@@ -1,0 +1,1141 @@
+﻿title,body,labels,assignees,milestone,project_status,priority,workstream,,,,,,,,
+[W1][P0][#1] Finalize scope and confirm research questions,"## Objective
+Complete **Finalize scope and confirm research questions** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Planning
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Confirm scope and research alignment.
+- [ ] Document decisions in the repository or shared workspace.
+- [ ] Flag any unresolved scope risks for group review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Planning,P0-Critical",,W1 - Initiation,Backlog,P0 - Critical,Planning,1,,,,,,,
+[W1][P0][#2] Configure GitHub repository and Project board,"## Objective
+Complete **Configure GitHub repository and Project board** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Setup
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Create or validate the required repository/environment resources.
+- [ ] Document setup instructions and dependencies.
+- [ ] Confirm access for all group members.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Setup,P0-Critical",,W1 - Initiation,Backlog,P0 - Critical,Setup,2,,,,,,,
+[W1][P0][#3] Configure Databricks Community Edition environment,"## Objective
+Complete **Configure Databricks Community Edition environment** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Setup
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Create or validate the required repository/environment resources.
+- [ ] Document setup instructions and dependencies.
+- [ ] Confirm access for all group members.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Setup,P0-Critical",,W1 - Initiation,Backlog,P0 - Critical,Setup,3,,,,,,,
+[W1][P0][#4] Download and verify the DataCo dataset,"## Objective
+Complete **Download and verify the DataCo dataset** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Data
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Acquire or validate the required dataset or supporting data file.
+- [ ] Check structure, row counts, file version, and completeness.
+- [ ] Document source, version, and storage location.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Data,P0-Critical",,W1 - Initiation,Backlog,P0 - Critical,Data,4,,,,,,,
+[W1][P0][#5] Develop the leakage-control plan,"## Objective
+Complete **Develop the leakage-control plan** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Methodology
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Define the methodological rule or protocol.
+- [ ] Document assumptions, exclusions, and validation criteria.
+- [ ] Submit the protocol for peer review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Methodology,P0-Critical",,W1 - Initiation,Backlog,P0 - Critical,Methodology,5,,,,,,,
+[W1][P2][#6] Create the Bronze-Silver-Gold structure in Databricks,"## Objective
+Complete **Create the Bronze-Silver-Gold structure in Databricks** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Setup
+- Priority: Medium
+- Owner: Bruno
+
+## Tasks
+- [ ] Create or validate the required repository/environment resources.
+- [ ] Document setup instructions and dependencies.
+- [ ] Confirm access for all group members.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Setup,P2-Medium",,W1 - Initiation,Backlog,P2 - Medium,Setup,6,,,,,,,
+[W1][P2][#7] Position the literature and gap analysis,"## Objective
+Complete **Position the literature and gap analysis** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W1-Initiation
+- Workstream: Research
+- Priority: Low
+- Owner: Luciana
+
+## Tasks
+- [ ] Compare relevant literature against the project gap.
+- [ ] Create a concise evidence table or synthesis.
+- [ ] Update the literature review section.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W1-Initiation,Research,P2-Medium",,W1 - Initiation,Backlog,P2 - Medium,Research,7,,,,,,,
+[W2][P0][#1] Bronze: ingest raw CSV into Delta Lake,"## Objective
+Complete **Bronze: ingest raw CSV into Delta Lake** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Engineering
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Engineering,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Engineering,1,,,,,,,
+"[W2][P0][#2] Silver: clean missing values, data types, and encoding","## Objective
+Complete **Silver: clean missing values, data types, and encoding** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Engineering
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Engineering,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Engineering,2,,,,,,,
+[W2][P0][#3] Feature engineering: order-time date variables,"## Objective
+Complete **Feature engineering: order-time date variables** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Engineering
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Engineering,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Engineering,3,,,,,,,
+[W2][P0][#4] Feature engineering: shipping and product variables,"## Objective
+Complete **Feature engineering: shipping and product variables** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Engineering
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Engineering,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Engineering,4,,,,,,,
+[W2][P0][#5] Feature engineering: customer and regional variables,"## Objective
+Complete **Feature engineering: customer and regional variables** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Engineering
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Engineering,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Engineering,5,,,,,,,
+[W2][P0][#6] Leakage audit: conceptual screening of all variables,"## Objective
+Complete **Leakage audit: conceptual screening of all variables** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Quality
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Quality,P0-Critical",,W2 - Data Engineering,Backlog,P0 - Critical,Quality,6,,,,,,,
+[W2][P1][#7] Document the Silver schema with a data dictionary,"## Objective
+Complete **Document the Silver schema with a data dictionary** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Documentation
+- Priority: Medium
+- Owner: Luciana
+
+## Tasks
+- [ ] Create or update the required documentation artifact.
+- [ ] Ensure terminology, formulas, and assumptions are clear.
+- [ ] Commit the document and link it to relevant issues.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Documentation,P1-High",,W2 - Data Engineering,Backlog,P1 - High,Documentation,7,,,,,,,
+[W2][P2][#8] External geographic file for dashboard only,"## Objective
+Complete **External geographic file for dashboard only** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W2-DataEngineering
+- Workstream: Data
+- Priority: Low
+- Owner: Bruno
+
+## Tasks
+- [ ] Acquire or validate the required dataset or supporting data file.
+- [ ] Check structure, row counts, file version, and completeness.
+- [ ] Document source, version, and storage location.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W2-DataEngineering,Data,P2-Medium",,W2 - Data Engineering,Backlog,P2 - Medium,Data,8,,,,,,,
+[W3][P1][#1] Univariate EDA: distributions and outliers,"## Objective
+Complete **Univariate EDA: distributions and outliers** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: EDA
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Generate the required exploratory analysis.
+- [ ] Save key visuals and summarize findings.
+- [ ] Connect findings to hypotheses and modeling choices.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,EDA,P1-High",,W3 - EDA & Gold Layer,Backlog,P1 - High,EDA,1,,,,,,,
+[W3][P1][#2] Bivariate EDA: correlates of late delivery,"## Objective
+Complete **Bivariate EDA: correlates of late delivery** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: EDA
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Generate the required exploratory analysis.
+- [ ] Save key visuals and summarize findings.
+- [ ] Connect findings to hypotheses and modeling choices.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,EDA,P1-High",,W3 - EDA & Gold Layer,Backlog,P1 - High,EDA,2,,,,,,,
+[W3][P1][#3] Bivariate EDA: profitability drivers,"## Objective
+Complete **Bivariate EDA: profitability drivers** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: EDA
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Generate the required exploratory analysis.
+- [ ] Save key visuals and summarize findings.
+- [ ] Connect findings to hypotheses and modeling choices.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,EDA,P1-High",,W3 - EDA & Gold Layer,Backlog,P1 - High,EDA,3,,,,,,,
+[W3][P1][#4] Class imbalance analysis for AO1,"## Objective
+Complete **Class imbalance analysis for AO1** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: EDA
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Generate the required exploratory analysis.
+- [ ] Save key visuals and summarize findings.
+- [ ] Connect findings to hypotheses and modeling choices.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,EDA,P1-High",,W3 - EDA & Gold Layer,Backlog,P1 - High,EDA,4,,,,,,,
+[W3][P0][#5] Gold: create leakage-safe AO1 analytical table,"## Objective
+Complete **Gold: create leakage-safe AO1 analytical table** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: Engineering
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,Engineering,P0-Critical",,W3 - EDA & Gold Layer,Backlog,P0 - Critical,Engineering,5,,,,,,,
+[W3][P0][#6] Gold: create leakage-safe AO2 analytical table,"## Objective
+Complete **Gold: create leakage-safe AO2 analytical table** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: Engineering
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Implement the required data pipeline or transformation.
+- [ ] Validate schema, row counts, and leakage-safe outputs.
+- [ ] Commit notebook/script and document execution order.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,Engineering,P0-Critical",,W3 - EDA & Gold Layer,Backlog,P0 - Critical,Engineering,6,,,,,,,
+[W3][P1][#7] Document EDA findings and validate with the group,"## Objective
+Complete **Document EDA findings and validate with the group** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W3-EDA-Gold
+- Workstream: Documentation
+- Priority: Medium
+- Owner: Luciana
+
+## Tasks
+- [ ] Create or update the required documentation artifact.
+- [ ] Ensure terminology, formulas, and assumptions are clear.
+- [ ] Commit the document and link it to relevant issues.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W3-EDA-GoldLayer,Documentation,P1-High",,W3 - EDA & Gold Layer,Backlog,P1 - High,Documentation,7,,,,,,,
+[W4][P0][#1] Create chronological train-test split for AO1 (80/20),"## Objective
+Complete **Create chronological train-test split for AO1 (80/20)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Modeling,P0-Critical",,W4 - AO1 Model,Backlog,P0 - Critical,Modeling,1,,,,,,,
+"[W4][P0][#2] Build AO1 preprocessing pipeline (encoding, scaling, SMOTE)","## Objective
+Complete **Build AO1 preprocessing pipeline (encoding, scaling, SMOTE)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Modeling,P0-Critical",,W4 - AO1 Model,Backlog,P0 - Critical,Modeling,2,,,,,,,
+[W4][P0][#3] AO1 baseline: Logistic Regression,"## Objective
+Complete **AO1 baseline: Logistic Regression** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Modeling,P0-Critical",,W4 - AO1 Model,Backlog,P0 - Critical,Modeling,3,,,,,,,
+[W4][P0][#4] AO1 primary model: XGBoost Classifier,"## Objective
+Complete **AO1 primary model: XGBoost Classifier** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Modeling,P0-Critical",,W4 - AO1 Model,Backlog,P0 - Critical,Modeling,4,,,,,,,
+"[W4][P1][#5] AO1 evaluation: metrics, curves, and confusion matrix","## Objective
+Complete **AO1 evaluation: metrics, curves, and confusion matrix** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Quality
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Quality,P1-High",,W4 - AO1 Model,Backlog,P1 - High,Quality,5,,,,,,,
+[W4][P1][#6] AO1 explainability: SHAP values,"## Objective
+Complete **AO1 explainability: SHAP values** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Modeling,P1-High",,W4 - AO1 Model,Backlog,P1 - High,Modeling,6,,,,,,,
+[W4][P1][#7] Post-model leakage audit for AO1,"## Objective
+Complete **Post-model leakage audit for AO1** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Quality
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Quality,P1-High",,W4 - AO1 Model,Backlog,P1 - High,Quality,7,,,,,,,
+[W4][P1][#8] Document AO1 results and validate H1,"## Objective
+Complete **Document AO1 results and validate H1** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W4-AO1-Model
+- Workstream: Documentation
+- Priority: Medium
+- Owner: Luciana
+
+## Tasks
+- [ ] Create or update the required documentation artifact.
+- [ ] Ensure terminology, formulas, and assumptions are clear.
+- [ ] Commit the document and link it to relevant issues.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W4-AO1Model,Documentation,P1-High",,W4 - AO1 Model,Backlog,P1 - High,Documentation,8,,,,,,,
+[W5][P0][#1] Create chronological train-test split for AO2 (80/20),"## Objective
+Complete **Create chronological train-test split for AO2 (80/20)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Modeling,P0-Critical",,W5 - AO2 Model,Backlog,P0 - Critical,Modeling,1,,,,,,,
+"[W5][P0][#2] Build AO2 preprocessing pipeline (encoding, scaling)","## Objective
+Complete **Build AO2 preprocessing pipeline (encoding, scaling)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Modeling,P0-Critical",,W5 - AO2 Model,Backlog,P0 - Critical,Modeling,2,,,,,,,
+[W5][P0][#3] AO2 baseline: Linear Regression or Ridge,"## Objective
+Complete **AO2 baseline: Linear Regression or Ridge** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Modeling,P0-Critical",,W5 - AO2 Model,Backlog,P0 - Critical,Modeling,3,,,,,,,
+[W5][P0][#4] AO2 primary model: Gradient Boosting Regressor,"## Objective
+Complete **AO2 primary model: Gradient Boosting Regressor** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Modeling,P0-Critical",,W5 - AO2 Model,Backlog,P0 - Critical,Modeling,4,,,,,,,
+"[W5][P1][#5] AO2 evaluation: RMSE, MAE, R-squared, and residual review","## Objective
+Complete **AO2 evaluation: RMSE, MAE, R-squared, and residual review** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Quality
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Quality,P1-High",,W5 - AO2 Model,Backlog,P1 - High,Quality,5,,,,,,,
+[W5][P1][#6] AO2 explainability: SHAP values,"## Objective
+Complete **AO2 explainability: SHAP values** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Modeling
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Modeling,P1-High",,W5 - AO2 Model,Backlog,P1 - High,Modeling,6,,,,,,,
+[W5][P1][#7] Document AO2 results and validate H2,"## Objective
+Complete **Document AO2 results and validate H2** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W5-AO2-Model
+- Workstream: Documentation
+- Priority: Medium
+- Owner: Andre
+
+## Tasks
+- [ ] Create or update the required documentation artifact.
+- [ ] Ensure terminology, formulas, and assumptions are clear.
+- [ ] Commit the document and link it to relevant issues.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W5-AO2Model,Documentation,P1-High",,W5 - AO2 Model,Backlog,P1 - High,Documentation,7,,,,,,,
+[W6][P0][#1] Define the 2x2 risk-margin matrix logic,"## Objective
+Complete **Define the 2x2 risk-margin matrix logic** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Integration
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Combine outputs from prior tasks into the integrated AO3 workflow.
+- [ ] Validate joins, scores, thresholds, or segment assignments.
+- [ ] Save integrated tables and document logic.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Integration,P0-Critical",,W6 - AO3 Integration,Backlog,P0 - Critical,Integration,1,,,,,,,
+[W6][P0][#2] Score the test set with AO1 and AO2 outputs,"## Objective
+Complete **Score the test set with AO1 and AO2 outputs** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Integration
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Combine outputs from prior tasks into the integrated AO3 workflow.
+- [ ] Validate joins, scores, thresholds, or segment assignments.
+- [ ] Save integrated tables and document logic.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Integration,P0-Critical",,W6 - AO3 Integration,Backlog,P0 - Critical,Integration,2,,,,,,,
+[W6][P0][#3] Segment orders into the four operational quadrants,"## Objective
+Complete **Segment orders into the four operational quadrants** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Integration
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Combine outputs from prior tasks into the integrated AO3 workflow.
+- [ ] Validate joins, scores, thresholds, or segment assignments.
+- [ ] Save integrated tables and document logic.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Integration,P0-Critical",,W6 - AO3 Integration,Backlog,P0 - Critical,Integration,3,,,,,,,
+[W6][P1][#4] Validate that segments reveal patterns not visible in isolation,"## Objective
+Complete **Validate that segments reveal patterns not visible in isolation** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Quality
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Quality,P1-High",,W6 - AO3 Integration,Backlog,P1 - High,Quality,4,,,,,,,
+[W6][P3][#5] Optional clustering: K-means extension,"## Objective
+Complete **Optional clustering: K-means extension** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Modeling
+- Priority: Medium
+- Owner: Luciana
+
+## Tasks
+- [ ] Build and run the model or modeling component.
+- [ ] Record metrics, settings, and output artifacts.
+- [ ] Save the model/output for downstream use.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Modeling,P3-Low",,W6 - AO3 Integration,Backlog,P3 - Low,Modeling,5,,,,,,,
+[W6][P1][#6] Define operational recommendations by segment,"## Objective
+Complete **Define operational recommendations by segment** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Analysis
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Translate analytical outputs into business interpretation.
+- [ ] Tie recommendations to model/EDA evidence.
+- [ ] Draft the relevant report subsection.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Analysis,P1-High",,W6 - AO3 Integration,Backlog,P1 - High,Analysis,6,,,,,,,
+[W6][P1][#7] Document AO3 methodology and results,"## Objective
+Complete **Document AO3 methodology and results** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W6-AO3-Integration
+- Workstream: Documentation
+- Priority: Medium
+- Owner: Tiago
+
+## Tasks
+- [ ] Create or update the required documentation artifact.
+- [ ] Ensure terminology, formulas, and assumptions are clear.
+- [ ] Commit the document and link it to relevant issues.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W6-AO3Integration,Documentation,P1-High",,W6 - AO3 Integration,Backlog,P1 - High,Documentation,7,,,,,,,
+[W7][P0][#1] Power BI: connect to Delta Lake Gold tables,"## Objective
+Complete **Power BI: connect to Delta Lake Gold tables** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Dashboard
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Build or validate the assigned dashboard page/component.
+- [ ] Check filters, KPIs, visuals, and data consistency.
+- [ ] Export or screenshot final visuals for the report.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Dashboard,P0-Critical",,W7 - Dashboard,Backlog,P0 - Critical,Dashboard,1,,,,,,,
+[W7][P0][#2] Power BI: delivery risk page (AO1),"## Objective
+Complete **Power BI: delivery risk page (AO1)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Dashboard
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Build or validate the assigned dashboard page/component.
+- [ ] Check filters, KPIs, visuals, and data consistency.
+- [ ] Export or screenshot final visuals for the report.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Dashboard,P0-Critical",,W7 - Dashboard,Backlog,P0 - Critical,Dashboard,2,,,,,,,
+[W7][P0][#3] Power BI: profitability page (AO2),"## Objective
+Complete **Power BI: profitability page (AO2)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Dashboard
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Build or validate the assigned dashboard page/component.
+- [ ] Check filters, KPIs, visuals, and data consistency.
+- [ ] Export or screenshot final visuals for the report.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Dashboard,P0-Critical",,W7 - Dashboard,Backlog,P0 - Critical,Dashboard,3,,,,,,,
+[W7][P0][#4] Power BI: risk-margin segmentation page (AO3),"## Objective
+Complete **Power BI: risk-margin segmentation page (AO3)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Dashboard
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Build or validate the assigned dashboard page/component.
+- [ ] Check filters, KPIs, visuals, and data consistency.
+- [ ] Export or screenshot final visuals for the report.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Dashboard,P0-Critical",,W7 - Dashboard,Backlog,P0 - Critical,Dashboard,4,,,,,,,
+[W7][P2][#5] Power BI: geographic page (global map),"## Objective
+Complete **Power BI: geographic page (global map)** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Dashboard
+- Priority: Medium
+- Owner: Andre
+
+## Tasks
+- [ ] Build or validate the assigned dashboard page/component.
+- [ ] Check filters, KPIs, visuals, and data consistency.
+- [ ] Export or screenshot final visuals for the report.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Dashboard,P2-Medium",,W7 - Dashboard,Backlog,P2 - Medium,Dashboard,5,,,,,,,
+"[W7][P1][#6] Write report: Abstract, Introduction, Problem, and Solution","## Objective
+Complete **Write report: Abstract, Introduction, Problem, and Solution** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Writing
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Draft or revise the assigned report section.
+- [ ] Ensure APA-aligned captions, citations, and consistency.
+- [ ] Submit the section for internal review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Writing,P1-High",,W7 - Dashboard,Backlog,P1 - High,Writing,6,,,,,,,
+[W7][P1][#7] Write report: Methodology and Results,"## Objective
+Complete **Write report: Methodology and Results** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Writing
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Draft or revise the assigned report section.
+- [ ] Ensure APA-aligned captions, citations, and consistency.
+- [ ] Submit the section for internal review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Writing,P1-High",,W7 - Dashboard,Backlog,P1 - High,Writing,7,,,,,,,
+"[W7][P1][#8] Write report: Discussion, Recommendations, and Conclusion","## Objective
+Complete **Write report: Discussion, Recommendations, and Conclusion** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Writing
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Draft or revise the assigned report section.
+- [ ] Ensure APA-aligned captions, citations, and consistency.
+- [ ] Submit the section for internal review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Writing,P1-High",,W7 - Dashboard,Backlog,P1 - High,Writing,8,,,,,,,
+[W7][P2][#9] Conduct internal group review of the report,"## Objective
+Complete **Conduct internal group review of the report** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W7-Dashboard
+- Workstream: Quality
+- Priority: Medium
+- Owner: Andre
+
+## Tasks
+- [ ] Run the required validation or audit.
+- [ ] Document findings and any corrective actions.
+- [ ] Confirm that outputs meet acceptance criteria.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W7-Dashboard,Quality,P2-Medium",,W7 - Dashboard,Backlog,P2 - Medium,Quality,9,,,,,,,
+"[W8][P0][#1] QA: reproducibility, run pipeline from scratch","## Objective
+Complete **QA: reproducibility, run pipeline from scratch** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: QA
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Run final validation, reproducibility, or submission checks.
+- [ ] Document issues found and fixes applied.
+- [ ] Confirm final package readiness.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,QA,P0-Critical",,W8 - QA & Final Delivery,Backlog,P0 - Critical,QA,1,,,,,,,
+[W8][P0][#2] QA: final leakage audit,"## Objective
+Complete **QA: final leakage audit** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: QA
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Run final validation, reproducibility, or submission checks.
+- [ ] Document issues found and fixes applied.
+- [ ] Confirm final package readiness.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,QA,P0-Critical",,W8 - QA & Final Delivery,Backlog,P0 - Critical,QA,2,,,,,,,
+[W8][P0][#3] QA: validate metrics on the final test set,"## Objective
+Complete **QA: validate metrics on the final test set** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: QA
+- Priority: High
+- Owner: Tiago
+
+## Tasks
+- [ ] Run final validation, reproducibility, or submission checks.
+- [ ] Document issues found and fixes applied.
+- [ ] Confirm final package readiness.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,QA,P0-Critical",,W8 - QA & Final Delivery,Backlog,P0 - Critical,QA,3,,,,,,,
+[W8][P2][#4] QA: final Power BI dashboard review,"## Objective
+Complete **QA: final Power BI dashboard review** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: QA
+- Priority: High
+- Owner: Andre
+
+## Tasks
+- [ ] Run final validation, reproducibility, or submission checks.
+- [ ] Document issues found and fixes applied.
+- [ ] Confirm final package readiness.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,QA,P2-Medium",,W8 - QA & Final Delivery,Backlog,P2 - Medium,QA,4,,,,,,,
+[W8][P1][#5] Finalize and format the written report,"## Objective
+Complete **Finalize and format the written report** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: Writing
+- Priority: High
+- Owner: Luciana
+
+## Tasks
+- [ ] Draft or revise the assigned report section.
+- [ ] Ensure APA-aligned captions, citations, and consistency.
+- [ ] Submit the section for internal review.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,Writing,P1-High",,W8 - QA & Final Delivery,Backlog,P1 - High,Writing,5,,,,,,,
+[W8][P1][#6] Prepare presentation slides,"## Objective
+Complete **Prepare presentation slides** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: Presentation
+- Priority: High
+- Owner: Bruno
+
+## Tasks
+- [ ] Prepare or rehearse the assigned presentation component.
+- [ ] Check timing, slide flow, and Q&A readiness.
+- [ ] Export final presentation files.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,Presentation,P1-High",,W8 - QA & Final Delivery,Backlog,P1 - High,Presentation,6,,,,,,,
+[W8][P2][#7] Presentation rehearsal and final submission,"## Objective
+Complete **Presentation rehearsal and final submission** as part of the DataCo Capstone execution plan.
+
+## Context
+- Milestone: W8-QA-Final
+- Workstream: Presentation
+- Priority: Medium
+- Owner: Tiago
+
+## Tasks
+- [ ] Prepare or rehearse the assigned presentation component.
+- [ ] Check timing, slide flow, and Q&A readiness.
+- [ ] Export final presentation files.
+
+## Acceptance Criteria
+- The required output is completed and committed to the repository or shared project workspace.
+- The output is reviewed by at least one other team member.
+- Any assumptions, decisions, or limitations are documented.
+- The issue can be moved to Done without unresolved blockers.","W8-QA-FinalDelivery,Presentation,P2-Medium",,W8 - QA & Final Delivery,Backlog,P2 - Medium,Presentation,7,,,,,,,
