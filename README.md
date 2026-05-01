@@ -1,73 +1,75 @@
 # DataCo Capstone Project
 
-This project develops a pre-shipment decision-support analytics framework using the DataCo Smart Supply Chain dataset.
+Decision-support analytics framework for supply chain operations using the **DataCo Smart Supply Chain** dataset.
 
-The objective is to predict late delivery risk, estimate order-level profitability, and integrate both outputs into an operational risk-margin segmentation framework.
+The project combines predictive modeling and business intelligence to support pre-shipment decisions by balancing **delivery risk** and **order profitability**.
 
-## Project Scope
+## Objectives
 
-- AO1: Late delivery risk prediction
-- AO2: Order-level profitability estimation
-- AO3: Risk-margin operational segmentation
-- Executive dashboard for decision support
+- **AO1:** Predict late delivery risk at order level.
+- **AO2:** Estimate order-level profitability.
+- **AO3:** Create a risk-margin segmentation framework for operations.
+- **Executive Dashboard:** Deliver insights for tactical and strategic decisions.
 
-## Tools
+## Tech Stack
 
-- Python
-- Databricks
-- Apache Spark
-- Delta Lake
-- Power BI
-- GitHub Projects
+- **Language:** Python (PySpark)
+- **Data Platform:** Databricks
+- **Processing Engine:** Apache Spark + Delta Lake
+- **Visualization:** Power BI
+- **Version Control:** GitHub
+- **IDE:** Cursor
+
+## Development Workflow
+
+To ensure reproducibility, traceability, and collaboration quality, we follow these standards:
+
+### 1) Branching and Pull Requests
+
+- **Protected `main`:** no direct commits.
+- **Feature branches:** `feature/<task-name>` (example: `feature/12-databricks-setup`).
+- **Pull Requests required:** every merge into `main` must go through PR review.
+- **Traceability:** each PR should reference its task/issue.
+
+### 2) Data Architecture (Medallion)
+
+- **Bronze (Raw):** original data with no manual modifications.
+- **Silver (Cleaned):** standardized and transformed data, fully code-driven.
+- **Gold (Curated):** business-ready aggregated tables for analytics and dashboarding.
+- **Reproducibility rule:** all transformations must be done via code.
 
 ## Repository Structure
 
-- `/data`: dataset files and references
-- `/notebooks`: analysis and modeling notebooks
-- `/docs`: project documentation and governance
-- `/dashboard`: Power BI files
-- `/report`: final report files
-- `/presentation`: slide deck
-- `/models`: saved models and model outputs
+- `/data` - dataset files and references (Bronze layer)
+- `/notebooks` - EDA, experiments, and execution notebooks
+- `/src` - reusable modules for cleaning, feature engineering, and modeling
+- `/models` - trained model artifacts and outputs
+- `/docs` - governance and project documentation
+- `/dashboard` - Power BI files (`.pbix`)
+- `/report` - final academic report and presentation materials
 
-## Project Workflow
+## Project Management (Agile/Kanban)
 
 ### Status Flow
 
-Backlog → Ready → In Progress → In Review → Done
+`Backlog` -> `Ready` -> `In Progress` -> `In Review` -> `Done`
 
-Blocked can occur at any stage when a task has an unresolved dependency or issue.
+### WIP and Prioritization
 
-### How We Work
+- **WIP limit:** max 2 tasks per person in `In Progress`.
+- **Priority levels:** `P0 (Critical)`, `P1 (High)`, `P2 (Medium)`, `P3 (Low)`.
 
-- Tasks are pulled from **Ready**
-- Team members select tasks based on priority and availability
-- No task should move to **Done** without review
-- Blocked tasks must include a short explanation of the blocker
+### Definition of Done (DoD)
 
-### WIP Limit
+A task is considered **Done** only when:
 
-- Maximum 2 tasks per person in **In Progress**
-- The team should avoid starting new work before completing or moving current work forward
-- P0 tasks should be prioritized before P1, P2, and P3 tasks
+- Deliverable is completed and reviewed.
+- Outputs are validated against project objectives.
+- README/Wiki documentation is updated.
+- PR is merged and working branch is deleted.
 
-### Priority Levels
+## Next Steps
 
-- P0 - Critical
-- P1 - High
-- P2 - Medium
-- P3 - Low
-
-### Workstream
-
-Workstream represents the type of work involved, such as Planning, Data, Engineering, EDA, Modeling, Integration, Dashboard, QA, Writing, Documentation, or Presentation.
-
-### Definition of Done
-
-A task can only be moved to **Done** when all criteria below are met:
-
-- Deliverable is completed
-- Output is validated and aligned with the task objective
-- Work is reviewed by at least one other team member
-- Required documentation is updated
-- No unresolved blockers remain
+- Finalize feature engineering for late-delivery modeling.
+- Benchmark baseline and advanced models for AO1 and AO2.
+- Connect curated Gold tables to the executive Power BI dashboard.
