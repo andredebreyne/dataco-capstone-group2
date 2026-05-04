@@ -31,8 +31,10 @@ AO1 target:
 
 AO2 target:
 
-- `Order Profit Per Order`
-- Regression target representing order-level economic outcome.
+- The AO2 target must be the verified raw order-level profit field from the official metadata.
+- The preferred target is `Order Profit Per Order` if confirmed by the dataset schema and metadata.
+- If the dataset uses `Benefit per order` as the equivalent raw order-level profit outcome, `Order Profit Per Order` is still preferred.
+- Whichever field is selected as the AO2 target, equivalent profit fields, duplicate profit fields, profit ratios, and direct transformations of the target must be excluded from predictors.
 
 AO3 inputs:
 
@@ -62,6 +64,17 @@ The following fields are forbidden as predictive inputs because they are targets
 | `Order Profit Per Order` | AO2 target |
 | `Benefit per order` | Same economic outcome as the target or direct duplicate/proxy |
 | `Order Item Profit Ratio` | Direct profit-derived ratio that can reconstruct the target |
+| Direct transformations of profit | Any field mathematically derived from the selected profit target would create target reconstruction risk. |
+
+### AO2 Financial Predictor Policy
+
+AO2 financial predictors must be classified as `Allowed`, `Forbidden`, or `Review` before modeling.
+
+Price, quantity, discount, sales, and order-value fields may be used only if they are available at order creation or before dispatch and do not mechanically reconstruct the selected AO2 target.
+
+Profit fields, profit ratios, duplicate profit outcomes, post-order adjustment fields, and direct target transformations are forbidden as AO2 predictors unless explicitly approved for descriptive use only.
+
+Any financial field included in AO2 must have a short justification documenting why it is decision-time valid and why it does not directly reconstruct the selected profit target.
 
 ### Forbidden Unless Explicitly Approved for Descriptive Use Only
 
@@ -141,6 +154,20 @@ Required controls:
 - Document any financial fields included as predictors and explain why they are available before dispatch.
 - Review residuals and feature importance for signs of target reconstruction.
 
+## AO3-Specific Controls
+
+AO3 combines AO1 predicted late-delivery risk and AO2 predicted profitability or derived predicted margin into a risk–margin prioritization framework.
+
+Required controls:
+
+- AO3 priority groups must be created from model predictions, not actual target values, during validation or final test evaluation.
+- AO3 thresholds must be defined using training or validation data only, not the final held-out test set.
+- The combined risk–margin framework must be compared against single-signal prioritization views:
+  - late-delivery-risk-only prioritization
+  - expected-profitability-only prioritization
+  - combined risk–margin prioritization
+- This comparison is required to support H3 and demonstrate whether the combined framework adds decision value beyond either signal alone.
+
 ## Conceptual Leakage Audit
 
 Before modeling, every candidate feature must be classified into one of these categories:
@@ -176,7 +203,8 @@ Each modeling PR must document:
 - Preprocessing objects fit only on training data.
 - Any approved exceptions.
 - Validation and test metrics.
-
+- For AO3, comparison of combined risk–margin prioritization against risk-only and profit-only prioritization.
+  
 ## Peer Review Checklist
 
 Before moving leakage-sensitive tasks to `Done`, at least one reviewer should confirm:
@@ -187,6 +215,7 @@ Before moving leakage-sensitive tasks to `Done`, at least one reviewer should co
 - Preprocessing is fit on training data only.
 - Resampling, if used, is applied only to training data.
 - AO2 predictors cannot reconstruct the target.
+- AO3 priority groups are based on predictions and are compared against risk-only and profit-only prioritization.
 - Assumptions and exceptions are documented.
 
 ## Known Assumptions and Limitations
