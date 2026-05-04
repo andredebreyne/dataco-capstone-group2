@@ -15,6 +15,7 @@ Use this document as the source of truth for decisions related to:
 - AO1 late-delivery risk prediction
 - AO2 order-profitability estimation
 - AO3 risk-margin prioritization framework
+- Reseach Question and Hypotheses to be tested
 - Bronze, Silver, and Gold data architecture
 - Leakage-safe modeling rules
 - Chronological train/test strategy
