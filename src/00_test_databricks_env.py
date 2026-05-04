@@ -1,11 +1,14 @@
 """Smoke test for validating the team Databricks PySpark environment."""
 
 from pyspark.sql import SparkSession
-
+import sys
 
 def main() -> None:
     """Create a small DataFrame and display it to confirm Spark execution."""
     spark = SparkSession.builder.getOrCreate()
+
+    print("Spark version:", spark.version)
+    print("Python version:", sys.version)
 
     # This dummy dataset is used only to validate that the configured
     # Databricks runtime can initialize Spark and execute a basic DataFrame job.
