@@ -224,3 +224,5 @@ __marimo__/
 # Large raw DataCo files are downloaded locally from Mendeley Data and verified via checksum.
 data/bronze/dataco/DataCoSupplyChainDataset.csv
 data/bronze/dataco/tokenized_access_logs.csv
+# Proposal source documents may contain student identifiers.
+docs/proposal/*.docx
