@@ -223,3 +223,6 @@ __marimo__/
 
 # Proposal source documents may contain student identifiers.
 docs/proposal/*.docx
+data/raw/DataCoSupplyChainDataset.csv
+data/raw/DescriptionDataCoSupplyChain.csv
+data/raw/tokenized_access_logs.csv
