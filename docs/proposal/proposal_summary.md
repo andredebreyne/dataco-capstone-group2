@@ -13,6 +13,18 @@ The framework combines:
 - AO3: risk-margin prioritization for operational decision support
 - Executive dashboard outputs for tactical and strategic decisions
 
+## Research Question	 
+
+How can pre-shipment attributes available at order creation be used to build a practical pre-dispatch order-prioritization framework that combines late-delivery risk and expected order profitability in a global e-commerce supply chain? 
+
+## Hypotheses 
+
+**H1.** For late-delivery prediction, an XGBoost classifier will outperform logistic regression on held-out data, particularly in AUC-ROC and recall. 
+
+**H2.** For order-profitability estimation, a gradient boosting regressor will outperform linear or ridge regression on held-out data, particularly in RMSE and MAE. 
+
+**H3.** Combining predicted late-delivery risk and expected order profitability in a risk–margin framework will identify pre-dispatch priority groups that are not evident from either signal alone and therefore support differentiated operational actions.  
+
 ## Dataset
 
 Primary dataset:
