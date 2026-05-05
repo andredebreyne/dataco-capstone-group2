@@ -63,6 +63,8 @@ For consistency, team members should use the following project path when possibl
 
 `/FileStore/tables/dataco/bronze/DataCoSupplyChainDataset.csv`
 
+The broader Bronze, Silver, Gold, and References destination convention is documented in `docs/medallion_structure.md`.
+
 Example read pattern:
 
 ```python

@@ -38,9 +38,11 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - **Gold (Curated):** business-ready aggregated tables for analytics and dashboarding.
 - **Reproducibility rule:** all transformations must be done via code.
 
+The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
+
 ## Repository Structure
 
-- `/data` - dataset files and references (Bronze layer)
+- `/data` - medallion data folders and references
 - `/notebooks` - EDA, experiments, and execution notebooks
 - `/src` - reusable modules for cleaning, feature engineering, and modeling
 - `/models` - trained model artifacts and outputs
