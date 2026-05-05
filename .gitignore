@@ -226,3 +226,5 @@ data/bronze/dataco/DataCoSupplyChainDataset.csv
 data/bronze/dataco/tokenized_access_logs.csv
 # Proposal source documents may contain student identifiers.
 docs/proposal/*.docx
+data/raw/tokenized_access_logs.csv
+data/raw/DataCoSupplyChainDataset.csv
