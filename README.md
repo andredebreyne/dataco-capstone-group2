@@ -24,10 +24,17 @@ The project combines predictive modeling and business intelligence to support pr
 
 To ensure reproducibility, traceability, and collaboration quality, we follow these standards:
 
+### Notebook and Module Policy
+
+- Notebooks are used for exploration, experiments, and orchestration.
+- Reusable logic should be implemented in `/src`.
+- Critical cleaning, feature engineering, splitting, modeling, evaluation, and prioritization logic should not exist only inside notebooks.
+- Notebooks should be runnable from top to bottom.
+
 ### 1) Branching and Pull Requests
 
 - **Protected `main`:** no direct commits.
-- **Feature branches:** `feature/<task-name>` (example: `feature/12-databricks-setup`).
+- **Feature branches:** `feature/<issue-number>-short-name`  (example: `feature/12-databricks-setup`).
 - **Pull Requests required:** every merge into `main` must go through PR review.
 - **Traceability:** each PR should reference its task/issue.
 
@@ -38,9 +45,11 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - **Gold (Curated):** business-ready aggregated tables for analytics and dashboarding.
 - **Reproducibility rule:** all transformations must be done via code.
 
+The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
+
 ## Repository Structure
 
-- `/data` - dataset files and references (Bronze layer)
+- `/data` - medallion data folders and references
 - `/notebooks` - EDA, experiments, and execution notebooks
 - `/src` - reusable modules for cleaning, feature engineering, and modeling
 - `/models` - trained model artifacts and outputs
