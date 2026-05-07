@@ -180,6 +180,8 @@ def canonicalize_column_name(column_name: str) -> str:
     canonical_name = column_name.strip()
     canonical_name = re.sub(r"[ ,;{}()\n\t=]", "_", canonical_name)
     canonical_name = re.sub(r"_+", "_", canonical_name)
+    if column_name.startswith("_"):
+        return canonical_name
     return canonical_name.strip("_")
 
 
