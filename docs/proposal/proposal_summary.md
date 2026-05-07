@@ -61,6 +61,30 @@ AO2 will compare Linear or Ridge Regression as baseline models against Gradient 
 
 AO3 will combine AO1 and AO2 outputs into a 2x2 operational risk-margin matrix. A clustering extension may be added only if time permits and it improves interpretation.
 
+## Target Definitions and Predictor Policy
+
+AO1 uses `Late_delivery_risk` as the binary classification target. Before modeling, the team must validate the meaning of this label, its class distribution, and whether any edge cases could affect interpretation.
+
+AO2 should use a raw order-level profit field as the primary regression target, preferably `Order Profit Per Order` or the equivalent available field such as `Benefit per order`, depending on the verified dataset schema.
+
+`Order Item Profit Ratio` should not be used as the primary AO2 target unless explicitly justified. Profit-ratio fields, duplicate profit fields, or variables that mechanically reconstruct the profit target should be excluded from AO2 predictors or documented as descriptive-only fields.
+
+Before AO2 modeling is finalized, the team must complete an AO2 target-reconstruction audit.
+
+## Feature Availability and Leakage Audit
+
+Before modeling, each candidate variable must be classified according to decision-time availability:
+
+- available at order creation
+- available before dispatch
+- post-shipment
+- post-delivery
+- unknown / needs review
+
+Only variables available at order creation or before dispatch may be used as predictors. Unknown variables require review before inclusion.
+
+The feature availability matrix and leakage audit must be documented in `/docs`.
+
 ## Evaluation Strategy
 
 The train/test split should be chronological by order date, with the most recent 20% reserved as the final held-out test set.
@@ -69,7 +93,15 @@ AO1 evaluation should focus on AUC-ROC, recall, precision, F1-score, and confusi
 
 AO2 evaluation should focus on RMSE, MAE, R-squared, residual review, and basic multicollinearity screening.
 
-AO3 evaluation should focus on whether the combined risk-margin view reveals operational priority groups that are not evident from either signal alone.
+AO3 must evaluate whether the combined risk-margin framework adds decision value beyond single-signal prioritization.
+
+The team should compare:
+
+- late-delivery-risk-only prioritization
+- expected-profitability-only prioritization
+- combined risk-margin prioritization
+
+This comparison is required to support H3.
 
 ## Implementation Scope
 
