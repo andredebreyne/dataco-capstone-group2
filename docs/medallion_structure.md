@@ -119,13 +119,14 @@ Reference files must include enough documentation to explain their source, owner
 
 Databricks Community Edition is the shared validation environment. Because Community Edition has limited storage and collaboration features, the repository remains the source of truth for code and documentation.
 
-Recommended DBFS folder convention:
+Recommended Unity Catalog Volumes convention:
 
 ```text
-/FileStore/tables/dataco/bronze/
-/FileStore/tables/dataco/silver/
-/FileStore/tables/dataco/gold/
-/FileStore/tables/dataco/references/
+/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv
+/Volumes/workspace/default/raw_data/bronze/
+/Volumes/workspace/default/raw_data/silver/
+/Volumes/workspace/default/raw_data/gold/
+/Volumes/workspace/default/raw_data/references/
 ```
 
 Recommended Spark table naming convention, if tables are created in a Databricks workspace:
@@ -146,7 +147,7 @@ dataco_gold_ao2_profitability_scored
 dataco_gold_ao3_risk_margin_priority
 ```
 
-If a team member cannot create managed tables in Community Edition, file-based DBFS paths are acceptable. The notebook or script must document the actual path used.
+If a team member cannot create managed tables in Community Edition, file-based Unity Catalog Volume paths are acceptable. The notebook or script must document the actual path used.
 
 ## Reproducible Rerun Rule
 
@@ -189,14 +190,14 @@ Each group member should confirm:
 - The repository can be cloned or opened through Databricks Repos.
 - Databricks Community Edition workspace access is available.
 - The standard cluster runtime can be selected, or fallback runtime use is documented.
-- The DataCo source files can be placed locally or uploaded to DBFS.
-- The Bronze, Silver, Gold, and References DBFS folders or equivalent paths can be created.
+- The DataCo source files can be placed locally or uploaded to the standard Unity Catalog Volume.
+- The Bronze, Silver, Gold, and References Volume folders or equivalent paths can be created.
 - The smoke test in `src/00_test_databricks_env.py` runs successfully.
 
 ## Assumptions and Limitations
 
 - Community Edition is the official validation environment for this project unless the team changes the standard.
-- Large raw data files are local or DBFS artifacts, not Git artifacts.
+- Large raw data files are local or Databricks Volume artifacts, not Git artifacts.
 - Local folder placeholders exist so code can reference the intended medallion structure.
 - Databricks paths may differ by team member; deviations must be documented in the related pull request or notebook.
 - Issue `#63` and issue `#64` define target-specific methodological rules that should be applied before AO1 and AO2 Gold modeling tables are finalized.

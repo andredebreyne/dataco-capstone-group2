@@ -45,9 +45,9 @@ Databricks Community Edition clusters automatically stop after a period of inact
 
 Team members should avoid treating stopped clusters as errors in the project code. Cluster shutdown is an expected behavior of the free Community Edition environment.
 
-## Manual CSV Upload to DBFS
+## Manual CSV Upload to Unity Catalog Volumes
 
-Community Edition does not provide the same production-grade storage integrations as paid Databricks workspaces. For this project, local CSV files can be uploaded manually to DBFS for development and validation.
+Community Edition does not provide the same production-grade storage integrations as paid Databricks workspaces. For this project, local CSV files can be uploaded manually to a Unity Catalog Volume for development and validation.
 
 Recommended upload process:
 
@@ -55,13 +55,13 @@ Recommended upload process:
 2. Go to the workspace home page or data upload area.
 3. Select the option to upload data.
 4. Choose the local CSV file from the project Bronze folder.
-5. Upload the file to DBFS.
-6. Record the DBFS path shown by Databricks.
+5. Upload the file to the standard project Volume.
+6. Record the Volume path shown by Databricks.
 7. Use that path in notebooks or PySpark scripts when reading the file.
 
 For consistency, team members should use the following project path when possible:
 
-`/FileStore/tables/dataco/bronze/DataCoSupplyChainDataset.csv`
+`/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`
 
 The broader Bronze, Silver, Gold, and References destination convention is documented in `docs/medallion_structure.md`.
 
@@ -72,7 +72,7 @@ df = (
     spark.read
     .option("header", "true")
     .option("inferSchema", "true")
-    .csv("/FileStore/tables/dataco/bronze/DataCoSupplyChainDataset.csv")
+    .csv("/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv")
 )
 ```
 
