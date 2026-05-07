@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import sys
 from dataclasses import dataclass
 
@@ -172,6 +173,37 @@ def validate_paths(config: SilverCleaningConfig) -> None:
 def read_bronze_delta(spark: SparkSession, config: SilverCleaningConfig) -> DataFrame:
     """Read the Bronze Delta dataset."""
     return spark.read.format(config.read_format).load(config.bronze_input_path)
+
+
+def canonicalize_column_name(column_name: str) -> str:
+    """Return the canonical project column name used by downstream Silver logic."""
+    canonical_name = column_name.strip()
+    canonical_name = re.sub(r"[ ,;{}()\n\t=]", "_", canonical_name)
+    canonical_name = re.sub(r"_+", "_", canonical_name)
+    return canonical_name.strip("_")
+
+
+def canonicalize_bronze_column_names(df: DataFrame) -> DataFrame:
+    """Normalize Bronze column names before applying the Silver schema contract."""
+    canonical_columns = [canonicalize_column_name(column_name) for column_name in df.columns]
+
+    if len(set(canonical_columns)) != len(canonical_columns):
+        duplicate_columns = sorted(
+            {
+                column_name
+                for column_name in canonical_columns
+                if canonical_columns.count(column_name) > 1
+            }
+        )
+        raise ValueError(
+            "Bronze column-name canonicalization created duplicate columns: "
+            f"{duplicate_columns}"
+        )
+
+    if canonical_columns == df.columns:
+        return df
+
+    return df.toDF(*canonical_columns)
 
 
 def validate_required_columns(df: DataFrame) -> None:
@@ -409,6 +441,9 @@ def run_silver_cleaning(config: SilverCleaningConfig, logger: logging.Logger) ->
 
         bronze_df = read_bronze_delta(spark, config)
         logger.info("Bronze Delta loaded successfully with %d columns.", len(bronze_df.columns))
+
+        bronze_df = canonicalize_bronze_column_names(bronze_df)
+        logger.info("Bronze column names canonicalized for Silver compatibility.")
 
         validate_required_columns(bronze_df)
         logger.info("Required Bronze columns validated successfully.")

@@ -40,6 +40,7 @@ src/data_engineering/clean_silver.py
 
 The Silver job applies only deterministic, non-fitted transformations:
 
+- canonicalize Bronze column names for downstream compatibility
 - trim string fields
 - convert blank strings to null
 - collapse repeated whitespace in categorical fields
