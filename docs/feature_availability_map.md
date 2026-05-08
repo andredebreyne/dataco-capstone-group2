@@ -140,11 +140,13 @@ Feature-engineering outputs may keep traceability keys and lineage columns, but 
 
 ## Databricks Registration
 
-Run the registration script in Databricks after the repository version of the CSV is available in the workspace:
+Run the registration script in Databricks:
 
 ```text
 src/data_engineering/register_feature_availability_map.py
 ```
+
+The script is self-contained for Databricks Community Edition. It contains an embedded copy of the feature availability map, so the team does not need to manually upload `feature_availability_map.csv` before running it.
 
 Default outputs:
 
@@ -153,11 +155,10 @@ Default outputs:
 /Volumes/workspace/default/raw_data/references/feature_availability_map
 ```
 
-The first output is a CSV copy of the versioned reference artifact. The second output is a Delta reference table for Spark-based downstream validation and modeling workflows.
+The first output is the generated CSV reference artifact. The second output is a Delta reference table for Spark-based downstream validation and modeling workflows.
 
 The script validates:
 
-- the CSV exists
 - the CSV contains exactly 53 rows
 - all expected columns are present
 - every source field is unique
@@ -165,7 +166,9 @@ The script validates:
 - controlled values use the approved vocabulary
 - the Delta output row count matches the source CSV
 
-If the script is run from a location where the repository-relative CSV path is not available, set:
+If the repository-relative CSV exists, the script reads and registers that file. If it does not exist, the script uses the embedded matrix and still writes both Databricks outputs.
+
+If the team intentionally wants to register a different CSV file, set:
 
 ```text
 DATACO_FEATURE_AVAILABILITY_MAP_INPUT_PATH
