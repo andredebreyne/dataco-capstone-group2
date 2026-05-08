@@ -12,6 +12,8 @@ The feature engineering job uses only fields that are expected to be known befor
 
 The job does not derive features from actual shipping duration, shipping date, delivery status, late-delivery target values, order status outcomes, or profit target fields. The output table includes only traceability keys, approved lineage fields, and generated shipping/product features.
 
+This output is a shipping/product candidate feature table, not the final AO1 or AO2 modeling matrix. Later Gold transformations must still apply the feature availability map, AO2 target-reconstruction policy, leakage-control rules, and train-only preprocessing before model training.
+
 ## Input and Output
 
 Input Delta path:
@@ -86,9 +88,13 @@ Forbidden inputs for this task include:
 
 The output intentionally does not retain all original Silver columns. This reduces the chance of accidentally carrying target, post-shipment, or direct profit-derived fields into downstream modeling. Modeling feature-selection code must still apply AO1 and AO2 leakage-control rules before training.
 
+Financial order-composition fields in this table are candidate/review features, not automatically approved AO2 predictors. Fields such as `item_unit_price`, `item_discount_amount`, `item_discount_rate`, `item_net_sales_amount`, `item_gross_sales_estimate`, and `item_discount_share_of_gross` must still be checked against the AO2 target-reconstruction policy before final AO2 feature inclusion. See `docs/ao2_target_policy.md` and `docs/leakage_control_plan.md`.
+
 ## High-Cardinality Review
 
 Some product fields may create high-cardinality features, especially `product_catalog_key` and `product_name_normalized`. These fields are retained for review and traceability, but they should not be blindly one-hot encoded in modeling pipelines.
+
+The feature job logs distinct counts for `shipping_mode_normalized`, `product_category_key`, `product_department_key`, `product_catalog_key`, and `product_name_normalized` after the Databricks run. These counts are evidence for later review only; this PR does not group, encode, collapse categories, apply frequency thresholds, or build historical aggregates.
 
 Before modeling, high-cardinality fields must be classified as:
 
@@ -109,6 +115,7 @@ The feature engineering job validates:
 - all expected feature columns are present
 - no unexpected original Silver columns are present in the feature output
 - required generated features do not contain null values
+- generated feature ranges and domains are valid, including non-negative scheduled days, binary indicator flags, positive order-item quantity, non-negative price/sales/discount amounts, discount rates between 0 and 1, and discount share between 0 and 1 when present
 - forbidden target, profit, or post-shipment fields are not present in the feature output
 
 ## Execution Order

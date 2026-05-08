@@ -17,6 +17,7 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import (
     col,
     concat_ws,
+    countDistinct,
     current_timestamp,
     lit,
     lower,
@@ -100,6 +101,14 @@ SHIPPING_PRODUCT_FEATURE_COLUMNS = (
 )
 
 EXPECTED_OUTPUT_COLUMNS = OUTPUT_KEY_COLUMNS + SHIPPING_PRODUCT_FEATURE_COLUMNS
+APPROVED_SHIPPING_SPEED_TIERS = ("economy", "expedited", "standard")
+HIGH_CARDINALITY_REVIEW_COLUMNS = (
+    "shipping_mode_normalized",
+    "product_category_key",
+    "product_department_key",
+    "product_catalog_key",
+    "product_name_normalized",
+)
 
 FORBIDDEN_INPUT_COLUMNS = (
     "Days_for_shipping_real",
@@ -276,6 +285,88 @@ def write_delta(
     )
 
 
+def validate_generated_feature_ranges(feature_df: DataFrame) -> None:
+    """Validate deterministic ranges and domains for generated feature columns."""
+    binary_columns = (
+        "is_same_day_or_next_day_shipping",
+        "is_standard_shipping",
+        "product_status_flag",
+    )
+    non_negative_columns = (
+        "scheduled_shipping_days",
+        "product_list_price",
+        "item_unit_price",
+        "item_discount_amount",
+        "item_gross_sales_estimate",
+        "item_net_sales_amount",
+    )
+
+    validation_rules = {
+        "scheduled_shipping_days must be greater than or equal to 0": col(
+            "scheduled_shipping_days"
+        )
+        < 0,
+        "shipping_speed_tier must be one of "
+        f"{APPROVED_SHIPPING_SPEED_TIERS}": ~col("shipping_speed_tier").isin(
+            *APPROVED_SHIPPING_SPEED_TIERS
+        ),
+        "order_item_quantity must be greater than 0": col("order_item_quantity") <= 0,
+        "item_discount_rate must be between 0 and 1": (
+            (col("item_discount_rate") < 0) | (col("item_discount_rate") > 1)
+        ),
+        "item_discount_share_of_gross must be between 0 and 1 when present": (
+            col("item_discount_share_of_gross").isNotNull()
+            & (
+                (col("item_discount_share_of_gross") < 0)
+                | (col("item_discount_share_of_gross") > 1)
+            )
+        ),
+    }
+
+    for column_name in binary_columns:
+        validation_rules[f"{column_name} must be binary 0/1"] = ~col(
+            column_name
+        ).isin(0, 1)
+
+    for column_name in non_negative_columns:
+        validation_rules[f"{column_name} must be greater than or equal to 0"] = col(
+            column_name
+        ) < 0
+
+    failed_rules = {}
+    for rule_description, invalid_condition in validation_rules.items():
+        invalid_count = feature_df.filter(invalid_condition).count()
+        if invalid_count:
+            failed_rules[rule_description] = invalid_count
+
+    if failed_rules:
+        raise ValueError(
+            "Generated shipping/product feature validation failed: "
+            f"{failed_rules}"
+        )
+
+
+def log_high_cardinality_evidence(
+    feature_df: DataFrame,
+    logger: logging.Logger,
+) -> None:
+    """Log distinct counts for retained category-review features."""
+    distinct_counts = feature_df.select(
+        [
+            countDistinct(col(column_name)).alias(column_name)
+            for column_name in HIGH_CARDINALITY_REVIEW_COLUMNS
+        ]
+    ).collect()[0].asDict()
+
+    logger.info(
+        "High-cardinality review distinct counts: %s",
+        {
+            column_name: distinct_counts[column_name]
+            for column_name in HIGH_CARDINALITY_REVIEW_COLUMNS
+        },
+    )
+
+
 def validate_feature_output(
     spark: SparkSession,
     config: ShippingProductFeatureConfig,
@@ -324,12 +415,17 @@ def validate_feature_output(
         "scheduled_shipping_days",
         "shipping_speed_tier",
         "shipping_mode_normalized",
+        "is_same_day_or_next_day_shipping",
+        "is_standard_shipping",
         "product_category_key",
         "product_department_key",
         "product_status_flag",
         "product_list_price",
         "order_item_quantity",
         "item_unit_price",
+        "item_discount_amount",
+        "item_discount_rate",
+        "item_gross_sales_estimate",
         "item_net_sales_amount",
     )
 
@@ -351,6 +447,8 @@ def validate_feature_output(
             "Required shipping/product features contain null values: "
             f"{columns_with_nulls}"
         )
+
+    validate_generated_feature_ranges(feature_df)
 
 
 def run_shipping_product_feature_engineering(
@@ -382,6 +480,9 @@ def run_shipping_product_feature_engineering(
 
         validate_feature_output(spark, config)
         logger.info("Shipping/product feature output validation completed successfully.")
+
+        feature_df = spark.read.format(config.write_format).load(config.feature_output_path)
+        log_high_cardinality_evidence(feature_df, logger)
         logger.info("DataCo shipping/product feature engineering job completed successfully.")
 
     except Exception:
