@@ -43,6 +43,12 @@ DISABLED_PUBLIC_DBFS_PREFIXES = ("dbfs:/FileStore/", "/FileStore/")
 EXPECTED_SILVER_ROWS = 180_519
 
 REQUIRED_INPUT_COLUMNS = (
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "_ingest_timestamp",
+    "_source_file",
+    "_silver_processed_timestamp",
     "Days_for_shipment_scheduled",
     "Shipping_Mode",
     "Category_Id",
@@ -60,6 +66,15 @@ REQUIRED_INPUT_COLUMNS = (
     "Order_Item_Discount",
     "Order_Item_Discount_Rate",
     "Order_Item_Total",
+)
+
+OUTPUT_KEY_COLUMNS = (
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "_ingest_timestamp",
+    "_source_file",
+    "_silver_processed_timestamp",
 )
 
 SHIPPING_PRODUCT_FEATURE_COLUMNS = (
@@ -83,6 +98,8 @@ SHIPPING_PRODUCT_FEATURE_COLUMNS = (
     "item_discount_share_of_gross",
     "_shipping_product_features_processed_timestamp",
 )
+
+EXPECTED_OUTPUT_COLUMNS = OUTPUT_KEY_COLUMNS + SHIPPING_PRODUCT_FEATURE_COLUMNS
 
 FORBIDDEN_INPUT_COLUMNS = (
     "Days_for_shipping_real",
@@ -242,7 +259,7 @@ def derive_shipping_product_features(
         .withColumn("_shipping_product_features_processed_timestamp", current_timestamp())
     )
 
-    return featured_df
+    return featured_df.select(*(OUTPUT_KEY_COLUMNS + SHIPPING_PRODUCT_FEATURE_COLUMNS))
 
 
 def write_delta(
@@ -275,16 +292,27 @@ def validate_feature_output(
 
     missing_features = sorted(
         column_name
-        for column_name in SHIPPING_PRODUCT_FEATURE_COLUMNS
+        for column_name in EXPECTED_OUTPUT_COLUMNS
         if column_name not in feature_df.columns
     )
     if missing_features:
-        raise ValueError(f"Missing shipping/product feature columns: {missing_features}")
+        raise ValueError(f"Missing shipping/product output columns: {missing_features}")
+
+    unexpected_columns = sorted(
+        column_name
+        for column_name in feature_df.columns
+        if column_name not in EXPECTED_OUTPUT_COLUMNS
+    )
+    if unexpected_columns:
+        raise ValueError(
+            "Shipping/product feature output contains unexpected columns: "
+            f"{unexpected_columns}"
+        )
 
     forbidden_generated_columns = sorted(
         column_name
         for column_name in FORBIDDEN_INPUT_COLUMNS
-        if column_name in SHIPPING_PRODUCT_FEATURE_COLUMNS
+        if column_name in feature_df.columns
     )
     if forbidden_generated_columns:
         raise ValueError(

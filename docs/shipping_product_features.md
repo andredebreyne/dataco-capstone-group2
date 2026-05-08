@@ -10,7 +10,7 @@ This document defines the shipping, product, and order-composition features crea
 
 The feature engineering job uses only fields that are expected to be known before dispatch, such as scheduled shipping days, shipping mode, product category, department, product identifiers, product price, item quantity, discounts, and order item totals.
 
-The job does not derive features from actual shipping duration, shipping date, delivery status, late-delivery target values, order status outcomes, or profit target fields.
+The job does not derive features from actual shipping duration, shipping date, delivery status, late-delivery target values, order status outcomes, or profit target fields. The output table includes only traceability keys, approved lineage fields, and generated shipping/product features.
 
 ## Input and Output
 
@@ -33,6 +33,19 @@ src/data_engineering/engineer_shipping_product_features.py
 ```
 
 ## Feature Contract
+
+The output keeps these key and lineage columns for traceability:
+
+| Column | Type | Purpose |
+| --- | --- | --- |
+| `Order_Id` | integer | Order-level join and traceability key. |
+| `Order_Item_Id` | integer | Order-item-level join and traceability key. |
+| `order_date_DateOrders` | timestamp | Decision-time timestamp used for chronological validation and downstream splits. |
+| `_ingest_timestamp` | timestamp | Bronze ingestion lineage. |
+| `_source_file` | string | Bronze source-file lineage. |
+| `_silver_processed_timestamp` | timestamp | Silver processing lineage. |
+
+Generated shipping and product features:
 
 | Feature | Type | Source | Intended use |
 | --- | --- | --- | --- |
@@ -71,7 +84,7 @@ Forbidden inputs for this task include:
 - `Benefit_per_order`
 - `Order_Item_Profit_Ratio`
 
-The output retains existing Silver columns for traceability, but modeling feature-selection code must still apply AO1 and AO2 leakage-control rules before training.
+The output intentionally does not retain all original Silver columns. This reduces the chance of accidentally carrying target, post-shipment, or direct profit-derived fields into downstream modeling. Modeling feature-selection code must still apply AO1 and AO2 leakage-control rules before training.
 
 ## High-Cardinality Review
 
@@ -94,8 +107,9 @@ The feature engineering job validates:
 - input row count matches `180,519`
 - output row count matches `180,519`
 - all expected feature columns are present
+- no unexpected original Silver columns are present in the feature output
 - required generated features do not contain null values
-- forbidden target or post-shipment fields are not generated as new features
+- forbidden target, profit, or post-shipment fields are not present in the feature output
 
 ## Execution Order
 
