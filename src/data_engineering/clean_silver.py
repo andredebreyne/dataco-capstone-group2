@@ -116,6 +116,8 @@ CATEGORICAL_COLUMNS = (
     "_source_file",
 )
 
+BRONZE_LINEAGE_COLUMNS = ("_ingest_timestamp", "_source_file")
+
 REQUIRED_COLUMNS = set(
     INTEGER_COLUMNS
     + DECIMAL_COLUMNS
@@ -123,9 +125,8 @@ REQUIRED_COLUMNS = set(
     + CATEGORICAL_COLUMNS
     + BRONZE_LINEAGE_COLUMNS
     )
-BRONZE_LINEAGE_COLUMNS = ("_ingest_timestamp", "_source_file")
-SILVER_LINEAGE_COLUMNS = ("_silver_processed_timestamp",)
 
+SILVER_LINEAGE_COLUMNS = ("_silver_processed_timestamp",)
 
 @dataclass(frozen=True)
 class SilverCleaningConfig:
