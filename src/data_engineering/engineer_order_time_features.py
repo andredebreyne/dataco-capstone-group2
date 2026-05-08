@@ -253,7 +253,7 @@ def validate_order_time_feature_ranges(feature_df: DataFrame) -> None:
     invalid_seasons = [
         row["order_season"]
         for row in (
-            feature_df.filter(~col("order_season").isin(APPROVED_ORDER_SEASONS))
+            feature_df.filter(~col("order_season").isin(*APPROVED_ORDER_SEASONS))
             .select("order_season")
             .distinct()
             .limit(20)
