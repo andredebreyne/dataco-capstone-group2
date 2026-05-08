@@ -24,6 +24,20 @@ def resolve_repo_root() -> Path:
     if "__file__" in globals():
         candidates.append(Path(__file__).resolve().parents[2])
 
+    if "dbutils" in globals():
+        try:
+            notebook_path = (
+                dbutils.notebook.entry_point.getDbutils()
+                .notebook()
+                .getContext()
+                .notebookPath()
+                .get()
+            )
+            workspace_path = Path("/Workspace") / notebook_path.strip("/")
+            candidates.extend([workspace_path, *workspace_path.parents])
+        except Exception:
+            pass
+
     for candidate in candidates:
         if (
             (candidate / "data" / "references" / "silver_schema_data_dictionary.csv").exists()
