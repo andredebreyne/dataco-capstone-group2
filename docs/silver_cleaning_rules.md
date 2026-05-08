@@ -121,7 +121,8 @@ The quality report records:
 - Silver row count
 - dropped row count
 - missing-value counts for important fields
-- numeric cast failures
+- integer cast failures
+- decimal cast failures
 - timestamp parse failures
 - final Silver column count
 
