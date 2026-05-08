@@ -38,6 +38,8 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - **Pull Requests required:** every merge into `main` must go through PR review.
 - **Traceability:** each PR should reference its task/issue.
 
+The detailed Git workflow, squash-and-merge rule, branch cleanup process, and cascading branch workflow are documented in `docs/git_strategy.md`.
+
 ### 2) Data Architecture (Medallion)
 
 - **Bronze (Raw):** original data with no manual modifications.
@@ -46,6 +48,18 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - **Reproducibility rule:** all transformations must be done via code.
 
 The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
+
+## Data Quality
+
+Data quality is validated across the Medallion architecture before downstream feature engineering, modeling, or dashboard outputs depend on the data. Silver-layer validation currently checks row count, required columns, critical non-null fields, key data types, lineage metadata, and quality-report metrics for the cleaned DataCo orders table.
+
+To run the Silver quality validation in Databricks, execute the Bronze and Silver jobs first, then run:
+
+```text
+tests/data_validation/test_silver_quality.py
+```
+
+See `docs/TESTING.md` for the complete testing strategy and validation details.
 
 ## Repository Structure
 
