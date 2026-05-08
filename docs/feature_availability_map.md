@@ -22,6 +22,8 @@ src/data_engineering/register_feature_availability_map.py
 
 The matrix classifies each structured DataCo source field by when it becomes known in the real process and how it may be used for modeling, dashboarding, or validation.
 
+For the broader leakage-control methodology, use `docs/leakage_control_plan.md` as the source-of-truth document.
+
 ## Decision-Time Rule
 
 The project supports pre-shipment decision making. A predictor is eligible for modeling only if it is known at order creation or can be derived from information available before dispatch.
@@ -136,7 +138,7 @@ The map supports and constrains the W2 feature-engineering tasks:
 - Shipping and product features use planned shipping and order-time product/commercial fields.
 - Customer and regional features use customer segment, coarse geography, market, and destination fields while excluding personal identifiers and street-level detail.
 
-Feature-engineering outputs may keep traceability keys and lineage columns, but final modeling feature matrices must still apply this availability map and the leakage-control plan.
+Feature-engineering outputs may keep traceability keys and lineage columns, but final modeling feature matrices must still apply this availability map and `docs/leakage_control_plan.md`.
 
 ## Databricks Registration
 
@@ -146,7 +148,7 @@ Run the registration script in Databricks:
 src/data_engineering/register_feature_availability_map.py
 ```
 
-The script is self-contained for Databricks Community Edition. It contains an embedded copy of the feature availability map, so the team does not need to manually upload `feature_availability_map.csv` before running it.
+The CSV at `data/references/feature_availability_map.csv` is the primary source of truth. The registration script does not maintain a second embedded copy of the map.
 
 Default outputs:
 
@@ -155,18 +157,19 @@ Default outputs:
 /Volumes/workspace/default/raw_data/references/feature_availability_map
 ```
 
-The first output is the generated CSV reference artifact. The second output is a Delta reference table for Spark-based downstream validation and modeling workflows.
+The first output is the copied CSV reference artifact. The second output is a Delta reference table for Spark-based downstream validation and modeling workflows.
 
 The script validates:
 
 - the CSV contains exactly 53 rows
 - all expected columns are present
 - every source field is unique
+- every Silver column name is unique
 - no blank cells exist
 - controlled values use the approved vocabulary
 - the Delta output row count matches the source CSV
 
-If the repository-relative CSV exists, the script reads and registers that file. If it does not exist, the script uses the embedded matrix and still writes both Databricks outputs.
+If the repository-relative CSV does not exist, the script fails with instructions to place the CSV at the expected path or configure a different input path.
 
 If the team intentionally wants to register a different CSV file, set:
 

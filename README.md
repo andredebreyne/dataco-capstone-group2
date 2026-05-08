@@ -46,6 +46,7 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - **Reproducibility rule:** all transformations must be done via code.
 
 The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
+The decision-time feature availability map is documented in `docs/feature_availability_map.md`.
 
 ## Repository Structure
 
