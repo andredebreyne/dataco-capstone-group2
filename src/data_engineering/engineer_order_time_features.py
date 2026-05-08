@@ -21,6 +21,8 @@ from pyspark.sql.functions import (
     dayofweek,
     hour,
     lit,
+    max as spark_max,
+    min as spark_min,
     month,
     quarter,
     weekofyear,
@@ -57,6 +59,31 @@ ORDER_TIME_FEATURE_COLUMNS = (
     "order_season",
     "_order_time_features_processed_timestamp",
 )
+
+ORDER_TIME_FEATURE_TYPES = {
+    "order_year": "int",
+    "order_quarter": "int",
+    "order_month": "int",
+    "order_week_of_year": "int",
+    "order_day_of_month": "int",
+    "order_day_of_week": "int",
+    "order_hour": "int",
+    "order_is_weekend": "int",
+    "order_season": "string",
+    "_order_time_features_processed_timestamp": "timestamp",
+}
+
+ORDER_TIME_FEATURE_RANGES = {
+    "order_quarter": (1, 4),
+    "order_month": (1, 12),
+    "order_week_of_year": (1, 53),
+    "order_day_of_month": (1, 31),
+    "order_day_of_week": (1, 7),
+    "order_hour": (0, 23),
+    "order_is_weekend": (0, 1),
+}
+
+APPROVED_ORDER_SEASONS = ("fall", "spring", "summer", "winter")
 
 
 @dataclass(frozen=True)
@@ -172,6 +199,77 @@ def write_delta(df: DataFrame, output_path: str, config: OrderTimeFeatureConfig)
     )
 
 
+def validate_order_time_feature_schema(feature_df: DataFrame) -> None:
+    """Validate generated order-time feature columns and Spark data types."""
+    missing_features = sorted(
+        column_name
+        for column_name in ORDER_TIME_FEATURE_COLUMNS
+        if column_name not in feature_df.columns
+    )
+    if missing_features:
+        raise ValueError(f"Missing order-time feature columns: {missing_features}")
+
+    invalid_types = {}
+    for column_name, expected_type in ORDER_TIME_FEATURE_TYPES.items():
+        actual_type = feature_df.schema[column_name].dataType.simpleString()
+        if actual_type != expected_type:
+            invalid_types[column_name] = {
+                "expected": expected_type,
+                "actual": actual_type,
+            }
+
+    if invalid_types:
+        raise ValueError(f"Invalid order-time feature column types: {invalid_types}")
+
+
+def validate_order_time_feature_ranges(feature_df: DataFrame) -> None:
+    """Validate deterministic ranges for generated order-time features."""
+    range_stats = feature_df.select(
+        [
+            aggregation.alias(f"{column_name}__{stat_name}")
+            for column_name in ORDER_TIME_FEATURE_RANGES
+            for stat_name, aggregation in (
+                ("min", spark_min(col(column_name))),
+                ("max", spark_max(col(column_name))),
+            )
+        ]
+    ).collect()[0].asDict()
+
+    range_errors = {}
+    for column_name, (
+        minimum_allowed,
+        maximum_allowed,
+    ) in ORDER_TIME_FEATURE_RANGES.items():
+        observed_min = range_stats[f"{column_name}__min"]
+        observed_max = range_stats[f"{column_name}__max"]
+        if observed_min is None or observed_max is None:
+            range_errors[column_name] = "contains only null values"
+        elif observed_min < minimum_allowed or observed_max > maximum_allowed:
+            range_errors[column_name] = {
+                "expected_range": [minimum_allowed, maximum_allowed],
+                "observed_range": [observed_min, observed_max],
+            }
+
+    invalid_seasons = [
+        row["order_season"]
+        for row in (
+            feature_df.filter(~col("order_season").isin(APPROVED_ORDER_SEASONS))
+            .select("order_season")
+            .distinct()
+            .limit(20)
+            .collect()
+        )
+    ]
+    if invalid_seasons:
+        range_errors["order_season"] = {
+            "approved_values": list(APPROVED_ORDER_SEASONS),
+            "observed_invalid_values": invalid_seasons,
+        }
+
+    if range_errors:
+        raise ValueError(f"Invalid order-time feature values: {range_errors}")
+
+
 def validate_feature_output(
     spark: SparkSession,
     config: OrderTimeFeatureConfig,
@@ -186,13 +284,7 @@ def validate_feature_output(
             f"found {row_count}."
         )
 
-    missing_features = sorted(
-        column_name
-        for column_name in ORDER_TIME_FEATURE_COLUMNS
-        if column_name not in feature_df.columns
-    )
-    if missing_features:
-        raise ValueError(f"Missing order-time feature columns: {missing_features}")
+    validate_order_time_feature_schema(feature_df)
 
     null_metrics = feature_df.select(
         [
@@ -213,6 +305,8 @@ def validate_feature_output(
             "Order-time feature output contains null values: "
             f"{columns_with_nulls}"
         )
+
+    validate_order_time_feature_ranges(feature_df)
 
 
 def run_order_time_feature_engineering(

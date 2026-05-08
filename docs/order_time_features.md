@@ -30,6 +30,11 @@ Output Delta path:
 /Volumes/workspace/default/raw_data/silver/dataco_orders_order_time_features
 ```
 
+Output note: this is a feature-enriched Silver dataset, or Gold-ready intermediate
+dataset, not a final leakage-safe AO1/AO2 modeling table. Downstream Gold
+transformations must still apply the feature availability map and leakage-control
+rules before creating model feature matrices. See `docs/leakage_control_plan.md`.
+
 Script:
 
 ```text
@@ -76,7 +81,10 @@ The feature engineering job validates:
 - input row count matches `180,519`
 - output row count matches `180,519`
 - all expected feature columns are present
+- generated feature columns use the expected Spark data types
 - generated order-time feature columns do not contain null values
+- generated calendar feature values stay within expected deterministic ranges
+- `order_season` contains only approved season labels
 
 ## Execution Order
 
@@ -93,4 +101,7 @@ The Silver cleaning job must complete successfully before order-time feature eng
 - `order_date_DateOrders` is treated as the order creation timestamp.
 - Calendar features are deterministic and do not require training-data fitting.
 - `order_season` is intentionally interpretable rather than statistically learned.
+  It is a simple calendar seasonality proxy based on month buckets and, because
+  DataCo is global, should not be interpreted as a geographically accurate local
+  climate season for every market.
 - Cyclical encodings such as sine/cosine month or day-of-week transformations may be added later inside model pipelines if needed, but fitted preprocessing and model-specific feature selection must remain training-only.
