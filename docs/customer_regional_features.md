@@ -12,6 +12,12 @@ The feature engineering job uses static customer segment and location fields, or
 
 The job does not derive features from personal identifiers, street-level addresses, delivery outcomes, shipping dates, actual shipping duration, targets, profit outcomes, or learned historical aggregates.
 
+## Scope Clarification
+
+This output is a Silver customer/regional candidate feature table. It is not the final AO1 or AO2 modeling matrix.
+
+Later Gold transformations must still apply the feature availability map, leakage-control rules, high-cardinality review, and train-only preprocessing before any AO1 or AO2 model training.
+
 ## Input and Output
 
 Input Delta path:
@@ -89,6 +95,12 @@ The following fields are intentionally excluded from the generated feature outpu
 
 `Customer_Id` is also not emitted as a modeling feature. It may be used later only as a controlled grouping key for training-only historical aggregates if the team approves that design.
 
+## Feature Availability Map Alignment
+
+The source fields used by this job are customer, market, destination geography, and coarse coordinate fields classified as order-time or pre-dispatch customer/regional fields in `data/references/feature_availability_map.csv`.
+
+Sensitive identifiers, street-level address fields, post-shipment fields, post-delivery fields, targets, and direct profit outcome fields are excluded from the feature output.
+
 ## Leakage-Control Assessment
 
 These features are designed to be decision-time valid because customer segment, destination geography, market, and coarse coordinates are expected to be known when the order is placed or before dispatch.
@@ -98,6 +110,20 @@ No historical performance aggregates are computed in this task. Any future custo
 ## High-Cardinality and Stability Review
 
 `customer_city_normalized`, `order_city_normalized`, `customer_region_key`, and `order_region_key` may be high-cardinality fields. They are retained for review and traceability, but they should not be blindly one-hot encoded in modeling pipelines.
+
+The job logs distinct counts during execution for:
+
+- `customer_segment_normalized`
+- `customer_country_normalized`
+- `customer_state_normalized`
+- `customer_city_normalized`
+- `market_normalized`
+- `order_country_normalized`
+- `order_region_normalized`
+- `order_state_normalized`
+- `order_city_normalized`
+- `customer_region_key`
+- `order_region_key`
 
 Before modeling, high-cardinality regional fields must be classified as:
 
@@ -119,6 +145,12 @@ The feature engineering job validates:
 - no unexpected original Silver columns are present in the feature output
 - personal identifiers, target fields, profit fields, and post-shipment fields are not present
 - required generated features do not contain null values
+- generated text and region-key fields have string output types
+- generated binary flags have integer output types and contain only `0` or `1`
+- rounded latitude and longitude have double output types
+- rounded latitude is between `-90` and `90` when not null
+- rounded longitude is between `-180` and `180` when not null
+- the feature processed timestamp has timestamp output type
 
 ## Execution Order
 
@@ -134,6 +166,7 @@ The Silver cleaning job must complete successfully before customer and regional 
 
 - Customer segment and regional fields are treated as available at order time.
 - Latitude and longitude are rounded to two decimals to reduce location precision while preserving broad geographic signal.
+- Rounded latitude and longitude are treated as broad geographic context, not precise customer-level location features.
 - Raw postal codes are not emitted as features; only availability flags are generated.
 - Personal identifiers and street-level details are excluded.
 - Historical aggregates are intentionally deferred to later modeling pipelines and must be fit on training data only.

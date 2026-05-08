@@ -17,14 +17,17 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import (
     col,
     concat_ws,
+    countDistinct,
     current_timestamp,
     lit,
     lower,
     regexp_replace,
     round as spark_round,
+    sum as spark_sum,
     trim,
     when,
 )
+from pyspark.sql.types import DoubleType, IntegerType, StringType, TimestampType
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -96,6 +99,61 @@ CUSTOMER_REGIONAL_FEATURE_COLUMNS = (
 )
 
 EXPECTED_OUTPUT_COLUMNS = OUTPUT_KEY_COLUMNS + CUSTOMER_REGIONAL_FEATURE_COLUMNS
+
+NORMALIZED_TEXT_FEATURE_COLUMNS = (
+    "customer_segment_normalized",
+    "customer_country_normalized",
+    "customer_state_normalized",
+    "customer_city_normalized",
+    "market_normalized",
+    "order_country_normalized",
+    "order_region_normalized",
+    "order_state_normalized",
+    "order_city_normalized",
+)
+
+REGION_KEY_COLUMNS = (
+    "customer_region_key",
+    "order_region_key",
+)
+
+BINARY_FEATURE_COLUMNS = (
+    "customer_zipcode_available",
+    "order_zipcode_available",
+    "customer_order_country_match",
+    "customer_order_state_match",
+    "geo_coordinates_available",
+)
+
+ROUNDED_COORDINATE_COLUMNS = (
+    "latitude_rounded",
+    "longitude_rounded",
+)
+
+PROCESSED_TIMESTAMP_COLUMN = "_customer_regional_features_processed_timestamp"
+
+EXPECTED_OUTPUT_TYPE_CLASSES = {
+    **{column_name: StringType for column_name in NORMALIZED_TEXT_FEATURE_COLUMNS},
+    **{column_name: StringType for column_name in REGION_KEY_COLUMNS},
+    **{column_name: IntegerType for column_name in BINARY_FEATURE_COLUMNS},
+    "latitude_rounded": DoubleType,
+    "longitude_rounded": DoubleType,
+    PROCESSED_TIMESTAMP_COLUMN: TimestampType,
+}
+
+HIGH_CARDINALITY_REVIEW_COLUMNS = (
+    "customer_segment_normalized",
+    "customer_country_normalized",
+    "customer_state_normalized",
+    "customer_city_normalized",
+    "market_normalized",
+    "order_country_normalized",
+    "order_region_normalized",
+    "order_state_normalized",
+    "order_city_normalized",
+    "customer_region_key",
+    "order_region_key",
+)
 
 FORBIDDEN_INPUT_COLUMNS = (
     "Customer_Email",
@@ -268,6 +326,97 @@ def write_delta(
     )
 
 
+def validate_feature_output_types(feature_df: DataFrame) -> None:
+    """Validate practical output data types for generated feature columns."""
+    schema_by_name = {field.name: field.dataType for field in feature_df.schema.fields}
+    invalid_types = {}
+
+    for column_name, expected_type_class in EXPECTED_OUTPUT_TYPE_CLASSES.items():
+        data_type = schema_by_name.get(column_name)
+        if data_type is not None and not isinstance(data_type, expected_type_class):
+            invalid_types[column_name] = {
+                "expected": expected_type_class.__name__,
+                "found": data_type.simpleString(),
+            }
+
+    if invalid_types:
+        raise ValueError(
+            "Customer/regional feature output has unexpected column types: "
+            f"{invalid_types}"
+        )
+
+
+def validate_feature_output_ranges(feature_df: DataFrame) -> None:
+    """Validate deterministic domains and coordinate ranges for generated features."""
+    invalid_binary_counts = feature_df.agg(
+        *[
+            spark_sum(
+                when(col(column_name).isin(0, 1), lit(0)).otherwise(lit(1))
+            ).alias(column_name)
+            for column_name in BINARY_FEATURE_COLUMNS
+        ]
+    ).collect()[0].asDict()
+
+    invalid_binary_columns = {
+        column_name: invalid_count
+        for column_name, invalid_count in invalid_binary_counts.items()
+        if invalid_count != 0
+    }
+
+    if invalid_binary_columns:
+        raise ValueError(
+            "Customer/regional binary flags must contain only 0 or 1 values: "
+            f"{invalid_binary_columns}"
+        )
+
+    coordinate_ranges = dict(zip(ROUNDED_COORDINATE_COLUMNS, ((-90, 90), (-180, 180))))
+    invalid_coordinate_counts = feature_df.agg(
+        *[
+            spark_sum(
+                when(
+                    col(column_name).isNotNull()
+                    & (
+                        (col(column_name) < lit(min_value))
+                        | (col(column_name) > lit(max_value))
+                    ),
+                    lit(1),
+                ).otherwise(lit(0))
+            ).alias(column_name)
+            for column_name, (min_value, max_value) in coordinate_ranges.items()
+        ]
+    ).collect()[0].asDict()
+
+    invalid_coordinate_columns = {
+        column_name: invalid_count
+        for column_name, invalid_count in invalid_coordinate_counts.items()
+        if invalid_count != 0
+    }
+
+    if invalid_coordinate_columns:
+        raise ValueError(
+            "Customer/regional rounded coordinates are outside expected ranges: "
+            f"{invalid_coordinate_columns}"
+        )
+
+
+def log_high_cardinality_evidence(
+    feature_df: DataFrame,
+    logger: logging.Logger,
+) -> None:
+    """Log distinct counts for fields that require later high-cardinality review."""
+    distinct_counts = feature_df.agg(
+        *[
+            countDistinct(col(column_name)).alias(column_name)
+            for column_name in HIGH_CARDINALITY_REVIEW_COLUMNS
+        ]
+    ).collect()[0].asDict()
+
+    logger.info(
+        "Customer/regional high-cardinality review distinct counts: %s",
+        distinct_counts,
+    )
+
+
 def validate_feature_output(
     spark: SparkSession,
     config: CustomerRegionalFeatureConfig,
@@ -289,6 +438,8 @@ def validate_feature_output(
     )
     if missing_columns:
         raise ValueError(f"Missing customer/regional output columns: {missing_columns}")
+
+    validate_feature_output_types(feature_df)
 
     unexpected_columns = sorted(
         column_name
@@ -345,6 +496,8 @@ def validate_feature_output(
             f"{columns_with_nulls}"
         )
 
+    validate_feature_output_ranges(feature_df)
+
 
 def run_customer_regional_feature_engineering(
     config: CustomerRegionalFeatureConfig,
@@ -369,6 +522,8 @@ def run_customer_regional_feature_engineering(
 
         feature_df = derive_customer_regional_features(silver_df)
         logger.info("Customer/regional feature derivation completed successfully.")
+
+        log_high_cardinality_evidence(feature_df, logger)
 
         write_delta(feature_df, config.feature_output_path, config)
         logger.info("Customer/regional feature Delta write completed successfully.")
