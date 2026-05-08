@@ -14,6 +14,12 @@ The versioned matrix is stored at:
 data/references/feature_availability_map.csv
 ```
 
+The registration script is stored at:
+
+```text
+src/data_engineering/register_feature_availability_map.py
+```
+
 The matrix classifies each structured DataCo source field by when it becomes known in the real process and how it may be used for modeling, dashboarding, or validation.
 
 ## Decision-Time Rule
@@ -131,6 +137,41 @@ The map supports and constrains the W2 feature-engineering tasks:
 - Customer and regional features use customer segment, coarse geography, market, and destination fields while excluding personal identifiers and street-level detail.
 
 Feature-engineering outputs may keep traceability keys and lineage columns, but final modeling feature matrices must still apply this availability map and the leakage-control plan.
+
+## Databricks Registration
+
+Run the registration script in Databricks after the repository version of the CSV is available in the workspace:
+
+```text
+src/data_engineering/register_feature_availability_map.py
+```
+
+Default outputs:
+
+```text
+/Volumes/workspace/default/raw_data/references/feature_availability_map.csv
+/Volumes/workspace/default/raw_data/references/feature_availability_map
+```
+
+The first output is a CSV copy of the versioned reference artifact. The second output is a Delta reference table for Spark-based downstream validation and modeling workflows.
+
+The script validates:
+
+- the CSV exists
+- the CSV contains exactly 53 rows
+- all expected columns are present
+- every source field is unique
+- no blank cells exist
+- controlled values use the approved vocabulary
+- the Delta output row count matches the source CSV
+
+If the script is run from a location where the repository-relative CSV path is not available, set:
+
+```text
+DATACO_FEATURE_AVAILABILITY_MAP_INPUT_PATH
+```
+
+to the accessible CSV path before execution.
 
 ## Update Rule
 
