@@ -49,6 +49,16 @@ Before building Gold analytical tables or AO1/AO2 feature matrices, reviewers sh
 
 The Silver layer is not a final AO1 or AO2 modeling matrix. It is a cleaned, typed source layer that still contains targets, outcomes, identifiers, dashboard-only fields, and fields requiring Gold-stage review.
 
+## Validation
+
+The lightweight validator is stored at:
+
+```text
+tests/data_validation/validate_silver_schema_dictionary.py
+```
+
+Run it from the repository root. In a Databricks notebook, set `DATACO_REPO_ROOT` first if the notebook's current working directory is not the repo checkout.
+
 ## Key Field Groups
 
 Identifiers and keys:

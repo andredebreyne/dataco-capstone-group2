@@ -9,10 +9,35 @@ from __future__ import annotations
 
 import ast
 import csv
+import os
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+def resolve_repo_root() -> Path:
+    """Resolve the repository root without relying on __file__ in notebooks."""
+    candidates = [Path.cwd()]
+    configured_root = os.getenv("DATACO_REPO_ROOT")
+
+    if configured_root:
+        candidates.insert(0, Path(configured_root))
+
+    if "__file__" in globals():
+        candidates.append(Path(__file__).resolve().parents[2])
+
+    for candidate in candidates:
+        if (
+            (candidate / "data" / "references" / "silver_schema_data_dictionary.csv").exists()
+            and (candidate / "src" / "data_engineering" / "clean_silver.py").exists()
+        ):
+            return candidate
+
+    raise RuntimeError(
+        "Run this validation from the repository root, or set DATACO_REPO_ROOT "
+        "to the repository path."
+    )
+
+
+REPO_ROOT = resolve_repo_root()
 DICTIONARY_PATH = REPO_ROOT / "data" / "references" / "silver_schema_data_dictionary.csv"
 CLEAN_SILVER_PATH = REPO_ROOT / "src" / "data_engineering" / "clean_silver.py"
 SCREENING_PATH = REPO_ROOT / "data" / "references" / "leakage_conceptual_screening.csv"
