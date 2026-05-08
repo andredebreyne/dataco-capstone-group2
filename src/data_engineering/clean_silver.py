@@ -56,14 +56,12 @@ INTEGER_COLUMNS = (
     "Late_delivery_risk",
     "Category_Id",
     "Customer_Id",
-    "Customer_Zipcode",
     "Department_Id",
     "Order_Customer_Id",
     "Order_Id",
     "Order_Item_Cardprod_Id",
     "Order_Item_Id",
     "Order_Item_Quantity",
-    "Order_Zipcode",
     "Product_Card_Id",
     "Product_Category_Id",
     "Product_Status",
@@ -102,6 +100,7 @@ CATEGORICAL_COLUMNS = (
     "Customer_Segment",
     "Customer_State",
     "Customer_Street",
+    "Customer_Zipcode",
     "Department_Name",
     "Market",
     "Order_City",
@@ -109,6 +108,7 @@ CATEGORICAL_COLUMNS = (
     "Order_Region",
     "Order_State",
     "Order_Status",
+    "Order_Zipcode",
     "Product_Description",
     "Product_Image",
     "Product_Name",
@@ -116,7 +116,13 @@ CATEGORICAL_COLUMNS = (
     "_source_file",
 )
 
-REQUIRED_COLUMNS = set(INTEGER_COLUMNS + DECIMAL_COLUMNS + TIMESTAMP_COLUMNS + CATEGORICAL_COLUMNS)
+REQUIRED_COLUMNS = set(
+    INTEGER_COLUMNS
+    + DECIMAL_COLUMNS
+    + TIMESTAMP_COLUMNS
+    + CATEGORICAL_COLUMNS
+    + BRONZE_LINEAGE_COLUMNS
+    )
 BRONZE_LINEAGE_COLUMNS = ("_ingest_timestamp", "_source_file")
 SILVER_LINEAGE_COLUMNS = ("_silver_processed_timestamp",)
 
@@ -341,7 +347,26 @@ def build_quality_metrics(
             )
         )
 
-    for column_name in INTEGER_COLUMNS + DECIMAL_COLUMNS:
+    for column_name in INTEGER_COLUMNS:
+        invalid_count = cleaned_string_df.select(
+            spark_sum(
+                when(
+                    col(column_name).isNotNull()
+                    & col(column_name).cast("int").isNull(),
+                    1,
+                ).otherwise(0)
+            ).alias("invalid_count")
+        ).collect()[0]["invalid_count"]
+    
+        metrics.append(
+            (
+                f"invalid_integer_cast_{column_name}",
+                str(invalid_count),
+                "Non-null source values that could not be cast to integer.",
+            )
+        )
+
+    for column_name in DECIMAL_COLUMNS:
         invalid_count = cleaned_string_df.select(
             spark_sum(
                 when(
@@ -351,14 +376,15 @@ def build_quality_metrics(
                 ).otherwise(0)
             ).alias("invalid_count")
         ).collect()[0]["invalid_count"]
+    
         metrics.append(
             (
-                f"invalid_numeric_cast_{column_name}",
+                f"invalid_decimal_cast_{column_name}",
                 str(invalid_count),
-                "Non-null source values that could not be cast to numeric type.",
+                "Non-null source values that could not be cast to double.",
             )
         )
-
+        
     for column_name in TIMESTAMP_COLUMNS:
         invalid_count = cleaned_string_df.select(
             spark_sum(
@@ -406,6 +432,62 @@ def write_quality_report(
 
     write_delta(metrics_df, config.quality_report_output_path, config)
 
+def validate_expected_column_types(silver_df: DataFrame) -> None:
+    """Validate that Silver output columns match the approved schema contract."""
+    actual_types = {
+        field.name: field.dataType.simpleString()
+        for field in silver_df.schema.fields
+    }
+
+    expected_types: dict[str, str] = {}
+
+    for column_name in INTEGER_COLUMNS:
+        expected_types[column_name] = "int"
+
+    for column_name in DECIMAL_COLUMNS:
+        expected_types[column_name] = "double"
+
+    for column_name in TIMESTAMP_COLUMNS:
+        expected_types[column_name] = "timestamp"
+
+    for column_name in CATEGORICAL_COLUMNS:
+        expected_types[column_name] = "string"
+
+    expected_types["_ingest_timestamp"] = "timestamp"
+    expected_types["_source_file"] = "string"
+    expected_types["_silver_processed_timestamp"] = "timestamp"
+
+    missing_columns = sorted(
+        column_name
+        for column_name in expected_types
+        if column_name not in actual_types
+    )
+
+    if missing_columns:
+        raise ValueError(
+            f"Missing expected Silver schema columns: {missing_columns}"
+        )
+
+    type_mismatches = sorted(
+        (
+            column_name,
+            expected_type,
+            actual_types[column_name],
+        )
+        for column_name, expected_type in expected_types.items()
+        if actual_types[column_name] != expected_type
+    )
+
+    if type_mismatches:
+        mismatch_details = [
+            f"{column_name}: expected {expected_type}, found {actual_type}"
+            for column_name, expected_type, actual_type in type_mismatches
+        ]
+
+        raise ValueError(
+            "Silver schema type validation failed. "
+            f"Mismatches: {mismatch_details}"
+        )
 
 def validate_silver_output(
     spark: SparkSession,
@@ -413,8 +495,8 @@ def validate_silver_output(
 ) -> None:
     """Validate the written Silver Delta dataset."""
     silver_df = spark.read.format(config.write_format).load(config.silver_output_path)
-    row_count = silver_df.count()
 
+    row_count = silver_df.count()
     if row_count != config.expected_bronze_rows:
         raise ValueError(
             f"Unexpected Silver row count. Expected {config.expected_bronze_rows}, "
@@ -427,6 +509,7 @@ def validate_silver_output(
     if missing_lineage:
         raise ValueError(f"Missing lineage columns in Silver output: {missing_lineage}")
 
+    validate_expected_column_types(silver_df)
 
 def run_silver_cleaning(config: SilverCleaningConfig, logger: logging.Logger) -> None:
     """Execute the DataCo Silver cleaning workflow."""
