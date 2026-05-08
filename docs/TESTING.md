@@ -37,8 +37,11 @@ Expected checks:
 - numeric fields are cast to approved analytical types
 - Bronze lineage is preserved
 - Silver processing metadata is appended
+- Silver quality-report metrics are written for auditability
 
 Silver must not perform fitted preprocessing such as statistical imputation, scaling, one-hot encoding, label encoding, target encoding, or resampling. Those transformations belong in model pipelines and must be fit on training data only.
+
+The detailed Silver transformation rules are documented in `docs/silver_cleaning_rules.md`.
 
 ### Gold
 
@@ -67,14 +70,21 @@ The script reads the Silver Delta dataset from:
 /Volumes/workspace/default/raw_data/silver/dataco_orders_silver
 ```
 
+It reads the Silver quality-report Delta dataset from:
+
+```text
+/Volumes/workspace/default/raw_data/silver/dataco_orders_silver_quality_report
+```
+
 It validates:
 
 - exactly `180,519` rows
-- zero nulls in `Order_Id`
-- zero nulls in `order_date_DateOrders`
-- zero nulls in `Sales`
-- zero nulls in `Late_delivery_risk`
-- `order_date_DateOrders` is a Spark `timestamp`
+- required Silver contract columns exist
+- Bronze lineage columns are preserved
+- `_silver_processed_timestamp` exists
+- zero nulls in critical fields: `Order_Id`, `order_date_DateOrders`, `Sales`, and `Late_delivery_risk`
+- key identifier, timestamp, target, financial, and lineage columns have approved Spark data types
+- the Silver quality report contains required audit metrics
 
 ## Why These Checks Matter
 
@@ -91,20 +101,20 @@ The timestamp check ensures order-time feature engineering can derive calendar f
 
 ## Running the Silver Tests in Databricks
 
-Run the Bronze and Silver jobs first:
+Run the Bronze and Silver jobs first from Databricks Repos or the Databricks workspace location where the repository scripts are available:
 
 ```text
 src/data_engineering/ingest_bronze.py
 src/data_engineering/clean_silver.py
 ```
 
-Then run the validation script in Databricks:
+Then run the validation script in Databricks from the repository root context:
 
 ```python
 %run /path/to/tests/data_validation/test_silver_quality
 ```
 
-If the script is copied into a Databricks notebook cell, run the full file content. The script should finish with:
+If the repository is not mounted in Databricks Repos, copy the full script into a temporary notebook cell after running Bronze and Silver. The script should finish with:
 
 ```text
 All Silver quality tests passed.

@@ -49,15 +49,9 @@ The detailed Git workflow, squash-and-merge rule, branch cleanup process, and ca
 
 The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
 
-## Git Strategy
-
-The team uses protected `main`, feature branches, peer-reviewed pull requests, squash and merge, and branch cleanup after merge. When a task depends on another task that is complete but still under review, a cascading branch may be created from the parent feature branch to avoid blocking progress. The dependent branch must be rebased onto `main` after the parent pull request is merged.
-
-See `docs/git_strategy.md` for the full workflow and examples.
-
 ## Data Quality
 
-Data quality is validated across the Medallion architecture before downstream feature engineering, modeling, or dashboard outputs depend on the data. Silver-layer validation currently checks row count, required non-null fields, and timestamp type consistency for the cleaned DataCo orders table.
+Data quality is validated across the Medallion architecture before downstream feature engineering, modeling, or dashboard outputs depend on the data. Silver-layer validation currently checks row count, required columns, critical non-null fields, key data types, lineage metadata, and quality-report metrics for the cleaned DataCo orders table.
 
 To run the Silver quality validation in Databricks, execute the Bronze and Silver jobs first, then run:
 

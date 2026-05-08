@@ -15,14 +15,55 @@ from pyspark.sql.functions import col, sum as spark_sum, when
 
 
 DEFAULT_SILVER_PATH = "/Volumes/workspace/default/raw_data/silver/dataco_orders_silver"
+DEFAULT_QUALITY_REPORT_PATH = (
+    "/Volumes/workspace/default/raw_data/silver/dataco_orders_silver_quality_report"
+)
 SILVER_PATH = os.getenv("DATACO_SILVER_OUTPUT_PATH", DEFAULT_SILVER_PATH)
+QUALITY_REPORT_PATH = os.getenv(
+    "DATACO_SILVER_QUALITY_REPORT_OUTPUT_PATH",
+    DEFAULT_QUALITY_REPORT_PATH,
+)
 EXPECTED_ROW_COUNT = 180_519
+
+REQUIRED_COLUMNS = (
+    "Order_Id",
+    "order_date_DateOrders",
+    "shipping_date_DateOrders",
+    "Sales",
+    "Late_delivery_risk",
+    "Benefit_per_order",
+    "Order_Profit_Per_Order",
+    "_ingest_timestamp",
+    "_source_file",
+    "_silver_processed_timestamp",
+)
 
 REQUIRED_NON_NULL_COLUMNS = (
     "Order_Id",
     "order_date_DateOrders",
     "Sales",
     "Late_delivery_risk",
+)
+
+EXPECTED_COLUMN_TYPES = {
+    "Order_Id": "int",
+    "order_date_DateOrders": "timestamp",
+    "shipping_date_DateOrders": "timestamp",
+    "Sales": "double",
+    "Late_delivery_risk": "int",
+    "Benefit_per_order": "double",
+    "Order_Profit_Per_Order": "double",
+    "_ingest_timestamp": "timestamp",
+    "_source_file": "string",
+    "_silver_processed_timestamp": "timestamp",
+}
+
+EXPECTED_QUALITY_METRICS = (
+    "bronze_row_count",
+    "silver_row_count",
+    "dropped_row_count",
+    "expected_bronze_rows",
+    "silver_column_count",
 )
 
 
@@ -36,6 +77,14 @@ def read_silver_delta(spark: SparkSession, silver_path: str = SILVER_PATH) -> Da
     return spark.read.format("delta").load(silver_path)
 
 
+def read_quality_report_delta(
+    spark: SparkSession,
+    quality_report_path: str = QUALITY_REPORT_PATH,
+) -> DataFrame:
+    """Read the Silver quality-report Delta dataset."""
+    return spark.read.format("delta").load(quality_report_path)
+
+
 def assert_row_count(df: DataFrame, expected_count: int = EXPECTED_ROW_COUNT) -> None:
     """Validate the Silver dataset row count."""
     actual_count = df.count()
@@ -44,6 +93,15 @@ def assert_row_count(df: DataFrame, expected_count: int = EXPECTED_ROW_COUNT) ->
         f"Unexpected Silver row count. Expected {expected_count}, "
         f"found {actual_count}."
     )
+
+
+def assert_required_columns_exist(df: DataFrame) -> None:
+    """Validate that the Silver dataset contains the required contract columns."""
+    missing_columns = sorted(
+        column_name for column_name in REQUIRED_COLUMNS if column_name not in df.columns
+    )
+
+    assert not missing_columns, f"Missing required Silver columns: {missing_columns}"
 
 
 def count_nulls(df: DataFrame, column_name: str) -> int:
@@ -62,13 +120,50 @@ def assert_required_columns_are_not_null(df: DataFrame) -> None:
         )
 
 
-def assert_order_date_is_timestamp(df: DataFrame) -> None:
-    """Validate the timestamp contract for the order date field."""
-    order_date_type = df.schema["order_date_DateOrders"].dataType.simpleString()
+def assert_expected_column_types(df: DataFrame) -> None:
+    """Validate key Silver schema fields used by downstream AO work."""
+    actual_types = {
+        field.name: field.dataType.simpleString()
+        for field in df.schema.fields
+    }
 
-    assert order_date_type == "timestamp", (
-        "order_date_DateOrders must be timestamp. "
-        f"Found {order_date_type}."
+    type_mismatches = sorted(
+        (
+            column_name,
+            expected_type,
+            actual_types.get(column_name),
+        )
+        for column_name, expected_type in EXPECTED_COLUMN_TYPES.items()
+        if actual_types.get(column_name) != expected_type
+    )
+
+    assert not type_mismatches, (
+        "Silver schema type validation failed. "
+        f"Mismatches: {type_mismatches}"
+    )
+
+
+def assert_quality_report_contract(quality_report_df: DataFrame) -> None:
+    """Validate that the Silver quality report contains expected audit metrics."""
+    required_columns = {"metric_name", "metric_value", "metric_details"}
+    missing_columns = sorted(required_columns.difference(quality_report_df.columns))
+
+    assert not missing_columns, (
+        f"Missing required Silver quality-report columns: {missing_columns}"
+    )
+
+    actual_metrics = {
+        row["metric_name"]
+        for row in quality_report_df.select("metric_name").distinct().collect()
+    }
+    missing_metrics = sorted(
+        metric_name
+        for metric_name in EXPECTED_QUALITY_METRICS
+        if metric_name not in actual_metrics
+    )
+
+    assert not missing_metrics, (
+        f"Missing required Silver quality-report metrics: {missing_metrics}"
     )
 
 
@@ -76,10 +171,13 @@ def run_silver_quality_tests() -> None:
     """Run all Silver quality tests."""
     spark = get_spark_session()
     silver_df = read_silver_delta(spark)
+    quality_report_df = read_quality_report_delta(spark)
 
     assert_row_count(silver_df)
+    assert_required_columns_exist(silver_df)
     assert_required_columns_are_not_null(silver_df)
-    assert_order_date_is_timestamp(silver_df)
+    assert_expected_column_types(silver_df)
+    assert_quality_report_contract(quality_report_df)
 
     print("All Silver quality tests passed.")
 
