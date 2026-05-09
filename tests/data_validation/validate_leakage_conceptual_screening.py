@@ -8,10 +8,29 @@ requiring Spark, model training, or Gold-table construction.
 from __future__ import annotations
 
 import csv
+import os
 from pathlib import Path
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+def resolve_repo_root() -> Path:
+    """Resolve the repository root in scripts and Databricks notebook runs."""
+    configured_root = os.getenv("DATACO_REPO_ROOT")
+    if configured_root:
+        return Path(configured_root).resolve()
+
+    if "__file__" in globals():
+        return Path(__file__).resolve().parents[2]
+
+    current_path = Path.cwd().resolve()
+    candidate_paths = (current_path, *current_path.parents)
+    for candidate_path in candidate_paths:
+        if (candidate_path / "data" / "references" / "feature_availability_map.csv").exists():
+            return candidate_path
+
+    return current_path
+
+
+REPO_ROOT = resolve_repo_root()
 SCREENING_PATH = REPO_ROOT / "data" / "references" / "leakage_conceptual_screening.csv"
 FEATURE_MAP_PATH = REPO_ROOT / "data" / "references" / "feature_availability_map.csv"
 
