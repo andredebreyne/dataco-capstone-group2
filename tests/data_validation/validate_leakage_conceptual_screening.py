@@ -13,7 +13,8 @@ from pathlib import Path
 
 
 def resolve_repo_root() -> Path:
-    """Resolve the repository root in scripts and Databricks notebook runs."""
+    """Resolve repository root for scripts and notebooks."""
+
     configured_root = os.getenv("DATACO_REPO_ROOT")
     if configured_root:
         return Path(configured_root).resolve()
@@ -22,12 +23,15 @@ def resolve_repo_root() -> Path:
         return Path(__file__).resolve().parents[2]
 
     current_path = Path.cwd().resolve()
-    candidate_paths = (current_path, *current_path.parents)
-    for candidate_path in candidate_paths:
-        if (candidate_path / "data" / "references" / "feature_availability_map.csv").exists():
-            return candidate_path
+
+    for candidate in (current_path, *current_path.parents):
+        if (
+            (candidate / "data" / "references" / "feature_availability_map.csv").exists()
+        ):
+            return candidate
 
     return current_path
+
 
 
 REPO_ROOT = resolve_repo_root()
