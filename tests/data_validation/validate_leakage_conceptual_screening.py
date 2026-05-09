@@ -11,42 +11,27 @@ import csv
 import os
 from pathlib import Path
 
-def resolve_repo_root() -> Path:
-    """Resolve the repository root without relying on __file__ in notebooks."""
-    candidates = [Path.cwd()]
-    configured_root = os.getenv("DATACO_REPO_ROOT")
 
+def resolve_repo_root() -> Path:
+    """Resolve repository root for scripts and notebooks."""
+
+    configured_root = os.getenv("DATACO_REPO_ROOT")
     if configured_root:
-        candidates.insert(0, Path(configured_root))
+        return Path(configured_root).resolve()
 
     if "__file__" in globals():
-        candidates.append(Path(__file__).resolve().parents[2])
+        return Path(__file__).resolve().parents[2]
 
-    if "dbutils" in globals():
-        try:
-            notebook_path = (
-                dbutils.notebook.entry_point.getDbutils()
-                .notebook()
-                .getContext()
-                .notebookPath()
-                .get()
-            )
-            workspace_path = Path("/Workspace") / notebook_path.strip("/")
-            candidates.extend([workspace_path, *workspace_path.parents])
-        except Exception:
-            pass
+    current_path = Path.cwd().resolve()
 
-    for candidate in candidates:
+    for candidate in (current_path, *current_path.parents):
         if (
-            (candidate / "data" / "references" / "silver_schema_data_dictionary.csv").exists()
-            and (candidate / "src" / "data_engineering" / "clean_silver.py").exists()
+            (candidate / "data" / "references" / "feature_availability_map.csv").exists()
         ):
             return candidate
 
-    raise RuntimeError(
-        "Run this validation from the repository root, or set DATACO_REPO_ROOT "
-        "to the repository path."
-    )
+    return current_path
+
 
 
 REPO_ROOT = resolve_repo_root()
@@ -108,6 +93,72 @@ ENGINEERED_FAMILIES = {
         REPO_ROOT / "src" / "data_engineering" / "engineer_customer_regional_features.py",
         REPO_ROOT / "docs" / "customer_regional_features.md",
     ),
+}
+
+EXPECTED_ENGINEERED_FEATURES = {
+    "order_time_engineered": {
+        "order_year",
+        "order_quarter",
+        "order_month",
+        "order_week_of_year",
+        "order_day_of_month",
+        "order_day_of_week",
+        "order_hour",
+        "order_is_weekend",
+        "order_season",
+        "_order_time_features_processed_timestamp",
+    },
+    "shipping_product_engineered": {
+        "scheduled_shipping_days",
+        "shipping_speed_tier",
+        "shipping_mode_normalized",
+        "is_same_day_or_next_day_shipping",
+        "is_standard_shipping",
+        "product_category_key",
+        "product_department_key",
+        "product_catalog_key",
+        "product_name_normalized",
+        "product_status_flag",
+        "product_list_price",
+        "order_item_quantity",
+        "item_unit_price",
+        "item_discount_amount",
+        "item_discount_rate",
+        "item_gross_sales_estimate",
+        "item_net_sales_amount",
+        "item_discount_share_of_gross",
+        "_shipping_product_features_processed_timestamp",
+    },
+    "customer_regional_engineered": {
+        "customer_segment_normalized",
+        "customer_country_normalized",
+        "customer_state_normalized",
+        "customer_city_normalized",
+        "customer_zipcode_available",
+        "market_normalized",
+        "order_country_normalized",
+        "order_region_normalized",
+        "order_state_normalized",
+        "order_city_normalized",
+        "order_zipcode_available",
+        "customer_region_key",
+        "order_region_key",
+        "customer_order_country_match",
+        "customer_order_state_match",
+        "latitude_rounded",
+        "longitude_rounded",
+        "geo_coordinates_available",
+        "_customer_regional_features_processed_timestamp",
+    },
+}
+
+CRITICAL_FORBIDDEN_PROXY_FIELDS = {
+    "Delivery Status",
+    "Days for shipping (real)",
+    "Benefit per order",
+    "Order Item Profit Ratio",
+    "shipping date (DateOrders)",
+    "Order Status",
 }
 
 
@@ -211,6 +262,32 @@ def assert_engineered_family_coverage(rows: list[dict[str, str]]) -> None:
         )
 
 
+def assert_engineered_feature_coverage(rows: list[dict[str, str]]) -> None:
+    """Validate current engineered feature contracts are represented by feature."""
+    screened_by_origin: dict[str, set[str]] = {}
+    for row in rows:
+        screened_by_origin.setdefault(row["variable_origin"], set()).add(
+            row["variable_name"]
+        )
+
+    missing_features: dict[str, list[str]] = {}
+    for origin, expected_features in EXPECTED_ENGINEERED_FEATURES.items():
+        if not any(path.exists() for path in ENGINEERED_FAMILIES[origin]):
+            continue
+
+        missing_for_origin = sorted(
+            expected_features.difference(screened_by_origin.get(origin, set()))
+        )
+        if missing_for_origin:
+            missing_features[origin] = missing_for_origin
+
+    if missing_features:
+        raise AssertionError(
+            "Implemented engineered features missing from screening table: "
+            f"{missing_features}"
+        )
+
+
 def assert_target_rows(rows: list[dict[str, str]]) -> None:
     """Validate the two primary target fields are marked target-only."""
     row_by_key = {
@@ -231,6 +308,49 @@ def assert_target_rows(rows: list[dict[str, str]]) -> None:
         raise AssertionError("Order Profit Per Order must be marked as AO2 target_only.")
 
 
+def assert_critical_forbidden_proxy_rows(rows: list[dict[str, str]]) -> None:
+    """Validate critical leakage proxies remain forbidden for AO1 and AO2."""
+    rows_by_name = {
+        row["variable_name"]: row
+        for row in rows
+        if row["variable_origin"] == "raw_dataco"
+    }
+    missing_fields = sorted(
+        field_name
+        for field_name in CRITICAL_FORBIDDEN_PROXY_FIELDS
+        if field_name not in rows_by_name
+    )
+    if missing_fields:
+        raise AssertionError(
+            f"Missing critical forbidden/proxy fields: {missing_fields}"
+        )
+
+    invalid_fields = []
+    for field_name in sorted(CRITICAL_FORBIDDEN_PROXY_FIELDS):
+        row = rows_by_name[field_name]
+        if (
+            row["ao1_policy"] != "forbidden"
+            or row["ao2_policy"] != "forbidden"
+            or row["dashboard_policy"] != "dashboard_only"
+            or row["modeling_policy"] != "dashboard_only"
+        ):
+            invalid_fields.append(
+                (
+                    field_name,
+                    row["ao1_policy"],
+                    row["ao2_policy"],
+                    row["dashboard_policy"],
+                    row["modeling_policy"],
+                )
+            )
+
+    if invalid_fields:
+        raise AssertionError(
+            "Critical leakage/proxy fields must stay forbidden for AO1/AO2 "
+            f"and dashboard_only for dashboard/modeling: {invalid_fields}"
+        )
+
+
 def run_validation() -> None:
     """Run all conceptual screening validations."""
     rows = read_csv(SCREENING_PATH)
@@ -241,7 +361,9 @@ def run_validation() -> None:
     assert_controlled_values(rows)
     assert_raw_feature_map_coverage(rows)
     assert_engineered_family_coverage(rows)
+    assert_engineered_feature_coverage(rows)
     assert_target_rows(rows)
+    assert_critical_forbidden_proxy_rows(rows)
 
     print("Conceptual leakage screening validation passed.")
 
