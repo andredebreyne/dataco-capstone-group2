@@ -9,6 +9,12 @@ Expected local AO1 EDA input:
 data/silver/dataco_orders_silver.csv
 ```
 
-Create this file by exporting the Databricks Silver table or by regenerating the
-Silver output from the documented pipeline. Do not point EDA notebooks directly
-at `data/raw/`; raw-to-Silver cleaning should stay a separate, reproducible step.
+Create this file by running:
+
+```text
+notebooks/pipeline/run_medallion_pipeline.py
+```
+
+The notebook exports the Silver Delta table to this local CSV path and replaces
+the file if it already exists. Do not point EDA notebooks directly at
+`data/raw/`; raw-to-Silver cleaning should stay a separate, reproducible step.
