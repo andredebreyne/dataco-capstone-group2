@@ -225,5 +225,15 @@ __marimo__/
 data/raw/
 data/bronze/dataco/DataCoSupplyChainDataset.csv
 data/bronze/dataco/tokenized_access_logs.csv
+
+# Local Silver clones are execution/review artifacts exported from Databricks or regenerated locally.
+# Keep the folder README and placeholder tracked, but do not commit large table exports.
+data/silver/*.csv
+data/silver/*.parquet
+data/silver/*.json
+data/silver/*.delta/
+!data/silver/.gitkeep
+!data/silver/README.md
+
 # Proposal source documents may contain student identifiers.
 docs/proposal/*.docx
