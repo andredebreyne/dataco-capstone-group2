@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="316" viewBox="0 0 1040 316">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="700">AO2 Mean Profit by Market</text>
+<text x="20" y="52" font-family="Arial, sans-serif" font-size="12" fill="#555">Allowed order-time market field; descriptive association only.</text>
+<line x1="330" x2="330" y1="62" y2="284" stroke="#777" stroke-width="1"/>
+<line x1="821" x2="821" y1="62" y2="284" stroke="#a33" stroke-width="2" stroke-dasharray="5,4"/>
+<text x="20" y="90" font-family="Arial, sans-serif" font-size="13">Europe</text>
+<rect x="330" y="70" width="520" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1062" x2="1062" y1="68" y2="94" stroke="#222" stroke-width="2"/>
+<text x="866" y="86" font-family="Arial, sans-serif" font-size="12">mean $23.27; median $32.78; n=50,252</text>
+<text x="20" y="128" font-family="Arial, sans-serif" font-size="13">Pacific Asia</text>
+<rect x="330" y="108" width="464" height="22" rx="2" fill="#2f6f73"/>
+<line x1="982" x2="982" y1="106" y2="132" stroke="#222" stroke-width="2"/>
+<text x="866" y="124" font-family="Arial, sans-serif" font-size="12">mean $20.79; median $29.18; n=41,260</text>
+<text x="20" y="166" font-family="Arial, sans-serif" font-size="13">Africa</text>
+<rect x="330" y="146" width="484" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1033" x2="1033" y1="144" y2="170" stroke="#222" stroke-width="2"/>
+<text x="866" y="162" font-family="Arial, sans-serif" font-size="12">mean $21.70; median $31.50; n=11,614</text>
+<text x="20" y="204" font-family="Arial, sans-serif" font-size="13">LATAM</text>
+<rect x="330" y="184" width="486" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1045" x2="1045" y1="182" y2="208" stroke="#222" stroke-width="2"/>
+<text x="866" y="200" font-family="Arial, sans-serif" font-size="12">mean $21.77; median $32.02; n=51,594</text>
+<text x="20" y="242" font-family="Arial, sans-serif" font-size="13">USCA</text>
+<rect x="330" y="222" width="488" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1033" x2="1033" y1="220" y2="246" stroke="#222" stroke-width="2"/>
+<text x="866" y="238" font-family="Arial, sans-serif" font-size="12">mean $21.87; median $31.49; n=25,799</text>
+<text x="827" y="302" font-family="Arial, sans-serif" font-size="12" fill="#a33">overall mean $21.97</text>
+</svg>

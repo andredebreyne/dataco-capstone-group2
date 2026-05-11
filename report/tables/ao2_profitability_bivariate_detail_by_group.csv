@@ -1,0 +1,287 @@
+variable_name,group_or_bin,row_count,mean_profit,median_profit,profit_difference_from_overall_mean,profit_difference_from_overall_median,sample_size_flag,interpretation_caveat
+Type,CASH,19616,23.347323,31.925,1.372334,0.405,support_ok,Conditional field: direct modeling use requires group validation.
+Type,PAYMENT,41725,21.263967,31.540001,-0.711021,0.02,support_ok,Conditional field: direct modeling use requires group validation.
+Type,DEBIT,69295,22.088878,31.32,0.113889,-0.200001,support_ok,Conditional field: direct modeling use requires group validation.
+Type,TRANSFER,49883,21.871861,31.690001,-0.103127,0.17,support_ok,Conditional field: direct modeling use requires group validation.
+Days for shipment (scheduled),1,27814,23.122238,31.690001,1.147249,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Days for shipment (scheduled),0,9737,20.850203,30.76,-1.124785,-0.76,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Days for shipment (scheduled),2,35216,21.305889,31.5,-0.6691,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Days for shipment (scheduled),4,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Sales per customer,"(7.489, 94.5]",36116,6.892397,12.04,-15.082591,-19.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales per customer,"(94.5, 128.69]",36832,13.714667,30.57,-8.260322,-0.950001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales per customer,"(128.69, 188.99]",35551,19.335216,43.200001,-2.639772,11.68,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales per customer,"(188.99, 272.98]",36553,27.555839,59.759998,5.580851,28.239998,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales per customer,"(272.98, 1939.99]",35467,42.806092,91.959999,20.831104,60.439999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Category Name,Fishing,17325,43.649106,97.440002,21.674118,65.920002,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Golf Balls,1475,5.656047,7.92,-16.318941,-23.6,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Trade-In,974,8.126663,8.755,-13.848325,-22.765,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Accessories,1780,9.350292,11.895,-12.624696,-19.625,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Shop By Sport,10984,11.81846,17.709999,-10.156529,-13.810001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Golf Gloves,1070,12.126626,12.205,-9.848362,-19.315,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Camping & Hiking,13729,31.13523,71.400002,9.160241,39.880001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Electronics,3156,12.956711,17.91,-9.018278,-13.610001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Cardio Equipment,12487,30.672788,45.360001,8.697799,13.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Men's Footwear,22246,14.020625,31.690001,-7.954364,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Girls' Apparel,1201,14.395146,18.139999,-7.579843,-13.380001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Indoor/Outdoor Games,19298,16.501784,23.139999,-5.473204,-8.380001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Women's Apparel,21035,16.658951,23.040001,-5.316038,-8.48,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Cleats,24551,20.147323,28.5,-1.827666,-3.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Category Name,Water Sports,15540,20.923228,48.0,-1.051761,16.48,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer Country,Puerto Rico,69373,21.815066,31.42,-0.159923,-0.1,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer Country,EE. UU.,111146,22.074806,31.67,0.099817,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer Segment,Home Office,32226,21.437359,31.110001,-0.537629,-0.41,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer Segment,Consumer,93504,22.17539,31.85,0.200401,0.33,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer Segment,Corporate,54789,21.949204,31.32,-0.025784,-0.200001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,NM,949,28.119357,33.93,6.144369,2.41,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,MA,1607,26.033684,33.25,4.058695,1.73,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,LA,948,18.109409,30.68,-3.865579,-0.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,HI,1248,25.753421,34.725,3.778433,3.205,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,WA,920,18.767859,29.75,-3.20713,-1.77,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,FL,5456,24.973783,33.195,2.998794,1.674999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,TN,1582,19.501953,27.099999,-2.473035,-4.420001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,UT,968,24.068957,30.035,2.093968,-1.485001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,CT,1094,23.953994,34.450001,1.979006,2.93,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,VA,1849,20.193256,31.67,-1.781733,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,NC,1992,23.74875,32.02,1.773761,0.5,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,NV,1440,23.732805,34.299999,1.757817,2.779999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,IL,7631,23.594419,31.43,1.61943,-0.09,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,PA,3824,20.461577,30.57,-1.513412,-0.950001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Customer State,OH,4095,20.664642,31.5,-1.310346,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Technology,1465,77.249154,101.199997,55.274165,69.679996,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Discs Shop,2026,11.941323,10.965,-10.033666,-20.555001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Golf,33220,14.976627,21.120001,-6.998361,-10.4,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Outdoors,9686,14.996021,14.93,-6.978968,-16.59,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Footwear,14525,28.242513,40.310001,6.267524,8.790001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Fan Shop,66861,27.432366,46.259998,5.457378,14.739998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Apparel,48998,17.998345,30.91,-3.976643,-0.610001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Department Name,Fitness,2479,18.772917,21.780001,-3.202072,-9.74,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Market,Europe,50252,23.271571,32.779999,1.296582,1.259998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Market,Pacific Asia,41260,20.788983,29.18,-1.186006,-2.34,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Market,Africa,11614,21.70408,31.495,-0.270909,-0.025001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Market,LATAM,51594,21.77233,32.025,-0.202658,0.504999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Market,USCA,25799,21.873475,31.49,-0.101514,-0.030001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Item Discount,"(-0.001, 4.0]",37728,17.971301,20.58,-4.003688,-10.940001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount,"(4.0, 10.0]",36400,16.444418,20.9,-5.53057,-10.620001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount,"(10.0, 19.5]",34750,20.669839,30.709999,-1.305149,-0.810001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount,"(19.5, 34.0]",36125,22.649784,36.959999,0.674795,5.439999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount,"(34.0, 500.0]",35516,32.486895,60.730001,10.511906,29.210001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount Rate,"(-0.001, 0.03]",40113,24.080546,34.450001,2.105558,2.93,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount Rate,"(0.03, 0.07]",40116,23.630781,33.400002,1.655793,1.880001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount Rate,"(0.07, 0.12]",30087,21.984322,31.67,0.009333,0.15,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount Rate,"(0.12, 0.17]",40116,20.413628,29.75,-1.561361,-1.77,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Discount Rate,"(0.17, 0.25]",30087,19.032546,27.799999,-2.942442,-3.720001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Product Price,"(9.989, 49.98]",43407,12.759933,16.690001,-9.215056,-14.83,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Product Price,"(49.98, 59.99]",46947,18.557553,25.92,-3.417436,-5.6,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Product Price,"(59.99, 129.99]",36919,20.271183,33.77,-1.703806,2.25,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Product Price,"(129.99, 215.82]",17480,20.777825,47.540001,-1.197164,16.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Product Price,"(215.82, 1999.99]",35766,39.98834,82.160004,18.013351,50.640003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Quantity,2,20315,12.238763,22.860001,-9.736225,-8.66,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Quantity,5,20385,29.948165,57.950001,7.973176,26.43,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Quantity,3,20350,18.149849,34.549999,-3.82514,3.029999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Quantity,4,20335,24.162163,45.900002,2.187174,14.380001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Quantity,1,99134,22.66722,29.1,0.692231,-2.42,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales,"(9.989, 100.0]",39195,7.406362,12.5,-14.568626,-19.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales,"(100.0, 149.94]",35945,14.07899,31.290001,-7.895999,-0.23,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales,"(149.94, 199.99]",37649,19.833611,44.0,-2.141378,12.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales,"(199.99, 299.98]",41611,29.208306,62.400002,7.233317,30.880001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Sales,"(299.98, 1999.99]",26119,46.266659,98.800003,24.29167,67.280003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Total,"(7.489, 94.5]",36116,6.892397,12.04,-15.082591,-19.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Total,"(94.5, 128.69]",36832,13.714667,30.57,-8.260322,-0.950001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Total,"(128.69, 188.99]",35551,19.335216,43.200001,-2.639772,11.68,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Total,"(188.99, 272.98]",36553,27.555839,59.759998,5.580851,28.239998,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Item Total,"(272.98, 1939.99]",35467,42.806092,91.959999,20.831104,60.439999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Order Region,Southern Africa,1157,26.643086,32.360001,4.668097,0.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Canada,959,24.922534,32.259998,2.947545,0.739998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Southern Europe,9431,24.475584,33.119999,2.500595,1.599998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,West Asia,6009,19.772909,30.23,-2.20208,-1.290001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Oceania,10148,19.853963,29.085,-2.121025,-2.435,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Central Africa,1677,19.944705,29.99,-2.030284,-1.530001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,North Africa,3232,19.98758,30.59,-1.987408,-0.93,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Northern Europe,9792,23.840952,33.425001,1.865963,1.905001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Eastern Asia,7280,20.242859,28.58,-1.73213,-2.940001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Eastern Europe,3920,20.335982,31.14,-1.639007,-0.38,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,West of USA,7993,20.635639,31.1,-1.33935,-0.42,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,East Africa,1852,23.308709,33.135,1.333721,1.615,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Caribbean,8318,20.657086,31.52,-1.317903,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,Western Europe,27109,23.071529,32.779999,1.09654,1.259998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Order Region,East of USA,6915,22.59773,31.969999,0.622741,0.449999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Product Price,"(9.989, 49.98]",43407,12.759933,16.690001,-9.215056,-14.83,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Product Price,"(49.98, 59.99]",46947,18.557553,25.92,-3.417436,-5.6,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Product Price,"(59.99, 129.99]",36919,20.271183,33.77,-1.703806,2.25,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Product Price,"(129.99, 215.82]",17480,20.777825,47.540001,-1.197164,16.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Product Price,"(215.82, 1999.99]",35766,39.98834,82.160004,18.013351,50.640003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+Product Status,0,180519,21.974989,31.52,0.0,0.0,support_ok,Conditional field: direct modeling use requires group validation.
+Shipping Mode,First Class,27814,23.122238,31.690001,1.147249,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Shipping Mode,Same Day,9737,20.850203,30.76,-1.124785,-0.76,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Shipping Mode,Second Class,35216,21.305889,31.5,-0.6691,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+Shipping Mode,Standard Class,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_year,2018,2123,15.940598,12.92,-6.03439,-18.6,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_year,2017,53196,24.514721,33.59,2.539733,2.07,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_year,2016,62550,20.945149,30.91,-1.02984,-0.610001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_year,2015,62650,21.051188,31.030001,-0.923801,-0.49,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_quarter,4,38219,23.423603,31.309999,1.448615,-0.210001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_quarter,1,48427,20.689197,30.08,-1.285791,-1.440001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_quarter,3,47323,22.5708,32.540001,0.595812,1.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_quarter,2,46550,21.517563,31.940001,-0.457426,0.42,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,10,12955,25.626168,32.389999,3.65118,0.869999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,1,17979,20.419791,28.16,-1.555197,-3.360001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,2,14529,20.7214,31.91,-1.253589,0.389999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,9,15489,23.198079,33.080002,1.22309,1.560001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,3,15919,20.964074,30.870001,-1.010914,-0.65,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,5,15976,21.14914,32.25,-0.825849,0.73,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,8,15912,22.637662,31.85,0.662673,0.33,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,11,12500,22.540625,32.919998,0.565636,1.399998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,6,15139,21.450725,32.029999,-0.524264,0.509998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,7,15922,21.893762,32.51,-0.081227,0.99,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,12,12764,22.052795,28.360001,0.077806,-3.16,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_month,4,15435,21.964455,31.43,-0.010534,-0.09,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_week_of_year,"(0.999, 10.0]",37541,20.410922,29.83,-1.564066,-1.690001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_week_of_year,"(10.0, 20.0]",35895,21.560073,31.67,-0.414915,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_week_of_year,"(20.0, 30.0]",35795,21.664979,32.119999,-0.31001,0.599998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_week_of_year,"(30.0, 40.0]",35277,22.375333,31.84,0.400344,0.32,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_week_of_year,"(40.0, 53.0]",36011,23.935053,32.040001,1.960064,0.52,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_month,"(0.999, 7.0]",41730,22.213616,31.459999,0.238627,-0.060001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_month,"(7.0, 13.0]",35296,20.957507,30.879999,-1.017482,-0.640001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_month,"(13.0, 19.0]",35463,21.135562,31.43,-0.839427,-0.09,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_month,"(19.0, 25.0]",35598,22.912376,31.49,0.937388,-0.030001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_month,"(25.0, 31.0]",32432,22.664264,32.450001,0.689276,0.93,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,2,25786,23.746662,32.164999,1.771674,0.644999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,5,25752,20.22905,30.969999,-1.745939,-0.550001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,7,25901,23.024579,32.0,1.04959,0.48,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,3,25622,21.256631,31.43,-0.718358,-0.09,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,4,25587,21.263453,31.299999,-0.711535,-0.220001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,1,25946,22.505967,31.190001,0.530978,-0.33,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_day_of_week,6,25925,21.779296,31.67,-0.195693,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_hour,"(-0.001, 4.0]",37882,22.057367,31.42,0.082378,-0.1,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_hour,"(4.0, 9.0]",37319,21.898209,31.1,-0.07678,-0.42,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_hour,"(9.0, 14.0]",37814,22.273041,31.75,0.298053,0.23,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_hour,"(14.0, 19.0]",37634,21.571771,31.67,-0.403218,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_hour,"(19.0, 23.0]",29870,22.097146,31.860001,0.122157,0.34,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_is_weekend,1,51847,22.765048,31.59,0.790059,0.07,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_is_weekend,0,128672,21.656643,31.52,-0.318346,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_season,fall,40944,23.765628,32.799999,1.790639,1.279999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_season,winter,45272,20.976995,29.4,-0.997994,-2.120001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_season,spring,47330,21.352781,31.52,-0.622208,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_season,summer,46973,22.002969,32.040001,0.027981,0.52,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+scheduled_shipping_days,1,27814,23.122238,31.690001,1.147249,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+scheduled_shipping_days,0,9737,20.850203,30.76,-1.124785,-0.76,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+scheduled_shipping_days,2,35216,21.305889,31.5,-0.6691,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+scheduled_shipping_days,4,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_speed_tier,standard,35216,21.305889,31.5,-0.6691,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_speed_tier,expedited,37551,22.533098,31.5,0.558109,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_speed_tier,economy,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_mode_normalized,first_class,27814,23.122238,31.690001,1.147249,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_mode_normalized,same_day,9737,20.850203,30.76,-1.124785,-0.76,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_mode_normalized,second_class,35216,21.305889,31.5,-0.6691,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+shipping_mode_normalized,standard_class,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+is_same_day_or_next_day_shipping,1,37551,22.533098,31.5,0.558109,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+is_same_day_or_next_day_shipping,0,142968,21.8284,31.540001,-0.146589,0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+is_standard_shipping,0,72767,21.939183,31.5,-0.035806,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+is_standard_shipping,1,107752,21.999169,31.58,0.02418,0.059999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,45_fishing,17325,43.649106,97.440002,21.674118,65.920002,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,36_golf_balls,1475,5.656047,7.92,-16.318941,-23.6,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,41_tradein,974,8.126663,8.755,-13.848325,-22.765,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,40_accessories,1780,9.350292,11.895,-12.624696,-19.625,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,13_electronics,1127,10.882786,14.89,-11.092202,-16.63,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,29_shop_by_sport,10984,11.81846,17.709999,-10.156529,-13.810001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,35_golf_gloves,1070,12.126626,12.205,-9.848362,-19.315,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,43_camping__hiking,13729,31.13523,71.400002,9.160241,39.880001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,9_cardio_equipment,12487,30.672788,45.360001,8.697799,13.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,18_mens_footwear,22246,14.020625,31.690001,-7.954364,0.17,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,37_electronics,2029,14.108664,19.6,-7.866324,-11.92,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,26_girls_apparel,1201,14.395146,18.139999,-7.579843,-13.380001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,46_indooroutdoor_games,19298,16.501784,23.139999,-5.473204,-8.380001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,24_womens_apparel,21035,16.658951,23.040001,-5.316038,-8.48,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_category_key,17_cleats,24551,20.147323,28.5,-1.827666,-3.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,10_technology,1465,77.249154,101.199997,55.274165,69.679996,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,9_discs_shop,2026,11.941323,10.965,-10.033666,-20.555001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,5_golf,33220,14.976627,21.120001,-6.998361,-10.4,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,6_outdoors,9686,14.996021,14.93,-6.978968,-16.59,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,3_footwear,14525,28.242513,40.310001,6.267524,8.790001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,7_fan_shop,66861,27.432366,46.259998,5.457378,14.739998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,4_apparel,48998,17.998345,30.91,-3.976643,-0.610001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_department_key,2_fitness,2479,18.772917,21.780001,-3.202072,-9.74,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+product_status_flag,0,180519,21.974989,31.52,0.0,0.0,support_ok,Conditional field: direct modeling use requires group validation.
+product_list_price,"(9.989, 49.98]",43407,12.759933,16.690001,-9.215056,-14.83,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+product_list_price,"(49.98, 59.99]",46947,18.557553,25.92,-3.417436,-5.6,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+product_list_price,"(59.99, 129.99]",36919,20.271183,33.77,-1.703806,2.25,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+product_list_price,"(129.99, 215.82]",17480,20.777825,47.540001,-1.197164,16.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+product_list_price,"(215.82, 1999.99]",35766,39.98834,82.160004,18.013351,50.640003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+order_item_quantity,2,20315,12.238763,22.860001,-9.736225,-8.66,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+order_item_quantity,5,20385,29.948165,57.950001,7.973176,26.43,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+order_item_quantity,3,20350,18.149849,34.549999,-3.82514,3.029999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+order_item_quantity,4,20335,24.162163,45.900002,2.187174,14.380001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+order_item_quantity,1,99134,22.66722,29.1,0.692231,-2.42,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_unit_price,"(9.989, 49.98]",43407,12.759933,16.690001,-9.215056,-14.83,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_unit_price,"(49.98, 59.99]",46947,18.557553,25.92,-3.417436,-5.6,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_unit_price,"(59.99, 129.99]",36919,20.271183,33.77,-1.703806,2.25,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_unit_price,"(129.99, 215.82]",17480,20.777825,47.540001,-1.197164,16.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_unit_price,"(215.82, 1999.99]",35766,39.98834,82.160004,18.013351,50.640003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_amount,"(-0.001, 4.0]",37728,17.971301,20.58,-4.003688,-10.940001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_amount,"(4.0, 10.0]",36400,16.444418,20.9,-5.53057,-10.620001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_amount,"(10.0, 19.5]",34750,20.669839,30.709999,-1.305149,-0.810001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_amount,"(19.5, 34.0]",36125,22.649784,36.959999,0.674795,5.439999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_amount,"(34.0, 500.0]",35516,32.486895,60.730001,10.511906,29.210001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_rate,"(-0.001, 0.03]",40113,24.080546,34.450001,2.105558,2.93,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_rate,"(0.03, 0.07]",40116,23.630781,33.400002,1.655793,1.880001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_rate,"(0.07, 0.12]",30087,21.984322,31.67,0.009333,0.15,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_rate,"(0.12, 0.17]",40116,20.413628,29.75,-1.561361,-1.77,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_rate,"(0.17, 0.25]",30087,19.032546,27.799999,-2.942442,-3.720001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_gross_sales_estimate,"(9.989, 100.0]",39195,7.406362,12.5,-14.568626,-19.02,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_gross_sales_estimate,"(100.0, 149.94]",35945,14.07899,31.290001,-7.895999,-0.23,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_gross_sales_estimate,"(149.94, 199.99]",37649,19.833611,44.0,-2.141378,12.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_gross_sales_estimate,"(199.99, 299.98]",41611,29.208306,62.400002,7.233317,30.880001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_gross_sales_estimate,"(299.98, 1999.99]",26119,46.266659,98.800003,24.29167,67.280003,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_net_sales_amount,"(7.489, 94.5]",36116,6.892397,12.04,-15.082591,-19.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_net_sales_amount,"(94.5, 128.69]",36832,13.714667,30.57,-8.260322,-0.950001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_net_sales_amount,"(128.69, 188.99]",35551,19.335216,43.200001,-2.639772,11.68,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_net_sales_amount,"(188.99, 272.98]",36553,27.555839,59.759998,5.580851,28.239998,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_net_sales_amount,"(272.98, 1939.99]",35467,42.806092,91.959999,20.831104,60.439999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_share_of_gross,"(-0.001, 0.03]",36351,24.775123,35.639999,2.800135,4.119999,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_share_of_gross,"(0.03, 0.07]",35859,23.121042,32.200001,1.146054,0.68,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_share_of_gross,"(0.07, 0.12]",36411,22.70299,33.169998,0.728001,1.649998,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_share_of_gross,"(0.12, 0.17]",35899,20.271993,29.040001,-1.702996,-2.48,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+item_discount_share_of_gross,"(0.17, 0.25]",35999,18.96781,28.049999,-3.007179,-3.470001,support_ok,Commercial field: descriptive signal only until AO2 target-reconstruction review is signed off.
+customer_segment_normalized,home_office,32226,21.437359,31.110001,-0.537629,-0.41,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_segment_normalized,consumer,93504,22.17539,31.85,0.200401,0.33,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_segment_normalized,corporate,54789,21.949204,31.32,-0.025784,-0.200001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_country_normalized,puerto_rico,69373,21.815066,31.42,-0.159923,-0.1,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_country_normalized,ee_uu,111146,22.074806,31.67,0.099817,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,nm,949,28.119357,33.93,6.144369,2.41,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,ma,1607,26.033684,33.25,4.058695,1.73,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,la,948,18.109409,30.68,-3.865579,-0.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,hi,1248,25.753421,34.725,3.778433,3.205,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,wa,920,18.767859,29.75,-3.20713,-1.77,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,fl,5456,24.973783,33.195,2.998794,1.674999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,tn,1582,19.501953,27.099999,-2.473035,-4.420001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,ut,968,24.068957,30.035,2.093968,-1.485001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,ct,1094,23.953994,34.450001,1.979006,2.93,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,va,1849,20.193256,31.67,-1.781733,0.15,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,nc,1992,23.74875,32.02,1.773761,0.5,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,nv,1440,23.732805,34.299999,1.757817,2.779999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,il,7631,23.594419,31.43,1.61943,-0.09,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,pa,3824,20.461577,30.57,-1.513412,-0.950001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_state_normalized,oh,4095,20.664642,31.5,-1.310346,-0.02,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+market_normalized,europe,50252,23.271571,32.779999,1.296582,1.259998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+market_normalized,pacific_asia,41260,20.788983,29.18,-1.186006,-2.34,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+market_normalized,africa,11614,21.70408,31.495,-0.270909,-0.025001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+market_normalized,latam,51594,21.77233,32.025,-0.202658,0.504999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+market_normalized,usca,25799,21.873475,31.49,-0.101514,-0.030001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,southern_africa,1157,26.643086,32.360001,4.668097,0.84,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,canada,959,24.922534,32.259998,2.947545,0.739998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,southern_europe,9431,24.475584,33.119999,2.500595,1.599998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,west_asia,6009,19.772909,30.23,-2.20208,-1.290001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,oceania,10148,19.853963,29.085,-2.121025,-2.435,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,central_africa,1677,19.944705,29.99,-2.030284,-1.530001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,north_africa,3232,19.98758,30.59,-1.987408,-0.93,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,northern_europe,9792,23.840952,33.425001,1.865963,1.905001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,eastern_asia,7280,20.242859,28.58,-1.73213,-2.940001,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,eastern_europe,3920,20.335982,31.14,-1.639007,-0.38,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,west_of_usa,7993,20.635639,31.1,-1.33935,-0.42,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,east_africa,1852,23.308709,33.135,1.333721,1.615,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,caribbean,8318,20.657086,31.52,-1.317903,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,western_europe,27109,23.071529,32.779999,1.09654,1.259998,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+order_region_normalized,east_of_usa,6915,22.59773,31.969999,0.622741,0.449999,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_order_country_match,0,180519,21.974989,31.52,0.0,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+customer_order_state_match,0,180519,21.974989,31.52,0.0,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
+geo_coordinates_available,1,180519,21.974989,31.52,0.0,0.0,support_ok,Allowed candidate for later Gold review; bivariate association is not causal.
