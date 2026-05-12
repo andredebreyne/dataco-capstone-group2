@@ -978,11 +978,28 @@ AO1 preprocessing is locked.
 FINDINGS_OUTPUT_PATH.write_text(findings_note, encoding="utf-8")
 print(f"Wrote findings note: {FINDINGS_OUTPUT_PATH}")
 
-try:
-    display(overall_df)  # type: ignore[name-defined]
-    display(slice_df.head(25))  # type: ignore[name-defined]
-    display(group_review_df.head(25))  # type: ignore[name-defined]
-except NameError:
-    print(overall_df.to_string(index=False))
-    print(slice_df.head(25).to_string(index=False))
-    print(group_review_df.head(25).to_string(index=False))
+
+def arrow_safe_preview(df: pd.DataFrame) -> pd.DataFrame:
+    """Return a display-only copy that avoids mixed object columns in Databricks."""
+    preview = df.copy()
+    for column in preview.columns:
+        if preview[column].dtype == "object" or pd.api.types.is_string_dtype(preview[column]):
+            preview[column] = preview[column].astype("string").fillna("")
+    return preview
+
+
+def display_or_print_preview(df: pd.DataFrame) -> None:
+    """Use Databricks display when available, otherwise print a text preview."""
+    preview = arrow_safe_preview(df)
+    try:
+        display(preview)  # type: ignore[name-defined]
+    except NameError:
+        print(preview.to_string(index=False))
+    except Exception as exc:
+        print(f"Databricks display preview failed; printing text preview instead. Error: {exc}")
+        print(preview.to_string(index=False))
+
+
+display_or_print_preview(overall_df)
+display_or_print_preview(slice_df.head(25))
+display_or_print_preview(group_review_df.head(25))
