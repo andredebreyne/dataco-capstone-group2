@@ -1,1 +1,42 @@
-
+variable_name,dataset_column,status,missing_rate,unique_values,decision,notes,summary_min,summary_q1,summary_median,summary_q3,summary_max,outlier_count
+Category Id,Category Id,numeric,0.0,51.0,approved_for_gold,"Numeric field, 51 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",2.0,18.0,29.0,45.0,76.0,0.0
+Customer City,Customer City,categorical,0.0,563.0,needs_group_review,"Categorical field with cardinality 563. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+Customer Id,Customer Id,numeric,0.0,20652.0,approved_for_gold,"Numeric field, 20652 distinct non-null values. Outlier rate by IQR: 0.66% (1198 outliers).",1.0,3258.5,6457.0,9779.0,20757.0,1198.0
+Customer Zipcode,Customer Zipcode,numeric,1.661874927292972e-05,995.0,approved_for_gold,"Numeric field, 995 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",603.0,725.0,19380.0,78207.0,99205.0,0.0
+Department Id,Department Id,numeric,0.0,11.0,approved_for_gold,"Numeric field, 11 distinct non-null values. Outlier rate by IQR: 0.20% (362 outliers).",2.0,4.0,5.0,7.0,12.0,362.0
+Latitude,Latitude,numeric,0.0,11250.0,approved_for_gold,"Numeric field, 11250 distinct non-null values. Outlier rate by IQR: 0.00% (9 outliers).",-33.93755341,18.26543236,33.14486313,39.27961731,48.78193283,9.0
+Longitude,Longitude,numeric,0.0,4487.0,approved_for_gold,"Numeric field, 4487 distinct non-null values. Outlier rate by IQR: 0.78% (1414 outliers).",-158.0259857,-98.44631195,-76.84790802,-66.37058258,115.2630768,1414.0
+Order City,Order City,categorical,0.0,3597.0,needs_group_review,"Categorical field with cardinality 3597. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+Order Customer Id,Order Customer Id,numeric,0.0,20652.0,approved_for_gold,"Numeric field, 20652 distinct non-null values. Outlier rate by IQR: 0.66% (1198 outliers).",1.0,3258.5,6457.0,9779.0,20757.0,1198.0
+Order Item Cardprod Id,Order Item Cardprod Id,numeric,0.0,118.0,approved_for_gold,"Numeric field, 118 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",19.0,403.0,627.0,1004.0,1363.0,0.0
+Order Item Discount,Order Item Discount,numeric,0.0,1017.0,approved_for_gold,"Numeric field, 1017 distinct non-null values. Outlier rate by IQR: 4.18% (7537 outliers).",0.0,5.400000095,14.0,29.98999977,500.0,7537.0
+Order Item Discount Rate,Order Item Discount Rate,numeric,0.0,18.0,approved_for_gold,"Numeric field, 18 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",0.0,0.039999999,0.100000001,0.159999996,0.25,0.0
+Order Item Product Price,Order Item Product Price,numeric,0.0,75.0,approved_for_gold,"Numeric field, 75 distinct non-null values. Outlier rate by IQR: 1.13% (2048 outliers).",9.989999771,50.0,59.99000168,199.9900055,1999.98999,2048.0
+Order Item Total,Order Item Total,numeric,0.0,2927.0,approved_for_gold,"Numeric field, 2927 distinct non-null values. Outlier rate by IQR: 1.08% (1943 outliers).",7.489999771,104.3799973,163.9900055,247.3999939,1939.98999,1943.0
+Order Zipcode,Order Zipcode,numeric,0.8623967560201419,609.0,needs_group_review,"Numeric field, 609 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",1040.0,23464.0,59405.0,90008.0,99301.0,0.0
+Product Card Id,Product Card Id,numeric,0.0,118.0,approved_for_gold,"Numeric field, 118 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",19.0,403.0,627.0,1004.0,1363.0,0.0
+Product Category Id,Product Category Id,numeric,0.0,51.0,approved_for_gold,"Numeric field, 51 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",2.0,18.0,29.0,45.0,76.0,0.0
+Product Name,Product Name,categorical,0.0,118.0,needs_group_review,"Categorical field with cardinality 118. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+Product Price,Product Price,numeric,0.0,75.0,approved_for_gold,"Numeric field, 75 distinct non-null values. Outlier rate by IQR: 1.13% (2048 outliers).",9.989999771,50.0,59.99000168,199.9900055,1999.98999,2048.0
+Product Status,Product Status,numeric,0.0,1.0,approved_for_gold,"Numeric field, 1 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",0.0,0.0,0.0,0.0,0.0,0.0
+Sales,Sales,numeric,0.0,193.0,approved_for_gold,"Numeric field, 193 distinct non-null values. Outlier rate by IQR: 0.27% (488 outliers).",9.989999771,119.9800034,199.9199982,299.9500122,1999.98999,488.0
+Sales per customer,Sales per customer,numeric,0.0,2927.0,approved_for_gold,"Numeric field, 2927 distinct non-null values. Outlier rate by IQR: 1.08% (1943 outliers).",7.489999771,104.3799973,163.9900055,247.3999939,1939.98999,1943.0
+Type,Type,categorical,0.0,4.0,approved_for_gold,Categorical field with cardinality 4.,,,,,,
+customer_city_normalized,Customer City,categorical,0.0,563.0,needs_group_review,"Categorical field with cardinality 563. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+customer_region_key,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+item_discount_amount,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+item_discount_rate,Order Item Discount Rate,numeric,0.0,18.0,approved_for_gold,"Numeric field, 18 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",0.0,0.039999999,0.100000001,0.159999996,0.25,0.0
+item_discount_share_of_gross,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+item_gross_sales_estimate,Sales,numeric,0.0,193.0,approved_for_gold,"Numeric field, 193 distinct non-null values. Outlier rate by IQR: 0.27% (488 outliers).",9.989999771,119.9800034,199.9199982,299.9500122,1999.98999,488.0
+item_net_sales_amount,Sales,numeric,0.0,193.0,approved_for_gold,"Numeric field, 193 distinct non-null values. Outlier rate by IQR: 0.27% (488 outliers).",9.989999771,119.9800034,199.9199982,299.9500122,1999.98999,488.0
+item_unit_price,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+latitude_rounded,Latitude,numeric,0.0,11250.0,approved_for_gold,"Numeric field, 11250 distinct non-null values. Outlier rate by IQR: 0.00% (9 outliers).",-33.93755341,18.26543236,33.14486313,39.27961731,48.78193283,9.0
+longitude_rounded,Longitude,numeric,0.0,4487.0,approved_for_gold,"Numeric field, 4487 distinct non-null values. Outlier rate by IQR: 0.78% (1414 outliers).",-158.0259857,-98.44631195,-76.84790802,-66.37058258,115.2630768,1414.0
+order date (DateOrders),order date (DateOrders),datetime,0.0,65752.0,approved_for_gold,Datetime-like field; reviewed by month.,2015-01-01 00:00:00,,,,2018-01-31 23:38:00,
+order_city_normalized,Order City,categorical,0.0,3597.0,needs_group_review,"Categorical field with cardinality 3597. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+order_item_quantity,Order Item Quantity,numeric,0.0,5.0,approved_for_gold,"Numeric field, 5 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",1.0,1.0,1.0,3.0,5.0,0.0
+order_region_key,Order Region,categorical,0.0,23.0,approved_for_gold,Categorical field with cardinality 23.,,,,,,
+product_catalog_key,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+product_list_price,,missing_in_dataset,,,needs_group_review,Review variable not found in the dataset. Confirm the source schema or column naming.,,,,,,
+product_name_normalized,Product Name,categorical,0.0,118.0,needs_group_review,"Categorical field with cardinality 118. High cardinality; consider grouping, hashing, or train-only encoding.",,,,,,
+product_status_flag,Product Status,numeric,0.0,1.0,approved_for_gold,"Numeric field, 1 distinct non-null values. Outlier rate by IQR: 0.00% (0 outliers).",0.0,0.0,0.0,0.0,0.0,0.0
