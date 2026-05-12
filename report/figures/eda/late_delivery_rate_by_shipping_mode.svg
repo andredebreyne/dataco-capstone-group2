@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="236" viewBox="0 0 980 236">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="700">Late-delivery Rate by Shipping Mode</text>
+<text x="300" y="50" font-family="Arial, sans-serif" font-size="12" fill="#555">Late-delivery rate</text>
+<text x="20" y="76" font-family="Arial, sans-serif" font-size="13">First Class</text>
+<rect x="300" y="58" width="495" height="22" rx="2" fill="#2f6f73"/>
+<text x="803" y="74" font-family="Arial, sans-serif" font-size="12">95.3% (+40.5 pp, n=27,814)</text>
+<text x="20" y="110" font-family="Arial, sans-serif" font-size="13">Second Class</text>
+<rect x="300" y="92" width="398" height="22" rx="2" fill="#2f6f73"/>
+<text x="706" y="108" font-family="Arial, sans-serif" font-size="12">76.6% (+21.8 pp, n=35,216)</text>
+<text x="20" y="144" font-family="Arial, sans-serif" font-size="13">Standard Class</text>
+<rect x="300" y="126" width="197" height="22" rx="2" fill="#2f6f73"/>
+<text x="505" y="142" font-family="Arial, sans-serif" font-size="12">38.1% (-16.8 pp, n=107,752)</text>
+<text x="20" y="178" font-family="Arial, sans-serif" font-size="13">Same Day</text>
+<rect x="300" y="160" width="237" height="22" rx="2" fill="#2f6f73"/>
+<text x="545" y="176" font-family="Arial, sans-serif" font-size="12">45.7% (-9.1 pp, n=9,737)</text>
+<line x1="585" x2="585" y1="52" y2="212" stroke="#b33" stroke-width="2" stroke-dasharray="5,4"/>
+<text x="591" y="224" font-family="Arial, sans-serif" font-size="12" fill="#b33">overall 54.8%</text>
+</svg>

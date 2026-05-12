@@ -1,0 +1,335 @@
+variable_name,level_or_bin,count,late_delivery_rate,late_delivery_rate_difference,supported
+Type,TRANSFER,49883,0.485436,-0.062855,True
+Type,PAYMENT,41725,0.575291,0.026999,True
+Type,DEBIT,69295,0.572177,0.023886,True
+Type,CASH,19616,0.566323,0.018032,True
+Days for shipment (scheduled),1,27814,0.953225,0.404934,True
+Days for shipment (scheduled),2,35216,0.766328,0.218036,True
+Days for shipment (scheduled),4,107752,0.380717,-0.167574,True
+Days for shipment (scheduled),0,9737,0.45743,-0.090861,True
+Sales per customer,"(7.489, 94.5]",36116,0.550781,0.00249,True
+Sales per customer,"(272.98, 1939.99]",35467,0.54944,0.001149,True
+Sales per customer,"(94.5, 128.69]",36832,0.548355,6.3e-05,True
+Sales per customer,"(188.99, 272.98]",36553,0.546467,-0.001825,True
+Sales per customer,"(128.69, 188.99]",35551,0.546426,-0.001865,True
+Category Id,"(24.0, 43.0]",35116,0.550006,0.001714,True
+Category Id,"(46.0, 76.0]",23861,0.5496,0.001308,True
+Category Id,"(1.999, 17.0]",41198,0.549153,0.000862,True
+Category Id,"(43.0, 46.0]",37063,0.548472,0.00018,True
+Category Id,"(17.0, 24.0]",43281,0.545205,-0.003087,True
+Category Name,Accessories,1780,0.569663,0.021372,True
+Category Name,Golf Gloves,1070,0.562617,0.014326,True
+Category Name,Electronics,3156,0.560837,0.012545,True
+Category Name,Trade-In,974,0.556468,0.008177,True
+Category Name,Girls' Apparel,1201,0.552873,0.004581,True
+Category Name,Men's Footwear,22246,0.544862,-0.003429,True
+Category Name,Cardio Equipment,12487,0.544967,-0.003325,True
+Category Name,Shop By Sport,10984,0.551529,0.003238,True
+Category Name,Camping & Hiking,13729,0.545342,-0.002949,True
+Category Name,Women's Apparel,21035,0.545567,-0.002724,True
+Category Name,Golf Balls,1475,0.545763,-0.002529,True
+Category Name,Cleats,24551,0.549713,0.001422,True
+Category Name,Fishing,17325,0.549264,0.000973,True
+Category Name,Indoor/Outdoor Games,19298,0.547466,-0.000825,True
+Category Name,Water Sports,15540,0.548069,-0.000222,True
+Customer Country,Puerto Rico,69373,0.547634,-0.000658,True
+Customer Country,EE. UU.,111146,0.548702,0.00041,True
+Customer Segment,Home Office,32226,0.550704,0.002413,True
+Customer Segment,Corporate,54789,0.547227,-0.001065,True
+Customer Segment,Consumer,93504,0.548084,-0.000208,True
+Customer State,NM,949,0.60274,0.054448,True
+Customer State,CO,1914,0.506792,-0.041499,True
+Customer State,AZ,3026,0.519498,-0.028794,True
+Customer State,NJ,3191,0.525541,-0.022751,True
+Customer State,MO,1354,0.526588,-0.021703,True
+Customer State,MD,2415,0.569358,0.021067,True
+Customer State,LA,948,0.527426,-0.020865,True
+Customer State,NC,1992,0.565763,0.017472,True
+Customer State,GA,2503,0.565322,0.01703,True
+Customer State,WA,920,0.56413,0.015839,True
+Customer State,IL,7631,0.563884,0.015593,True
+Customer State,TN,1582,0.562579,0.014288,True
+Customer State,MI,3804,0.535226,-0.013065,True
+Customer State,PA,3824,0.535826,-0.012465,True
+Customer State,UT,968,0.536157,-0.012134,True
+Department Id,"(5.0, 6.0]",9686,0.554925,0.006633,True
+Department Id,"(7.0, 12.0]",4750,0.553684,0.005393,True
+Department Id,"(4.0, 5.0]",33220,0.547803,-0.000489,True
+Department Id,"(6.0, 7.0]",66861,0.547748,-0.000543,True
+Department Id,"(1.999, 4.0]",66002,0.547726,-0.000565,True
+Department Name,Fitness,2479,0.555466,0.007175,True
+Department Name,Outdoors,9686,0.554925,0.006633,True
+Department Name,Discs Shop,2026,0.544423,-0.003869,True
+Department Name,Technology,1465,0.550171,0.001879,True
+Department Name,Footwear,14525,0.547263,-0.001028,True
+Department Name,Apparel,48998,0.547471,-0.00082,True
+Department Name,Fan Shop,66861,0.547748,-0.000543,True
+Department Name,Golf,33220,0.547803,-0.000489,True
+Latitude,"(34.114, 40.211]",36181,0.55203,0.003739,True
+Latitude,"(25.98, 34.114]",36125,0.550118,0.001826,True
+Latitude,"(18.252, 25.98]",36111,0.548919,0.000627,True
+Latitude,"(40.211, 48.782]",35998,0.545753,-0.002539,True
+Latitude,"(-33.939, 18.252]",36104,0.544621,-0.00367,True
+Longitude,"(-158.02700000000002, -112.121]",36115,0.552568,0.004277,True
+Longitude,"(-66.371, 115.263]",33377,0.551518,0.003226,True
+Longitude,"(-112.121, -83.489]",36106,0.550186,0.001894,True
+Longitude,"(-73.69, -66.371]",38824,0.545307,-0.002984,True
+Longitude,"(-83.489, -73.69]",36097,0.542344,-0.005947,True
+Market,LATAM,51594,0.543552,-0.00474,True
+Market,Europe,50252,0.552078,0.003786,True
+Market,Africa,11614,0.545893,-0.002398,True
+Market,Pacific Asia,41260,0.55046,0.002169,True
+Market,USCA,25799,0.548006,-0.000286,True
+Order Item Discount,"(-0.001, 4.0]",37728,0.551421,0.003129,True
+Order Item Discount,"(34.0, 500.0]",35516,0.551047,0.002756,True
+Order Item Discount,"(4.0, 10.0]",36400,0.548571,0.00028,True
+Order Item Discount,"(10.0, 19.5]",34750,0.545612,-0.00268,True
+Order Item Discount,"(19.5, 34.0]",36125,0.544609,-0.003682,True
+Order Item Discount Rate,"(0.17, 0.25]",30087,0.552564,0.004273,True
+Order Item Discount Rate,"(0.03, 0.07]",40116,0.549157,0.000866,True
+Order Item Discount Rate,"(-0.001, 0.03]",40113,0.5488,0.000508,True
+Order Item Discount Rate,"(0.07, 0.12]",30087,0.545884,-0.002408,True
+Order Item Discount Rate,"(0.12, 0.17]",40116,0.545518,-0.002773,True
+Order Item Product Price,"(9.989, 49.98]",43407,0.551547,0.003256,True
+Order Item Product Price,"(215.82, 1999.99]",35766,0.548678,0.000386,True
+Order Item Product Price,"(129.99, 215.82]",17480,0.548284,-8e-06,True
+Order Item Product Price,"(49.98, 59.99]",46947,0.547958,-0.000333,True
+Order Item Product Price,"(59.99, 129.99]",36919,0.544516,-0.003775,True
+Order Item Quantity,2,20315,0.543392,-0.0049,True
+Order Item Quantity,3,20350,0.551155,0.002863,True
+Order Item Quantity,1,99134,0.548803,0.000511,True
+Order Item Quantity,5,20385,0.547952,-0.000339,True
+Order Item Quantity,4,20335,0.548168,-0.000123,True
+Sales,"(9.989, 100.0]",39195,0.552468,0.004177,True
+Sales,"(299.98, 1999.99]",26119,0.548681,0.00039,True
+Sales,"(149.94, 199.99]",37649,0.547451,-0.00084,True
+Sales,"(100.0, 149.94]",35945,0.546947,-0.001345,True
+Sales,"(199.99, 299.98]",41611,0.546034,-0.002258,True
+Order Item Total,"(7.489, 94.5]",36116,0.550781,0.00249,True
+Order Item Total,"(272.98, 1939.99]",35467,0.54944,0.001149,True
+Order Item Total,"(94.5, 128.69]",36832,0.548355,6.3e-05,True
+Order Item Total,"(188.99, 272.98]",36553,0.546467,-0.001825,True
+Order Item Total,"(128.69, 188.99]",35551,0.546426,-0.001865,True
+Order Region,Canada,959,0.488008,-0.060283,True
+Order Region,Central Africa,1677,0.579606,0.031315,True
+Order Region,West Africa,3696,0.528409,-0.019882,True
+Order Region,Caribbean,8318,0.530777,-0.017515,True
+Order Region,Southern Africa,1157,0.533276,-0.015016,True
+Order Region,South Asia,7731,0.56267,0.014378,True
+Order Region,East Africa,1852,0.559395,0.011104,True
+Order Region,Western Europe,27109,0.558486,0.010195,True
+Order Region,South of  USA,4045,0.557726,0.009434,True
+Order Region,West of USA,7993,0.539597,-0.008694,True
+Order Region,Eastern Europe,3920,0.556633,0.008341,True
+Order Region,East of USA,6915,0.556616,0.008325,True
+Order Region,Oceania,10148,0.540205,-0.008086,True
+Order Region,Northern Europe,9792,0.540441,-0.00785,True
+Order Region,Southeast Asia,9539,0.555299,0.007008,True
+Product Category Id,"(24.0, 43.0]",35116,0.550006,0.001714,True
+Product Category Id,"(46.0, 76.0]",23861,0.5496,0.001308,True
+Product Category Id,"(1.999, 17.0]",41198,0.549153,0.000862,True
+Product Category Id,"(43.0, 46.0]",37063,0.548472,0.00018,True
+Product Category Id,"(17.0, 24.0]",43281,0.545205,-0.003087,True
+Product Price,"(9.989, 49.98]",43407,0.551547,0.003256,True
+Product Price,"(215.82, 1999.99]",35766,0.548678,0.000386,True
+Product Price,"(129.99, 215.82]",17480,0.548284,-8e-06,True
+Product Price,"(49.98, 59.99]",46947,0.547958,-0.000333,True
+Product Price,"(59.99, 129.99]",36919,0.544516,-0.003775,True
+Product Status,0,180519,0.548291,0.0,True
+Shipping Mode,First Class,27814,0.953225,0.404934,True
+Shipping Mode,Second Class,35216,0.766328,0.218036,True
+Shipping Mode,Standard Class,107752,0.380717,-0.167574,True
+Shipping Mode,Same Day,9737,0.45743,-0.090861,True
+order_year,2018,2123,0.562883,0.014591,True
+order_year,2017,53196,0.544477,-0.003814,True
+order_year,2016,62550,0.550695,0.002404,True
+order_year,2015,62650,0.548635,0.000344,True
+order_quarter,3,47323,0.550472,0.002181,True
+order_quarter,2,46550,0.546144,-0.002147,True
+order_quarter,1,48427,0.548227,-6.4e-05,True
+order_quarter,4,38219,0.548288,-4e-06,True
+order_month,8,15912,0.557944,0.009652,True
+order_month,7,15922,0.540573,-0.007719,True
+order_month,4,15435,0.542792,-0.005499,True
+order_month,12,12764,0.553353,0.005062,True
+order_month,9,15489,0.552973,0.004682,True
+order_month,3,15919,0.552547,0.004256,True
+order_month,11,12500,0.54552,-0.002771,True
+order_month,2,14529,0.54553,-0.002762,True
+order_month,10,12955,0.545967,-0.002325,True
+order_month,1,17979,0.546582,-0.001709,True
+order_month,5,15976,0.547384,-0.000908,True
+order_month,6,15139,0.548253,-3.8e-05,True
+order_week_of_year,"(30.0, 40.0]",35277,0.552456,0.004165,True
+order_week_of_year,"(40.0, 53.0]",36011,0.549915,0.001624,True
+order_week_of_year,"(20.0, 30.0]",35795,0.548484,0.000193,True
+order_week_of_year,"(0.999, 10.0]",37541,0.548227,-6.4e-05,True
+order_week_of_year,"(10.0, 20.0]",35895,0.542443,-0.005848,True
+order_day_of_month,"(0.999, 7.0]",41730,0.553966,0.005675,True
+order_day_of_month,"(25.0, 31.0]",32432,0.550228,0.001937,True
+order_day_of_month,"(19.0, 25.0]",35598,0.548514,0.000223,True
+order_day_of_month,"(7.0, 13.0]",35296,0.544113,-0.004179,True
+order_day_of_month,"(13.0, 19.0]",35463,0.543778,-0.004513,True
+order_day_of_week,3,25622,0.54301,-0.005281,True
+order_day_of_week,7,25901,0.543956,-0.004335,True
+order_day_of_week,6,25925,0.551707,0.003416,True
+order_day_of_week,1,25946,0.551145,0.002853,True
+order_day_of_week,2,25786,0.550531,0.00224,True
+order_day_of_week,5,25752,0.550054,0.001763,True
+order_day_of_week,4,25587,0.547583,-0.000709,True
+order_hour,12,7486,0.594977,0.046686,True
+order_hour,20,7481,0.591231,0.04294,True
+order_hour,8,7435,0.508675,-0.039616,True
+order_hour,6,7270,0.509491,-0.0388,True
+order_hour,11,7497,0.510604,-0.037687,True
+order_hour,22,7418,0.584794,0.036502,True
+order_hour,4,7719,0.514704,-0.033587,True
+order_hour,0,7590,0.514756,-0.033535,True
+order_hour,23,7573,0.580615,0.032324,True
+order_hour,3,7440,0.516532,-0.031759,True
+order_hour,15,7472,0.579764,0.031473,True
+order_hour,17,7573,0.578635,0.030343,True
+order_hour,13,7578,0.577725,0.029434,True
+order_hour,14,7556,0.576628,0.028337,True
+order_hour,18,7534,0.575922,0.027631,True
+order_is_weekend,1,51847,0.547553,-0.000738,True
+order_is_weekend,0,128672,0.548589,0.000297,True
+order_season,spring,47330,0.547623,-0.000668,True
+order_season,summer,46973,0.548932,0.000641,True
+order_season,fall,40944,0.548481,0.00019,True
+order_season,winter,45272,0.548153,-0.000138,True
+scheduled_shipping_days,1,27814,0.953225,0.404934,True
+scheduled_shipping_days,2,35216,0.766328,0.218036,True
+scheduled_shipping_days,4,107752,0.380717,-0.167574,True
+scheduled_shipping_days,0,9737,0.45743,-0.090861,True
+shipping_speed_tier,expedited,37551,0.824665,0.276374,True
+shipping_speed_tier,standard,35216,0.766328,0.218036,True
+shipping_speed_tier,economy,107752,0.380717,-0.167574,True
+shipping_mode_normalized,first_class,27814,0.953225,0.404934,True
+shipping_mode_normalized,second_class,35216,0.766328,0.218036,True
+shipping_mode_normalized,standard_class,107752,0.380717,-0.167574,True
+shipping_mode_normalized,same_day,9737,0.45743,-0.090861,True
+is_same_day_or_next_day_shipping,1,37551,0.824665,0.276374,True
+is_same_day_or_next_day_shipping,0,142968,0.475701,-0.07259,True
+is_standard_shipping,0,72767,0.796432,0.248141,True
+is_standard_shipping,1,107752,0.380717,-0.167574,True
+product_category_key,40_accessories,1780,0.569663,0.021372,True
+product_category_key,37_electronics,2029,0.563332,0.01504,True
+product_category_key,35_golf_gloves,1070,0.562617,0.014326,True
+product_category_key,41_tradein,974,0.556468,0.008177,True
+product_category_key,13_electronics,1127,0.556344,0.008053,True
+product_category_key,26_girls_apparel,1201,0.552873,0.004581,True
+product_category_key,18_mens_footwear,22246,0.544862,-0.003429,True
+product_category_key,9_cardio_equipment,12487,0.544967,-0.003325,True
+product_category_key,29_shop_by_sport,10984,0.551529,0.003238,True
+product_category_key,43_camping__hiking,13729,0.545342,-0.002949,True
+product_category_key,24_womens_apparel,21035,0.545567,-0.002724,True
+product_category_key,36_golf_balls,1475,0.545763,-0.002529,True
+product_category_key,17_cleats,24551,0.549713,0.001422,True
+product_category_key,45_fishing,17325,0.549264,0.000973,True
+product_category_key,46_indooroutdoor_games,19298,0.547466,-0.000825,True
+product_department_key,2_fitness,2479,0.555466,0.007175,True
+product_department_key,6_outdoors,9686,0.554925,0.006633,True
+product_department_key,9_discs_shop,2026,0.544423,-0.003869,True
+product_department_key,10_technology,1465,0.550171,0.001879,True
+product_department_key,3_footwear,14525,0.547263,-0.001028,True
+product_department_key,4_apparel,48998,0.547471,-0.00082,True
+product_department_key,7_fan_shop,66861,0.547748,-0.000543,True
+product_department_key,5_golf,33220,0.547803,-0.000489,True
+product_status_flag,0,180519,0.548291,0.0,True
+product_list_price,"(9.989, 49.98]",43407,0.551547,0.003256,True
+product_list_price,"(215.82, 1999.99]",35766,0.548678,0.000386,True
+product_list_price,"(129.99, 215.82]",17480,0.548284,-8e-06,True
+product_list_price,"(49.98, 59.99]",46947,0.547958,-0.000333,True
+product_list_price,"(59.99, 129.99]",36919,0.544516,-0.003775,True
+order_item_quantity,2,20315,0.543392,-0.0049,True
+order_item_quantity,3,20350,0.551155,0.002863,True
+order_item_quantity,1,99134,0.548803,0.000511,True
+order_item_quantity,5,20385,0.547952,-0.000339,True
+order_item_quantity,4,20335,0.548168,-0.000123,True
+item_unit_price,"(9.989, 49.98]",43407,0.551547,0.003256,True
+item_unit_price,"(215.82, 1999.99]",35766,0.548678,0.000386,True
+item_unit_price,"(129.99, 215.82]",17480,0.548284,-8e-06,True
+item_unit_price,"(49.98, 59.99]",46947,0.547958,-0.000333,True
+item_unit_price,"(59.99, 129.99]",36919,0.544516,-0.003775,True
+item_discount_amount,"(-0.001, 4.0]",37728,0.551421,0.003129,True
+item_discount_amount,"(34.0, 500.0]",35516,0.551047,0.002756,True
+item_discount_amount,"(4.0, 10.0]",36400,0.548571,0.00028,True
+item_discount_amount,"(10.0, 19.5]",34750,0.545612,-0.00268,True
+item_discount_amount,"(19.5, 34.0]",36125,0.544609,-0.003682,True
+item_discount_rate,"(0.17, 0.25]",30087,0.552564,0.004273,True
+item_discount_rate,"(0.03, 0.07]",40116,0.549157,0.000866,True
+item_discount_rate,"(-0.001, 0.03]",40113,0.5488,0.000508,True
+item_discount_rate,"(0.07, 0.12]",30087,0.545884,-0.002408,True
+item_discount_rate,"(0.12, 0.17]",40116,0.545518,-0.002773,True
+item_gross_sales_estimate,"(9.989, 100.0]",39195,0.552468,0.004177,True
+item_gross_sales_estimate,"(299.98, 1999.99]",26119,0.548681,0.00039,True
+item_gross_sales_estimate,"(149.94, 199.99]",37649,0.547451,-0.00084,True
+item_gross_sales_estimate,"(100.0, 149.94]",35945,0.546947,-0.001345,True
+item_gross_sales_estimate,"(199.99, 299.98]",41611,0.546034,-0.002258,True
+item_net_sales_amount,"(7.489, 94.5]",36116,0.550781,0.00249,True
+item_net_sales_amount,"(272.98, 1939.99]",35467,0.54944,0.001149,True
+item_net_sales_amount,"(94.5, 128.69]",36832,0.548355,6.3e-05,True
+item_net_sales_amount,"(188.99, 272.98]",36553,0.546467,-0.001825,True
+item_net_sales_amount,"(128.69, 188.99]",35551,0.546426,-0.001865,True
+item_discount_share_of_gross,"(0.03, 0.07]",35859,0.551521,0.00323,True
+item_discount_share_of_gross,"(0.17, 0.25]",35999,0.551432,0.003141,True
+item_discount_share_of_gross,"(-0.001, 0.03]",36351,0.548045,-0.000246,True
+item_discount_share_of_gross,"(0.12, 0.17]",35899,0.545865,-0.002427,True
+item_discount_share_of_gross,"(0.07, 0.12]",36411,0.544643,-0.003648,True
+customer_segment_normalized,home_office,32226,0.550704,0.002413,True
+customer_segment_normalized,corporate,54789,0.547227,-0.001065,True
+customer_segment_normalized,consumer,93504,0.548084,-0.000208,True
+customer_country_normalized,puerto_rico,69373,0.547634,-0.000658,True
+customer_country_normalized,ee_uu,111146,0.548702,0.00041,True
+customer_state_normalized,nm,949,0.60274,0.054448,True
+customer_state_normalized,co,1914,0.506792,-0.041499,True
+customer_state_normalized,az,3026,0.519498,-0.028794,True
+customer_state_normalized,nj,3191,0.525541,-0.022751,True
+customer_state_normalized,mo,1354,0.526588,-0.021703,True
+customer_state_normalized,md,2415,0.569358,0.021067,True
+customer_state_normalized,la,948,0.527426,-0.020865,True
+customer_state_normalized,nc,1992,0.565763,0.017472,True
+customer_state_normalized,ga,2503,0.565322,0.01703,True
+customer_state_normalized,wa,920,0.56413,0.015839,True
+customer_state_normalized,il,7631,0.563884,0.015593,True
+customer_state_normalized,tn,1582,0.562579,0.014288,True
+customer_state_normalized,mi,3804,0.535226,-0.013065,True
+customer_state_normalized,pa,3824,0.535826,-0.012465,True
+customer_state_normalized,ut,968,0.536157,-0.012134,True
+customer_zipcode_available,1,180516,0.548295,4e-06,True
+market_normalized,latam,51594,0.543552,-0.00474,True
+market_normalized,europe,50252,0.552078,0.003786,True
+market_normalized,africa,11614,0.545893,-0.002398,True
+market_normalized,pacific_asia,41260,0.55046,0.002169,True
+market_normalized,usca,25799,0.548006,-0.000286,True
+order_region_normalized,canada,959,0.488008,-0.060283,True
+order_region_normalized,central_africa,1677,0.579606,0.031315,True
+order_region_normalized,west_africa,3696,0.528409,-0.019882,True
+order_region_normalized,caribbean,8318,0.530777,-0.017515,True
+order_region_normalized,southern_africa,1157,0.533276,-0.015016,True
+order_region_normalized,south_asia,7731,0.56267,0.014378,True
+order_region_normalized,east_africa,1852,0.559395,0.011104,True
+order_region_normalized,western_europe,27109,0.558486,0.010195,True
+order_region_normalized,south_of_usa,4045,0.557726,0.009434,True
+order_region_normalized,west_of_usa,7993,0.539597,-0.008694,True
+order_region_normalized,eastern_europe,3920,0.556633,0.008341,True
+order_region_normalized,east_of_usa,6915,0.556616,0.008325,True
+order_region_normalized,oceania,10148,0.540205,-0.008086,True
+order_region_normalized,northern_europe,9792,0.540441,-0.00785,True
+order_region_normalized,southeast_asia,9539,0.555299,0.007008,True
+order_zipcode_available,1,24840,0.550322,0.002031,True
+order_zipcode_available,0,155679,0.547967,-0.000324,True
+customer_order_country_match,0,180519,0.548291,0.0,True
+customer_order_state_match,0,180519,0.548291,0.0,True
+geo_coordinates_available,1,180519,0.548291,0.0,True
+latitude_rounded,"(34.11, 40.21]",36115,0.552291,0.004,True
+latitude_rounded,"(25.98, 34.11]",36211,0.549695,0.001404,True
+latitude_rounded,"(18.25, 25.98]",33686,0.548032,-0.000259,True
+latitude_rounded,"(40.21, 48.78]",35978,0.545917,-0.002374,True
+latitude_rounded,"(-33.940999999999995, 18.25]",38529,0.545667,-0.002624,True
+longitude_rounded,"(-158.031, -112.12]",36202,0.552456,0.004164,True
+longitude_rounded,"(-112.12, -83.49]",36063,0.550232,0.00194,True
+longitude_rounded,"(-73.69, -66.37]",62809,0.549905,0.001614,True
+longitude_rounded,"(-83.49, -73.69]",36053,0.542396,-0.005895,True
+longitude_rounded,"(-66.37, 115.26]",9392,0.536627,-0.011664,True

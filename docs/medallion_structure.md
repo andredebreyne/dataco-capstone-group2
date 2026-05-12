@@ -67,10 +67,16 @@ Destination for cleaned analytical tables used by notebooks and reusable code. S
 Recommended local file convention:
 
 ```text
-data/silver/dataco_orders_silver.parquet
+data/silver/dataco_orders_silver.csv
 data/silver/feature_availability_matrix.csv
 data/silver/leakage_audit_results.csv
 ```
+
+Large local Silver table exports are ignored by Git. They should be exported
+from Databricks or regenerated from the documented pipeline before local EDA or
+review notebooks are run; notebooks should not silently fall back to raw data.
+Use `notebooks/pipeline/run_medallion_pipeline.py` to create the standard local
+Silver CSV clone.
 
 Silver responsibilities:
 
