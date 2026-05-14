@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="270" viewBox="0 0 980 270">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="700">AO1 Late-Delivery Rate by Market</text>
+<text x="300" y="50" font-family="Arial, sans-serif" font-size="12" fill="#555">Late-delivery rate</text>
+<text x="20" y="76" font-family="Arial, sans-serif" font-size="13">LATAM</text>
+<rect x="300" y="58" width="282" height="22" rx="2" fill="#2f6f73"/>
+<text x="590" y="74" font-family="Arial, sans-serif" font-size="12">54.4% (-0.5 pp, n=51,594)</text>
+<text x="20" y="110" font-family="Arial, sans-serif" font-size="13">Europe</text>
+<rect x="300" y="92" width="287" height="22" rx="2" fill="#2f6f73"/>
+<text x="595" y="108" font-family="Arial, sans-serif" font-size="12">55.2% (+0.4 pp, n=50,252)</text>
+<text x="20" y="144" font-family="Arial, sans-serif" font-size="13">Africa</text>
+<rect x="300" y="126" width="283" height="22" rx="2" fill="#2f6f73"/>
+<text x="591" y="142" font-family="Arial, sans-serif" font-size="12">54.6% (-0.2 pp, n=11,614)</text>
+<text x="20" y="178" font-family="Arial, sans-serif" font-size="13">Pacific Asia</text>
+<rect x="300" y="160" width="286" height="22" rx="2" fill="#2f6f73"/>
+<text x="594" y="176" font-family="Arial, sans-serif" font-size="12">55.0% (+0.2 pp, n=41,260)</text>
+<text x="20" y="212" font-family="Arial, sans-serif" font-size="13">USCA</text>
+<rect x="300" y="194" width="284" height="22" rx="2" fill="#2f6f73"/>
+<text x="592" y="210" font-family="Arial, sans-serif" font-size="12">54.8% (-0.0 pp, n=25,799)</text>
+<line x1="585" x2="585" y1="52" y2="246" stroke="#b33" stroke-width="2" stroke-dasharray="5,4"/>
+<text x="591" y="258" font-family="Arial, sans-serif" font-size="12" fill="#b33">overall 54.8%</text>
+</svg>

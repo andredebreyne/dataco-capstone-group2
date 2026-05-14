@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="270" viewBox="0 0 760 270">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="34" font-family="Arial, sans-serif" font-size="20" font-weight="700">AO1 Overall Class Distribution</text>
+<text x="20" y="90" font-family="Arial, sans-serif" font-size="14">late_1</text>
+<rect x="170" y="70" width="230" height="28" rx="2" fill="#2f6f73"/>
+<text x="410" y="90" font-family="Arial, sans-serif" font-size="13">98,977 (54.8%)</text>
+<text x="20" y="148" font-family="Arial, sans-serif" font-size="14">not_late_0</text>
+<rect x="170" y="128" width="189" height="28" rx="2" fill="#7a8a99"/>
+<text x="369" y="148" font-family="Arial, sans-serif" font-size="13">81,542 (45.2%)</text>
+<text x="20" y="246" font-family="Arial, sans-serif" font-size="12" fill="#555">Severity: mild; majority/minority ratio 1.214:1</text>
+</svg>

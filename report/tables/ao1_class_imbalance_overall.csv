@@ -1,0 +1,20 @@
+metric,value,interpretation
+dataset_path,data/silver/dataco_orders_silver.csv,Local Silver CSV clone used for this EDA.
+dataset_read_mode,local_silver_csv,No raw-data fallback is allowed for this analysis.
+target_column,Late_delivery_risk,AO1 binary late-delivery target.
+total_rows,180519,Rows loaded from the local Silver clone.
+rows_with_valid_binary_target,180519,Rows retained for class imbalance calculations.
+missing_target_count,0,Missing AO1 target rows are excluded from rate calculations.
+invalid_target_count,0,Non-missing target values outside 0/1 would fail this notebook.
+count_late_1,98977,Positive AO1 class.
+count_not_late_0,81542,Negative AO1 class.
+late_delivery_rate,0.548291,54.83% of valid rows are late deliveries.
+not_late_rate,0.451709,45.17% of valid rows are not late.
+majority_class,late_1,Class with the larger count in the current Silver clone.
+minority_class,not_late_0,Class with the smaller count in the current Silver clone.
+majority_minority_class_ratio,1.213816,Majority-to-minority ratio is 1.214:1.
+imbalance_severity,mild,Class imbalance is mild; the positive late class is the majority class.
+minimum_slice_support,903,Slice rows below this threshold are flagged to avoid overinterpretation.
+metric_implication,accuracy_not_sufficient,"AO1 should report recall, precision, F1, confusion matrix, AUC-ROC, and PR-AUC if imbalance remains meaningful after split."
+threshold_implication,validation_data_required,"Operational thresholds should be selected later on validation data, not from the final test set."
+resampling_statement,no_resampling_in_eda,"No resampling is applied during EDA. If resampling such as SMOTE, undersampling, or class weighting is considered later, it must be applied only inside the training fold or training data after the chronological split, never before splitting and never on the full dataset."
