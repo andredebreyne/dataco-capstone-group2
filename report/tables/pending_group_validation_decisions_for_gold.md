@@ -5,7 +5,10 @@ Draft date: 2026-05-14
 Purpose: summarize the remaining team decisions needed to finalize variable
 screening and unblock Gold table creation for AO1, AO2, and later AO3.
 
-This is a temporary coordination note, not the final variable policy. Issue 18
+This is a temporary coordination note, not the final variable policy. The
+formal pre-Gold policy handoff is now documented in
+`docs/pre_gold_decision_log.md`, with the machine-readable companion at
+`data/references/pre_gold_decision_log.csv`. Issue 18
 univariate EDA has been reviewed from the remote branch
 `origin/18-w3p11-univariate-eda-distributions-and-outliers`, but it is not yet
 merged into this branch. Treat the issue 18 findings as distribution and
