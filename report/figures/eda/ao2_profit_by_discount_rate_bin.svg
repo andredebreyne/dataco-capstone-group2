@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="316" viewBox="0 0 1040 316">
+<rect width="100%" height="100%" fill="white"/>
+<text x="20" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="700">AO2 Mean Profit by Discount Rate Bin</text>
+<text x="20" y="52" font-family="Arial, sans-serif" font-size="12" fill="#555">Conditional commercial field; requires AO2 group validation before modeling.</text>
+<line x1="330" x2="330" y1="62" y2="284" stroke="#777" stroke-width="1"/>
+<line x1="804" x2="804" y1="62" y2="284" stroke="#a33" stroke-width="2" stroke-dasharray="5,4"/>
+<text x="20" y="90" font-family="Arial, sans-serif" font-size="13">(0.17, 0.25]</text>
+<rect x="330" y="70" width="410" height="22" rx="2" fill="#2f6f73"/>
+<line x1="930" x2="930" y1="68" y2="94" stroke="#222" stroke-width="2"/>
+<text x="866" y="86" font-family="Arial, sans-serif" font-size="12">mean $19.03; median $27.80; n=30,087</text>
+<text x="20" y="128" font-family="Arial, sans-serif" font-size="13">(-0.001, 0.03]</text>
+<rect x="330" y="108" width="520" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1073" x2="1073" y1="106" y2="132" stroke="#222" stroke-width="2"/>
+<text x="866" y="124" font-family="Arial, sans-serif" font-size="12">mean $24.08; median $34.45; n=40,113</text>
+<text x="20" y="166" font-family="Arial, sans-serif" font-size="13">(0.03, 0.07]</text>
+<rect x="330" y="146" width="510" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1051" x2="1051" y1="144" y2="170" stroke="#222" stroke-width="2"/>
+<text x="866" y="162" font-family="Arial, sans-serif" font-size="12">mean $23.63; median $33.40; n=40,116</text>
+<text x="20" y="204" font-family="Arial, sans-serif" font-size="13">(0.12, 0.17]</text>
+<rect x="330" y="184" width="440" height="22" rx="2" fill="#2f6f73"/>
+<line x1="972" x2="972" y1="182" y2="208" stroke="#222" stroke-width="2"/>
+<text x="866" y="200" font-family="Arial, sans-serif" font-size="12">mean $20.41; median $29.75; n=40,116</text>
+<text x="20" y="242" font-family="Arial, sans-serif" font-size="13">(0.07, 0.12]</text>
+<rect x="330" y="222" width="474" height="22" rx="2" fill="#2f6f73"/>
+<line x1="1013" x2="1013" y1="220" y2="246" stroke="#222" stroke-width="2"/>
+<text x="866" y="238" font-family="Arial, sans-serif" font-size="12">mean $21.98; median $31.67; n=30,087</text>
+<text x="810" y="302" font-family="Arial, sans-serif" font-size="12" fill="#a33">overall mean $21.97</text>
+</svg>
