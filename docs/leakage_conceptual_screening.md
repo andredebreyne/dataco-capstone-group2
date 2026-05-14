@@ -14,6 +14,10 @@ The screening table should be used before Gold table construction and before AO1
 
 This document does not replace the broader leakage rules in `docs/leakage_control_plan.md`, the raw-field availability map in `docs/feature_availability_map.md`, or the AO2 target policy in `docs/ao2_target_policy.md`.
 
+Finalized first-pass Gold inclusion and exclusion decisions, including the
+conditional `Type` assumption and AO2 commercial-field policy, are documented in
+`docs/pre_gold_modeling_decisions.md`.
+
 ## How to Use the Table
 
 Use the table as a gate before building model-ready features:

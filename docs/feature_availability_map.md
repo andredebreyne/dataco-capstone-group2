@@ -24,6 +24,9 @@ The matrix classifies each structured DataCo source field by when it becomes kno
 
 For the broader leakage-control methodology, use `docs/leakage_control_plan.md` as the source-of-truth document.
 
+For finalized first-pass Gold inclusion and exclusion decisions, use
+`docs/pre_gold_modeling_decisions.md` alongside this availability map.
+
 ## Decision-Time Rule
 
 The project supports pre-shipment decision making. A predictor is eligible for modeling only if it is known at order creation or can be derived from information available before dispatch.

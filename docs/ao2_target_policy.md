@@ -11,6 +11,9 @@ This policy freezes the AO2 target definition and predictor rules before profita
 
 The goal is to keep AO2 useful for the AO3 risk-margin prioritization framework while preserving methodological defensibility.
 
+The finalized first-pass Gold AO2 commercial predictor decision is documented in
+`docs/pre_gold_modeling_decisions.md`.
+
 ## Primary AO2 Target
 
 Use `Order Profit Per Order` as the primary AO2 regression target.
@@ -93,20 +96,22 @@ Duplicate-field rule:
 - Prefer business-readable order-level names where possible.
 - Document the final selected financial predictors before model training.
 
-Recommended initial AO2 financial predictor set, subject to team sign-off:
+Finalized first-pass AO2 commercial predictor set:
 
-Primary AO2 value predictor:
-- Order Item Total
+- `Order Item Product Price`
+- `Order Item Discount Rate`
+- `Order Item Quantity`
 
-Optional revenue-structure predictors for robustness:
-- Order Item Discount Rate
-- Order Item Quantity
-- Order Item Product Price
+Finalized first-pass exclusion:
 
-Rule:
-Do not treat the revenue-structure fields as profit predictors by themselves, and compare model results with and without them.
+- `Order Item Total` is approved as the AO3 margin denominator only and is
+  excluded from primary AO2 predictors.
+- `Sales per customer`, `Sales`, `Order Item Discount`, and `Product Price`
+  are excluded from primary AO2 predictors to avoid duplicate economic inputs
+  and target-reconstruction risk.
 
-Do not include `Sales per customer` if `Order Item Total` is used. Do not include `Product Price` if `Order Item Product Price` is used.
+Alternative commercial specifications may be tested later as sensitivity
+models, but the first-pass AO2 Gold design should remain conservative.
 
 ## Non-Financial Predictor Policy
 

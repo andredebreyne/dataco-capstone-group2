@@ -18,6 +18,9 @@ This output is a Silver customer/regional candidate feature table. It is not the
 
 Later Gold transformations must still apply the feature availability map, leakage-control rules, high-cardinality review, and train-only preprocessing before any AO1 or AO2 model training.
 
+Finalized first-pass Gold decisions for coarse versus granular geography are
+documented in `docs/pre_gold_modeling_decisions.md`.
+
 ## Input and Output
 
 Input Delta path:

@@ -1,4 +1,4 @@
-# Pre-Gold Methodological Decision Log
+# Pre-Gold Methodological Decision Inventory
 
 Draft date: 2026-05-14
 
@@ -7,6 +7,12 @@ Draft date: 2026-05-14
 This log resolves the methodological decisions needed before Gold analytical
 table creation for AO1 late-delivery risk, AO2 order profitability, and AO3
 risk-margin prioritization.
+
+Finalized team decisions for first-pass model-ready Gold are documented in
+`docs/pre_gold_modeling_decisions.md`. This file remains a preliminary decision
+inventory and source review log; any unresolved or conditional statuses below
+reflect the pre-finalization review stage and are superseded by the finalized
+modeling decisions.
 
 It does not implement Gold tables, train models, select thresholds, apply
 resampling, create new engineered features, or approve final model feature
@@ -31,7 +37,6 @@ dashboard-only fields, lineage fields, or conditional candidates.
 - `docs/ao1_bivariate_eda.md`
 - `docs/ao2_bivariate_eda.md`
 - `docs/ao1_class_imbalance_analysis.md`
-- `report/tables/pending_group_validation_decisions_for_gold.md`
 - `report/tables/univariate_distribution_eda_findings.md`
 - `report/tables/ao1_late_delivery_bivariate_findings.md`
 - `report/tables/ao2_profitability_bivariate_findings.md`
@@ -57,12 +62,16 @@ No external sources were used.
 | `defer_to_future_feature_design` | Do not include in the first model-ready Gold predictor set. Requires a later grouping, encoding, or time-aware aggregate design. |
 | `needs_group_validation` | Do not include in default Gold predictor columns until the team answers the listed question. |
 
-## Formal Decision Log
+## Preliminary Decision Inventory
+
+The status values in this table are historical review statuses from the
+pre-finalization decision inventory. Use `docs/pre_gold_modeling_decisions.md`
+for current first-pass Gold inclusion and exclusion rules.
 
 | Decision area | Variable or feature group | Related AO | Decision | Rationale | Main source artifacts | Leakage risk | Target-reconstruction risk | Action required before Gold | Group validation needed | Final status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AO1 target | `Late_delivery_risk` | AO1 | `exclude_from_model_features` | Official binary AO1 target. It is target-only and must never be used as a predictor or grouping signal for model features. | `docs/ao1_target_definition.md`; `data/references/feature_availability_map.csv`; `data/references/leakage_conceptual_screening.csv`; `report/tables/ao1_class_imbalance_findings.md` | High if used as predictor | Low | Keep as AO1 target column only. Exclude from all predictor matrices. | No | Resolved |
-| AO1 primary population | `Delivery_Status = Shipping canceled`; `Order_Status` values `CANCELED` and `SUSPECTED_FRAUD` | AO1 | `needs_group_validation` | The target note recommends excluding canceled/fraud shipments from the primary AO1 table because they are not normal completed deliveries, but this affects the modeling population and should be signed off before AO1 Gold is frozen. | `docs/ao1_target_definition.md`; `report/tables/pending_group_validation_decisions_for_gold.md` | Medium if canceled records are treated as normal non-late deliveries | Low | Default proposal: primary AO1 Gold excludes `Delivery_Status = Shipping canceled`; optionally retain a sensitivity/audit flag outside predictors. | Yes | Unresolved group validation |
+| AO1 primary population | `Delivery_Status = Shipping canceled`; `Order_Status` values `CANCELED` and `SUSPECTED_FRAUD` | AO1 | `needs_group_validation` | The target note recommends excluding canceled/fraud shipments from the primary AO1 table because they are not normal completed deliveries, but this affects the modeling population and should be signed off before AO1 Gold is frozen. | `docs/ao1_target_definition.md`; `docs/pre_gold_modeling_decisions.md` | Medium if canceled records are treated as normal non-late deliveries | Low | Default proposal: primary AO1 Gold excludes `Delivery_Status = Shipping canceled`; optionally retain a sensitivity/audit flag outside predictors. | Yes | Unresolved group validation |
 | Delivery outcome leakage fields | `Delivery_Status`; `Days_for_shipping_real`; `shipping_date_DateOrders`; `Order_Status` | AO1, AO2, dashboard | `dashboard_only` | These fields are post-shipment, post-delivery, or post-order status fields and may directly encode delivery or fulfillment outcomes. | `docs/leakage_control_plan.md`; `docs/ao1_target_definition.md`; `docs/feature_availability_map.md`; `report/tables/ao1_late_delivery_bivariate_findings.md`; `report/tables/ao2_profitability_bivariate_findings.md` | High | Low | Keep out of AO1 and AO2 predictors. Retain only in audit/dashboard outputs or AO1 population sensitivity logic. | No | Resolved |
 | AO2 target | `Order_Profit_Per_Order` | AO2 | `exclude_from_model_features` | Official AO2 target and target-only field. | `docs/ao2_target_policy.md`; `data/references/feature_availability_map.csv`; `report/tables/ao2_profitability_bivariate_findings.md` | Low | High if used as predictor | Keep as AO2 target column only. Exclude from AO1 and AO2 predictor matrices. | No | Resolved |
 | AO2 profit duplicates and realized margin proxies | `Benefit_per_order`; `Order_Item_Profit_Ratio`; direct profit transformations; realized margin fields | AO2, dashboard | `dashboard_only` | `Benefit_per_order` exactly matches `Order_Profit_Per_Order` in the reviewed Silver clone. `Order_Item_Profit_Ratio` is a realized profit-ratio/proxy that can reconstruct profit with order value. | `docs/ao2_target_policy.md`; `docs/leakage_control_plan.md`; `report/tables/ao2_profitability_bivariate_findings.md` | Medium | High | Exclude from model predictors. Use only for target audit, descriptive historical margin, governance, or dashboard caveats. | No | Resolved |
@@ -76,7 +85,7 @@ No external sources were used.
 | Raw order timestamp | `order_date_DateOrders`; source `order date (DateOrders)` | AO1, AO2, general Gold | `lineage_or_split_only` | The raw timestamp is needed for chronological split and lineage, but has high cardinality and should not be used as an unconstrained model feature. | `docs/leakage_control_plan.md`; `docs/order_time_features.md`; `report/tables/univariate_distribution_eda_findings.md`; `report/tables/ao1_late_delivery_bivariate_findings.md` | Medium if used raw | Low | Retain for chronological split, lineage, and validation. Use derived calendar fields for modeling candidates. | No | Resolved |
 | Derived order-time calendar features | `order_year`; `order_quarter`; `order_month`; `order_week_of_year`; `order_day_of_month`; `order_day_of_week`; `order_hour`; `order_is_weekend`; `order_season` | AO1, AO2 | `approved_for_gold_candidate` | Deterministic features derived only from order creation timestamp. No shipment, delivery, or outcome fields are used. | `docs/order_time_features.md`; `data/references/leakage_conceptual_screening.csv`; `report/tables/ao1_late_delivery_bivariate_findings.md`; `report/tables/ao2_profitability_bivariate_findings.md` | Low | Low | Include as Gold candidate features. Any later scaling/encoding remains training-only. | No | Resolved |
 | Product category and department descriptors | `Category_Name`; `Department_Name`; `product_category_key`; `product_department_key` | AO1, AO2 | `approved_for_gold_candidate` | Category and department names/keys are order-time product mix descriptors with clear business meaning and support-safe EDA patterns. | `docs/feature_availability_map.md`; `docs/shipping_product_features.md`; `report/tables/ao2_profitability_bivariate_findings.md` | Low | Low | Include as candidate product mix features. Prefer names or stable engineered keys over raw numeric IDs. | No | Resolved |
-| Category and department raw IDs | `Category_Id`; `Product_Category_Id`; `Department_Id` | AO1, AO2 | `lineage_or_split_only` | Numeric codes duplicate clearer category/department descriptors and may be treated incorrectly as numeric signal. | `data/references/feature_availability_map.csv`; `report/tables/eda_univariate_summary.csv`; `report/tables/pending_group_validation_decisions_for_gold.md` | Low | Low | Do not use as direct predictors in first Gold model matrices. Keep only if needed to build stable category/department keys or for traceability. | No | Resolved |
+| Category and department raw IDs | `Category_Id`; `Product_Category_Id`; `Department_Id` | AO1, AO2 | `lineage_or_split_only` | Numeric codes duplicate clearer category/department descriptors and may be treated incorrectly as numeric signal. | `data/references/feature_availability_map.csv`; `report/tables/eda_univariate_summary.csv`; `docs/pre_gold_modeling_decisions.md` | Low | Low | Do not use as direct predictors in first Gold model matrices. Keep only if needed to build stable category/department keys or for traceability. | No | Resolved |
 | Product IDs, product names, and catalog keys | `Product_Card_Id`; `Order_Item_Cardprod_Id`; `Product_Name`; `product_catalog_key`; `product_name_normalized` | AO1, AO2 | `defer_to_future_feature_design` | Product-level identifiers and names are high-cardinality or key-like. Direct use risks overfitting and unstable catalog shortcuts. | `docs/shipping_product_features.md`; `report/tables/univariate_distribution_eda_findings.md`; `report/tables/ao1_late_delivery_bivariate_findings.md`; `report/tables/ao2_profitability_bivariate_findings.md` | Medium | Low to medium | Exclude from first model-ready predictor set. Revisit only with grouped product features, frequency thresholds, or time-aware aggregate design. | Yes for future design | Deferred |
 | Product status | `Product_Status`; `product_status_flag` | AO1, AO2 | `exclude_from_model_features` | Current EDA found one observed value, so it provides no useful variation. Semantics also remain unclear. | `report/tables/univariate_distribution_eda_findings.md`; `report/tables/ao1_class_imbalance_group_review_list.csv`; `docs/shipping_product_features.md` | Low | Low | Exclude from first Gold model predictors. Retain only as descriptive metadata if needed. | No | Resolved |
 | Coarse customer and destination geography | `Customer_Segment`; `Customer_Country`; `Customer_State`; `Market`; `Order_Country`; `Order_Region`; `Order_State`; normalized equivalents | AO1, AO2 | `approved_for_gold_candidate` | Coarse geography and segment fields are known at order creation and are supported by the availability map. | `docs/feature_availability_map.md`; `docs/customer_regional_features.md`; `report/tables/ao1_late_delivery_bivariate_findings.md`; `report/tables/ao2_profitability_bivariate_findings.md` | Low | Low | Include as candidate features, with later encoding fit on training data only. Review cardinality during Gold construction, especially for country/state fields. | No | Resolved |
@@ -142,37 +151,17 @@ These decisions are locked for the first model-ready Gold design:
   product catalog keys, raw city, raw postal code, raw/rounded coordinates, and
   region-key composites.
 
-## Remaining Group Validation Questions
+## Finalization Status
 
-The team must answer these before the first model-ready Gold tables are frozen:
-
-1. Should primary AO1 Gold exclude `Delivery_Status = Shipping canceled`
-   records, with canceled/fraud rows retained only for sensitivity or audit?
-2. Is `Type` a valid order-creation operational variable for AO1/AO2 modeling,
-   or should it remain descriptive-only?
-3. For AO2, should `Order_Item_Total` be used only as the AO3 denominator, or
-   also as an AO2 predictor candidate?
-4. If AO2 uses commercial fields, which non-duplicative set is approved:
-   order value, gross sales, one price field, one discount field, and/or
-   quantity?
-5. Should direct product-level descriptors (`Product_Name`,
-   `product_name_normalized`, product IDs, `product_catalog_key`) remain
-   excluded from first-pass Gold, or should the team define grouped product
-   features later?
-6. Should granular geography (`Customer_City`, `Order_City`, postal codes,
-   coordinates, region keys) remain excluded from first-pass Gold, or should the
-   team define coarse grouping rules later?
-7. Are any historical customer, product, city, region, or category aggregates in
-   scope for a future issue, with time-aware train-only computation?
-
-Until these questions are answered, the conservative Gold default is to exclude
-the affected fields from model predictors or keep them in a clearly marked
-conditional review list.
+The former group-validation questions in this preliminary inventory have been
+answered by the team. Use `docs/pre_gold_modeling_decisions.md` as the
+source-of-truth for first-pass Gold modeling policy.
 
 ## Recommended Next Gold Task Scope
 
 Create the first leakage-safe Gold analytical tables for AO1, AO2, and AO3
-support using this decision log as the gating policy. The next task should:
+support using `docs/pre_gold_modeling_decisions.md` as the finalized gating
+policy. The next task should:
 
 - build explicit target, predictor candidate, dashboard-only, and lineage-only
   column lists;
@@ -182,4 +171,3 @@ support using this decision log as the gating policy. The next task should:
 - place conditional commercial, product-level, and granular geography fields in
   an excluded/review log rather than default predictors;
 - not train models, resample, or select thresholds.
-

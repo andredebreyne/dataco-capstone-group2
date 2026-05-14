@@ -33,7 +33,9 @@ Output Delta path:
 Output note: this is a feature-enriched Silver dataset, or Gold-ready intermediate
 dataset, not a final leakage-safe AO1/AO2 modeling table. Downstream Gold
 transformations must still apply the feature availability map and leakage-control
-rules before creating model feature matrices. See `docs/leakage_control_plan.md`.
+rules before creating model feature matrices. See `docs/leakage_control_plan.md`
+and the finalized first-pass Gold decisions in
+`docs/pre_gold_modeling_decisions.md`.
 
 Script:
 
