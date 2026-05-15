@@ -46,12 +46,15 @@ EDA_ACTION = "check"
 LOCAL_SILVER_CSV_RELATIVE_PATH = Path("data/silver/dataco_orders_silver.csv")
 
 EDA_PYTHON_SCRIPTS = (
+    Path("notebooks/eda/eda_univariate_distribution_analysis.py"),
     Path("notebooks/eda/ao1_bivariate_late_delivery_eda.py"),
     Path("notebooks/eda/ao2_bivariate_profitability_eda.py"),
     Path("notebooks/eda/ao1_class_imbalance_analysis.py"),
 )
 
 EXPECTED_EDA_ARTIFACTS = (
+    Path("report/tables/eda_univariate_summary.csv"),
+    Path("report/tables/univariate_distribution_eda_findings.md"),
     Path("docs/ao1_bivariate_eda.md"),
     Path("docs/ao2_bivariate_eda.md"),
     Path("docs/ao1_class_imbalance_analysis.md"),

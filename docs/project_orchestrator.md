@@ -20,10 +20,10 @@ This orchestrator covers Bronze, Silver, feature engineering, lightweight valida
 | Shipping/product feature engineering | `src/data_engineering/engineer_shipping_product_features.py` | Create shipping and product candidate features from Silver. | Silver Delta. | Shipping/product feature Delta table. | Required when feature engineering runs; controlled by `RUN_FEATURE_ENGINEERING` and `RUN_SHIPPING_PRODUCT_FEATURES`. | Uses existing feature contract and output validation. |
 | Customer/regional feature engineering | `src/data_engineering/engineer_customer_regional_features.py` | Create customer and regional candidate features from Silver. | Silver Delta. | Customer/regional feature Delta table. | Required when feature engineering runs; controlled by `RUN_FEATURE_ENGINEERING` and `RUN_CUSTOMER_REGIONAL_FEATURES`. | Uses existing feature contract and output validation. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
+| Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the original `.ipynb` is retained as exploratory context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
 | AO2 bivariate EDA | `notebooks/eda/ao2_bivariate_profitability_eda.py` | Generate AO2 profitability bivariate EDA summaries and figures. | Local Silver CSV clone. | AO2 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
 | AO1 class imbalance analysis | `notebooks/eda/ao1_class_imbalance_analysis.py` | Generate AO1 target balance and slice-level imbalance artifacts. | Local Silver CSV clone. | Class imbalance tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
-| Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.ipynb` | Generate univariate distribution review outputs. | Local project data inputs used by the notebook. | Univariate EDA tables and figures. | Optional manual step. | Not automated by the Python orchestrator because it is currently an `.ipynb` notebook. |
 | EDA summary | `docs/eda_findings_summary.md` | Synthesize implemented EDA outputs for reviewers. | Existing EDA tables, figures, and documentation. | Documentation only. | Manual documentation step. | No executable generator exists yet; document as manual unless one is added later. |
 | Silver schema dictionary validation | `tests/data_validation/validate_silver_schema_dictionary.py` | Validate the Silver dictionary reference against `clean_silver.py`. | `data/references/silver_schema_data_dictionary.csv` and `src/data_engineering/clean_silver.py`. | Console pass/fail result. | Required for pre-Gold governance; controlled by `RUN_PRE_GOLD_GOVERNANCE_CHECKS`. | Does not require Spark. |
 | Leakage conceptual screening validation | `tests/data_validation/validate_leakage_conceptual_screening.py` | Validate leakage screening coverage and controlled values. | Reference CSVs and implemented feature scripts. | Console pass/fail result. | Required for pre-Gold governance; controlled by `RUN_PRE_GOLD_GOVERNANCE_CHECKS`. | Does not require Spark. |
@@ -35,7 +35,7 @@ This orchestrator covers Bronze, Silver, feature engineering, lightweight valida
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, and feature engineering jobs.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
-- `notebooks/eda/` contains EDA scripts and notebooks.
+- `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
 - `data/references/` contains small committed reference and governance CSVs.
 
@@ -83,7 +83,7 @@ RUN_EDA = True
 EDA_ACTION = "run_python_scripts"
 ```
 
-The univariate EDA `.ipynb` remains a manual notebook step unless it is converted to an executable Python workflow later.
+The univariate EDA now has an orchestrator-supported Python script. The original `.ipynb` is not called by the orchestrator.
 
 ## Failure Handling
 
@@ -99,4 +99,3 @@ Required steps raise a clear `RuntimeError` that names the failed step. Optional
 ## Future Contribution Rule
 
 Any task that adds, renames, removes, or changes an executable pipeline step, validation script, feature engineering job, EDA artifact generator, model training step, scoring step, or dashboard export must update `notebooks/pipeline/run_project_workflow.py` and this document before the PR is considered complete.
-
