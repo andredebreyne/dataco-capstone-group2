@@ -24,8 +24,7 @@ Current workflow artifacts:
 
 Historical issue 18 notebook artifacts:
 
-- `notebooks/eda_univariate_distribution_analysis.ipynb`
-- `eda_univariate_distribution_analysis.ipynb`
+- `notebooks/eda/eda_univariate_distribution_analysis_exploratory.ipynb`
 - `notebooks/eda_univariate_summary.csv`
 - `notebooks/figures/*.png`
 

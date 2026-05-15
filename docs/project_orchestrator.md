@@ -20,7 +20,7 @@ This orchestrator covers Bronze, Silver, feature engineering, lightweight valida
 | Shipping/product feature engineering | `src/data_engineering/engineer_shipping_product_features.py` | Create shipping and product candidate features from Silver. | Silver Delta. | Shipping/product feature Delta table. | Required when feature engineering runs; controlled by `RUN_FEATURE_ENGINEERING` and `RUN_SHIPPING_PRODUCT_FEATURES`. | Uses existing feature contract and output validation. |
 | Customer/regional feature engineering | `src/data_engineering/engineer_customer_regional_features.py` | Create customer and regional candidate features from Silver. | Silver Delta. | Customer/regional feature Delta table. | Required when feature engineering runs; controlled by `RUN_FEATURE_ENGINEERING` and `RUN_CUSTOMER_REGIONAL_FEATURES`. | Uses existing feature contract and output validation. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
-| Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the original `.ipynb` is retained as exploratory context. |
+| Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
 | AO2 bivariate EDA | `notebooks/eda/ao2_bivariate_profitability_eda.py` | Generate AO2 profitability bivariate EDA summaries and figures. | Local Silver CSV clone. | AO2 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
 | AO1 class imbalance analysis | `notebooks/eda/ao1_class_imbalance_analysis.py` | Generate AO1 target balance and slice-level imbalance artifacts. | Local Silver CSV clone. | Class imbalance tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -83,7 +83,7 @@ RUN_EDA = True
 EDA_ACTION = "run_python_scripts"
 ```
 
-The univariate EDA now has an orchestrator-supported Python script. The original `.ipynb` is not called by the orchestrator.
+The univariate EDA now has an orchestrator-supported Python script. The exploratory notebook is retained as `notebooks/eda/eda_univariate_distribution_analysis_exploratory.ipynb` and is not called by the orchestrator.
 
 ## Failure Handling
 
