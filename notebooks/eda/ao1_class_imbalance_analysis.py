@@ -169,7 +169,7 @@ def load_input_dataset() -> tuple[pd.DataFrame, str, str]:
         raise FileNotFoundError(
             "Local Silver CSV clone not found. Create the cleaned Silver table at "
             f"{REPO_ROOT / DEFAULT_LOCAL_SILVER_CSV} by running "
-            "notebooks/pipeline/run_medallion_pipeline.py. Do not point this EDA "
+            "notebooks/pipeline/run_project_workflow.py. Do not point this EDA "
             "at data/raw and do not duplicate Silver cleaning logic here."
         )
 

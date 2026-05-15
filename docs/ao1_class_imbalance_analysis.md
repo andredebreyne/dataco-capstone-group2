@@ -23,7 +23,7 @@ data/silver/dataco_orders_silver.csv
 If the Silver clone is missing, generate it by running:
 
 ```text
-notebooks/pipeline/run_medallion_pipeline.py
+notebooks/pipeline/run_project_workflow.py
 ```
 
 The script intentionally does not fall back to raw data and does not duplicate
