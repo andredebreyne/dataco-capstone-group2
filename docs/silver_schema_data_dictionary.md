@@ -37,6 +37,9 @@ The dictionary aligns each non-lineage Silver field with `data/references/leakag
 
 The dictionary does not replace `docs/leakage_control_plan.md`, `docs/feature_availability_map.md`, `docs/ao1_target_definition.md`, or `docs/ao2_target_policy.md`.
 
+Finalized first-pass Gold modeling decisions are documented in
+`docs/pre_gold_modeling_decisions.md`.
+
 ## How to Use Before Gold and Modeling
 
 Before building Gold analytical tables or AO1/AO2 feature matrices, reviewers should use the dictionary to confirm:

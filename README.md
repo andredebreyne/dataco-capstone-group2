@@ -51,6 +51,7 @@ The detailed folder, Databricks destination, and rerun conventions are documente
 The decision-time feature availability map is documented in `docs/feature_availability_map.md`.
 - [Conceptual Leakage Screening](docs/leakage_conceptual_screening.md)
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
+- [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
 
 ## Data Quality
 

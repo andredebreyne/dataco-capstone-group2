@@ -14,6 +14,9 @@ Leakage control applies to:
 - AO2: order-level profitability estimation
 - AO3: risk-margin prioritization using AO1 and AO2 outputs
 
+Finalized first-pass Gold inclusion and exclusion decisions are documented in
+`docs/pre_gold_modeling_decisions.md`.
+
 ## Decision-Time Rule
 
 The primary rule is:

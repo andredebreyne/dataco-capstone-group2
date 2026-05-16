@@ -14,6 +14,9 @@ The job does not derive features from actual shipping duration, shipping date, d
 
 This output is a shipping/product candidate feature table, not the final AO1 or AO2 modeling matrix. Later Gold transformations must still apply the feature availability map, AO2 target-reconstruction policy, leakage-control rules, and train-only preprocessing before model training.
 
+Finalized first-pass Gold decisions for product-level descriptors and AO2
+commercial predictors are documented in `docs/pre_gold_modeling_decisions.md`.
+
 ## Input and Output
 
 Input Delta path:
