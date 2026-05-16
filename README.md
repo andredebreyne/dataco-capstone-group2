@@ -52,6 +52,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [Conceptual Leakage Screening](docs/leakage_conceptual_screening.md)
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
 - [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
+- [EDA Findings Summary](docs/eda_findings_summary.md)
 
 ## Data Quality
 
