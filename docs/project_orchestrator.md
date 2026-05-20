@@ -11,6 +11,8 @@ This orchestrator covers Bronze, Silver, feature engineering, lightweight valida
 | Workflow step | Script or notebook path | Purpose | Input dependency | Output | Required or optional | Notes / Databricks assumptions |
 | --- | --- | --- | --- | --- | --- | --- |
 | Environment validation | `src/00_test_databricks_env.py` | Validate that Spark starts and a small PySpark job can run. | Databricks cluster attached to the repo. | Console smoke-test output. | Required for first setup; controlled by `RUN_ENV_CHECK`. | Uses the active Spark session or creates one. |
+| Repository structure validation | `notebooks/pipeline/run_project_workflow.py` | Confirm the full repository checkout is available to Databricks before running project jobs. | Repository root resolved from Databricks Repos, current working directory, or `DATACO_REPO_ROOT`. | Clear pass/fail message listing missing paths. | Required; controlled by `RUN_REPO_STRUCTURE_CHECK`. | The orchestrator does not clone from GitHub or manage credentials; it validates the repo that is already attached. |
+| Databricks Volume directory setup | `notebooks/pipeline/run_project_workflow.py` | Create and validate the standard Unity Catalog Volume folder layout. | `DATACO_VOLUME_ROOT` or default `/Volumes/workspace/default/raw_data`. | `bronze`, `silver`, `gold`, `references`, and `eda` folders under the Volume root. | Required; controlled by `RUN_VOLUME_SETUP`. | Uses Databricks `dbutils.fs.mkdirs`; disable only when folders are intentionally managed elsewhere. |
 | Raw data availability check | `notebooks/pipeline/run_project_workflow.py` | Confirm the raw DataCo CSV path configured for Bronze exists. | `DATACO_RAW_INPUT_PATH` or default `/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`. | Clear pass/fail message. | Required before Bronze; controlled by `RUN_RAW_DATA_CHECK`. | Uses local path checks and Databricks `dbutils.fs.ls` when available. |
 | Feature availability map registration | `src/data_engineering/register_feature_availability_map.py` | Validate and register the decision-time feature availability reference. | `data/references/feature_availability_map.csv`. | Volume CSV and Delta reference table. | Required for governance runs; controlled by `RUN_REFERENCE_REGISTRATION`. | Default Volume root is `/Volumes/workspace/default/raw_data`. |
 | Bronze ingestion | `src/data_engineering/ingest_bronze.py` | Ingest the raw DataCo CSV into Bronze Delta while preserving source-level data. | Raw DataCo CSV in the configured Volume path. | Bronze Delta and column mapping output. | Required; controlled by `RUN_BRONZE`. | Uses existing Bronze config and logic. |
@@ -44,10 +46,12 @@ The earlier medallion-only runner was removed after the project-level orchestrat
 ## Databricks Assumptions
 
 - Use Databricks Community Edition with runtime `14.3 LTS` where available, or `13.3 LTS` as the documented fallback.
-- Run the orchestrator from Databricks Repos or set `DATACO_REPO_ROOT` to the repository checkout path.
+- Run the orchestrator from the full repository checkout in Databricks or set `DATACO_REPO_ROOT` to the repository checkout path.
+- The orchestrator assumes the repository is already available in Databricks. It does not clone from GitHub, manage Git credentials, create branches, or open pull requests.
 - The default Volume root is `DATACO_VOLUME_ROOT=/Volumes/workspace/default/raw_data`.
 - The default raw DataCo CSV path is `/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`; override with `DATACO_RAW_INPUT_PATH` only when needed.
 - Bronze, Silver, feature, and reference output paths use Unity Catalog Volume paths by default.
+- The standard Volume setup creates or validates `bronze`, `silver`, `gold`, `references`, and `eda` folders under the configured Volume root.
 - The local Silver CSV clone expected by EDA scripts is `data/silver/dataco_orders_silver.csv`.
 - EDA scripts must use the Silver CSV clone or an explicitly configured Silver clone path, not raw data.
 
@@ -59,6 +63,8 @@ Common flag usage:
 
 ```python
 RUN_ENV_CHECK = True
+RUN_REPO_STRUCTURE_CHECK = True
+RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
 RUN_BRONZE = True
 RUN_SILVER = True
@@ -84,6 +90,22 @@ EDA_ACTION = "run_python_scripts"
 ```
 
 The univariate EDA now has an orchestrator-supported Python script. The exploratory notebook is retained as `notebooks/eda/eda_univariate_distribution_analysis_exploratory.ipynb` and is not called by the orchestrator.
+
+## Primary Output Paths
+
+At the end of each run, the orchestrator prints the primary paths that reviewers should verify:
+
+- Volume root.
+- Raw DataCo CSV.
+- Bronze Delta table.
+- Bronze column mapping Delta table.
+- Feature availability map Delta table.
+- Silver Delta table.
+- Silver quality report Delta table.
+- Order-time feature Delta table.
+- Shipping/product feature Delta table.
+- Customer/regional feature Delta table.
+- Local Silver CSV clone for EDA.
 
 ## Failure Handling
 

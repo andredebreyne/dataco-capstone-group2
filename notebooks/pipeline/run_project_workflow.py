@@ -21,6 +21,8 @@ from typing import Any, Callable
 
 # Keep these switches simple for Databricks review runs.
 RUN_ENV_CHECK = True
+RUN_REPO_STRUCTURE_CHECK = True
+RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
 RUN_REFERENCE_REGISTRATION = True
 RUN_BRONZE = True
@@ -44,6 +46,35 @@ RUN_CUSTOMER_REGIONAL_FEATURES = True
 EDA_ACTION = "check"
 
 LOCAL_SILVER_CSV_RELATIVE_PATH = Path("data/silver/dataco_orders_silver.csv")
+
+VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
+
+STANDARD_VOLUME_DIRECTORIES = (
+    VOLUME_ROOT,
+    f"{VOLUME_ROOT}/bronze",
+    f"{VOLUME_ROOT}/silver",
+    f"{VOLUME_ROOT}/gold",
+    f"{VOLUME_ROOT}/references",
+    f"{VOLUME_ROOT}/eda",
+)
+
+REQUIRED_REPOSITORY_PATHS = (
+    Path("README.md"),
+    Path("docs/project_orchestrator.md"),
+    Path("data/references/feature_availability_map.csv"),
+    Path("src/00_test_databricks_env.py"),
+    Path("src/data_engineering"),
+    Path("src/data_engineering/ingest_bronze.py"),
+    Path("src/data_engineering/clean_silver.py"),
+    Path("src/data_engineering/engineer_order_time_features.py"),
+    Path("src/data_engineering/engineer_shipping_product_features.py"),
+    Path("src/data_engineering/engineer_customer_regional_features.py"),
+    Path("src/data_engineering/register_feature_availability_map.py"),
+    Path("tests/data_validation"),
+    Path("tests/data_validation/test_silver_quality.py"),
+    Path("notebooks/eda"),
+    Path("notebooks/pipeline"),
+)
 
 EDA_PYTHON_SCRIPTS = (
     Path("notebooks/eda/eda_univariate_distribution_analysis.py"),
@@ -210,6 +241,22 @@ def databricks_path_exists(path_value: str) -> bool:
         return False
 
 
+def create_databricks_directory(path_value: str) -> None:
+    """Create a Databricks Volume directory when running in Databricks."""
+    databricks_utils = globals().get("dbutils")
+    if databricks_utils is not None:
+        databricks_utils.fs.mkdirs(path_value)
+        return
+
+    if path_value.startswith("/Volumes/"):
+        raise RuntimeError(
+            "Databricks dbutils is required to create Unity Catalog Volume paths. "
+            f"Run this step in Databricks or disable RUN_VOLUME_SETUP. Path: {path_value}"
+        )
+
+    Path(path_value).mkdir(parents=True, exist_ok=True)
+
+
 def run_step(
     step_name: str,
     enabled: bool,
@@ -244,16 +291,44 @@ def run_step(
 
 def validate_databricks_environment() -> None:
     """Validate the repo root and run the existing Databricks smoke test."""
-    required_paths = (
-        REPO_ROOT / "README.md",
-        REPO_ROOT / "data" / "references" / "feature_availability_map.csv",
-        REPO_ROOT / "src" / "data_engineering" / "ingest_bronze.py",
-    )
-    missing_paths = [path for path in required_paths if not path.exists()]
-    if missing_paths:
-        raise FileNotFoundError(f"Missing expected repository paths: {missing_paths}")
-
     run_python_file(Path("src/00_test_databricks_env.py"))
+
+
+def validate_repository_structure() -> None:
+    """Validate that Databricks is running against the full repository checkout."""
+    missing_paths = [
+        str(REPO_ROOT / relative_path)
+        for relative_path in REQUIRED_REPOSITORY_PATHS
+        if not (REPO_ROOT / relative_path).exists()
+    ]
+    if missing_paths:
+        raise FileNotFoundError(
+            "Missing expected repository paths. Run from the full repository checkout "
+            "or set DATACO_REPO_ROOT to the repository root. Missing paths: "
+            f"{missing_paths}"
+        )
+
+    print("Required repository folders, scripts, tests, and reference files are present.")
+
+
+def setup_standard_volume_directories() -> None:
+    """Create and validate the standard Databricks Volume directory layout."""
+    for directory_path in STANDARD_VOLUME_DIRECTORIES:
+        create_databricks_directory(directory_path)
+
+    missing_directories = [
+        directory_path
+        for directory_path in STANDARD_VOLUME_DIRECTORIES
+        if not databricks_path_exists(directory_path)
+    ]
+    if missing_directories:
+        raise FileNotFoundError(
+            f"Standard Databricks Volume directories were not created: {missing_directories}"
+        )
+
+    print("Standard Databricks Volume directories are available:")
+    for directory_path in STANDARD_VOLUME_DIRECTORIES:
+        print(f"- {directory_path}")
 
 
 def validate_raw_dataset_available() -> None:
@@ -367,6 +442,28 @@ def print_final_checklist() -> None:
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
+    bronze_config = BronzeIngestionConfig()
+    silver_config = SilverCleaningConfig()
+    feature_map_config = FeatureAvailabilityMapConfig(
+        input_csv_path=REPO_ROOT / "data/references/feature_availability_map.csv"
+    )
+    order_time_config = OrderTimeFeatureConfig()
+    shipping_product_config = ShippingProductFeatureConfig()
+    customer_regional_config = CustomerRegionalFeatureConfig()
+
+    print("\nPrimary workflow output paths:")
+    print(f"- Volume root: {VOLUME_ROOT}")
+    print(f"- Raw DataCo CSV: {bronze_config.input_path}")
+    print(f"- Bronze Delta: {bronze_config.output_path}")
+    print(f"- Bronze column mapping Delta: {bronze_config.column_mapping_output_path}")
+    print(f"- Feature availability map Delta: {feature_map_config.delta_output_path}")
+    print(f"- Silver Delta: {silver_config.silver_output_path}")
+    print(f"- Silver quality report Delta: {silver_config.quality_report_output_path}")
+    print(f"- Order-time features Delta: {order_time_config.feature_output_path}")
+    print(f"- Shipping/product features Delta: {shipping_product_config.feature_output_path}")
+    print(f"- Customer/regional features Delta: {customer_regional_config.feature_output_path}")
+    print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
+
 
 # COMMAND ----------
 
@@ -374,6 +471,16 @@ def print_final_checklist() -> None:
 def main() -> None:
     """Execute the configured project workflow."""
     run_step("Environment validation", RUN_ENV_CHECK, validate_databricks_environment)
+    run_step(
+        "Repository structure validation",
+        RUN_REPO_STRUCTURE_CHECK,
+        validate_repository_structure,
+    )
+    run_step(
+        "Databricks Volume directory setup",
+        RUN_VOLUME_SETUP,
+        setup_standard_volume_directories,
+    )
     run_step("Raw DataCo dataset availability", RUN_RAW_DATA_CHECK, validate_raw_dataset_available)
     run_step(
         "Feature availability map registration",
