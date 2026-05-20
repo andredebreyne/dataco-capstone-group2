@@ -20,6 +20,19 @@ Default Delta output path:
 /Volumes/workspace/default/raw_data/gold/ao1_late_delivery_analytical_table
 ```
 
+## Input Delta Paths
+
+The builder uses these default Delta paths unless the corresponding
+`DATACO_*` environment variable overrides them:
+
+| Table | Default path |
+| --- | --- |
+| Silver orders | `/Volumes/workspace/default/raw_data/silver/dataco_orders_silver` |
+| Order-time features | `/Volumes/workspace/default/raw_data/silver/dataco_orders_order_time_features` |
+| Shipping/product features | `/Volumes/workspace/default/raw_data/silver/dataco_shipping_product_features` |
+| Customer/regional features | `/Volumes/workspace/default/raw_data/silver/dataco_customer_regional_features` |
+| AO1 Gold output | `/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_analytical_table` |
+
 ## Primary Population Rule
 
 The table applies the approved first-pass AO1 population policy from
@@ -35,6 +48,13 @@ Excluded records:
 
 These fields are used only to filter the primary AO1 population and are not
 written to the Gold analytical table.
+
+Primary AO1 Gold starts from 180,519 Silver rows and applies the approved
+fulfilled/fulfillment-eligible population rule. The filter excludes 7,754
+records associated with shipping-canceled, canceled, or suspected-fraud cases,
+producing 172,765 rows in the primary AO1 Gold table. Excluded records are not
+treated as normal non-late deliveries and should be retained only for audit,
+sensitivity, or descriptive dashboard use.
 
 Expected primary AO1 Gold row count:
 
@@ -167,4 +187,3 @@ class weighting, model training, threshold selection, or SHAP/explainability.
 Those steps must be fit only on training data after the official chronological
 split. Categorical variables in this table are intentionally left as strings so
 the modeling pipeline can apply train-only encoding.
-

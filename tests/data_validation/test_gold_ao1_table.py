@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, sum as spark_sum, when
+from pyspark.sql.functions import col, lit, sum as spark_sum, when
 from pyspark.sql.types import IntegerType, StringType, TimestampType
 
 
@@ -18,6 +18,9 @@ DEFAULT_GOLD_AO1_PATH = (
     "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_analytical_table"
 )
 GOLD_AO1_PATH = os.getenv("DATACO_GOLD_AO1_OUTPUT_PATH", DEFAULT_GOLD_AO1_PATH)
+
+DEFAULT_SILVER_PATH = "/Volumes/workspace/default/raw_data/silver/dataco_orders_silver"
+SILVER_PATH = os.getenv("DATACO_SILVER_OUTPUT_PATH", DEFAULT_SILVER_PATH)
 
 EXPECTED_ROW_COUNT = 172_765
 
@@ -192,6 +195,11 @@ def read_gold_ao1_delta(spark: SparkSession) -> DataFrame:
     return spark.read.format("delta").load(GOLD_AO1_PATH)
 
 
+def read_silver_delta(spark: SparkSession) -> DataFrame:
+    """Read the Silver Delta table used to validate the approved AO1 population."""
+    return spark.read.format("delta").load(SILVER_PATH)
+
+
 def assert_row_count(df: DataFrame) -> None:
     """Validate the AO1 Gold primary population row count."""
     actual_count = df.count()
@@ -248,6 +256,49 @@ def assert_unique_keys(df: DataFrame) -> None:
     )
 
 
+def assert_filtered_silver_keys_match_gold(gold_df: DataFrame, silver_df: DataFrame) -> None:
+    """Validate that Gold keys exactly match the approved filtered Silver population."""
+    filtered_silver_keys = (
+        silver_df.filter(
+            (col("Delivery_Status") != lit("Shipping canceled"))
+            & (~col("Order_Status").isin("CANCELED", "SUSPECTED_FRAUD"))
+        )
+        .select(*JOIN_KEY_COLUMNS)
+    )
+    gold_keys = gold_df.select(*JOIN_KEY_COLUMNS)
+
+    silver_key_count = filtered_silver_keys.count()
+    silver_distinct_key_count = filtered_silver_keys.distinct().count()
+    assert silver_key_count == silver_distinct_key_count, (
+        "Filtered Silver AO1 population contains duplicate keys. "
+        f"Rows: {silver_key_count}; distinct keys: {silver_distinct_key_count}."
+    )
+
+    gold_key_count = gold_keys.count()
+    gold_distinct_key_count = gold_keys.distinct().count()
+    assert gold_key_count == gold_distinct_key_count, (
+        "AO1 Gold contains duplicate keys. "
+        f"Rows: {gold_key_count}; distinct keys: {gold_distinct_key_count}."
+    )
+
+    missing_from_gold_count = filtered_silver_keys.join(
+        gold_keys,
+        list(JOIN_KEY_COLUMNS),
+        "left_anti",
+    ).count()
+    unexpected_in_gold_count = gold_keys.join(
+        filtered_silver_keys,
+        list(JOIN_KEY_COLUMNS),
+        "left_anti",
+    ).count()
+
+    assert missing_from_gold_count == 0 and unexpected_in_gold_count == 0, (
+        "AO1 Gold keys do not exactly match the approved filtered Silver population. "
+        f"Missing from Gold: {missing_from_gold_count}; "
+        f"unexpected in Gold: {unexpected_in_gold_count}."
+    )
+
+
 def assert_target_contract(df: DataFrame) -> None:
     """Validate the AO1 target is binary and complete."""
     target_values = {
@@ -279,12 +330,14 @@ def run_gold_ao1_quality_tests() -> None:
     """Run all AO1 Gold table quality tests."""
     spark = get_spark_session()
     gold_df = read_gold_ao1_delta(spark)
+    silver_df = read_silver_delta(spark)
 
     assert_row_count(gold_df)
     assert_required_columns_exist(gold_df)
     assert_forbidden_columns_absent(gold_df)
     assert_required_columns_are_not_null(gold_df)
     assert_unique_keys(gold_df)
+    assert_filtered_silver_keys_match_gold(gold_df, silver_df)
     assert_target_contract(gold_df)
     assert_expected_column_types(gold_df)
 
