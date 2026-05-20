@@ -28,7 +28,7 @@ The notebook intentionally rejects raw inputs and does not fall back to
 `data/raw/`. If the Silver CSV is missing, run:
 
 ```text
-notebooks/pipeline/run_medallion_pipeline.py
+notebooks/pipeline/run_project_workflow.py
 ```
 
 The notebook may derive deterministic review features already documented in the

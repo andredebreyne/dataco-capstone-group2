@@ -25,7 +25,7 @@ data/silver/dataco_orders_silver.csv
 
 Set `DATACO_AO1_EDA_INPUT_PATH` only when using another local Silver CSV clone.
 The notebook intentionally does not fall back to `data/raw/`. If the Silver CSV
-is missing, run `notebooks/pipeline/run_medallion_pipeline.py` first.
+is missing, run `notebooks/pipeline/run_project_workflow.py` first.
 
 The notebook may derive deterministic review features already documented in the
 W2 feature-engineering notes, such as order calendar fields, planned shipping

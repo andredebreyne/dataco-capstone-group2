@@ -75,7 +75,7 @@ data/silver/leakage_audit_results.csv
 Large local Silver table exports are ignored by Git. They should be exported
 from Databricks or regenerated from the documented pipeline before local EDA or
 review notebooks are run; notebooks should not silently fall back to raw data.
-Use `notebooks/pipeline/run_medallion_pipeline.py` to create the standard local
+Use `notebooks/pipeline/run_project_workflow.py` to create the standard local
 Silver CSV clone.
 
 Silver responsibilities:

@@ -16,10 +16,15 @@ This note does not approve final AO1 or AO2 modeling predictors. The issue 18
 evidence only and must still be reconciled with leakage, target-reconstruction,
 identifier, and high-cardinality policies from issues 19, 20, and 21.
 
-Related artifacts on the issue 18 branch:
+Current workflow artifacts:
 
-- `notebooks/eda_univariate_distribution_analysis.ipynb`
-- `eda_univariate_distribution_analysis.ipynb`
+- `notebooks/eda/eda_univariate_distribution_analysis.py`
+- `report/tables/eda_univariate_summary.csv`
+- `report/figures/eda/*.png`
+
+Historical issue 18 notebook artifacts:
+
+- `notebooks/eda/eda_univariate_distribution_analysis_exploratory.ipynb`
 - `notebooks/eda_univariate_summary.csv`
 - `notebooks/figures/*.png`
 
@@ -185,8 +190,10 @@ caveats may be needed after final feature approval.
 
 ## Figure Outputs
 
-The issue 18 branch includes PNG figures under `notebooks/figures/` for reviewed
-variables that were present in the notebook input. Figure coverage includes:
+The current executable workflow writes PNG figures under `report/figures/eda/`.
+The issue 18 branch also included PNG figures under `notebooks/figures/` for
+reviewed variables that were present in the notebook input. Figure coverage
+includes:
 
 ```text
 category_id.png

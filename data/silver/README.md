@@ -12,7 +12,7 @@ data/silver/dataco_orders_silver.csv
 Create this file by running:
 
 ```text
-notebooks/pipeline/run_medallion_pipeline.py
+notebooks/pipeline/run_project_workflow.py
 ```
 
 The notebook exports the Silver Delta table to this local CSV path and replaces
