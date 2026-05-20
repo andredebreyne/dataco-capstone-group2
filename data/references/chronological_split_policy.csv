@@ -1,0 +1,11 @@
+policy_key,policy_value,policy_scope,rationale,validation_rule,related_document
+split_anchor_column,order_date_DateOrders,AO1; AO2; AO3,Order creation timestamp is decision-time available and present in Gold analytical tables,must_equal_order_date_DateOrders,docs/chronological_split_policy.md
+primary_ordering_columns,"order_date_DateOrders; Order_Id; Order_Item_Id",AO1; AO2; AO3,Tie-breakers make repeated timestamps and multi-item orders deterministic,must_include_required_ordering_columns,docs/chronological_split_policy.md
+development_ratio,0.80,AO1; AO2; AO3,Earliest 80 percent of records are used for development and model selection,must_equal_0_80,docs/chronological_split_policy.md
+test_ratio,0.20,AO1; AO2; AO3,Most recent 20 percent of records are held out for final evaluation,must_equal_0_20,docs/chronological_split_policy.md
+development_partition_label,development,AO1; AO2; AO3,Avoids confusing the full 80 percent development window with final model-training folds,must_equal_development,docs/chronological_split_policy.md
+test_partition_label,test,AO1; AO2; AO3,Names the untouched final holdout period,must_equal_test,docs/chronological_split_policy.md
+shuffle_allowed,false,AO1; AO2; AO3,Official splits must preserve time order to prevent future-data leakage,must_equal_false,docs/chronological_split_policy.md
+test_set_refit_allowed,false,AO1; AO2; AO3,Preprocessing model selection threshold tuning and fitting must not use the final test set,must_equal_false,docs/chronological_split_policy.md
+ao1_split_population,ao1_gold_primary_population,AO1,Apply AO1 exclusions before computing the AO1 split boundary,must_equal_ao1_gold_primary_population,docs/pre_gold_modeling_decisions.md
+ao2_split_population,ao2_gold_full_population,AO2,AO2 uses the final leakage-safe AO2 Gold table unless a later approved policy changes the population,must_equal_ao2_gold_full_population,docs/ao2_target_policy.md
