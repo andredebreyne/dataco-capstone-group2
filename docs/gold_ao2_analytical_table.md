@@ -141,6 +141,11 @@ The builder and validation script enforce:
 - positive `ao3_order_value`;
 - key timestamp and feature schema types consistent with downstream modeling.
 
+Unlike AO1 Gold, AO2 Gold uses the full valid Silver population of 180,519 rows
+and does not apply AO1-specific exclusions for shipping-canceled, canceled, or
+suspected-fraud records, because AO2 models order-level profitability rather
+than completed-delivery lateness.
+
 Validation script:
 
 ```text
@@ -155,4 +160,3 @@ selection, model training, thresholding, or SHAP/explainability.
 Those steps must be fit only on training data after the official chronological
 split. Categorical variables remain as strings so the modeling pipeline can
 apply train-only encoding.
-

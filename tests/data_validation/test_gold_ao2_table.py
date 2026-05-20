@@ -66,6 +66,7 @@ REQUIRED_COLUMNS = (
 )
 
 REQUIRED_NON_NULL_COLUMNS = REQUIRED_COLUMNS
+APPROVED_COLUMNS = REQUIRED_COLUMNS
 
 FORBIDDEN_AO2_COLUMNS = (
     "Delivery_Status",
@@ -182,6 +183,17 @@ def assert_required_columns_exist(df: DataFrame) -> None:
     assert not missing_columns, f"Missing AO2 Gold columns: {missing_columns}"
 
 
+def assert_no_unexpected_columns(df: DataFrame) -> None:
+    """Validate that AO2 Gold contains only the approved output schema."""
+    unexpected_columns = sorted(
+        column_name for column_name in df.columns if column_name not in APPROVED_COLUMNS
+    )
+    assert not unexpected_columns, (
+        "AO2 Gold contains unexpected columns not included in the approved schema: "
+        f"{unexpected_columns}"
+    )
+
+
 def assert_forbidden_columns_absent(df: DataFrame) -> None:
     """Validate that leakage, duplicate, and deferred fields are not present."""
     forbidden_columns = sorted(
@@ -253,6 +265,7 @@ def run_gold_ao2_quality_tests() -> None:
 
     assert_row_count(gold_df)
     assert_required_columns_exist(gold_df)
+    assert_no_unexpected_columns(gold_df)
     assert_forbidden_columns_absent(gold_df)
     assert_required_columns_are_not_null(gold_df)
     assert_unique_keys(gold_df)
