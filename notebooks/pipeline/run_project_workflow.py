@@ -452,7 +452,7 @@ def print_final_checklist() -> None:
         detail = f" - {result.detail}" if result.detail else ""
         print(f"- {result.status.upper()}: {result.name} ({required_label}){detail}")
 
-    print("- NOT RUN: Gold/modeling and dashboard exports are outside this orchestrator.")
+    print("- NOT RUN: AO2 Gold, modeling, scoring, and dashboard exports are outside this orchestrator.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
