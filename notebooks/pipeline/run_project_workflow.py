@@ -113,6 +113,14 @@ class StepResult:
 STEP_RESULTS: list[StepResult] = []
 
 
+def local_path_exists(path: Path) -> bool:
+    """Return whether a local path exists, treating inaccessible probes as absent."""
+    try:
+        return path.exists()
+    except OSError:
+        return False
+
+
 def find_repo_root() -> Path:
     """Find the repo root from Databricks Repos, local execution, or an env var."""
     env_root = os.getenv("DATACO_REPO_ROOT")
@@ -129,8 +137,12 @@ def find_repo_root() -> Path:
     for starting_point in candidate_roots:
         for candidate in [starting_point, *starting_point.parents]:
             if (
-                (candidate / "data" / "references" / "feature_availability_map.csv").exists()
-                and (candidate / "src" / "data_engineering" / "ingest_bronze.py").exists()
+                local_path_exists(
+                    candidate / "data" / "references" / "feature_availability_map.csv"
+                )
+                and local_path_exists(
+                    candidate / "src" / "data_engineering" / "ingest_bronze.py"
+                )
             ):
                 return candidate
 
@@ -214,7 +226,7 @@ def get_spark_session() -> Any:
 def run_python_file(relative_path: Path) -> None:
     """Execute an existing project Python script by path."""
     script_path = REPO_ROOT / relative_path
-    if not script_path.exists():
+    if not local_path_exists(script_path):
         raise FileNotFoundError(f"Expected executable script not found: {script_path}")
 
     runpy.run_path(str(script_path), run_name="__main__")
@@ -308,7 +320,7 @@ def validate_repository_structure() -> None:
     missing_paths = [
         str(REPO_ROOT / relative_path)
         for relative_path in REQUIRED_REPOSITORY_PATHS
-        if not (REPO_ROOT / relative_path).exists()
+        if not local_path_exists(REPO_ROOT / relative_path)
     ]
     if missing_paths:
         raise FileNotFoundError(
