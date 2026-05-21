@@ -50,6 +50,19 @@ Order_Item_Id ASC
 The tie-breakers are required because multiple order items can share the same
 order timestamp. They make the split reproducible without randomization.
 
+The chronological split uses deterministic 1-based row numbers after sorting by
+`order_date_DateOrders`, `Order_Id`, and `Order_Item_Id`. For a table with `n`
+rows, the development boundary is defined as `floor(n * 0.80)`. Rows with
+`row_number <= floor(n * 0.80)` are assigned to the development partition, and
+rows with `row_number > floor(n * 0.80)` are assigned to the final held-out test
+partition.
+
+This formula applies separately to each objective-specific Gold table after
+that objective's population rules are applied. AO1 and AO2 may have different
+row counts and therefore different boundary row numbers, but they must use the
+same ordering columns, boundary formula, and partition labels. No random shuffle
+is used.
+
 ## Development and Validation Strategy
 
 The holdout test set must remain untouched until final evaluation for each AO.
@@ -63,6 +76,9 @@ Within the development set:
   documents a controlled sensitivity experiment outside the primary results.
 
 All preprocessing and model fitting must happen inside development data only.
+Any preprocessing, imputation, encoding, scaling, resampling, feature selection,
+threshold tuning, or hyperparameter tuning performed during internal validation
+must be fit only on the inner training portion of the development data.
 
 Fit only on development/training data:
 
@@ -138,6 +154,7 @@ Every partitioning script must persist or document:
 - split anchor column;
 - ordering columns;
 - split ratio;
+- boundary row formula;
 - partition labels;
 - development row count;
 - test row count;
@@ -171,4 +188,3 @@ tests/data_validation/validate_chronological_split_policy.py
 
 The policy should change only if the team records and justifies the exception
 before model training or final reporting.
-

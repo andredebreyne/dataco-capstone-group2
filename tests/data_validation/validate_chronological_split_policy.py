@@ -49,13 +49,18 @@ REQUIRED_POLICY_VALUES = {
     "primary_ordering_columns": "order_date_DateOrders; Order_Id; Order_Item_Id",
     "development_ratio": "0.80",
     "test_ratio": "0.20",
+    "boundary_row_formula": "row_number <= floor(total_rows * 0.80)",
     "development_partition_label": "development",
     "test_partition_label": "test",
     "shuffle_allowed": "false",
     "test_set_refit_allowed": "false",
     "ao1_split_population": "ao1_gold_primary_population",
     "ao2_split_population": "ao2_gold_full_population",
+    "policy_status": "frozen",
+    "policy_issue": "#66",
 }
+
+NON_EMPTY_POLICY_VALUES = ("policy_version",)
 
 ALLOWED_SCOPES = {
     "AO1",
@@ -72,6 +77,8 @@ REQUIRED_DOC_PHRASES = (
     "Order_Item_Id ASC",
     "Earliest 80% of rows",
     "Most recent 20% of rows",
+    "row_number <= floor(n * 0.80)",
+    "row_number > floor(n * 0.80)",
     "development",
     "test",
     "Fit only on development/training data",
@@ -126,7 +133,8 @@ def assert_required_policy_values(rows: list[dict[str, str]]) -> None:
     """Validate that required frozen policy values are present and exact."""
     rows_by_key = {row["policy_key"]: row for row in rows}
 
-    missing_keys = sorted(set(REQUIRED_POLICY_VALUES).difference(rows_by_key))
+    required_keys = set(REQUIRED_POLICY_VALUES).union(NON_EMPTY_POLICY_VALUES)
+    missing_keys = sorted(required_keys.difference(rows_by_key))
     if missing_keys:
         raise AssertionError(f"Missing required policy keys: {missing_keys}")
 
@@ -138,6 +146,14 @@ def assert_required_policy_values(rows: list[dict[str, str]]) -> None:
 
     if invalid_values:
         raise AssertionError(f"Invalid chronological split policy values: {invalid_values}")
+
+    blank_policy_values = [
+        policy_key
+        for policy_key in NON_EMPTY_POLICY_VALUES
+        if not rows_by_key[policy_key]["policy_value"].strip()
+    ]
+    if blank_policy_values:
+        raise AssertionError(f"Blank policy values: {blank_policy_values}")
 
 
 def assert_ratio_sum(rows: list[dict[str, str]]) -> None:
