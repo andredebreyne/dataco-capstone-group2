@@ -43,6 +43,7 @@ RUN_ORDER_TIME_FEATURES = True
 RUN_SHIPPING_PRODUCT_FEATURES = True
 RUN_CUSTOMER_REGIONAL_FEATURES = True
 RUN_AO1_GOLD = True
+RUN_AO2_GOLD = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
 # report artifacts. Use "check" for artifact validation or "run_python_scripts"
@@ -74,11 +75,13 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/data_engineering/engineer_shipping_product_features.py"),
     Path("src/data_engineering/engineer_customer_regional_features.py"),
     Path("src/data_engineering/build_gold_ao1_table.py"),
+    Path("src/data_engineering/build_gold_ao2_table.py"),
     Path("src/data_engineering/register_feature_availability_map.py"),
     Path("src/modeling/create_ao1_chronological_partitions.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
+    Path("tests/data_validation/test_gold_ao2_table.py"),
     Path("tests/data_validation/validate_ao1_chronological_partitions.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
@@ -175,6 +178,11 @@ from src.data_engineering.build_gold_ao1_table import (  # noqa: E402
     GoldAO1Config,
     configure_logging as configure_gold_ao1_logging,
     run_gold_ao1_build,
+)
+from src.data_engineering.build_gold_ao2_table import (  # noqa: E402
+    GoldAO2Config,
+    configure_logging as configure_gold_ao2_logging,
+    run_gold_ao2_build,
 )
 from src.data_engineering.engineer_customer_regional_features import (  # noqa: E402
     CustomerRegionalFeatureConfig,
@@ -435,6 +443,11 @@ def run_ao1_gold_validation() -> None:
     run_python_file(Path("tests/data_validation/test_gold_ao1_table.py"))
 
 
+def run_ao2_gold_validation() -> None:
+    """Run the AO2 Gold analytical table quality validation."""
+    run_python_file(Path("tests/data_validation/test_gold_ao2_table.py"))
+
+
 def run_ao1_partition_validation() -> None:
     """Run the AO1 chronological partition validation."""
     run_python_file(Path("tests/data_validation/validate_ao1_chronological_partitions.py"))
@@ -478,7 +491,7 @@ def print_final_checklist() -> None:
         detail = f" - {result.detail}" if result.detail else ""
         print(f"- {result.status.upper()}: {result.name} ({required_label}){detail}")
 
-    print("- NOT RUN: AO2 Gold, modeling, scoring, and dashboard exports are outside this orchestrator.")
+    print("- NOT RUN: modeling, scoring, and dashboard exports are outside this orchestrator.")
     print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
@@ -492,6 +505,7 @@ def print_final_checklist() -> None:
     shipping_product_config = ShippingProductFeatureConfig()
     customer_regional_config = CustomerRegionalFeatureConfig()
     gold_ao1_config = GoldAO1Config()
+    gold_ao2_config = GoldAO2Config()
     ao1_partition_config = AO1ChronologicalPartitionConfig()
 
     print("\nPrimary workflow output paths:")
@@ -506,6 +520,7 @@ def print_final_checklist() -> None:
     print(f"- Shipping/product features Delta: {shipping_product_config.feature_output_path}")
     print(f"- Customer/regional features Delta: {customer_regional_config.feature_output_path}")
     print(f"- AO1 Gold analytical table Delta: {gold_ao1_config.gold_output_path}")
+    print(f"- AO2 Gold analytical table Delta: {gold_ao2_config.gold_output_path}")
     print(f"- AO1 chronological partitions Delta: {ao1_partition_config.partition_output_path}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
@@ -570,6 +585,12 @@ def main() -> None:
         lambda: run_gold_ao1_build(GoldAO1Config(), configure_gold_ao1_logging()),
     )
     run_step("AO1 Gold quality validation", RUN_GOLD and RUN_AO1_GOLD, run_ao1_gold_validation)
+    run_step(
+        "AO2 Gold analytical table build",
+        RUN_GOLD and RUN_AO2_GOLD,
+        lambda: run_gold_ao2_build(GoldAO2Config(), configure_gold_ao2_logging()),
+    )
+    run_step("AO2 Gold quality validation", RUN_GOLD and RUN_AO2_GOLD, run_ao2_gold_validation)
     run_step(
         "AO1 chronological partition creation",
         RUN_AO1_PARTITIONS,
