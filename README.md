@@ -54,6 +54,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
 - [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
 - [Master Chronological Split Policy](docs/chronological_split_policy.md)
+- [AO1 Chronological Partitions](docs/ao1_chronological_partitions.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
 
 ## Data Quality

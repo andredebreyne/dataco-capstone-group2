@@ -30,6 +30,8 @@ RUN_SILVER = True
 RUN_SILVER_VALIDATION = True
 RUN_FEATURE_ENGINEERING = True
 RUN_GOLD = True
+RUN_AO1_PARTITIONS = False
+RUN_AO1_PARTITION_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -73,9 +75,11 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/data_engineering/engineer_customer_regional_features.py"),
     Path("src/data_engineering/build_gold_ao1_table.py"),
     Path("src/data_engineering/register_feature_availability_map.py"),
+    Path("src/modeling/create_ao1_chronological_partitions.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
+    Path("tests/data_validation/validate_ao1_chronological_partitions.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -196,6 +200,11 @@ from src.data_engineering.register_feature_availability_map import (  # noqa: E4
     FeatureAvailabilityMapConfig,
     configure_logging as configure_feature_map_logging,
     run_feature_availability_map_registration,
+)
+from src.modeling.create_ao1_chronological_partitions import (  # noqa: E402
+    AO1ChronologicalPartitionConfig,
+    configure_logging as configure_ao1_partition_logging,
+    run_ao1_chronological_partitioning,
 )
 
 
@@ -426,6 +435,11 @@ def run_ao1_gold_validation() -> None:
     run_python_file(Path("tests/data_validation/test_gold_ao1_table.py"))
 
 
+def run_ao1_partition_validation() -> None:
+    """Run the AO1 chronological partition validation."""
+    run_python_file(Path("tests/data_validation/validate_ao1_chronological_partitions.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -465,6 +479,7 @@ def print_final_checklist() -> None:
         print(f"- {result.status.upper()}: {result.name} ({required_label}){detail}")
 
     print("- NOT RUN: AO2 Gold, modeling, scoring, and dashboard exports are outside this orchestrator.")
+    print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -477,6 +492,7 @@ def print_final_checklist() -> None:
     shipping_product_config = ShippingProductFeatureConfig()
     customer_regional_config = CustomerRegionalFeatureConfig()
     gold_ao1_config = GoldAO1Config()
+    ao1_partition_config = AO1ChronologicalPartitionConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -490,6 +506,7 @@ def print_final_checklist() -> None:
     print(f"- Shipping/product features Delta: {shipping_product_config.feature_output_path}")
     print(f"- Customer/regional features Delta: {customer_regional_config.feature_output_path}")
     print(f"- AO1 Gold analytical table Delta: {gold_ao1_config.gold_output_path}")
+    print(f"- AO1 chronological partitions Delta: {ao1_partition_config.partition_output_path}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -553,6 +570,21 @@ def main() -> None:
         lambda: run_gold_ao1_build(GoldAO1Config(), configure_gold_ao1_logging()),
     )
     run_step("AO1 Gold quality validation", RUN_GOLD and RUN_AO1_GOLD, run_ao1_gold_validation)
+    run_step(
+        "AO1 chronological partition creation",
+        RUN_AO1_PARTITIONS,
+        lambda: run_ao1_chronological_partitioning(
+            AO1ChronologicalPartitionConfig(),
+            configure_ao1_partition_logging(),
+        ),
+        required=RUN_AO1_PARTITIONS,
+    )
+    run_step(
+        "AO1 chronological partition validation",
+        RUN_AO1_PARTITIONS and RUN_AO1_PARTITION_VALIDATION,
+        run_ao1_partition_validation,
+        required=RUN_AO1_PARTITIONS and RUN_AO1_PARTITION_VALIDATION,
+    )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
     run_step("Final execution checklist", RUN_FINAL_CHECKLIST, print_final_checklist, required=False)
