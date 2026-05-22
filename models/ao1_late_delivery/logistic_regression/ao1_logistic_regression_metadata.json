@@ -1,0 +1,248 @@
+{
+  "artifacts": {
+    "coefficients_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_coefficients.csv",
+    "metadata_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json",
+    "metrics_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_metrics.csv",
+    "metrics_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.json",
+    "model_artifact_path": null,
+    "model_artifact_saved": false
+  },
+  "excluded_identifier_metadata_columns": [
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "chronological_row_number",
+    "split_partition",
+    "_gold_ao1_processed_timestamp"
+  ],
+  "feature_columns": [
+    "order_year",
+    "order_quarter",
+    "order_month",
+    "order_week_of_year",
+    "order_day_of_month",
+    "order_day_of_week",
+    "order_hour",
+    "scheduled_shipping_days",
+    "order_is_weekend",
+    "is_same_day_or_next_day_shipping",
+    "is_standard_shipping",
+    "customer_zipcode_available",
+    "order_zipcode_available",
+    "customer_order_country_match",
+    "customer_order_state_match",
+    "geo_coordinates_available",
+    "Type",
+    "order_season",
+    "shipping_speed_tier",
+    "shipping_mode_normalized",
+    "product_category_key",
+    "product_department_key",
+    "customer_segment_normalized",
+    "customer_country_normalized",
+    "customer_state_normalized",
+    "market_normalized",
+    "order_country_normalized",
+    "order_region_normalized",
+    "order_state_normalized"
+  ],
+  "feature_count_after_preprocessing": 1290,
+  "feature_count_before_preprocessing": 29,
+  "final_test_partition_status": {
+    "label": "test",
+    "treatment": "reserved for final AO1 model evaluation; not touched by issue #27",
+    "used_for_preprocessing_fit": false,
+    "used_for_threshold_selection": false,
+    "used_for_training": false,
+    "used_for_validation_metrics": false
+  },
+  "forbidden_leakage_columns": [
+    "Benefit per order",
+    "Benefit_per_order",
+    "Customer_City",
+    "Customer_Email",
+    "Customer_Fname",
+    "Customer_Id",
+    "Customer_Lname",
+    "Customer_Password",
+    "Customer_Street",
+    "Customer_Zipcode",
+    "Days for shipping (real)",
+    "Days_for_shipping_real",
+    "Delivery Status",
+    "Delivery_Status",
+    "Late_delivery_risk",
+    "Latitude",
+    "Longitude",
+    "Order Item Profit Ratio",
+    "Order Profit Per Order",
+    "Order Status",
+    "Order_City",
+    "Order_Customer_Id",
+    "Order_Item_Cardprod_Id",
+    "Order_Item_Profit_Ratio",
+    "Order_Item_Total",
+    "Order_Profit_Per_Order",
+    "Order_Status",
+    "Order_Zipcode",
+    "Product_Card_Id",
+    "Product_Category_Id",
+    "Product_Description",
+    "Product_Image",
+    "Product_Name",
+    "Sales",
+    "Sales_per_customer",
+    "customer_city_normalized",
+    "customer_region_key",
+    "item_discount_amount",
+    "item_discount_rate",
+    "item_discount_share_of_gross",
+    "item_gross_sales_estimate",
+    "item_net_sales_amount",
+    "item_unit_price",
+    "latitude_rounded",
+    "longitude_rounded",
+    "order_city_normalized",
+    "order_region_key",
+    "product_catalog_key",
+    "product_list_price",
+    "product_name_normalized",
+    "product_status_flag",
+    "shipping date (DateOrders)",
+    "shipping_date_DateOrders"
+  ],
+  "generated_timestamp_utc": "2026-05-22T22:08:07.143080+00:00",
+  "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
+  "input_partition_read_format": "delta",
+  "interpretability_notes": {
+    "coefficient_scope": "coefficients are from the preprocessed feature space",
+    "odds_ratio_note": "Odds ratios are computed from standardized/encoded features and should be interpreted as associative, not causal."
+  },
+  "issue": "#27",
+  "logistic_regression": {
+    "baseline_threshold": 0.5,
+    "library": "sklearn.linear_model.LogisticRegression",
+    "parameters": {
+      "C": 1.0,
+      "class_weight": "balanced",
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": null,
+      "max_iter": 1000,
+      "multi_class": "auto",
+      "n_jobs": null,
+      "penalty": "l2",
+      "random_state": 620,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "threshold_tuning": "none",
+    "tuning": "none"
+  },
+  "metadata_status": "runtime_training_completed",
+  "partition_column": "split_partition",
+  "partition_labels_observed": [
+    "development",
+    "test"
+  ],
+  "partition_row_counts": {
+    "development": 138212,
+    "test": 34553
+  },
+  "preprocessing_reference": {
+    "factory": "src.modeling.build_ao1_preprocessing_pipeline.build_sklearn_preprocessor",
+    "fit_scope": "fitted inside issue #27 on training slice only",
+    "metadata_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/preprocessing/ao1_preprocessing_metadata.json",
+    "metadata_status": "runtime_fit_completed"
+  },
+  "smote": {
+    "class_distribution_after_resampling": {
+      "training": {
+        "negative_count": 47147,
+        "positive_count": 63422,
+        "positive_rate": 0.5735965777026111,
+        "row_count": 110569
+      },
+      "validation": {
+        "negative_count": 11882,
+        "positive_count": 15761,
+        "positive_rate": 0.5701624281011468,
+        "row_count": 27643
+      }
+    },
+    "class_distribution_before_resampling": {
+      "training": {
+        "negative_count": 47147,
+        "positive_count": 63422,
+        "positive_rate": 0.5735965777026111,
+        "row_count": 110569
+      },
+      "validation": {
+        "negative_count": 11882,
+        "positive_count": 15761,
+        "positive_rate": 0.5701624281011468,
+        "row_count": 27643
+      }
+    },
+    "decision": "not used for this baseline",
+    "rationale": "Issue #26 marks SMOTE as deferred and AO1 imbalance as mild. This baseline uses class_weight='balanced' instead of SMOTE.",
+    "test_resampling_allowed": false,
+    "training_only": true,
+    "used": false,
+    "validation_resampling_allowed": false
+  },
+  "split_metadata": {
+    "development_rows": 138212,
+    "final_test_partition_label": "test",
+    "final_test_used": false,
+    "inner_train_boundary_row_count": 110569,
+    "inner_validation_ratio": 0.2,
+    "partition_structure": "development_test",
+    "training_slice": "development_inner_train",
+    "validation_rule": "first 80% of development rows as inner training and final 20% as validation, ordered by order_date_DateOrders, Order_Id, Order_Item_Id",
+    "validation_slice": "development_inner_validation"
+  },
+  "target_column": "Late_delivery_risk",
+  "training_slice_summary": {
+    "max_chronological_row_number": 110569,
+    "max_order_date_DateOrders": "2016-11-05T05:42:00",
+    "min_chronological_row_number": 1,
+    "min_order_date_DateOrders": "2015-01-01T00:00:00",
+    "row_count": 110569
+  },
+  "validation_metrics": {
+    "accuracy": 0.6855623485149948,
+    "confusion_matrix": {
+      "false_negative": 6864,
+      "false_positive": 1828,
+      "true_negative": 10054,
+      "true_positive": 8897
+    },
+    "f1": 0.671826625386997,
+    "log_loss": 0.572337054661078,
+    "pr_auc": 0.8306652164503145,
+    "precision": 0.8295571095571096,
+    "recall": 0.5644946386650593,
+    "roc_auc": 0.7425530885785173,
+    "threshold": 0.5,
+    "validation_positive_class_rate": 0.5701624281011468,
+    "validation_predicted_positive_rate_at_0_5": 0.3879824910465579
+  },
+  "validation_slice_summary": {
+    "max_chronological_row_number": 138212,
+    "max_order_date_DateOrders": "2017-04-22T03:43:00",
+    "min_chronological_row_number": 110570,
+    "min_order_date_DateOrders": "2016-11-05T05:42:00",
+    "row_count": 27643
+  },
+  "versions": {
+    "joblib": "1.2.0",
+    "pandas": "1.5.3",
+    "pyspark": null,
+    "python": "3.11.10",
+    "sklearn": "1.3.0"
+  }
+}

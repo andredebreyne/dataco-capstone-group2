@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "2"
+# ///
 """Run the DataCo project workflow from one Databricks-compatible entry point.
 
 This notebook is intentionally thin. Reusable Bronze, Silver, feature
@@ -30,12 +34,12 @@ RUN_SILVER = True
 RUN_SILVER_VALIDATION = True
 RUN_FEATURE_ENGINEERING = True
 RUN_GOLD = True
-RUN_AO1_PARTITIONS = False
-RUN_AO1_PARTITION_VALIDATION = False
-RUN_AO1_PREPROCESSING = False
-RUN_AO1_PREPROCESSING_VALIDATION = False
-RUN_AO1_LOGISTIC_BASELINE = False
-RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
+RUN_AO1_PARTITIONS = True
+RUN_AO1_PARTITION_VALIDATION = True
+RUN_AO1_PREPROCESSING = True
+RUN_AO1_PREPROCESSING_VALIDATION = True
+RUN_AO1_LOGISTIC_BASELINE = True
+RUN_AO1_LOGISTIC_BASELINE_VALIDATION = True
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
