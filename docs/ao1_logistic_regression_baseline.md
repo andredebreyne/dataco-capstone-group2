@@ -125,6 +125,7 @@ The training script writes validation-only metrics to:
 ```text
 models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.json
 report/tables/ao1_logistic_regression_validation_metrics.csv
+report/tables/ao1_logistic_regression_validation_findings.md
 ```
 
 Required metrics:
@@ -142,6 +143,9 @@ Required metrics:
 
 Do not copy placeholder values into this document. Report-facing values should
 come from the generated metrics artifacts after the Databricks training run.
+Narrative result comments belong in
+`report/tables/ao1_logistic_regression_validation_findings.md` so this document
+remains the methodology and runbook reference.
 
 ## Interpretability Outputs
 
@@ -190,6 +194,7 @@ models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.jso
 models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json
 report/tables/ao1_logistic_regression_validation_metrics.csv
 report/tables/ao1_logistic_regression_coefficients.csv
+report/tables/ao1_logistic_regression_validation_findings.md
 ```
 
 Optional fitted model artifact:
