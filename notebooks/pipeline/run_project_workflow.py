@@ -32,6 +32,8 @@ RUN_FEATURE_ENGINEERING = True
 RUN_GOLD = True
 RUN_AO1_PARTITIONS = False
 RUN_AO1_PARTITION_VALIDATION = False
+RUN_AO1_PREPROCESSING = False
+RUN_AO1_PREPROCESSING_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -76,10 +78,12 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/data_engineering/build_gold_ao1_table.py"),
     Path("src/data_engineering/register_feature_availability_map.py"),
     Path("src/modeling/create_ao1_chronological_partitions.py"),
+    Path("src/modeling/build_ao1_preprocessing_pipeline.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
     Path("tests/data_validation/validate_ao1_chronological_partitions.py"),
+    Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -205,6 +209,11 @@ from src.modeling.create_ao1_chronological_partitions import (  # noqa: E402
     AO1ChronologicalPartitionConfig,
     configure_logging as configure_ao1_partition_logging,
     run_ao1_chronological_partitioning,
+)
+from src.modeling.build_ao1_preprocessing_pipeline import (  # noqa: E402
+    AO1PreprocessingConfig,
+    configure_logging as configure_ao1_preprocessing_logging,
+    run_ao1_preprocessing_pipeline,
 )
 
 
@@ -440,6 +449,11 @@ def run_ao1_partition_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_chronological_partitions.py"))
 
 
+def run_ao1_preprocessing_validation() -> None:
+    """Run the AO1 preprocessing metadata validation."""
+    run_python_file(Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -480,6 +494,7 @@ def print_final_checklist() -> None:
 
     print("- NOT RUN: AO2 Gold, modeling, scoring, and dashboard exports are outside this orchestrator.")
     print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
+    print("- OPTIONAL: AO1 preprocessing runs only when RUN_AO1_PREPROCESSING is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -493,6 +508,7 @@ def print_final_checklist() -> None:
     customer_regional_config = CustomerRegionalFeatureConfig()
     gold_ao1_config = GoldAO1Config()
     ao1_partition_config = AO1ChronologicalPartitionConfig()
+    ao1_preprocessing_config = AO1PreprocessingConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -507,6 +523,7 @@ def print_final_checklist() -> None:
     print(f"- Customer/regional features Delta: {customer_regional_config.feature_output_path}")
     print(f"- AO1 Gold analytical table Delta: {gold_ao1_config.gold_output_path}")
     print(f"- AO1 chronological partitions Delta: {ao1_partition_config.partition_output_path}")
+    print(f"- AO1 preprocessing metadata: {ao1_preprocessing_config.metadata_output_path}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -584,6 +601,21 @@ def main() -> None:
         RUN_AO1_PARTITIONS and RUN_AO1_PARTITION_VALIDATION,
         run_ao1_partition_validation,
         required=RUN_AO1_PARTITIONS and RUN_AO1_PARTITION_VALIDATION,
+    )
+    run_step(
+        "AO1 preprocessing pipeline build",
+        RUN_AO1_PREPROCESSING,
+        lambda: run_ao1_preprocessing_pipeline(
+            AO1PreprocessingConfig(),
+            configure_ao1_preprocessing_logging(),
+        ),
+        required=RUN_AO1_PREPROCESSING,
+    )
+    run_step(
+        "AO1 preprocessing pipeline validation",
+        RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
+        run_ao1_preprocessing_validation,
+        required=RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
