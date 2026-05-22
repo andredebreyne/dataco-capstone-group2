@@ -34,6 +34,8 @@ RUN_AO1_PARTITIONS = False
 RUN_AO1_PARTITION_VALIDATION = False
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO1_LOGISTIC_BASELINE = False
+RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -79,11 +81,13 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/data_engineering/register_feature_availability_map.py"),
     Path("src/modeling/create_ao1_chronological_partitions.py"),
     Path("src/modeling/build_ao1_preprocessing_pipeline.py"),
+    Path("src/modeling/train_ao1_logistic_regression_baseline.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
     Path("tests/data_validation/validate_ao1_chronological_partitions.py"),
     Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"),
+    Path("tests/data_validation/validate_ao1_logistic_regression_baseline.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -454,6 +458,16 @@ def run_ao1_preprocessing_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"))
 
 
+def run_ao1_logistic_baseline() -> None:
+    """Run the AO1 Logistic Regression baseline training job."""
+    run_python_file(Path("src/modeling/train_ao1_logistic_regression_baseline.py"))
+
+
+def run_ao1_logistic_baseline_validation() -> None:
+    """Run the AO1 Logistic Regression baseline artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_ao1_logistic_regression_baseline.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -495,6 +509,7 @@ def print_final_checklist() -> None:
     print("- NOT RUN: AO2 Gold, modeling, scoring, and dashboard exports are outside this orchestrator.")
     print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
     print("- OPTIONAL: AO1 preprocessing runs only when RUN_AO1_PREPROCESSING is True.")
+    print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -524,6 +539,7 @@ def print_final_checklist() -> None:
     print(f"- AO1 Gold analytical table Delta: {gold_ao1_config.gold_output_path}")
     print(f"- AO1 chronological partitions Delta: {ao1_partition_config.partition_output_path}")
     print(f"- AO1 preprocessing metadata: {ao1_preprocessing_config.metadata_output_path}")
+    print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -616,6 +632,18 @@ def main() -> None:
         RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
         run_ao1_preprocessing_validation,
         required=RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
+    )
+    run_step(
+        "AO1 Logistic Regression baseline training",
+        RUN_AO1_LOGISTIC_BASELINE,
+        run_ao1_logistic_baseline,
+        required=RUN_AO1_LOGISTIC_BASELINE,
+    )
+    run_step(
+        "AO1 Logistic Regression baseline validation",
+        RUN_AO1_LOGISTIC_BASELINE and RUN_AO1_LOGISTIC_BASELINE_VALIDATION,
+        run_ao1_logistic_baseline_validation,
+        required=RUN_AO1_LOGISTIC_BASELINE and RUN_AO1_LOGISTIC_BASELINE_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)

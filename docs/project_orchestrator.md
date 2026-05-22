@@ -27,6 +27,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 Gold table cre
 | AO1 chronological partition validation | `tests/data_validation/validate_ao1_chronological_partitions.py` | Validate row counts, key preservation, partition labels, row-number boundaries, chronological ordering, date ranges, and target distribution. | AO1 Gold Delta table and AO1 partition Delta table. | Console pass/fail result with target distribution summary. | Optional and disabled by default; controlled by `RUN_AO1_PARTITIONS` and `RUN_AO1_PARTITION_VALIDATION`. | Runs in Databricks because it reads Delta paths. |
 | AO1 preprocessing pipeline build | `src/modeling/build_ao1_preprocessing_pipeline.py` | Fit AO1 imputers, encoders, and scalers on the fitting partition only and write lightweight preprocessing metadata. | AO1 chronological partition Delta table. | `models/ao1_late_delivery/preprocessing/ao1_preprocessing_metadata.json`; optional fitted artifact in a Databricks Volume when explicitly enabled. | Optional and disabled by default; controlled by `RUN_AO1_PREPROCESSING`. | Does not train models, tune thresholds, or apply SMOTE. With current `development`/`test` partitions, fits on `development` only and transforms `test` only as a compatibility check. |
 | AO1 preprocessing pipeline validation | `tests/data_validation/validate_ao1_preprocessing_pipeline.py` | Validate metadata, feature groups, excluded leakage fields, fit source, SMOTE policy, and transformed row counts when runtime shape metadata is available. | AO1 preprocessing metadata and AO1 chronological partition Delta table. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_PREPROCESSING` and `RUN_AO1_PREPROCESSING_VALIDATION`. | Runs in Databricks for Delta-dependent checks; static metadata checks can run before the Delta table is available. |
+| AO1 Logistic Regression baseline training | `src/modeling/train_ao1_logistic_regression_baseline.py` | Train the AO1 Logistic Regression baseline on the approved training slice and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, and coefficient CSV. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, train XGBoost, tune thresholds, or apply SMOTE. |
+| AO1 Logistic Regression baseline validation | `tests/data_validation/validate_ao1_logistic_regression_baseline.py` | Validate Logistic Regression baseline artifacts, fit boundaries, metric ranges, parameters, and coefficient output. | Completed AO1 Logistic Regression baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE` and `RUN_AO1_LOGISTIC_BASELINE_VALIDATION`. | Runs after baseline training. Confirms final test is marked as unused and forbidden leakage fields are not predictors. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -42,7 +44,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 Gold table cre
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1 chronological partition creation and AO1 preprocessing metadata generation.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1 chronological partition creation, AO1 preprocessing metadata generation, and the AO1 Logistic Regression baseline.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -82,6 +84,8 @@ RUN_AO1_PARTITIONS = False
 RUN_AO1_PARTITION_VALIDATION = False
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO1_LOGISTIC_BASELINE = False
+RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -120,6 +124,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 Gold analytical table Delta table.
 - AO1 chronological partitions Delta table.
 - AO1 preprocessing metadata JSON.
+- AO1 Logistic Regression metadata JSON.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling
