@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 Gold table creation, lightweight validation, optional EDA artifact checks, and pre-Gold governance checks. Model training, scoring, dashboard exports, and final model evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional EDA artifact checks, and pre-Gold governance checks. Model training, scoring, dashboard exports, and final model evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -23,6 +23,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 Gold table cre
 | Customer/regional feature engineering | `src/data_engineering/engineer_customer_regional_features.py` | Create customer and regional candidate features from Silver. | Silver Delta. | Customer/regional feature Delta table. | Required when feature engineering runs; controlled by `RUN_FEATURE_ENGINEERING` and `RUN_CUSTOMER_REGIONAL_FEATURES`. | Uses existing feature contract and output validation. |
 | AO1 Gold analytical table build | `src/data_engineering/build_gold_ao1_table.py` | Create the leakage-safe AO1 Gold analytical table for late-delivery modeling. | Silver Delta and the three feature-engineering Delta outputs. | AO1 Gold Delta table. | Required when Gold runs; controlled by `RUN_GOLD` and `RUN_AO1_GOLD`. | Excludes shipping-canceled, canceled, and suspected-fraud records from the primary AO1 population. |
 | AO1 Gold quality validation | `tests/data_validation/test_gold_ao1_table.py` | Validate the AO1 Gold row count, target completeness, schema, keys, and leakage exclusions. | AO1 Gold Delta table. | Console pass/fail result. | Required when Gold runs; controlled by `RUN_GOLD` and `RUN_AO1_GOLD`. | Runs in Databricks because it reads Delta paths. |
+| AO2 Gold analytical table build | `src/data_engineering/build_gold_ao2_table.py` | Create the leakage-safe AO2 Gold analytical table for profitability modeling. | Silver Delta and the three feature-engineering Delta outputs. | AO2 Gold Delta table. | Required when Gold runs; controlled by `RUN_GOLD` and `RUN_AO2_GOLD`. | Uses the conservative first-pass AO2 commercial predictor policy and keeps AO3 order value as a support field only. |
+| AO2 Gold quality validation | `tests/data_validation/test_gold_ao2_table.py` | Validate the AO2 Gold row count, target completeness, schema, keys, AO3 support denominator, and leakage exclusions. | AO2 Gold Delta table. | Console pass/fail result. | Required when Gold runs; controlled by `RUN_GOLD` and `RUN_AO2_GOLD`. | Runs in Databricks because it reads Delta paths. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -109,6 +111,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - Shipping/product feature Delta table.
 - Customer/regional feature Delta table.
 - AO1 Gold analytical table Delta table.
+- AO2 Gold analytical table Delta table.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling
