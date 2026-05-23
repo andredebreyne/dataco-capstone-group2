@@ -55,6 +55,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
 - [Master Chronological Split Policy](docs/chronological_split_policy.md)
 - [AO1 Chronological Partitions](docs/ao1_chronological_partitions.md)
+- [AO2 Chronological Partitions](docs/ao2_chronological_partitions.md)
 - [AO1 Preprocessing Pipeline](docs/ao1_preprocessing_pipeline.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
