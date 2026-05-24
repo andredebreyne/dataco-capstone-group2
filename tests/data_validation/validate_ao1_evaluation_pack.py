@@ -105,12 +105,53 @@ REQUIRED_THRESHOLD_COLUMNS = {
     "model_name",
     "threshold",
     "row_count",
+    "positive_class_rate",
+    "predicted_positive_rate",
+    "accuracy",
     "precision",
     "recall",
     "f1",
+    "true_negative",
     "false_negative",
     "false_positive",
+    "true_positive",
 }
+
+REQUIRED_CONFUSION_COLUMNS = {
+    "model_name",
+    "threshold",
+    "row_count",
+    "true_negative",
+    "false_positive",
+    "false_negative",
+    "true_positive",
+}
+
+REQUIRED_ROC_COLUMNS = {
+    "model_name",
+    "point_index",
+    "false_positive_rate",
+    "true_positive_rate",
+    "threshold",
+}
+
+REQUIRED_PR_COLUMNS = {
+    "model_name",
+    "point_index",
+    "precision",
+    "recall",
+    "threshold",
+}
+
+REQUIRED_CALIBRATION_COLUMNS = {
+    "model_name",
+    "probability_bin",
+    "row_count",
+    "average_predicted_probability",
+    "actual_positive_rate",
+}
+
+EXPECTED_THRESHOLD_GRID = {0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70}
 
 UNIT_INTERVAL_COLUMNS = {
     "threshold",
@@ -122,6 +163,21 @@ UNIT_INTERVAL_COLUMNS = {
     "f1",
     "roc_auc",
     "pr_auc",
+}
+
+ROC_UNIT_INTERVAL_COLUMNS = {
+    "false_positive_rate",
+    "true_positive_rate",
+}
+
+PR_UNIT_INTERVAL_COLUMNS = {
+    "precision",
+    "recall",
+}
+
+CALIBRATION_UNIT_INTERVAL_COLUMNS = {
+    "average_predicted_probability",
+    "actual_positive_rate",
 }
 
 
@@ -153,6 +209,34 @@ def assert_non_negative_integer_columns(frame: pd.DataFrame, columns: set[str]) 
         values = frame[column_name]
         assert (values >= 0).all(), f"{column_name} has negative values."
         assert (values.round() == values).all(), f"{column_name} has non-integer values."
+
+
+def rounded_values(values: pd.Series) -> set[float]:
+    """Return values rounded to two decimals for stable threshold checks."""
+    return {round(float(value), 2) for value in values.dropna()}
+
+
+def assert_threshold_grid(threshold_df: pd.DataFrame, model_names: set[str]) -> None:
+    """Assert every model has the expected validation threshold grid."""
+    expected_values = {round(value, 2) for value in EXPECTED_THRESHOLD_GRID}
+    assert 0.50 in expected_values, "Expected threshold grid must include 0.50."
+    for model_name in model_names:
+        model_thresholds = rounded_values(
+            threshold_df.loc[threshold_df["model_name"] == model_name, "threshold"]
+        )
+        assert model_thresholds == expected_values, (
+            f"Threshold grid for {model_name} is {sorted(model_thresholds)}, "
+            f"expected {sorted(expected_values)}."
+        )
+
+
+def assert_findings_text() -> None:
+    """Validate that findings note states the key evaluation boundaries."""
+    findings_text = FINDINGS_PATH.read_text(encoding="utf-8").lower()
+    assert "final test" in findings_text, "Findings note must mention final test boundary."
+    assert "recall" in findings_text, "Findings note must mention recall."
+    assert "threshold" in findings_text, "Findings note must mention thresholds."
+    assert "trade-off" in findings_text, "Findings note must mention threshold trade-offs."
 
 
 def validate_metadata() -> dict:
@@ -188,6 +272,11 @@ def validate_metadata() -> dict:
     else:
         assert metadata["evaluation_status"] == "complete_validation_model_comparison"
 
+    assert metadata["comparison_status"] in {"partial", "complete"}
+    assert metadata["expected_model_artifacts"], "Expected model artifacts are not recorded."
+    assert "available_model_artifacts" in metadata
+    assert "missing_model_artifacts" in metadata
+    assert isinstance(metadata.get("h1_comparison_complete"), bool)
     return metadata
 
 
@@ -204,8 +293,15 @@ def main() -> None:
     assert FINDINGS_PATH.exists(), f"Missing findings artifact: {FINDINGS_PATH}"
     assert_columns(metrics_df, REQUIRED_METRIC_COLUMNS, "metrics comparison")
     assert_columns(threshold_df, REQUIRED_THRESHOLD_COLUMNS, "threshold grid")
+    assert_columns(confusion_df, REQUIRED_CONFUSION_COLUMNS, "confusion matrix")
+    assert_columns(roc_df, REQUIRED_ROC_COLUMNS, "ROC curve")
+    assert_columns(pr_df, REQUIRED_PR_COLUMNS, "precision-recall curve")
+    assert_columns(calibration_df, REQUIRED_CALIBRATION_COLUMNS, "calibration table")
     assert_unit_interval_values(metrics_df, UNIT_INTERVAL_COLUMNS)
     assert_unit_interval_values(threshold_df, UNIT_INTERVAL_COLUMNS)
+    assert_unit_interval_values(roc_df, ROC_UNIT_INTERVAL_COLUMNS)
+    assert_unit_interval_values(pr_df, PR_UNIT_INTERVAL_COLUMNS)
+    assert_unit_interval_values(calibration_df, CALIBRATION_UNIT_INTERVAL_COLUMNS)
 
     count_columns = {
         "row_count",
@@ -215,24 +311,33 @@ def main() -> None:
         "true_positive",
     }
     assert_non_negative_integer_columns(metrics_df, count_columns)
+    assert_non_negative_integer_columns(threshold_df, count_columns)
     assert_non_negative_integer_columns(confusion_df, count_columns)
+    assert_non_negative_integer_columns(calibration_df, {"row_count"})
 
     model_names = set(metrics_df["model_name"])
     assert model_names == set(metadata["evaluated_models"]), (
         "Metadata evaluated_models do not match metrics output."
     )
+    assert rounded_values(metrics_df["threshold"]) == {0.50}, (
+        "Metrics comparison must report default threshold 0.50 rows."
+    )
+    assert_threshold_grid(threshold_df, model_names)
     assert set(threshold_df["model_name"]) == model_names
     assert set(confusion_df["model_name"]) == model_names
     assert set(roc_df["model_name"]) == model_names
     assert set(pr_df["model_name"]) == model_names
     assert set(calibration_df["model_name"]) == model_names
+    assert_findings_text()
 
     findings_text = FINDINGS_PATH.read_text(encoding="utf-8")
     assert metadata["evaluation_status"] in findings_text
     if metadata["missing_models"]:
-        assert "This run is partial" in findings_text
+        assert metadata["comparison_status"] == "partial"
+        assert metadata["missing_model_artifacts"]
     else:
-        assert "This run includes all expected AO1 candidate models." in findings_text
+        assert metadata["comparison_status"] == "complete"
+        assert not metadata["missing_model_artifacts"]
 
     print("All AO1 evaluation pack validation checks passed.")
 

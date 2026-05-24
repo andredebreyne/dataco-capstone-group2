@@ -1,0 +1,18 @@
+{
+  "accuracy": 0.7212314148247296,
+  "confusion_matrix": {
+    "false_negative": 6557,
+    "false_positive": 1149,
+    "true_negative": 10733,
+    "true_positive": 9204
+  },
+  "f1": 0.7049092440836333,
+  "log_loss": 0.513276459904523,
+  "pr_auc": 0.8489117912727457,
+  "precision": 0.8890176760359316,
+  "recall": 0.5839730981536705,
+  "roc_auc": 0.7752787090098935,
+  "threshold": 0.5,
+  "validation_positive_class_rate": 0.5701624281011468,
+  "validation_predicted_positive_rate_at_0_5": 0.37452519625221575
+}

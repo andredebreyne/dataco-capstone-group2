@@ -45,6 +45,26 @@ Databricks Community Edition clusters automatically stop after a period of inact
 
 Team members should avoid treating stopped clusters as errors in the project code. Cluster shutdown is an expected behavior of the free Community Edition environment.
 
+## Python Dependencies
+
+Install project Python dependencies before running modeling workflow steps in Databricks Community Edition.
+
+Recommended command from the repository root:
+
+```python
+%pip install -r requirements.txt
+```
+
+If the notebook cannot resolve the repository-relative path, install the current modeling dependency directly:
+
+```python
+%pip install xgboost
+```
+
+Restart Python or restart the attached session if Databricks prompts for it after package installation.
+
+The project pins `xgboost==3.2.0`, which is the version confirmed in Databricks for this workflow. `xgboost` is required for AO1 primary XGBoost model training and for generating the XGBoost validation prediction artifact used by the AO1 evaluation pack.
+
 ## Manual CSV Upload to Unity Catalog Volumes
 
 Community Edition does not provide the same production-grade storage integrations as paid Databricks workspaces. For this project, local CSV files can be uploaded manually to a Unity Catalog Volume for development and validation.

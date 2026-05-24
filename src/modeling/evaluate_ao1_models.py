@@ -26,6 +26,20 @@ PROBABILITY_COLUMN = "predicted_probability"
 MODEL_COLUMN = "model_name"
 DEFAULT_THRESHOLD = 0.50
 THRESHOLD_GRID = (0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70)
+FINAL_TEST_LABELS = {
+    "test",
+    "final_test",
+    "holdout",
+    "hold_out",
+    "holdout_test",
+    "hold_out_test",
+    "heldout",
+    "held_out",
+    "heldout_test",
+    "held_out_test",
+    "final_holdout",
+    "final_hold_out",
+}
 
 REQUIRED_PREDICTION_COLUMNS = {
     MODEL_COLUMN,
@@ -138,28 +152,41 @@ def configure_logging() -> logging.Logger:
     return logging.getLogger("dataco.ao1_model_evaluation")
 
 
-def read_prediction_artifacts(config: AO1EvaluationConfig) -> pd.DataFrame:
+def read_prediction_artifacts(config: AO1EvaluationConfig) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Read all available AO1 validation prediction artifacts."""
-    candidates = (
-        config.logistic_predictions_path,
-        config.xgboost_predictions_path,
-    )
+    candidates = {
+        "logistic_regression": config.logistic_predictions_path,
+        "xgboost": config.xgboost_predictions_path,
+    }
     frames: list[pd.DataFrame] = []
+    available_artifacts: dict[str, str] = {}
+    missing_artifacts: dict[str, str] = {}
 
-    for path in candidates:
+    for model_key, path in candidates.items():
         if not path.exists():
+            missing_artifacts[model_key] = str(path)
             continue
         frame = pd.read_csv(path)
         validate_prediction_contract(frame, path)
         frames.append(frame)
+        available_artifacts[model_key] = str(path)
 
     if not frames:
         raise FileNotFoundError(
             "No AO1 validation prediction artifacts were found. Expected at least "
-            f"one of: {[str(path) for path in candidates]}"
+            f"one of: {list(missing_artifacts.values())}"
         )
 
-    return pd.concat(frames, ignore_index=True)
+    artifact_status = {
+        "expected_model_artifacts": {
+            model_key: str(path)
+            for model_key, path in candidates.items()
+        },
+        "available_model_artifacts": available_artifacts,
+        "missing_model_artifacts": missing_artifacts,
+        "comparison_status": "complete" if not missing_artifacts else "partial",
+    }
+    return pd.concat(frames, ignore_index=True), artifact_status
 
 
 def validate_prediction_contract(frame: pd.DataFrame, path: Path) -> None:
@@ -202,6 +229,27 @@ def validate_prediction_contract(frame: pd.DataFrame, path: Path) -> None:
         raise ValueError(f"{path} has missing predicted probabilities.")
     if not probability.between(0.0, 1.0).all():
         raise ValueError(f"{path} has predicted probabilities outside [0, 1].")
+
+    for slice_column in ("split_partition", "evaluation_slice"):
+        if slice_column not in frame.columns:
+            continue
+        observed_labels = frame[slice_column].dropna().astype(str).map(normalize_label)
+        final_test_labels = sorted(set(observed_labels).intersection(FINAL_TEST_LABELS))
+        if final_test_labels:
+            raise ValueError(
+                f"{path} contains final-test rows in `{slice_column}`: {final_test_labels}. "
+                "Issue #29 evaluates validation predictions only."
+            )
+
+
+def normalize_label(value: str) -> str:
+    """Normalize slice labels for validation/test boundary checks."""
+    return (
+        value.strip()
+        .lower()
+        .replace(" ", "_")
+        .replace("-", "_")
+    )
 
 
 def compute_metrics_for_threshold(
@@ -448,6 +496,7 @@ def write_findings(
     config: AO1EvaluationConfig,
     evaluation_status: str,
     missing_models: list[str],
+    artifact_status: dict[str, Any],
 ) -> None:
     """Write a compact report-facing AO1 evaluation findings note."""
     metric_rows = metrics_df.sort_values(["roc_auc", "pr_auc"], ascending=False)
@@ -468,26 +517,50 @@ def write_findings(
         "This evaluation pack compares available AO1 candidate models on the validation slice only. "
         "It does not evaluate the final test partition, select the final operating threshold, or "
         "override the separate threshold-governance task.",
+        "The final test partition is not used in this evaluation pack.",
         "",
         "## Completion Status",
         "",
         f"Evaluation status: `{evaluation_status}`.",
         "",
+        f"Comparison status: `{artifact_status['comparison_status']}`",
+        "",
+        "Expected prediction artifacts:",
+        "",
     ]
 
-    if missing_models:
+    for model_key, path in artifact_status["expected_model_artifacts"].items():
+        lines.append(f"- `{model_key}`: `{path}`")
+
+    lines.extend(
+        [
+            "",
+            "Available prediction artifacts:",
+            "",
+        ]
+    )
+
+    for model_key, path in artifact_status["available_model_artifacts"].items():
+        lines.append(f"- `{model_key}`: `{path}`")
+
+    if artifact_status["missing_model_artifacts"]:
+        lines.extend(["", "Missing prediction artifacts:", ""])
+        for model_key, path in artifact_status["missing_model_artifacts"].items():
+            lines.append(f"- `{model_key}`: `{path}`")
         lines.extend(
             [
-                "This run is partial because these expected candidate models were not available:",
                 "",
-                *[f"- `{model_name}`" for model_name in missing_models],
+                "The H1 Logistic Regression versus XGBoost comparison is not complete until "
+                "both validation prediction artifacts are available.",
                 "",
             ]
         )
     else:
         lines.extend(
             [
-                "This run includes all expected AO1 candidate models.",
+                "",
+                "The H1 Logistic Regression versus XGBoost validation comparison is complete "
+                "for the available issue #29 evaluation scope.",
                 "",
             ]
         )
@@ -515,6 +588,8 @@ def write_findings(
             f"The strongest available validation ranking model is `{best_row['model_name']}`. "
             "The threshold grid should be reviewed by the team before freezing an AO1 "
             "operating threshold for AO3 and dashboard use.",
+            "This findings note supports recall, precision, and threshold trade-off review; "
+            "it does not select the final operational threshold.",
             "",
             "A recall-oriented candidate row for the current best model is:",
             "",
@@ -570,7 +645,7 @@ def run_ao1_model_evaluation(
 ) -> dict[str, Any]:
     """Build AO1 validation metrics, curves, threshold grids, and findings."""
     logger.info("Starting AO1 model evaluation pack.")
-    predictions = read_prediction_artifacts(config)
+    predictions, artifact_status = read_prediction_artifacts(config)
     model_names = sorted(predictions[MODEL_COLUMN].astype(str).unique())
     missing_models = sorted(EXPECTED_MODELS.difference(model_names))
     evaluation_status = (
@@ -622,6 +697,7 @@ def run_ao1_model_evaluation(
         config,
         evaluation_status,
         missing_models,
+        artifact_status,
     )
 
     metadata = {
@@ -639,6 +715,11 @@ def run_ao1_model_evaluation(
         "expected_models": sorted(EXPECTED_MODELS),
         "missing_models": missing_models,
         "final_test_used": False,
+        "comparison_status": artifact_status["comparison_status"],
+        "expected_model_artifacts": artifact_status["expected_model_artifacts"],
+        "available_model_artifacts": artifact_status["available_model_artifacts"],
+        "missing_model_artifacts": artifact_status["missing_model_artifacts"],
+        "h1_comparison_complete": artifact_status["comparison_status"] == "complete",
         "required_prediction_columns": sorted(REQUIRED_PREDICTION_COLUMNS),
         "input_prediction_paths": {
             "logistic_regression": str(config.logistic_predictions_path),

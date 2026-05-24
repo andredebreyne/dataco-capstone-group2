@@ -552,6 +552,7 @@ def save_validation_predictions(
     validation_pdf: pd.DataFrame,
     y_probability: Any,
     threshold: float,
+    evaluation_slice: str,
     path: Path,
 ) -> None:
     """Write validation prediction records for downstream AO1 evaluation."""
@@ -567,7 +568,7 @@ def save_validation_predictions(
         ],
     ].copy()
     prediction_df["model_name"] = "ao1_logistic_regression_baseline"
-    prediction_df["evaluation_slice"] = INNER_VALIDATION_LABEL
+    prediction_df["evaluation_slice"] = evaluation_slice
     prediction_df["predicted_probability"] = y_probability
     prediction_df["prediction_threshold"] = threshold
     prediction_df["predicted_label"] = (
@@ -756,6 +757,7 @@ def run_ao1_logistic_regression_baseline(
         validation_pdf,
         y_validation_probability,
         config.threshold,
+        str(split_metadata.get("validation_slice", INNER_VALIDATION_LABEL)),
         config.validation_predictions_csv_path,
     )
     save_metrics_csv(metrics, config.metrics_csv_path)
