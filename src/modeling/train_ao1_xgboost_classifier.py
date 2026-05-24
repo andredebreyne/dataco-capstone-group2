@@ -65,15 +65,31 @@ REQUIRED_INPUT_COLUMNS = (
     ROW_NUMBER_COLUMN,
 )
 
+
+def resolve_repo_root() -> Path:
+    """Resolve repository root for local and Databricks notebook execution."""
+    configured_root = os.getenv("DATACO_REPO_ROOT")
+    if configured_root:
+        return Path(configured_root).expanduser().resolve()
+
+    if "__file__" in globals():
+        return Path(__file__).resolve().parents[2]
+
+    current_path = Path.cwd().resolve()
+    for candidate in (current_path, *current_path.parents):
+        if (candidate / "src").exists() and (candidate / "models").exists():
+            return candidate
+
+    return current_path
+
+
+REPO_ROOT = resolve_repo_root()
+
+
 DEFAULT_OUTPUT_DIR = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_OUTPUT_DIR",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "xgboost_classifier"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "xgboost_classifier"),
     )
 )
 
@@ -94,61 +110,35 @@ DEFAULT_METADATA_JSON_PATH = Path(
 DEFAULT_METRICS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_METRICS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_xgboost_classifier_validation_metrics.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_classifier_validation_metrics.csv"),
     )
 )
 
 DEFAULT_CANDIDATE_RESULTS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_CANDIDATE_RESULTS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_xgboost_classifier_candidate_results.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_classifier_candidate_results.csv"),
     )
 )
 
 DEFAULT_FEATURE_IMPORTANCE_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_FEATURE_IMPORTANCE_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_xgboost_classifier_feature_importance.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_classifier_feature_importance.csv"),
     )
 )
 
 DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_VALIDATION_PREDICTIONS_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_xgboost_validation_predictions.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_validation_predictions.csv"),
     )
 )
 
 DEFAULT_PREPROCESSING_METADATA_PATH = Path(
     os.getenv(
         "DATACO_AO1_PREPROCESSING_METADATA_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "preprocessing"
-            / "ao1_preprocessing_metadata.json"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "preprocessing" / "ao1_preprocessing_metadata.json"),
     )
 )
 
