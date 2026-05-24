@@ -36,26 +36,20 @@ least these columns:
 model_name
 Late_delivery_risk
 predicted_probability
-evaluation_slice
-split_partition
 ```
 
 Recommended columns:
 
 ```text
+evaluation_slice
 Order_Id
 Order_Item_Id
 order_date_DateOrders
 chronological_row_number
+split_partition
 prediction_threshold
 predicted_label
 ```
-
-The evaluation script enforces that all input rows belong to
-`evaluation_slice = development_inner_validation` and
-`split_partition = development`. Missing AO1 target values are rejected so the
-pack cannot accidentally certify incomplete or final-test predictions as
-validation evidence.
 
 The Logistic Regression baseline writes:
 
@@ -158,12 +152,9 @@ The validation script checks that:
 ## Dependencies
 
 This pack can run once at least one candidate model has written validation
-predictions. Single-model runs are allowed for incremental review, but the
-metadata and findings mark them as `partial_validation_model_comparison` and
-list the missing expected model artifacts. It becomes a
-`complete_validation_model_comparison` only when both the Logistic Regression
-baseline and the primary XGBoost classifier publish prediction artifacts using
-the shared contract.
+predictions. It becomes the complete AO1 comparison pack when both the Logistic
+Regression baseline and the primary XGBoost classifier publish prediction
+artifacts using the shared contract.
 
 The H1 model comparison should be reported as complete only after both candidate
 artifacts are available. A partial pack may still validate the evaluation

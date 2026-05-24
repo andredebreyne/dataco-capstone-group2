@@ -5,8 +5,23 @@ Issue: `#29`
 ## Scope
 
 This evaluation pack compares available AO1 candidate models on the validation slice only. It does not evaluate the final test partition, select the final operating threshold, or override the separate threshold-governance task.
+The final test partition is not used in this evaluation pack.
 
 ## Candidate Model Summary
+
+Comparison status: `complete`
+
+Expected prediction artifacts:
+
+- `logistic_regression`: `/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv`
+- `xgboost`: `/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv`
+
+Available prediction artifacts:
+
+- `logistic_regression`: `/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv`
+- `xgboost`: `/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv`
+
+The H1 Logistic Regression versus XGBoost validation comparison is complete for the available issue #29 evaluation scope.
 
 | Model | ROC-AUC | PR-AUC | Precision @ 0.50 | Recall @ 0.50 | F1 @ 0.50 |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -16,6 +31,7 @@ This evaluation pack compares available AO1 candidate models on the validation s
 ## Operating-Threshold Readiness
 
 The strongest available validation ranking model is `ao1_xgboost_classifier`. The threshold grid should be reviewed by the team before freezing an AO1 operating threshold for AO3 and dashboard use.
+This findings note supports recall, precision, and threshold trade-off review; it does not select the final operational threshold.
 
 A recall-oriented candidate row for the current best model is:
 
