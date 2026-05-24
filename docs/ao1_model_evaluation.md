@@ -16,6 +16,8 @@ by the separate threshold-selection task and must use this evaluation evidence.
 
 The evaluation pack uses validation predictions only. The final test partition
 must remain untouched until final model evaluation is explicitly approved.
+If a prediction artifact includes `split_partition` or `evaluation_slice`, rows
+marked as `test`, `final_test`, or equivalent held-out test labels are rejected.
 
 Required boundary rules:
 
@@ -61,6 +63,9 @@ The primary XGBoost classifier should write:
 report/tables/ao1_xgboost_validation_predictions.csv
 ```
 
+The evaluator fails if `Late_delivery_risk` is missing, non-binary, or if
+`predicted_probability` is missing or outside `[0, 1]`.
+
 ## Evaluation Script
 
 Implementation:
@@ -81,6 +86,11 @@ report/tables/ao1_calibration_by_probability_bin.csv
 report/tables/ao1_model_evaluation_findings.md
 models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json
 ```
+
+The metadata records expected, available, and missing model prediction artifacts.
+`comparison_status` is `partial` when only one candidate artifact is available
+and `complete` when both Logistic Regression and XGBoost validation prediction
+artifacts are available.
 
 ## Metrics
 
@@ -131,10 +141,13 @@ tests/data_validation/validate_ao1_evaluation_pack.py
 The validation script checks that:
 
 - metadata marks the final test set as unused;
+- metadata marks the comparison as `partial` or `complete`;
 - model names are consistent across outputs;
 - metrics and threshold values are within valid ranges;
+- the documented threshold grid includes `0.50`;
 - confusion-matrix counts are non-negative;
-- curve, threshold, calibration, and findings artifacts exist.
+- curve, threshold, calibration, and findings artifacts exist;
+- findings mention the final-test boundary and recall/threshold trade-offs.
 
 ## Dependencies
 
@@ -142,3 +155,8 @@ This pack can run once at least one candidate model has written validation
 predictions. It becomes the complete AO1 comparison pack when both the Logistic
 Regression baseline and the primary XGBoost classifier publish prediction
 artifacts using the shared contract.
+
+The H1 model comparison should be reported as complete only after both candidate
+artifacts are available. A partial pack may still validate the evaluation
+infrastructure, but it is not enough to conclude the Logistic Regression versus
+XGBoost comparison.
