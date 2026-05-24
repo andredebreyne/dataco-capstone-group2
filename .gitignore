@@ -235,5 +235,12 @@ data/silver/*.delta/
 !data/silver/.gitkeep
 !data/silver/README.md
 
+# Generated AO1 row-level predictions and dense curve-point exports.
+# Regenerate these from the AO1 modeling/evaluation scripts instead of committing them.
+report/tables/ao1_logistic_regression_validation_predictions.csv
+report/tables/ao1_xgboost_validation_predictions.csv
+report/tables/ao1_roc_curve_points.csv
+report/tables/ao1_precision_recall_curve_points.csv
+
 # Proposal source documents may contain student identifiers.
 docs/proposal/*.docx
