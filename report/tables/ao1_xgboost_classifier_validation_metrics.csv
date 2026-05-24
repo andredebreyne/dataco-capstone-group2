@@ -1,0 +1,15 @@
+metric,value
+roc_auc,0.7752787090098935
+pr_auc,0.8489117912727457
+accuracy,0.7212314148247296
+precision,0.8890176760359316
+recall,0.5839730981536705
+f1,0.7049092440836333
+log_loss,0.513276459904523
+validation_positive_class_rate,0.5701624281011468
+validation_predicted_positive_rate_at_0_5,0.37452519625221575
+threshold,0.5
+confusion_matrix_true_negative,10733.0
+confusion_matrix_false_positive,1149.0
+confusion_matrix_false_negative,6557.0
+confusion_matrix_true_positive,9204.0

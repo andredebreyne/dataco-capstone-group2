@@ -1,0 +1,407 @@
+{
+  "artifacts": {
+    "candidate_results_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_classifier_candidate_results.csv",
+    "feature_importance_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_classifier_feature_importance.csv",
+    "metadata_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json",
+    "metrics_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_classifier_validation_metrics.csv",
+    "metrics_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metrics.json",
+    "model_artifact_path": null,
+    "model_artifact_saved": false,
+    "validation_predictions_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+  },
+  "candidate_results": [
+    {
+      "candidate_id": "balanced_reference",
+      "candidate_rank_input_order": 1,
+      "model_parameters": {
+        "colsample_bytree": 0.9,
+        "eval_metric": "logloss",
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "min_child_weight": 1,
+        "n_estimators": 200,
+        "n_jobs": -1,
+        "objective": "binary:logistic",
+        "random_state": 620,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.0,
+        "scale_pos_weight": 0.7433855759830974,
+        "subsample": 0.9,
+        "tree_method": "hist"
+      },
+      "selected": false,
+      "validation_metrics": {
+        "accuracy": 0.7207249574937598,
+        "confusion_matrix": {
+          "false_negative": 6564,
+          "false_positive": 1156,
+          "true_negative": 10726,
+          "true_positive": 9197
+        },
+        "f1": 0.7043731331852646,
+        "log_loss": 0.5233772581865233,
+        "pr_auc": 0.843366564008819,
+        "precision": 0.8883415435139573,
+        "recall": 0.5835289638982298,
+        "roc_auc": 0.7727752541725333,
+        "threshold": 0.5,
+        "validation_positive_class_rate": 0.5701624281011468,
+        "validation_predicted_positive_rate_at_0_5": 0.37452519625221575
+      }
+    },
+    {
+      "candidate_id": "shallower_regularized",
+      "candidate_rank_input_order": 2,
+      "model_parameters": {
+        "colsample_bytree": 0.85,
+        "eval_metric": "logloss",
+        "learning_rate": 0.04,
+        "max_depth": 2,
+        "min_child_weight": 3,
+        "n_estimators": 250,
+        "n_jobs": -1,
+        "objective": "binary:logistic",
+        "random_state": 620,
+        "reg_alpha": 0.1,
+        "reg_lambda": 2.0,
+        "scale_pos_weight": 0.7433855759830974,
+        "subsample": 0.85,
+        "tree_method": "hist"
+      },
+      "selected": false,
+      "validation_metrics": {
+        "accuracy": 0.7209058351119633,
+        "confusion_matrix": {
+          "false_negative": 6610,
+          "false_positive": 1105,
+          "true_negative": 10777,
+          "true_positive": 9151
+        },
+        "f1": 0.7034631202675172,
+        "log_loss": 0.5367295025224256,
+        "pr_auc": 0.8337581666440882,
+        "precision": 0.8922581903276131,
+        "recall": 0.580610367362477,
+        "roc_auc": 0.7631869304340213,
+        "threshold": 0.5,
+        "validation_positive_class_rate": 0.5701624281011468,
+        "validation_predicted_positive_rate_at_0_5": 0.3710161704590674
+      }
+    },
+    {
+      "candidate_id": "deeper_conservative",
+      "candidate_rank_input_order": 3,
+      "model_parameters": {
+        "colsample_bytree": 0.9,
+        "eval_metric": "logloss",
+        "learning_rate": 0.06,
+        "max_depth": 4,
+        "min_child_weight": 2,
+        "n_estimators": 150,
+        "n_jobs": -1,
+        "objective": "binary:logistic",
+        "random_state": 620,
+        "reg_alpha": 0.0,
+        "reg_lambda": 1.5,
+        "scale_pos_weight": 0.7433855759830974,
+        "subsample": 0.9,
+        "tree_method": "hist"
+      },
+      "selected": true,
+      "validation_metrics": {
+        "accuracy": 0.7212314148247296,
+        "confusion_matrix": {
+          "false_negative": 6557,
+          "false_positive": 1149,
+          "true_negative": 10733,
+          "true_positive": 9204
+        },
+        "f1": 0.7049092440836333,
+        "log_loss": 0.513276459904523,
+        "pr_auc": 0.8489117912727457,
+        "precision": 0.8890176760359316,
+        "recall": 0.5839730981536705,
+        "roc_auc": 0.7752787090098935,
+        "threshold": 0.5,
+        "validation_positive_class_rate": 0.5701624281011468,
+        "validation_predicted_positive_rate_at_0_5": 0.37452519625221575
+      }
+    }
+  ],
+  "excluded_identifier_metadata_columns": [
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "chronological_row_number",
+    "split_partition",
+    "_gold_ao1_processed_timestamp"
+  ],
+  "feature_columns": [
+    "order_year",
+    "order_quarter",
+    "order_month",
+    "order_week_of_year",
+    "order_day_of_month",
+    "order_day_of_week",
+    "order_hour",
+    "scheduled_shipping_days",
+    "order_is_weekend",
+    "is_same_day_or_next_day_shipping",
+    "is_standard_shipping",
+    "customer_zipcode_available",
+    "order_zipcode_available",
+    "customer_order_country_match",
+    "customer_order_state_match",
+    "geo_coordinates_available",
+    "Type",
+    "order_season",
+    "shipping_speed_tier",
+    "shipping_mode_normalized",
+    "product_category_key",
+    "product_department_key",
+    "customer_segment_normalized",
+    "customer_country_normalized",
+    "customer_state_normalized",
+    "market_normalized",
+    "order_country_normalized",
+    "order_region_normalized",
+    "order_state_normalized"
+  ],
+  "feature_count_after_preprocessing": 1290,
+  "feature_count_before_preprocessing": 29,
+  "final_test_partition_status": {
+    "label": "test",
+    "treatment": "reserved for final AO1 model evaluation; not touched by issue #28",
+    "used_for_model_selection": false,
+    "used_for_preprocessing_fit": false,
+    "used_for_threshold_selection": false,
+    "used_for_training": false,
+    "used_for_validation_metrics": false
+  },
+  "forbidden_leakage_columns": [
+    "Benefit per order",
+    "Benefit_per_order",
+    "Customer_City",
+    "Customer_Email",
+    "Customer_Fname",
+    "Customer_Id",
+    "Customer_Lname",
+    "Customer_Password",
+    "Customer_Street",
+    "Customer_Zipcode",
+    "Days for shipping (real)",
+    "Days_for_shipping_real",
+    "Delivery Status",
+    "Delivery_Status",
+    "Late_delivery_risk",
+    "Latitude",
+    "Longitude",
+    "Order Item Profit Ratio",
+    "Order Profit Per Order",
+    "Order Status",
+    "Order_City",
+    "Order_Customer_Id",
+    "Order_Item_Cardprod_Id",
+    "Order_Item_Profit_Ratio",
+    "Order_Item_Total",
+    "Order_Profit_Per_Order",
+    "Order_Status",
+    "Order_Zipcode",
+    "Product_Card_Id",
+    "Product_Category_Id",
+    "Product_Description",
+    "Product_Image",
+    "Product_Name",
+    "Sales",
+    "Sales_per_customer",
+    "customer_city_normalized",
+    "customer_region_key",
+    "item_discount_amount",
+    "item_discount_rate",
+    "item_discount_share_of_gross",
+    "item_gross_sales_estimate",
+    "item_net_sales_amount",
+    "item_unit_price",
+    "latitude_rounded",
+    "longitude_rounded",
+    "order_city_normalized",
+    "order_region_key",
+    "product_catalog_key",
+    "product_list_price",
+    "product_name_normalized",
+    "product_status_flag",
+    "shipping date (DateOrders)",
+    "shipping_date_DateOrders"
+  ],
+  "generated_timestamp_utc": "2026-05-24T19:29:48.885947+00:00",
+  "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
+  "input_partition_read_format": "delta",
+  "interpretability_notes": {
+    "feature_importance_scope": "importances are from the preprocessed feature space",
+    "importance_note": "XGBoost feature importances are model-derived associations and should not be interpreted as causal effects."
+  },
+  "issue": "#28",
+  "metadata_status": "runtime_training_completed",
+  "partition_column": "split_partition",
+  "partition_labels_observed": [
+    "development",
+    "test"
+  ],
+  "partition_row_counts": {
+    "development": 138212,
+    "test": 34553
+  },
+  "preprocessing_reference": {
+    "factory": "src.modeling.build_ao1_preprocessing_pipeline.build_sklearn_preprocessor",
+    "fit_scope": "fitted inside issue #28 on training slice only",
+    "metadata_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/preprocessing/ao1_preprocessing_metadata.json",
+    "metadata_status": "runtime_fit_completed"
+  },
+  "smote": {
+    "class_distribution_after_resampling": {
+      "training": {
+        "negative_count": 47147,
+        "positive_count": 63422,
+        "positive_rate": 0.5735965777026111,
+        "row_count": 110569
+      },
+      "validation": {
+        "negative_count": 11882,
+        "positive_count": 15761,
+        "positive_rate": 0.5701624281011468,
+        "row_count": 27643
+      }
+    },
+    "class_distribution_before_resampling": {
+      "training": {
+        "negative_count": 47147,
+        "positive_count": 63422,
+        "positive_rate": 0.5735965777026111,
+        "row_count": 110569
+      },
+      "validation": {
+        "negative_count": 11882,
+        "positive_count": 15761,
+        "positive_rate": 0.5701624281011468,
+        "row_count": 27643
+      }
+    },
+    "decision": "not used for this XGBoost validation model",
+    "rationale": "Issue #26 marks SMOTE as deferred and AO1 imbalance as mild. This XGBoost model uses scale_pos_weight from the training slice instead of resampling.",
+    "test_resampling_allowed": false,
+    "training_only": true,
+    "used": false,
+    "validation_resampling_allowed": false
+  },
+  "split_metadata": {
+    "development_rows": 138212,
+    "final_test_partition_label": "test",
+    "final_test_used": false,
+    "inner_train_boundary_row_count": 110569,
+    "inner_validation_ratio": 0.2,
+    "partition_structure": "development_test",
+    "training_slice": "development_inner_train",
+    "validation_rule": "first 80% of development rows as inner training and final 20% as validation, ordered by order_date_DateOrders, Order_Id, Order_Item_Id",
+    "validation_slice": "development_inner_validation"
+  },
+  "target_column": "Late_delivery_risk",
+  "training_slice_summary": {
+    "max_chronological_row_number": 110569,
+    "max_order_date_DateOrders": "2016-11-05T05:42:00",
+    "min_chronological_row_number": 1,
+    "min_order_date_DateOrders": "2015-01-01T00:00:00",
+    "row_count": 110569
+  },
+  "validation_metrics": {
+    "accuracy": 0.7212314148247296,
+    "confusion_matrix": {
+      "false_negative": 6557,
+      "false_positive": 1149,
+      "true_negative": 10733,
+      "true_positive": 9204
+    },
+    "f1": 0.7049092440836333,
+    "log_loss": 0.513276459904523,
+    "pr_auc": 0.8489117912727457,
+    "precision": 0.8890176760359316,
+    "recall": 0.5839730981536705,
+    "roc_auc": 0.7752787090098935,
+    "threshold": 0.5,
+    "validation_positive_class_rate": 0.5701624281011468,
+    "validation_predicted_positive_rate_at_0_5": 0.37452519625221575
+  },
+  "validation_slice_summary": {
+    "max_chronological_row_number": 138212,
+    "max_order_date_DateOrders": "2017-04-22T03:43:00",
+    "min_chronological_row_number": 110570,
+    "min_order_date_DateOrders": "2016-11-05T05:42:00",
+    "row_count": 27643
+  },
+  "versions": {
+    "joblib": "1.2.0",
+    "pandas": "1.5.3",
+    "pyspark": null,
+    "python": "3.11.10",
+    "sklearn": "1.3.0",
+    "xgboost": "3.2.0"
+  },
+  "xgboost_classifier": {
+    "baseline_threshold": 0.5,
+    "candidate_count": 3,
+    "candidate_ids": [
+      "balanced_reference",
+      "shallower_regularized",
+      "deeper_conservative"
+    ],
+    "library": "xgboost.XGBClassifier",
+    "selected_candidate_id": "deeper_conservative",
+    "selected_parameters": {
+      "base_score": null,
+      "booster": null,
+      "callbacks": null,
+      "colsample_bylevel": null,
+      "colsample_bynode": null,
+      "colsample_bytree": 0.9,
+      "device": null,
+      "early_stopping_rounds": null,
+      "enable_categorical": false,
+      "eval_metric": "logloss",
+      "feature_types": null,
+      "feature_weights": null,
+      "gamma": null,
+      "grow_policy": null,
+      "importance_type": null,
+      "interaction_constraints": null,
+      "learning_rate": 0.06,
+      "max_bin": null,
+      "max_cat_threshold": null,
+      "max_cat_to_onehot": null,
+      "max_delta_step": null,
+      "max_depth": 4,
+      "max_leaves": null,
+      "min_child_weight": 2,
+      "missing": NaN,
+      "monotone_constraints": null,
+      "multi_strategy": null,
+      "n_estimators": 150,
+      "n_jobs": -1,
+      "num_parallel_tree": null,
+      "objective": "binary:logistic",
+      "random_state": 620,
+      "reg_alpha": 0.0,
+      "reg_lambda": 1.5,
+      "sampling_method": null,
+      "scale_pos_weight": 0.7433855759830974,
+      "subsample": 0.9,
+      "tree_method": "hist",
+      "validate_parameters": null,
+      "verbosity": null
+    },
+    "selection_metric_order": [
+      "roc_auc",
+      "recall"
+    ],
+    "threshold_tuning": "none",
+    "tuning_scope": "small validation-only candidate comparison inside development"
+  }
+}
