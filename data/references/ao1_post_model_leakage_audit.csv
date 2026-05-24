@@ -1,0 +1,12 @@
+audit_area,source_artifact,check_performed,result,status
+chronological_split,docs/chronological_split_policy.md,Confirm development/test split is chronological and final test is reserved for final QA,No final-test use found in AO1 validation workflow,passed
+preprocessing_fit_scope,src/modeling/build_ao1_preprocessing_pipeline.py,Confirm learned preprocessing is fit on training/fitting data only,Train-only preprocessing rule documented and implemented,passed
+logistic_baseline_scope,src/modeling/train_ao1_logistic_regression_baseline.py,Confirm baseline trains on training slice and evaluates validation only,Final test is marked unused in baseline metadata,passed
+xgboost_scope,src/modeling/train_ao1_xgboost_classifier.py,Confirm XGBoost candidate comparison uses validation only,Final test is marked unused in XGBoost metadata,passed
+evaluation_pack_scope,src/modeling/evaluate_ao1_models.py,Confirm model comparison uses validation prediction artifacts only,Evaluation pack validates prediction contract and final-test exclusion,passed
+threshold_policy_scope,src/modeling/select_ao1_decision_threshold.py,Confirm threshold policy uses validation trade-off grid only,Threshold policy is validation-only and reusable for AO3,passed
+performance_plausibility,report/tables/ao1_model_validation_comparison.csv,Review AO1 validation performance for implausibly high metrics,Metrics are plausible and not near-perfect,passed
+forbidden_predictor_review,src/modeling/build_ao1_preprocessing_pipeline.py,Confirm direct target outcome and post-shipment fields are excluded,Forbidden fields are not approved predictors,passed
+resampling_review,src/modeling/train_ao1_xgboost_classifier.py,Confirm resampling is not fit before split or on validation/test,SMOTE is not used; XGBoost class weighting is training-slice based,passed
+shap_plausibility,docs/ao1_shap_explainability.md,Review top SHAP drivers for operational plausibility after Issue #30 validation,Pending final SHAP artifact review,pending
+final_conclusion,docs/ao1_post_model_leakage_audit.md,Record overall AO1 post-model leakage status,Provisionally leakage-safe pending SHAP review,provisional
