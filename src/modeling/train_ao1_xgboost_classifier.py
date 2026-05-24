@@ -332,7 +332,15 @@ def build_candidate_parameter_sets(
 def build_xgboost_pipeline(candidate_parameters: dict[str, Any]) -> Any:
     """Build the approved preprocessing plus one XGBoost candidate model."""
     from sklearn.pipeline import Pipeline
-    from xgboost import XGBClassifier
+
+    try:
+        from xgboost import XGBClassifier
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "Missing dependency: xgboost. In Databricks, run "
+            "`%pip install -r requirements.txt` or `%pip install xgboost`, "
+            "then restart Python. See docs/databricks_setup.md."
+        ) from exc
 
     model_parameters = {
         key: value
