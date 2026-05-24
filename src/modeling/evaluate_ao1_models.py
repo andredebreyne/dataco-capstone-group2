@@ -31,7 +31,15 @@ REQUIRED_PREDICTION_COLUMNS = {
     MODEL_COLUMN,
     TARGET_COLUMN,
     PROBABILITY_COLUMN,
+    "evaluation_slice",
+    "split_partition",
 }
+EXPECTED_MODELS = {
+    "ao1_logistic_regression_baseline",
+    "ao1_xgboost_classifier",
+}
+EXPECTED_EVALUATION_SLICE = "development_inner_validation"
+EXPECTED_SPLIT_PARTITION = "development"
 
 
 def resolve_repo_root() -> Path:
@@ -137,11 +145,9 @@ def read_prediction_artifacts(config: AO1EvaluationConfig) -> pd.DataFrame:
         config.xgboost_predictions_path,
     )
     frames: list[pd.DataFrame] = []
-    missing_paths: list[str] = []
 
     for path in candidates:
         if not path.exists():
-            missing_paths.append(str(path))
             continue
         frame = pd.read_csv(path)
         validate_prediction_contract(frame, path)
@@ -150,7 +156,7 @@ def read_prediction_artifacts(config: AO1EvaluationConfig) -> pd.DataFrame:
     if not frames:
         raise FileNotFoundError(
             "No AO1 validation prediction artifacts were found. Expected at least "
-            f"one of: {missing_paths}"
+            f"one of: {[str(path) for path in candidates]}"
         )
 
     return pd.concat(frames, ignore_index=True)
@@ -165,9 +171,31 @@ def validate_prediction_contract(frame: pd.DataFrame, path: Path) -> None:
     if frame.empty:
         raise ValueError(f"{path} is empty.")
 
-    invalid_targets = sorted(set(frame[TARGET_COLUMN].dropna()) - {0, 1})
+    if frame[MODEL_COLUMN].isna().any():
+        raise ValueError(f"{path} has missing model names.")
+
+    if frame[TARGET_COLUMN].isna().any():
+        raise ValueError(f"{path} has missing AO1 target values.")
+
+    invalid_targets = sorted(set(frame[TARGET_COLUMN]) - {0, 1})
     if invalid_targets:
         raise ValueError(f"{path} has non-binary target values: {invalid_targets}")
+
+    invalid_slices = sorted(
+        set(frame["evaluation_slice"].astype(str)) - {EXPECTED_EVALUATION_SLICE}
+    )
+    if invalid_slices:
+        raise ValueError(
+            f"{path} contains non-validation evaluation_slice values: {invalid_slices}"
+        )
+
+    invalid_partitions = sorted(
+        set(frame["split_partition"].astype(str)) - {EXPECTED_SPLIT_PARTITION}
+    )
+    if invalid_partitions:
+        raise ValueError(
+            f"{path} contains non-development split_partition values: {invalid_partitions}"
+        )
 
     probability = frame[PROBABILITY_COLUMN]
     if probability.isna().any():
@@ -418,6 +446,8 @@ def write_findings(
     threshold_df: pd.DataFrame,
     calibration_df: pd.DataFrame,
     config: AO1EvaluationConfig,
+    evaluation_status: str,
+    missing_models: list[str],
 ) -> None:
     """Write a compact report-facing AO1 evaluation findings note."""
     metric_rows = metrics_df.sort_values(["roc_auc", "pr_auc"], ascending=False)
@@ -439,11 +469,37 @@ def write_findings(
         "It does not evaluate the final test partition, select the final operating threshold, or "
         "override the separate threshold-governance task.",
         "",
-        "## Candidate Model Summary",
+        "## Completion Status",
         "",
-        "| Model | ROC-AUC | PR-AUC | Precision @ 0.50 | Recall @ 0.50 | F1 @ 0.50 |",
-        "| --- | ---: | ---: | ---: | ---: | ---: |",
+        f"Evaluation status: `{evaluation_status}`.",
+        "",
     ]
+
+    if missing_models:
+        lines.extend(
+            [
+                "This run is partial because these expected candidate models were not available:",
+                "",
+                *[f"- `{model_name}`" for model_name in missing_models],
+                "",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "This run includes all expected AO1 candidate models.",
+                "",
+            ]
+        )
+
+    lines.extend(
+        [
+            "## Candidate Model Summary",
+            "",
+            "| Model | ROC-AUC | PR-AUC | Precision @ 0.50 | Recall @ 0.50 | F1 @ 0.50 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
+        ]
+    )
 
     for _, row in metric_rows.iterrows():
         lines.append(
@@ -516,6 +572,12 @@ def run_ao1_model_evaluation(
     logger.info("Starting AO1 model evaluation pack.")
     predictions = read_prediction_artifacts(config)
     model_names = sorted(predictions[MODEL_COLUMN].astype(str).unique())
+    missing_models = sorted(EXPECTED_MODELS.difference(model_names))
+    evaluation_status = (
+        "complete_validation_model_comparison"
+        if not missing_models
+        else "partial_validation_model_comparison"
+    )
     logger.info("Loaded AO1 validation predictions for models: %s", model_names)
 
     metric_rows = [
@@ -553,17 +615,29 @@ def run_ao1_model_evaluation(
         frame.to_csv(path, index=False)
         logger.info("Wrote AO1 evaluation artifact: %s", path)
 
-    write_findings(metrics_df, threshold_df, calibration_df, config)
+    write_findings(
+        metrics_df,
+        threshold_df,
+        calibration_df,
+        config,
+        evaluation_status,
+        missing_models,
+    )
 
     metadata = {
         "metadata_status": "ao1_validation_evaluation_completed",
+        "evaluation_status": evaluation_status,
         "issue": "#29",
         "generated_timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "target_column": TARGET_COLUMN,
         "probability_column": PROBABILITY_COLUMN,
+        "evaluation_slice": EXPECTED_EVALUATION_SLICE,
+        "split_partition": EXPECTED_SPLIT_PARTITION,
         "default_threshold": DEFAULT_THRESHOLD,
         "threshold_grid": list(THRESHOLD_GRID),
         "evaluated_models": model_names,
+        "expected_models": sorted(EXPECTED_MODELS),
+        "missing_models": missing_models,
         "final_test_used": False,
         "required_prediction_columns": sorted(REQUIRED_PREDICTION_COLUMNS),
         "input_prediction_paths": {

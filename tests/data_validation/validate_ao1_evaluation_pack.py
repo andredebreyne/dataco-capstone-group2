@@ -160,12 +160,34 @@ def validate_metadata() -> dict:
     assert METADATA_PATH.exists(), f"Missing metadata artifact: {METADATA_PATH}"
     metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
     assert metadata["metadata_status"] == "ao1_validation_evaluation_completed"
+    assert metadata["evaluation_status"] in {
+        "complete_validation_model_comparison",
+        "partial_validation_model_comparison",
+    }
     assert metadata["issue"] == "#29"
     assert metadata["final_test_used"] is False
     assert metadata["target_column"] == "Late_delivery_risk"
     assert metadata["probability_column"] == "predicted_probability"
+    assert metadata["evaluation_slice"] == "development_inner_validation"
+    assert metadata["split_partition"] == "development"
+    assert set(metadata["expected_models"]) == {
+        "ao1_logistic_regression_baseline",
+        "ao1_xgboost_classifier",
+    }
     assert metadata["evaluated_models"], "No evaluated models are recorded."
     assert metadata["threshold_grid"], "Threshold grid is empty."
+
+    evaluated_models = set(metadata["evaluated_models"])
+    missing_models = set(metadata["missing_models"])
+    expected_models = set(metadata["expected_models"])
+    assert evaluated_models.union(missing_models) == expected_models
+    assert not evaluated_models.intersection(missing_models)
+
+    if missing_models:
+        assert metadata["evaluation_status"] == "partial_validation_model_comparison"
+    else:
+        assert metadata["evaluation_status"] == "complete_validation_model_comparison"
+
     return metadata
 
 
@@ -204,6 +226,13 @@ def main() -> None:
     assert set(roc_df["model_name"]) == model_names
     assert set(pr_df["model_name"]) == model_names
     assert set(calibration_df["model_name"]) == model_names
+
+    findings_text = FINDINGS_PATH.read_text(encoding="utf-8")
+    assert metadata["evaluation_status"] in findings_text
+    if metadata["missing_models"]:
+        assert "This run is partial" in findings_text
+    else:
+        assert "This run includes all expected AO1 candidate models." in findings_text
 
     print("All AO1 evaluation pack validation checks passed.")
 
