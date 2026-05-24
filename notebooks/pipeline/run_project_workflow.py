@@ -48,6 +48,8 @@ RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
 RUN_AO1_SHAP_EXPLAINABILITY = False
 RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+RUN_AO1_DECISION_THRESHOLD = False
+RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -100,6 +102,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/evaluate_ao1_models.py"),
     Path("src/modeling/train_ao1_xgboost_classifier.py"),
     Path("src/modeling/explain_ao1_xgboost_shap.py"),
+    Path("src/modeling/select_ao1_decision_threshold.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -111,6 +114,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_evaluation_pack.py"),
     Path("tests/data_validation/validate_ao1_xgboost_classifier.py"),
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
+    Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -541,6 +545,16 @@ def run_ao1_shap_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_shap_explainability.py"))
 
 
+def run_ao1_decision_threshold_selection() -> None:
+    """Run the AO1 decision-threshold selection policy job."""
+    run_python_file(Path("src/modeling/select_ao1_decision_threshold.py"))
+
+
+def run_ao1_decision_threshold_validation() -> None:
+    """Run the AO1 decision-threshold policy artifact checks."""
+    run_python_file(Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -587,6 +601,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
     print("- OPTIONAL: AO1 SHAP explainability runs only when RUN_AO1_SHAP_EXPLAINABILITY is True.")
+    print("- OPTIONAL: AO1 decision threshold runs only when RUN_AO1_DECISION_THRESHOLD is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -627,6 +642,7 @@ def print_final_checklist() -> None:
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
     print(f"- AO1 XGBoost validation predictions: {ao1_xgboost_config.validation_predictions_csv_path}")
     print(f"- AO1 SHAP driver summary: {ao1_shap_config.driver_summary_output_path}")
+    print("- AO1 decision threshold policy: data/references/ao1_decision_threshold_policy.csv")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -794,6 +810,18 @@ def main() -> None:
         RUN_AO1_EVALUATION_PACK and RUN_AO1_EVALUATION_PACK_VALIDATION,
         run_ao1_evaluation_pack_validation,
         required=RUN_AO1_EVALUATION_PACK and RUN_AO1_EVALUATION_PACK_VALIDATION,
+    )
+    run_step(
+        "AO1 decision threshold selection",
+        RUN_AO1_DECISION_THRESHOLD,
+        run_ao1_decision_threshold_selection,
+        required=RUN_AO1_DECISION_THRESHOLD,
+    )
+    run_step(
+        "AO1 decision threshold validation",
+        RUN_AO1_DECISION_THRESHOLD and RUN_AO1_DECISION_THRESHOLD_VALIDATION,
+        run_ao1_decision_threshold_validation,
+        required=RUN_AO1_DECISION_THRESHOLD and RUN_AO1_DECISION_THRESHOLD_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)

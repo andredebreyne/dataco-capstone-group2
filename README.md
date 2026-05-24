@@ -61,6 +61,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)
 - [AO1 SHAP Explainability](docs/ao1_shap_explainability.md)
+- [AO1 Decision Threshold Policy](docs/ao1_decision_threshold.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
 
 ## Data Quality

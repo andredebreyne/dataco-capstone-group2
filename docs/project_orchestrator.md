@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 preprocessing, optional AO1 validation-model training, optional AO1 validation evaluation-pack generation, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 preprocessing, optional AO1 validation-model training, optional AO1 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -39,6 +39,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO1 XGBoost classifier validation | `tests/data_validation/validate_ao1_xgboost_classifier.py` | Validate XGBoost artifacts, fit boundaries, metric ranges, selected candidate metadata, and feature-importance output. | Completed AO1 XGBoost classifier artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_XGBOOST_CLASSIFIER` and `RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION`. | Runs after XGBoost training. Confirms final test is marked as unused, exactly one candidate is selected, and forbidden leakage fields are not predictors. |
 | AO1 SHAP explainability | `src/modeling/explain_ao1_xgboost_shap.py` | Generate SHAP-based explanations for the selected AO1 XGBoost validation model. | AO1 chronological partition Delta table, AO1 preprocessing factory, and XGBoost metadata when available. | SHAP feature-importance CSV, driver summary CSV, top-feature plot, findings note, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY`. | Retrains the selected XGBoost candidate on the approved training slice and explains validation rows only. Does not use final test or select thresholds. |
 | AO1 SHAP explainability validation | `tests/data_validation/validate_ao1_shap_explainability.py` | Validate SHAP artifacts, metadata, figure generation, leakage-token guardrails, and final-test exclusion. | Completed AO1 SHAP explainability artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY` and `RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION`. | Runs after SHAP explainability. |
+| AO1 decision-threshold selection | `src/modeling/select_ao1_decision_threshold.py` | Select the AO1 operating threshold from validation threshold trade-offs using the documented recall-first operational rule. | AO1 evaluation metrics and threshold grid from issue `#29`. | Policy CSV, threshold metadata JSON, and recommendation note. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD`. | Runs on validation evidence only. Produces a provisional policy until the primary AO1 model artifact is available. |
+| AO1 decision-threshold validation | `tests/data_validation/validate_ao1_decision_threshold_policy.py` | Validate the AO1 threshold policy, metadata, final-test exclusion, and AO3/dashboard reuse rule. | Completed AO1 threshold policy artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD` and `RUN_AO1_DECISION_THRESHOLD_VALIDATION`. | Runs after threshold selection. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -54,7 +56,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, AO1 validation evaluation packaging, and AO1 SHAP explainability.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, AO1 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -104,6 +106,8 @@ RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
 RUN_AO1_SHAP_EXPLAINABILITY = False
 RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+RUN_AO1_DECISION_THRESHOLD = False
+RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -149,6 +153,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 XGBoost metadata JSON.
 - AO1 XGBoost validation predictions CSV.
 - AO1 SHAP driver summary CSV.
+- AO1 decision threshold policy CSV.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling
