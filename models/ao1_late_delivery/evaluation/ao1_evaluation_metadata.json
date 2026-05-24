@@ -8,19 +8,30 @@
     "roc_curve_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_roc_curve_points.csv",
     "threshold_tradeoff_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_threshold_tradeoff_grid.csv"
   },
+  "available_model_artifacts": {
+    "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+  },
+  "comparison_status": "complete",
   "default_threshold": 0.5,
   "evaluated_models": [
     "ao1_logistic_regression_baseline",
     "ao1_xgboost_classifier"
   ],
+  "expected_model_artifacts": {
+    "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+  },
   "final_test_used": false,
-  "generated_timestamp_utc": "2026-05-24T19:31:34.467609+00:00",
+  "generated_timestamp_utc": "2026-05-24T21:25:41.671282+00:00",
+  "h1_comparison_complete": true,
   "input_prediction_paths": {
     "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
     "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
   },
   "issue": "#29",
   "metadata_status": "ao1_validation_evaluation_completed",
+  "missing_model_artifacts": {},
   "probability_column": "predicted_probability",
   "required_prediction_columns": [
     "Late_delivery_risk",

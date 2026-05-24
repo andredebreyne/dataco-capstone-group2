@@ -233,7 +233,7 @@
     "shipping date (DateOrders)",
     "shipping_date_DateOrders"
   ],
-  "generated_timestamp_utc": "2026-05-24T19:29:48.885947+00:00",
+  "generated_timestamp_utc": "2026-05-24T21:23:51.058029+00:00",
   "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
   "input_partition_read_format": "delta",
   "interpretability_notes": {
