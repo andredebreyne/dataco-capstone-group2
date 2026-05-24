@@ -37,6 +37,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO1 validation evaluation pack validation | `tests/data_validation/validate_ao1_evaluation_pack.py` | Validate AO1 evaluation metadata, metrics, threshold, confusion-matrix, curve, calibration, and findings artifacts. | Completed AO1 evaluation pack artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_EVALUATION_PACK` and `RUN_AO1_EVALUATION_PACK_VALIDATION`. | Runs after the evaluation pack. Confirms final test is marked as unused. |
 | AO1 XGBoost classifier training | `src/modeling/train_ao1_xgboost_classifier.py` | Train the AO1 primary XGBoost classifier on the approved training slice, compare a small validation-only candidate set, and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, candidate-comparison CSV, feature-importance CSV, and validation-prediction CSV. | Optional and disabled by default; controlled by `RUN_AO1_XGBOOST_CLASSIFIER`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, tune thresholds, apply SMOTE, score AO3, or run final AO1 evaluation. |
 | AO1 XGBoost classifier validation | `tests/data_validation/validate_ao1_xgboost_classifier.py` | Validate XGBoost artifacts, fit boundaries, metric ranges, selected candidate metadata, and feature-importance output. | Completed AO1 XGBoost classifier artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_XGBOOST_CLASSIFIER` and `RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION`. | Runs after XGBoost training. Confirms final test is marked as unused, exactly one candidate is selected, and forbidden leakage fields are not predictors. |
+| AO1 SHAP explainability | `src/modeling/explain_ao1_xgboost_shap.py` | Generate SHAP-based explanations for the selected AO1 XGBoost validation model. | AO1 chronological partition Delta table, AO1 preprocessing factory, and XGBoost metadata when available. | SHAP feature-importance CSV, driver summary CSV, top-feature plot, findings note, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY`. | Retrains the selected XGBoost candidate on the approved training slice and explains validation rows only. Does not use final test or select thresholds. |
+| AO1 SHAP explainability validation | `tests/data_validation/validate_ao1_shap_explainability.py` | Validate SHAP artifacts, metadata, figure generation, leakage-token guardrails, and final-test exclusion. | Completed AO1 SHAP explainability artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY` and `RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION`. | Runs after SHAP explainability. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -52,7 +54,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, and AO1 validation evaluation packaging.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, AO1 validation evaluation packaging, and AO1 SHAP explainability.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -100,6 +102,8 @@ RUN_AO1_EVALUATION_PACK = False
 RUN_AO1_EVALUATION_PACK_VALIDATION = False
 RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
+RUN_AO1_SHAP_EXPLAINABILITY = False
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -144,6 +148,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 evaluation metadata JSON.
 - AO1 XGBoost metadata JSON.
 - AO1 XGBoost validation predictions CSV.
+- AO1 SHAP driver summary CSV.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling
