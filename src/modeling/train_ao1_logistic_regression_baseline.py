@@ -62,15 +62,31 @@ EXCLUDED_IDENTIFIER_METADATA_COLUMNS = (
     "_gold_ao1_processed_timestamp",
 )
 
+
+def resolve_repo_root() -> Path:
+    """Resolve repository root for local and Databricks notebook execution."""
+    configured_root = os.getenv("DATACO_REPO_ROOT")
+    if configured_root:
+        return Path(configured_root).expanduser().resolve()
+
+    if "__file__" in globals():
+        return Path(__file__).resolve().parents[2]
+
+    current_path = Path.cwd().resolve()
+    for candidate in (current_path, *current_path.parents):
+        if (candidate / "src").exists() and (candidate / "models").exists():
+            return candidate
+
+    return current_path
+
+
+REPO_ROOT = resolve_repo_root()
+
+
 DEFAULT_OUTPUT_DIR = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_OUTPUT_DIR",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "logistic_regression"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "logistic_regression"),
     )
 )
 
@@ -91,49 +107,28 @@ DEFAULT_METADATA_JSON_PATH = Path(
 DEFAULT_METRICS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_METRICS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_logistic_regression_validation_metrics.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_validation_metrics.csv"),
     )
 )
 
 DEFAULT_COEFFICIENTS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_COEFFICIENTS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_logistic_regression_coefficients.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_coefficients.csv"),
     )
 )
 
 DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_VALIDATION_PREDICTIONS_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_logistic_regression_validation_predictions.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_validation_predictions.csv"),
     )
 )
 
 DEFAULT_PREPROCESSING_METADATA_PATH = Path(
     os.getenv(
         "DATACO_AO1_PREPROCESSING_METADATA_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "preprocessing"
-            / "ao1_preprocessing_metadata.json"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "preprocessing" / "ao1_preprocessing_metadata.json"),
     )
 )
 

@@ -245,6 +245,6 @@ The validation script checks:
 
 ## Next Step
 
-The next AO1 modeling task should train and validate the XGBoost classifier on
-the same validation design, then compare it against this Logistic Regression
-baseline for H1.
+The AO1 XGBoost classifier uses the same validation design and should be
+compared against this Logistic Regression baseline for H1. See
+`docs/ao1_xgboost_classifier.md`.
