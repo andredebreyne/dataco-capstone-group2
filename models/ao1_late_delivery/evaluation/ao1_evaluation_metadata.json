@@ -14,6 +14,17 @@
     "ao1_xgboost_classifier"
   ],
   "final_test_used": false,
+  "comparison_status": "complete",
+  "expected_model_artifacts": {
+    "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+  },
+  "available_model_artifacts": {
+    "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+  },
+  "missing_model_artifacts": {},
+  "h1_comparison_complete": true,
   "generated_timestamp_utc": "2026-05-24T19:31:34.467609+00:00",
   "input_prediction_paths": {
     "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
