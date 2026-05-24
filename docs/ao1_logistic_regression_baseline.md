@@ -125,6 +125,7 @@ The training script writes validation-only metrics to:
 ```text
 models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.json
 report/tables/ao1_logistic_regression_validation_metrics.csv
+report/tables/ao1_logistic_regression_validation_predictions.csv
 report/tables/ao1_logistic_regression_validation_findings.md
 ```
 
@@ -194,6 +195,7 @@ models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.jso
 models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json
 report/tables/ao1_logistic_regression_validation_metrics.csv
 report/tables/ao1_logistic_regression_coefficients.csv
+report/tables/ao1_logistic_regression_validation_predictions.csv
 report/tables/ao1_logistic_regression_validation_findings.md
 ```
 

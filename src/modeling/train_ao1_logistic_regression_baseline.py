@@ -62,15 +62,31 @@ EXCLUDED_IDENTIFIER_METADATA_COLUMNS = (
     "_gold_ao1_processed_timestamp",
 )
 
+
+def resolve_repo_root() -> Path:
+    """Resolve repository root for local and Databricks notebook execution."""
+    configured_root = os.getenv("DATACO_REPO_ROOT")
+    if configured_root:
+        return Path(configured_root).expanduser().resolve()
+
+    if "__file__" in globals():
+        return Path(__file__).resolve().parents[2]
+
+    current_path = Path.cwd().resolve()
+    for candidate in (current_path, *current_path.parents):
+        if (candidate / "src").exists() and (candidate / "models").exists():
+            return candidate
+
+    return current_path
+
+
+REPO_ROOT = resolve_repo_root()
+
+
 DEFAULT_OUTPUT_DIR = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_OUTPUT_DIR",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "logistic_regression"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "logistic_regression"),
     )
 )
 
@@ -91,37 +107,28 @@ DEFAULT_METADATA_JSON_PATH = Path(
 DEFAULT_METRICS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_METRICS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_logistic_regression_validation_metrics.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_validation_metrics.csv"),
     )
 )
 
 DEFAULT_COEFFICIENTS_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_LOGISTIC_COEFFICIENTS_CSV_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "report"
-            / "tables"
-            / "ao1_logistic_regression_coefficients.csv"
-        ),
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_coefficients.csv"),
+    )
+)
+
+DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH = Path(
+    os.getenv(
+        "DATACO_AO1_LOGISTIC_VALIDATION_PREDICTIONS_PATH",
+        str(REPO_ROOT / "report" / "tables" / "ao1_logistic_regression_validation_predictions.csv"),
     )
 )
 
 DEFAULT_PREPROCESSING_METADATA_PATH = Path(
     os.getenv(
         "DATACO_AO1_PREPROCESSING_METADATA_PATH",
-        str(
-            Path(__file__).resolve().parents[2]
-            / "models"
-            / "ao1_late_delivery"
-            / "preprocessing"
-            / "ao1_preprocessing_metadata.json"
-        ),
+        str(REPO_ROOT / "models" / "ao1_late_delivery" / "preprocessing" / "ao1_preprocessing_metadata.json"),
     )
 )
 
@@ -146,6 +153,7 @@ class AO1LogisticRegressionBaselineConfig:
     metadata_json_path: Path = DEFAULT_METADATA_JSON_PATH
     metrics_csv_path: Path = DEFAULT_METRICS_CSV_PATH
     coefficients_csv_path: Path = DEFAULT_COEFFICIENTS_CSV_PATH
+    validation_predictions_csv_path: Path = DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH
     model_artifact_path: str = DEFAULT_MODEL_ARTIFACT_PATH
     save_fitted_model: bool = (
         os.getenv("DATACO_AO1_SAVE_LOGISTIC_MODEL", "false").strip().lower()
@@ -540,6 +548,50 @@ def save_metrics_csv(metrics: dict[str, Any], path: Path) -> None:
     pd.DataFrame(metric_rows).to_csv(path, index=False)
 
 
+def save_validation_predictions(
+    validation_pdf: pd.DataFrame,
+    y_probability: Any,
+    threshold: float,
+    evaluation_slice: str,
+    path: Path,
+) -> None:
+    """Write validation prediction records for downstream AO1 evaluation."""
+    prediction_df = validation_pdf.loc[
+        :,
+        [
+            "Order_Id",
+            "Order_Item_Id",
+            "order_date_DateOrders",
+            ROW_NUMBER_COLUMN,
+            PARTITION_COLUMN,
+            TARGET_COLUMN,
+        ],
+    ].copy()
+    prediction_df["model_name"] = "ao1_logistic_regression_baseline"
+    prediction_df["evaluation_slice"] = evaluation_slice
+    prediction_df["predicted_probability"] = y_probability
+    prediction_df["prediction_threshold"] = threshold
+    prediction_df["predicted_label"] = (
+        prediction_df["predicted_probability"] >= threshold
+    ).astype(int)
+
+    output_columns = [
+        "model_name",
+        "evaluation_slice",
+        "Order_Id",
+        "Order_Item_Id",
+        "order_date_DateOrders",
+        ROW_NUMBER_COLUMN,
+        PARTITION_COLUMN,
+        TARGET_COLUMN,
+        "predicted_probability",
+        "prediction_threshold",
+        "predicted_label",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    prediction_df.to_csv(path, index=False, columns=output_columns)
+
+
 def save_model_artifact(pipeline: Any, output_path: str) -> None:
     """Persist the fitted preprocessing-plus-model pipeline when enabled."""
     if output_path.startswith(DISABLED_PUBLIC_DBFS_PREFIXES):
@@ -636,6 +688,7 @@ def build_metadata(
             "metadata_json": str(config.metadata_json_path),
             "metrics_csv": str(config.metrics_csv_path),
             "coefficients_csv": str(config.coefficients_csv_path),
+            "validation_predictions_csv": str(config.validation_predictions_csv_path),
             "model_artifact_saved": model_artifact_saved,
             "model_artifact_path": config.model_artifact_path if model_artifact_saved else None,
         },
@@ -700,6 +753,13 @@ def run_ao1_logistic_regression_baseline(
     config.coefficients_csv_path.parent.mkdir(parents=True, exist_ok=True)
     coefficient_df.to_csv(config.coefficients_csv_path, index=False)
 
+    save_validation_predictions(
+        validation_pdf,
+        y_validation_probability,
+        config.threshold,
+        str(split_metadata.get("validation_slice", INNER_VALIDATION_LABEL)),
+        config.validation_predictions_csv_path,
+    )
     save_metrics_csv(metrics, config.metrics_csv_path)
     save_json(metrics, config.metrics_json_path)
 
