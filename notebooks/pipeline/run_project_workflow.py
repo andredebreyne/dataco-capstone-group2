@@ -593,6 +593,7 @@ def print_final_checklist() -> None:
     print(f"- AO1 preprocessing metadata: {ao1_preprocessing_config.metadata_output_path}")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
+    print(f"- AO1 XGBoost validation predictions: {ao1_xgboost_config.validation_predictions_csv_path}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 

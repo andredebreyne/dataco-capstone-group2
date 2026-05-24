@@ -128,6 +128,7 @@ The training script writes validation-only metrics to:
 ```text
 models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metrics.json
 report/tables/ao1_xgboost_classifier_validation_metrics.csv
+report/tables/ao1_xgboost_validation_predictions.csv
 ```
 
 Required metrics:
@@ -167,6 +168,32 @@ Interpretation cautions:
 - importances are associative and not causal;
 - correlated predictors can split importance across related columns.
 
+## Validation Prediction Output
+
+The selected XGBoost candidate writes row-level validation predictions to:
+
+```text
+report/tables/ao1_xgboost_validation_predictions.csv
+```
+
+Columns:
+
+- `model_name`
+- `evaluation_slice`
+- `Order_Id`
+- `Order_Item_Id`
+- `order_date_DateOrders`
+- `chronological_row_number`
+- `split_partition`
+- `Late_delivery_risk`
+- `predicted_probability`
+- `prediction_threshold`
+- `predicted_label`
+
+This file is required by the AO1 evaluation pack and threshold-selection
+workflow so Logistic Regression and XGBoost can be compared using a shared
+validation-prediction contract.
+
 ## Artifacts
 
 Training outputs:
@@ -177,6 +204,7 @@ models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json
 report/tables/ao1_xgboost_classifier_validation_metrics.csv
 report/tables/ao1_xgboost_classifier_candidate_results.csv
 report/tables/ao1_xgboost_classifier_feature_importance.csv
+report/tables/ao1_xgboost_validation_predictions.csv
 ```
 
 Optional fitted model artifact:
@@ -213,7 +241,7 @@ The validation script checks:
 - SMOTE is not used;
 - exactly one XGBoost candidate is selected;
 - selected parameters are documented;
-- report-facing metrics, candidate-comparison, and feature-importance CSV files exist.
+- report-facing metrics, candidate-comparison, feature-importance, and validation-prediction CSV files exist.
 
 ## Assumptions and Limitations
 

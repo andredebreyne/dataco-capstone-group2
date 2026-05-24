@@ -127,6 +127,18 @@ DEFAULT_FEATURE_IMPORTANCE_CSV_PATH = Path(
     )
 )
 
+DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH = Path(
+    os.getenv(
+        "DATACO_AO1_XGBOOST_VALIDATION_PREDICTIONS_PATH",
+        str(
+            Path(__file__).resolve().parents[2]
+            / "report"
+            / "tables"
+            / "ao1_xgboost_validation_predictions.csv"
+        ),
+    )
+)
+
 DEFAULT_PREPROCESSING_METADATA_PATH = Path(
     os.getenv(
         "DATACO_AO1_PREPROCESSING_METADATA_PATH",
@@ -160,6 +172,7 @@ class AO1XGBoostClassifierConfig:
     metrics_csv_path: Path = DEFAULT_METRICS_CSV_PATH
     candidate_results_csv_path: Path = DEFAULT_CANDIDATE_RESULTS_CSV_PATH
     feature_importance_csv_path: Path = DEFAULT_FEATURE_IMPORTANCE_CSV_PATH
+    validation_predictions_csv_path: Path = DEFAULT_VALIDATION_PREDICTIONS_CSV_PATH
     model_artifact_path: str = DEFAULT_MODEL_ARTIFACT_PATH
     save_fitted_model: bool = (
         os.getenv("DATACO_AO1_SAVE_XGBOOST_MODEL", "false").strip().lower()
@@ -390,6 +403,50 @@ def save_candidate_results_csv(
     pd.DataFrame(rows).to_csv(path, index=False)
 
 
+def save_validation_predictions(
+    validation_pdf: pd.DataFrame,
+    y_probability: Any,
+    threshold: float,
+    evaluation_slice: str,
+    path: Path,
+) -> None:
+    """Write selected XGBoost validation predictions for downstream evaluation."""
+    prediction_df = validation_pdf.loc[
+        :,
+        [
+            "Order_Id",
+            "Order_Item_Id",
+            "order_date_DateOrders",
+            ROW_NUMBER_COLUMN,
+            PARTITION_COLUMN,
+            TARGET_COLUMN,
+        ],
+    ].copy()
+    prediction_df["model_name"] = "ao1_xgboost_classifier"
+    prediction_df["evaluation_slice"] = evaluation_slice
+    prediction_df["predicted_probability"] = y_probability
+    prediction_df["prediction_threshold"] = threshold
+    prediction_df["predicted_label"] = (
+        prediction_df["predicted_probability"] >= threshold
+    ).astype(int)
+
+    output_columns = [
+        "model_name",
+        "evaluation_slice",
+        "Order_Id",
+        "Order_Item_Id",
+        "order_date_DateOrders",
+        ROW_NUMBER_COLUMN,
+        PARTITION_COLUMN,
+        TARGET_COLUMN,
+        "predicted_probability",
+        "prediction_threshold",
+        "predicted_label",
+    ]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    prediction_df.to_csv(path, index=False, columns=output_columns)
+
+
 def extract_feature_importance(pipeline: Any) -> pd.DataFrame:
     """Extract feature-importance rows from the selected XGBoost pipeline."""
     preprocessor = pipeline.named_steps["preprocessor"]
@@ -510,6 +567,7 @@ def build_metadata(
             "metrics_csv": str(config.metrics_csv_path),
             "candidate_results_csv": str(config.candidate_results_csv_path),
             "feature_importance_csv": str(config.feature_importance_csv_path),
+            "validation_predictions_csv": str(config.validation_predictions_csv_path),
             "model_artifact_saved": model_artifact_saved,
             "model_artifact_path": config.model_artifact_path if model_artifact_saved else None,
         },
@@ -601,11 +659,19 @@ def run_ao1_xgboost_classifier(
     selected_candidate["selected"] = True
     selected_pipeline = candidate_pipelines[selected_candidate["candidate_id"]]
     logger.info("Selected AO1 XGBoost candidate: %s", selected_candidate["candidate_id"])
+    selected_validation_probability = selected_pipeline.predict_proba(x_validation)[:, 1]
 
     feature_importance_df = extract_feature_importance(selected_pipeline)
     config.feature_importance_csv_path.parent.mkdir(parents=True, exist_ok=True)
     feature_importance_df.to_csv(config.feature_importance_csv_path, index=False)
 
+    save_validation_predictions(
+        validation_pdf,
+        selected_validation_probability,
+        config.threshold,
+        split_metadata["validation_slice"],
+        config.validation_predictions_csv_path,
+    )
     save_metrics_csv(selected_candidate["validation_metrics"], config.metrics_csv_path)
     save_candidate_results_csv(candidate_results, config.candidate_results_csv_path)
     save_json(selected_candidate["validation_metrics"], config.metrics_json_path)

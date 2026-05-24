@@ -140,6 +140,20 @@ REQUIRED_FEATURE_IMPORTANCE_COLUMNS = {
     "importance_share",
 }
 
+REQUIRED_VALIDATION_PREDICTION_COLUMNS = {
+    "model_name",
+    "evaluation_slice",
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "chronological_row_number",
+    "split_partition",
+    TARGET_COLUMN,
+    "predicted_probability",
+    "prediction_threshold",
+    "predicted_label",
+}
+
 
 def resolve_repo_root() -> Path:
     """Resolve repository root for local artifact paths."""
@@ -189,6 +203,12 @@ FEATURE_IMPORTANCE_CSV_PATH = Path(
     os.getenv(
         "DATACO_AO1_XGBOOST_FEATURE_IMPORTANCE_CSV_PATH",
         str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_classifier_feature_importance.csv"),
+    )
+)
+VALIDATION_PREDICTIONS_CSV_PATH = Path(
+    os.getenv(
+        "DATACO_AO1_XGBOOST_VALIDATION_PREDICTIONS_PATH",
+        str(REPO_ROOT / "report" / "tables" / "ao1_xgboost_validation_predictions.csv"),
     )
 )
 
@@ -445,6 +465,44 @@ def assert_feature_importance_table_exists(metadata: dict[str, Any]) -> None:
     )
 
 
+def assert_validation_predictions_table_exists(metadata: dict[str, Any]) -> None:
+    """Validate selected XGBoost validation predictions for downstream evaluation."""
+    header = set(read_csv_header(VALIDATION_PREDICTIONS_CSV_PATH))
+    missing_columns = sorted(REQUIRED_VALIDATION_PREDICTION_COLUMNS.difference(header))
+    assert not missing_columns, (
+        f"Validation predictions table missing columns: {missing_columns}"
+    )
+
+    rows = read_csv_rows(VALIDATION_PREDICTIONS_CSV_PATH)
+    assert rows, "Validation predictions table must contain at least one row."
+    assert len(rows) == metadata["validation_slice_summary"]["row_count"], (
+        "Validation predictions row count must match validation slice row count."
+    )
+
+    validation_slice = metadata["split_metadata"]["validation_slice"]
+    for row in rows:
+        assert row["model_name"] == "ao1_xgboost_classifier", (
+            f"Unexpected model_name in validation predictions: {row['model_name']}"
+        )
+        assert row["evaluation_slice"] == validation_slice, (
+            "Validation prediction evaluation_slice does not match metadata."
+        )
+        probability = float(row["predicted_probability"])
+        threshold = float(row["prediction_threshold"])
+        predicted_label = int(float(row["predicted_label"]))
+        target_value = int(float(row[TARGET_COLUMN]))
+
+        assert 0.0 <= probability <= 1.0, (
+            f"Predicted probability outside [0, 1]: {probability}"
+        )
+        assert 0.0 <= threshold <= 1.0, f"Prediction threshold outside [0, 1]: {threshold}"
+        assert predicted_label in {0, 1}, f"Invalid predicted label: {predicted_label}"
+        assert target_value in {0, 1}, f"Invalid target value: {target_value}"
+        assert predicted_label == int(probability >= threshold), (
+            "Predicted label does not match probability-threshold rule."
+        )
+
+
 def assert_artifact_paths_match(metadata: dict[str, Any]) -> None:
     """Validate metadata artifact path fields match the validator expectations."""
     artifacts = metadata["artifacts"]
@@ -454,6 +512,7 @@ def assert_artifact_paths_match(metadata: dict[str, Any]) -> None:
         "metrics_csv": METRICS_CSV_PATH,
         "candidate_results_csv": CANDIDATE_RESULTS_CSV_PATH,
         "feature_importance_csv": FEATURE_IMPORTANCE_CSV_PATH,
+        "validation_predictions_csv": VALIDATION_PREDICTIONS_CSV_PATH,
     }
 
     for artifact_key, expected_path in expected_paths.items():
@@ -494,6 +553,7 @@ def run_validation() -> None:
     assert_metrics_csv_exists()
     assert_candidate_results_table_exists(metadata)
     assert_feature_importance_table_exists(metadata)
+    assert_validation_predictions_table_exists(metadata)
 
     print_validation_summary(metadata, metrics)
     print("\nAO1 XGBoost classifier validation passed.")
