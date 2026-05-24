@@ -60,6 +60,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)
+- [AO1 SHAP Explainability](docs/ao1_shap_explainability.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
 
 ## Data Quality
