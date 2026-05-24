@@ -5,8 +5,7 @@
     "metrics_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_metrics.csv",
     "metrics_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metrics.json",
     "model_artifact_path": null,
-    "model_artifact_saved": false,
-    "validation_predictions_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv"
+    "model_artifact_saved": false
   },
   "excluded_identifier_metadata_columns": [
     "Order_Id",
@@ -112,7 +111,7 @@
     "shipping date (DateOrders)",
     "shipping_date_DateOrders"
   ],
-  "generated_timestamp_utc": "2026-05-24T21:23:43.863268+00:00",
+  "generated_timestamp_utc": "2026-05-22T22:08:07.143080+00:00",
   "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
   "input_partition_read_format": "delta",
   "interpretability_notes": {
