@@ -1,0 +1,21 @@
+rank,feature_name,mean_abs_shap,importance_share,mean_signed_shap,driver_direction_note
+1,categorical__shipping_mode_normalized_first_class,5.780122,0.3810038,5.780122,positive average contribution to late-delivery risk
+2,categorical__order_state_normalized_tabasco,0.31227824,0.020584201,-0.31227824,negative average contribution to late-delivery risk
+3,categorical__order_state_normalized_murcia,0.3095292,0.020402994,0.3095292,positive average contribution to late-delivery risk
+4,numeric_continuous__scheduled_shipping_days,0.30237073,0.019931136,0.06887957,positive average contribution to late-delivery risk
+5,categorical__shipping_speed_tier_standard,0.2683656,0.017689645,-0.2683656,negative average contribution to late-delivery risk
+6,categorical__order_country_normalized_repblica_democrtica_del_congo,0.23980965,0.015807346,0.23980965,positive average contribution to late-delivery risk
+7,categorical__order_state_normalized_duarte,0.22989981,0.015154127,0.22989981,positive average contribution to late-delivery risk
+8,categorical__order_state_normalized_manawatuwanganui,0.20480613,0.013500046,0.20480613,positive average contribution to late-delivery risk
+9,categorical__order_state_normalized_jrkov,0.18351592,0.012096676,0.18351592,positive average contribution to late-delivery risk
+10,categorical__order_state_normalized_atlntida,0.1729253,0.011398582,0.1729253,positive average contribution to late-delivery risk
+11,categorical__order_state_normalized_limburgo,0.161463,0.010643031,0.161463,positive average contribution to late-delivery risk
+12,categorical__order_country_normalized_suecia,0.16094881,0.010609138,0.16094881,positive average contribution to late-delivery risk
+13,categorical__order_state_normalized_matanzas,0.16091782,0.0106070945,-0.16091782,negative average contribution to late-delivery risk
+14,categorical__order_state_normalized_ontario,0.15887077,0.010472161,-0.15887077,negative average contribution to late-delivery risk
+15,categorical__order_state_normalized_mazovia,0.1588273,0.010469296,-0.1588273,negative average contribution to late-delivery risk
+16,categorical__order_state_normalized_marche,0.15643935,0.01031189,-0.15643935,negative average contribution to late-delivery risk
+17,categorical__order_state_normalized_flanders_oriental,0.15208763,0.010025042,0.15208763,positive average contribution to late-delivery risk
+18,categorical__order_state_normalized_dar_es_salaam,0.14198874,0.009359362,-0.14198874,negative average contribution to late-delivery risk
+19,categorical__order_state_normalized_delhi,0.13604945,0.008967865,-0.13604945,negative average contribution to late-delivery risk
+20,categorical__order_state_normalized_ginebra,0.13098662,0.008634143,0.13098662,positive average contribution to late-delivery risk

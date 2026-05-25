@@ -584,6 +584,7 @@ def build_metadata(
             "joblib": get_package_version("joblib"),
             "xgboost": get_package_version("xgboost"),
         },
+        "xgboost_version": get_package_version("xgboost"),
     }
 
 
