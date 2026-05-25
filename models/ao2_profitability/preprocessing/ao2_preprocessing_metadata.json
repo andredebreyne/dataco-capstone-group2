@@ -204,7 +204,7 @@
     "Sales_per_customer",
     "ao3_order_value"
   ],
-  "generated_timestamp_utc": "2026-05-25T14:45:11.802669+00:00",
+  "generated_timestamp_utc": "2026-05-25T05:19:16.506450+00:00",
   "input_path": "/Volumes/workspace/default/raw_data/gold/ao2_profitability_chronological_partitions",
   "interpretation_safeguards": [
     "One-hot encoding changes coefficient interpretation for future linear models.",
