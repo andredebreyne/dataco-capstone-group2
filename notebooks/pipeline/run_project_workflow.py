@@ -43,19 +43,21 @@ RUN_AO2_PARTITIONS = False
 RUN_AO2_PARTITION_VALIDATION = False
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO2_PREPROCESSING = False
+RUN_AO2_PREPROCESSING_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
 RUN_AO1_EVALUATION_PACK_VALIDATION = False
-RUN_AO1_XGBOOST_CLASSIFIER = True
-RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = True
-RUN_AO1_SHAP_EXPLAINABILITY = True
-RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = True
+RUN_AO1_XGBOOST_CLASSIFIER = False
+RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
+RUN_AO1_SHAP_EXPLAINABILITY = False
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
 RUN_AO1_RESULTS_H1_VALIDATION = False
-RUN_SILVER_CSV_EXPORT = True
+RUN_SILVER_CSV_EXPORT = False
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
 RUN_FINAL_CHECKLIST = True
@@ -103,6 +105,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/create_ao1_chronological_partitions.py"),
     Path("src/modeling/create_ao2_chronological_partitions.py"),
     Path("src/modeling/build_ao1_preprocessing_pipeline.py"),
+    Path("src/modeling/build_ao2_preprocessing_pipeline.py"),
     Path("src/modeling/train_ao1_logistic_regression_baseline.py"),
     Path("src/modeling/evaluate_ao1_models.py"),
     Path("src/modeling/train_ao1_xgboost_classifier.py"),
@@ -115,6 +118,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_chronological_partitions.py"),
     Path("tests/data_validation/validate_ao2_chronological_partitions.py"),
     Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"),
+    Path("tests/data_validation/validate_ao2_preprocessing_pipeline.py"),
     Path("tests/data_validation/validate_ao1_logistic_regression_baseline.py"),
     Path("tests/data_validation/validate_ao1_evaluation_pack.py"),
     Path("tests/data_validation/validate_ao1_xgboost_classifier.py"),
@@ -262,6 +266,11 @@ from src.modeling.build_ao1_preprocessing_pipeline import (  # noqa: E402
     AO1PreprocessingConfig,
     configure_logging as configure_ao1_preprocessing_logging,
     run_ao1_preprocessing_pipeline,
+)
+from src.modeling.build_ao2_preprocessing_pipeline import (  # noqa: E402
+    AO2PreprocessingConfig,
+    configure_logging as configure_ao2_preprocessing_logging,
+    run_ao2_preprocessing_pipeline,
 )
 from src.modeling.train_ao1_xgboost_classifier import (  # noqa: E402
     AO1XGBoostClassifierConfig,
@@ -522,6 +531,11 @@ def run_ao1_preprocessing_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"))
 
 
+def run_ao2_preprocessing_validation() -> None:
+    """Run the AO2 preprocessing metadata validation."""
+    run_python_file(Path("tests/data_validation/validate_ao2_preprocessing_pipeline.py"))
+
+
 def run_ao1_logistic_baseline() -> None:
     """Run the AO1 Logistic Regression baseline training job."""
     run_python_file(Path("src/modeling/train_ao1_logistic_regression_baseline.py"))
@@ -614,6 +628,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
     print("- OPTIONAL: AO2 chronological partitions run only when RUN_AO2_PARTITIONS is True.")
     print("- OPTIONAL: AO1 preprocessing runs only when RUN_AO1_PREPROCESSING is True.")
+    print("- OPTIONAL: AO2 preprocessing runs only when RUN_AO2_PREPROCESSING is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -637,6 +652,7 @@ def print_final_checklist() -> None:
     ao1_partition_config = AO1ChronologicalPartitionConfig()
     ao2_partition_config = AO2ChronologicalPartitionConfig()
     ao1_preprocessing_config = AO1PreprocessingConfig()
+    ao2_preprocessing_config = AO2PreprocessingConfig()
     ao1_xgboost_config = AO1XGBoostClassifierConfig()
     ao1_shap_config = AO1SHAPExplainabilityConfig()
 
@@ -656,6 +672,7 @@ def print_final_checklist() -> None:
     print(f"- AO1 chronological partitions Delta: {ao1_partition_config.partition_output_path}")
     print(f"- AO2 chronological partitions Delta: {ao2_partition_config.partition_output_path}")
     print(f"- AO1 preprocessing metadata: {ao1_preprocessing_config.metadata_output_path}")
+    print(f"- AO2 preprocessing metadata: {ao2_preprocessing_config.metadata_output_path}")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -777,6 +794,21 @@ def main() -> None:
         RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
         run_ao1_preprocessing_validation,
         required=RUN_AO1_PREPROCESSING and RUN_AO1_PREPROCESSING_VALIDATION,
+    )
+    run_step(
+        "AO2 preprocessing pipeline build",
+        RUN_AO2_PREPROCESSING,
+        lambda: run_ao2_preprocessing_pipeline(
+            AO2PreprocessingConfig(),
+            configure_ao2_preprocessing_logging(),
+        ),
+        required=RUN_AO2_PREPROCESSING,
+    )
+    run_step(
+        "AO2 preprocessing pipeline validation",
+        RUN_AO2_PREPROCESSING and RUN_AO2_PREPROCESSING_VALIDATION,
+        run_ao2_preprocessing_validation,
+        required=RUN_AO2_PREPROCESSING and RUN_AO2_PREPROCESSING_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",
