@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 preprocessing, optional AO1 validation-model training, optional AO1 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 validation-model training, optional AO1 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -31,6 +31,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO2 chronological partition validation | `tests/data_validation/validate_ao2_chronological_partitions.py` | Validate row counts, key preservation, partition labels, row-number boundaries, chronological ordering, date ranges, and AO2 target coverage. | AO2 Gold Delta table and AO2 partition Delta table. | Console pass/fail result with target coverage summary. | Optional and disabled by default; controlled by `RUN_AO2_PARTITIONS` and `RUN_AO2_PARTITION_VALIDATION`. | Runs in Databricks because it reads Delta paths. |
 | AO1 preprocessing pipeline build | `src/modeling/build_ao1_preprocessing_pipeline.py` | Fit AO1 imputers, encoders, and scalers on the fitting partition only and write lightweight preprocessing metadata. | AO1 chronological partition Delta table. | `models/ao1_late_delivery/preprocessing/ao1_preprocessing_metadata.json`; optional fitted artifact in a Databricks Volume when explicitly enabled. | Optional and disabled by default; controlled by `RUN_AO1_PREPROCESSING`. | Does not train models, tune thresholds, or apply SMOTE. With current `development`/`test` partitions, fits on `development` only and transforms `test` only as a compatibility check. |
 | AO1 preprocessing pipeline validation | `tests/data_validation/validate_ao1_preprocessing_pipeline.py` | Validate metadata, feature groups, excluded leakage fields, fit source, SMOTE policy, and transformed row counts when runtime shape metadata is available. | AO1 preprocessing metadata and AO1 chronological partition Delta table. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_PREPROCESSING` and `RUN_AO1_PREPROCESSING_VALIDATION`. | Runs in Databricks for Delta-dependent checks; static metadata checks can run before the Delta table is available. |
+| AO2 preprocessing pipeline build | `src/modeling/build_ao2_preprocessing_pipeline.py` | Fit AO2 imputers, encoders, and scalers on the fitting partition only and write lightweight preprocessing metadata. | AO2 chronological partition Delta table. | `models/ao2_profitability/preprocessing/ao2_preprocessing_metadata.json`; optional fitted artifact in a Databricks Volume when explicitly enabled. | Optional and disabled by default; controlled by `RUN_AO2_PREPROCESSING`. | Does not train AO2 models, derive margins, or assign AO3 groups. With current `development`/`test` partitions, fits on `development` only and transforms `test` only as a compatibility check. |
+| AO2 preprocessing pipeline validation | `tests/data_validation/validate_ao2_preprocessing_pipeline.py` | Validate metadata, feature groups, AO2 target/proxy exclusions, `ao3_order_value` exclusion, fit source, and transformed row counts when runtime shape metadata is available. | AO2 preprocessing metadata and AO2 chronological partition Delta table. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_PREPROCESSING` and `RUN_AO2_PREPROCESSING_VALIDATION`. | Runs in Databricks for Delta-dependent checks; static metadata checks can run before the Delta table is available. |
 | AO1 Logistic Regression baseline training | `src/modeling/train_ao1_logistic_regression_baseline.py` | Train the AO1 Logistic Regression baseline on the approved training slice and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, and coefficient CSV. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, train XGBoost, tune thresholds, or apply SMOTE. |
 | AO1 Logistic Regression baseline validation | `tests/data_validation/validate_ao1_logistic_regression_baseline.py` | Validate Logistic Regression baseline artifacts, fit boundaries, metric ranges, parameters, and coefficient output. | Completed AO1 Logistic Regression baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE` and `RUN_AO1_LOGISTIC_BASELINE_VALIDATION`. | Runs after baseline training. Confirms final test is marked as unused and forbidden leakage fields are not predictors. |
 | AO1 validation evaluation pack | `src/modeling/evaluate_ao1_models.py` | Compare available AO1 candidate validation predictions using ranking metrics, threshold grids, confusion matrices, operating curves, and calibration bins. | Row-level validation prediction CSVs from AO1 candidate models. | Evaluation metrics, threshold grid, curve points, calibration table, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO1_EVALUATION_PACK`. | Runs on validation only. The final test set is not used and the final operating threshold is selected in the separate threshold-governance task. |
@@ -58,7 +60,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, AO1 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO1 XGBoost classifier, AO1 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -100,6 +102,8 @@ RUN_AO2_PARTITIONS = False
 RUN_AO2_PARTITION_VALIDATION = False
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO2_PREPROCESSING = False
+RUN_AO2_PREPROCESSING_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
@@ -152,6 +156,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 chronological partitions Delta table.
 - AO2 chronological partitions Delta table.
 - AO1 preprocessing metadata JSON.
+- AO2 preprocessing metadata JSON.
 - AO1 Logistic Regression metadata JSON.
 - AO1 evaluation metadata JSON.
 - AO1 XGBoost metadata JSON.

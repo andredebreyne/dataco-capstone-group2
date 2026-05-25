@@ -57,6 +57,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Chronological Partitions](docs/ao1_chronological_partitions.md)
 - [AO2 Chronological Partitions](docs/ao2_chronological_partitions.md)
 - [AO1 Preprocessing Pipeline](docs/ao1_preprocessing_pipeline.md)
+- [AO2 Preprocessing Pipeline](docs/ao2_preprocessing_pipeline.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)
