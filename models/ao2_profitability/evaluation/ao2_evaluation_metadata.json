@@ -1,0 +1,85 @@
+{
+  "available_model_artifacts": {
+    "ao2_gradient_boosting_regressor": {
+      "metadata_json": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\models\\ao2_profitability\\gradient_boosting\\ao2_gradient_boosting_metadata.json",
+      "residual_diagnostics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_residual_diagnostics.csv",
+      "validation_metrics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_validation_metrics.csv",
+      "validation_predictions_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_validation_predictions.csv"
+    },
+    "ao2_ridge_baseline": {
+      "metadata_json": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\models\\ao2_profitability\\ridge_baseline\\ao2_ridge_baseline_metadata.json",
+      "residual_diagnostics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_residual_diagnostics.csv",
+      "validation_metrics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_validation_metrics.csv",
+      "validation_predictions_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_validation_predictions.csv"
+    }
+  },
+  "comparison_status": "complete",
+  "error_slice_policy": {
+    "forbidden_slice_dimensions_not_used": [
+      "ao3_order_value",
+      "Order_Item_Total",
+      "Sales",
+      "Sales_per_customer",
+      "Benefit_per_order",
+      "Order_Item_Profit_Ratio",
+      "post-shipment fields",
+      "final-test labels"
+    ],
+    "operational_join_used": false,
+    "slice_types": [
+      "actual_profit_band",
+      "actual_profit_quantile",
+      "absolute_error_band"
+    ]
+  },
+  "error_slice_rows": 28,
+  "error_slices_generated": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_error_slices.csv",
+  "evaluated_models": [
+    "ao2_gradient_boosting_regressor",
+    "ao2_ridge_baseline"
+  ],
+  "evaluation_slice": "development_inner_validation",
+  "expected_models": [
+    "ao2_gradient_boosting_regressor",
+    "ao2_ridge_baseline"
+  ],
+  "final_test_boundary": "Final test, holdout, held-out, and test-labelled rows are rejected from metrics, residual diagnostics, error slices, findings, and H2 evidence.",
+  "final_test_used": false,
+  "findings_generated": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_model_evaluation_findings.md",
+  "generated_timestamp_utc": "2026-05-25T19:32:50.609117+00:00",
+  "h2_validation_evidence_complete": true,
+  "h2_validation_evidence_consistent": true,
+  "input_artifact_paths": {
+    "ao2_gradient_boosting_regressor": {
+      "metadata_json": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\models\\ao2_profitability\\gradient_boosting\\ao2_gradient_boosting_metadata.json",
+      "residual_diagnostics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_residual_diagnostics.csv",
+      "validation_metrics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_validation_metrics.csv",
+      "validation_predictions_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_gradient_boosting_validation_predictions.csv"
+    },
+    "ao2_ridge_baseline": {
+      "metadata_json": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\models\\ao2_profitability\\ridge_baseline\\ao2_ridge_baseline_metadata.json",
+      "residual_diagnostics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_residual_diagnostics.csv",
+      "validation_metrics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_validation_metrics.csv",
+      "validation_predictions_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_ridge_validation_predictions.csv"
+    }
+  },
+  "issue": "#37",
+  "limitations": [
+    "No AO2 model is trained or retrained by this evaluation pack.",
+    "No preprocessing logic is changed.",
+    "No final-test predictions or labels are used.",
+    "AO3 predicted margin and risk-margin segmentation are outside this issue.",
+    "Operational error slices are not joined from AO2 partitions in this compact pack."
+  ],
+  "metadata_status": "ao2_validation_evaluation_completed",
+  "metrics_generated": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_model_evaluation_metrics.csv",
+  "metrics_rows": 2,
+  "min_slice_rows": 100,
+  "missing_artifacts": {},
+  "missing_models": [],
+  "prediction_column": "predicted_profit",
+  "residual_diagnostics_generated": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao2_residual_diagnostics_by_model.csv",
+  "residual_diagnostics_rows": 2,
+  "target_column": "Order_Profit_Per_Order",
+  "target_policy_caveat": "AO2 target-reconstruction and leakage exclusions were enforced by the upstream Ridge and Gradient Boosting model artifacts. Issue #37 evaluates saved validation predictions only and does not change target policy."
+}
