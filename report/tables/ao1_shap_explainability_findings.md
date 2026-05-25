@@ -11,7 +11,7 @@ This memo explains the selected AO1 XGBoost validation model using SHAP values c
 - Selected XGBoost candidate: `deeper_conservative`.
 - Validation rows explained: `5000`.
 - SHAP values are computed after the approved AO1 preprocessing pipeline.
-- Model source: `deterministic_reconstruction` from `models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json`.
+- Model source: `deterministic_reconstruction` from `/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json`.
 - SHAP method: `TreeExplainer` for the positive class `Late_delivery_risk = 1`.
 - SHAP output space: `raw margin / log-odds`.
 - Interpretations are model associations, not causal effects.
@@ -43,7 +43,7 @@ This memo explains the selected AO1 XGBoost validation model using SHAP values c
 
 ## Business Plausibility Check
 
-The leading SHAP drivers are operationally plausible for pre-dispatch late-delivery risk because they emphasize the shipping promise, scheduled shipping window, and geographic fulfillment context available before dispatch. The dominant driver in this run is `categorical__shipping_mode_normalized_first_class`; because this effect is much larger than the others, the team should review it as a possible service-level or data-pattern concentration before final H1 reporting. Geography and shipping-speed drivers should be described as model associations that support prioritization and monitoring, not as proof that changing a single field will causally reduce late deliveries.
+The leading SHAP drivers are operationally plausible for pre-dispatch late-delivery risk because they emphasize the shipping promise, scheduled shipping window, and geographic fulfillment context available before dispatch. The dominant driver in this run is `categorical__shipping_mode_normalized_first_class`; if this effect remains much larger than the others, the team should review it as a possible service-level or data-pattern concentration before final H1 reporting. Geography and shipping-speed drivers should be described as model associations that support prioritization and monitoring, not as proof that changing a single field will causally reduce late deliveries.
 
 Top-driver interpretation for report reuse:
 

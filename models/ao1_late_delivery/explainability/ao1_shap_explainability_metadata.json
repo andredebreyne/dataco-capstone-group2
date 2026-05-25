@@ -8,7 +8,7 @@
   },
   "feature_count": 1290,
   "final_test_used": false,
-  "generated_timestamp_utc": "2026-05-24T23:16:20.498575+00:00",
+  "generated_timestamp_utc": "2026-05-25T02:52:04.426662+00:00",
   "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
   "input_slice": "development_inner_validation",
   "interpretation_limits": [

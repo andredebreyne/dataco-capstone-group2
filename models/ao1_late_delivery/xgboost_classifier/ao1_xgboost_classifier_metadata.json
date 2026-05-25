@@ -233,7 +233,7 @@
     "shipping date (DateOrders)",
     "shipping_date_DateOrders"
   ],
-  "generated_timestamp_utc": "2026-05-25T01:03:41.329994+00:00",
+  "generated_timestamp_utc": "2026-05-25T02:51:58.383771+00:00",
   "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
   "input_partition_read_format": "delta",
   "interpretability_notes": {
@@ -345,7 +345,6 @@
     "sklearn": "1.3.2",
     "xgboost": "2.0.3"
   },
-  "xgboost_version": "2.0.3",
   "xgboost_classifier": {
     "baseline_threshold": 0.5,
     "candidate_count": 3,
@@ -403,5 +402,6 @@
     ],
     "threshold_tuning": "none",
     "tuning_scope": "small validation-only candidate comparison inside development"
-  }
+  },
+  "xgboost_version": "2.0.3"
 }
