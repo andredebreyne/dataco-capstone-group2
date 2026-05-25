@@ -1,6 +1,7 @@
 """Generate AO1 XGBoost SHAP explainability artifacts.
 
-This job retrains the selected AO1 XGBoost validation configuration on the
+This job deterministically reconstructs the selected AO1 XGBoost validation
+configuration from the selected-model metadata, fits that specification on the
 approved training slice only, computes SHAP values on the validation slice, and
 writes report-facing feature-driver artifacts. The final test partition is not
 used for fitting, model selection, threshold tuning, or explainability.
@@ -27,18 +28,39 @@ from src.modeling.create_ao1_chronological_partitions import (
 )
 from src.modeling.train_ao1_logistic_regression_baseline import (
     determine_modeling_slices,
+    get_package_version,
     read_optional_json,
     validate_volume_path,
 )
 from src.modeling.train_ao1_xgboost_classifier import (
     AO1XGBoostClassifierConfig,
+    assert_feature_list_is_safe,
     build_candidate_parameter_sets,
     build_xgboost_pipeline,
 )
 
 
 RANDOM_STATE = 620
-DEFAULT_SELECTED_CANDIDATE_ID = "deeper_conservative"
+PINNED_XGBOOST_VERSION = "2.0.3"
+MODEL_SOURCE = "deterministic_reconstruction"
+SHAP_METHOD = "TreeExplainer"
+SHAP_OUTPUT_SPACE = "raw margin / log-odds"
+POSITIVE_CLASS_LABEL = "Late_delivery_risk = 1"
+FORBIDDEN_FEATURE_TOKENS = {
+    "actual",
+    "benefit_per_order",
+    "days_for_shipping_real",
+    "delivery_status",
+    "final_test",
+    "holdout",
+    "late_delivery_risk",
+    "order_item_total",
+    "order_profit",
+    "profit_ratio",
+    "sales",
+    "shipping_date",
+    "test_partition",
+}
 
 
 def resolve_repo_root() -> Path:
@@ -134,17 +156,91 @@ def get_spark_session() -> Any:
     return SparkSession.builder.getOrCreate()
 
 
-def selected_candidate_id(config: AO1SHAPExplainabilityConfig) -> str:
-    """Return selected XGBoost candidate id from metadata when available."""
-    metadata = read_optional_json(config.xgboost_metadata_path)
-    candidate_id = (
-        metadata.get("xgboost_classifier", {}).get("selected_candidate_id")
-        if metadata
-        else None
+def normalize_feature_name(feature_name: str) -> str:
+    """Return normalized feature text for leakage-token checks."""
+    normalized = feature_name.strip().lower()
+    for character in (" ", "-", "/", "(", ")", "[", "]", "{", "}", "."):
+        normalized = normalized.replace(character, "_")
+    while "__" in normalized:
+        normalized = normalized.replace("__", "_")
+    return normalized.strip("_")
+
+
+def assert_no_forbidden_feature_tokens(frame: pd.DataFrame) -> None:
+    """Fail if SHAP outputs contain obvious leakage-like feature names."""
+    normalized_features = frame["feature_name"].astype(str).map(normalize_feature_name)
+    matched = sorted(
+        token
+        for token in FORBIDDEN_FEATURE_TOKENS
+        if normalized_features.str.contains(token, regex=False).any()
     )
-    if candidate_id:
-        return str(candidate_id)
-    return DEFAULT_SELECTED_CANDIDATE_ID
+    if matched:
+        raise ValueError(f"SHAP output contains forbidden leakage-like feature tokens: {matched}")
+
+
+def read_required_xgboost_metadata(config: AO1SHAPExplainabilityConfig) -> dict[str, Any]:
+    """Read required selected AO1 XGBoost metadata for model alignment."""
+    metadata = read_optional_json(config.xgboost_metadata_path)
+    if metadata is None:
+        raise FileNotFoundError(
+            "AO1 SHAP explainability requires selected AO1 XGBoost metadata at "
+            f"{config.xgboost_metadata_path}. Run the AO1 XGBoost classifier workflow first "
+            "or set DATACO_AO1_XGBOOST_METADATA_PATH to the selected-model metadata. "
+            "SHAP must align with the selected/primary AO1 model and will not guess a candidate."
+        )
+    return metadata
+
+
+def selected_candidate_id(metadata: dict[str, Any], config: AO1SHAPExplainabilityConfig) -> str:
+    """Return selected XGBoost candidate id from required selected-model metadata."""
+    candidate_id = metadata.get("xgboost_classifier", {}).get("selected_candidate_id")
+    if not candidate_id:
+        raise ValueError(
+            "AO1 XGBoost metadata does not contain "
+            "`xgboost_classifier.selected_candidate_id`. Required metadata path: "
+            f"{config.xgboost_metadata_path}. SHAP must align with the selected/primary AO1 model."
+        )
+    return str(candidate_id)
+
+
+def validate_xgboost_version() -> str:
+    """Ensure the Databricks-stable XGBoost dependency is used."""
+    installed_version = get_package_version("xgboost")
+    if installed_version and installed_version != PINNED_XGBOOST_VERSION:
+        raise RuntimeError(
+            "AO1 SHAP explainability is pinned to xgboost=="
+            f"{PINNED_XGBOOST_VERSION} for Databricks reproducibility. "
+            f"Detected xgboost=={installed_version}. Install dependencies from requirements.txt "
+            "and restart Python before regenerating SHAP artifacts."
+        )
+    return installed_version or PINNED_XGBOOST_VERSION
+
+
+def shap_version() -> str | None:
+    """Return installed SHAP version when available."""
+    return get_package_version("shap")
+
+
+def selected_parameter_source(metadata: dict[str, Any], candidate_id: str) -> str:
+    """Describe where the selected candidate parameters came from."""
+    candidate_results = metadata.get("candidate_results", [])
+    matching_candidate = next(
+        (
+            candidate
+            for candidate in candidate_results
+            if candidate.get("candidate_id") == candidate_id
+        ),
+        None,
+    )
+    if matching_candidate:
+        return (
+            "selected AO1 XGBoost metadata candidate_results matched to "
+            f"`{candidate_id}`; pipeline rebuilt with the approved candidate grid"
+        )
+    return (
+        "selected AO1 XGBoost metadata selected_candidate_id matched to the approved "
+        "candidate grid"
+    )
 
 
 def select_candidate_parameters(
@@ -223,7 +319,9 @@ def compute_shap_importance(
     importance_df["rank"] = (
         importance_df["mean_abs_shap"].rank(method="first", ascending=False).astype(int)
     )
-    return importance_df.sort_values(["rank", "feature_name"])
+    importance_df = importance_df.sort_values(["rank", "feature_name"])
+    assert_no_forbidden_feature_tokens(importance_df)
+    return importance_df
 
 
 def build_driver_summary(importance_df: pd.DataFrame, top_n: int) -> pd.DataFrame:
@@ -269,8 +367,11 @@ def write_findings(
     config: AO1SHAPExplainabilityConfig,
     selected_candidate: str,
     sample_row_count: int,
+    xgboost_metadata_path: Path,
 ) -> None:
     """Write the AO1 SHAP findings memo for report reuse."""
+    top_feature_names = driver_summary_df["feature_name"].astype(str).head(5).tolist()
+    dominant_feature = top_feature_names[0] if top_feature_names else "not available"
     lines = [
         "# AO1 SHAP Explainability",
         "",
@@ -286,6 +387,9 @@ def write_findings(
         f"- Selected XGBoost candidate: `{selected_candidate}`.",
         f"- Validation rows explained: `{sample_row_count}`.",
         "- SHAP values are computed after the approved AO1 preprocessing pipeline.",
+        f"- Model source: `{MODEL_SOURCE}` from `{xgboost_metadata_path}`.",
+        f"- SHAP method: `{SHAP_METHOD}` for the positive class `{POSITIVE_CLASS_LABEL}`.",
+        f"- SHAP output space: `{SHAP_OUTPUT_SPACE}`.",
         "- Interpretations are model associations, not causal effects.",
         "",
         "## Dominant Late-Delivery Drivers",
@@ -304,12 +408,27 @@ def write_findings(
     lines.extend(
         [
             "",
-            "## Business Plausibility Check",
-            "",
-            "The top drivers should be reviewed as operational signals related to order timing, "
-            "shipping promise, geography, customer segment, and product/channel context. Any "
-            "feature that appears to encode post-shipment outcomes must be treated as a leakage "
-            "candidate and escalated before H1 is finalized.",
+        "## Business Plausibility Check",
+        "",
+        "The leading SHAP drivers are operationally plausible for pre-dispatch late-delivery "
+        "risk because they emphasize the shipping promise, scheduled shipping window, and "
+        "geographic fulfillment context available before dispatch. The dominant driver in this "
+        f"run is `{dominant_feature}`; if this effect remains much larger than the others, the "
+        "team should review it as a possible service-level or data-pattern concentration before "
+        "final H1 reporting. Geography and shipping-speed drivers should be described as model "
+        "associations that support prioritization and monitoring, not as proof that changing a "
+        "single field will causally reduce late deliveries.",
+        "",
+        "Top-driver interpretation for report reuse:",
+        "",
+        "- Shipping mode and shipping-speed features indicate that the promised fulfillment service "
+        "level is central to the model's late-risk ranking.",
+        "- Scheduled shipping days captures the planned order-to-dispatch window and is a plausible "
+        "pre-shipment timing signal.",
+        "- Geography features can reflect route complexity, regional operations, or market-specific "
+        "patterns, but should be reviewed for sparse one-hot categories before broad conclusions.",
+        "- SHAP explains the selected model behavior for `Late_delivery_risk = 1` in raw margin / "
+        "log-odds space; values are directional model explanations, not causal effects.",
             "",
             "## Artifacts",
             "",
@@ -339,6 +458,9 @@ def run_ao1_shap_explainability(
     logger.info("AO1 partition input path: %s", config.partition_input_path)
 
     validate_volume_path(config.partition_input_path, "partition_input_path")
+    assert_feature_list_is_safe()
+    xgboost_metadata = read_required_xgboost_metadata(config)
+    xgboost_version = validate_xgboost_version()
     spark = get_spark_session()
     partitioned_df = spark.read.format(config.read_format).load(config.partition_input_path)
 
@@ -358,7 +480,7 @@ def run_ao1_shap_explainability(
         config.random_state,
     )
 
-    candidate_id = selected_candidate_id(config)
+    candidate_id = selected_candidate_id(xgboost_metadata, config)
     candidate_parameters = select_candidate_parameters(
         build_candidate_parameter_sets(xgb_config, y_train),
         candidate_id,
@@ -382,6 +504,7 @@ def run_ao1_shap_explainability(
         config,
         candidate_id,
         len(x_validation_sample),
+        config.xgboost_metadata_path,
     )
 
     metadata = {
@@ -390,12 +513,41 @@ def run_ao1_shap_explainability(
         "generated_timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "selected_model": "ao1_xgboost_classifier",
         "selected_candidate_id": candidate_id,
+        "selected_candidate_name": candidate_id,
+        "model_source": MODEL_SOURCE,
+        "model_source_detail": {
+            "reason_saved_model_loading_was_not_used": (
+                "The AO1 XGBoost workflow stores selected-model metadata and can optionally save "
+                "a fitted model artifact. This SHAP workflow reconstructs the selected candidate "
+                "specification deterministically from the metadata and approved candidate grid."
+            ),
+            "limitation": (
+                "SHAP explains the reconstructed selected-model specification; it does not select "
+                "a new model or explain final-test performance."
+            ),
+            "xgboost_parameter_source": selected_parameter_source(
+                xgboost_metadata,
+                candidate_id,
+            ),
+        },
+        "input_partition_path": config.partition_input_path,
+        "input_slice": split_metadata["validation_slice"],
         "final_test_used": False,
         "training_slice": split_metadata["training_slice"],
         "validation_slice": split_metadata["validation_slice"],
+        "shap_method": SHAP_METHOD,
+        "shap_output_space": SHAP_OUTPUT_SPACE,
+        "positive_class": POSITIVE_CLASS_LABEL,
         "sample_row_count": int(len(x_validation_sample)),
+        "sample_size": int(len(x_validation_sample)),
+        "random_state": int(config.random_state),
         "top_n_features": int(config.top_n_features),
+        "feature_count": int(len(shap_importance_df)),
+        "top_driver_count": int(len(driver_summary_df)),
         "target_column": TARGET_COLUMN,
+        "xgboost_metadata_path": str(config.xgboost_metadata_path),
+        "xgboost_version": xgboost_version,
+        "shap_version": shap_version(),
         "artifacts": {
             "shap_importance_csv": str(config.shap_importance_output_path),
             "driver_summary_csv": str(config.driver_summary_output_path),
@@ -403,9 +555,22 @@ def run_ao1_shap_explainability(
             "findings_markdown": str(config.findings_output_path),
             "metadata_json": str(config.metadata_output_path),
         },
+        "output_artifacts": {
+            "shap_importance_csv": str(config.shap_importance_output_path),
+            "driver_summary_csv": str(config.driver_summary_output_path),
+            "top_features_figure": str(config.figure_output_path),
+            "findings_markdown": str(config.findings_output_path),
+            "metadata_json": str(config.metadata_output_path),
+        },
+        "limitations": [
+            "SHAP values explain model behavior on validation rows only.",
+            "SHAP values are model associations, not causal effects.",
+            "Preprocessed one-hot features may split one business concept across multiple rows.",
+            "The workflow deterministically reconstructs the selected XGBoost specification instead of loading a saved fitted model artifact.",
+        ],
         "interpretation_limits": [
             "SHAP values explain model behavior on validation rows only.",
-            "SHAP values are not causal effects.",
+            "SHAP values are model associations, not causal effects.",
             "Preprocessed one-hot features may split one business concept across multiple rows.",
         ],
     }

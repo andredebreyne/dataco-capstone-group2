@@ -11,6 +11,9 @@ This memo explains the selected AO1 XGBoost validation model using SHAP values c
 - Selected XGBoost candidate: `deeper_conservative`.
 - Validation rows explained: `5000`.
 - SHAP values are computed after the approved AO1 preprocessing pipeline.
+- Model source: `deterministic_reconstruction` from `models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json`.
+- SHAP method: `TreeExplainer` for the positive class `Late_delivery_risk = 1`.
+- SHAP output space: `raw margin / log-odds`.
 - Interpretations are model associations, not causal effects.
 
 ## Dominant Late-Delivery Drivers
@@ -40,7 +43,14 @@ This memo explains the selected AO1 XGBoost validation model using SHAP values c
 
 ## Business Plausibility Check
 
-The top drivers should be reviewed as operational signals related to order timing, shipping promise, geography, customer segment, and product/channel context. Any feature that appears to encode post-shipment outcomes must be treated as a leakage candidate and escalated before H1 is finalized.
+The leading SHAP drivers are operationally plausible for pre-dispatch late-delivery risk because they emphasize the shipping promise, scheduled shipping window, and geographic fulfillment context available before dispatch. The dominant driver in this run is `categorical__shipping_mode_normalized_first_class`; because this effect is much larger than the others, the team should review it as a possible service-level or data-pattern concentration before final H1 reporting. Geography and shipping-speed drivers should be described as model associations that support prioritization and monitoring, not as proof that changing a single field will causally reduce late deliveries.
+
+Top-driver interpretation for report reuse:
+
+- Shipping mode and shipping-speed features indicate that the promised fulfillment service level is central to the model's late-risk ranking.
+- Scheduled shipping days captures the planned order-to-dispatch window and is a plausible pre-shipment timing signal.
+- Geography features can reflect route complexity, regional operations, or market-specific patterns, but should be reviewed for sparse one-hot categories before broad conclusions.
+- SHAP explains the selected model behavior for `Late_delivery_risk = 1` in raw margin / log-odds space; values are directional model explanations, not causal effects.
 
 ## Artifacts
 

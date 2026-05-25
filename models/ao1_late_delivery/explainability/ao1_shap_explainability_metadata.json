@@ -6,20 +6,52 @@
     "shap_importance_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_shap_feature_importance.csv",
     "top_features_figure": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/figures/ao1_shap_top_features.png"
   },
+  "feature_count": 1290,
   "final_test_used": false,
-  "generated_timestamp_utc": "2026-05-25T01:03:46.554466+00:00",
+  "generated_timestamp_utc": "2026-05-24T23:16:20.498575+00:00",
+  "input_partition_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
+  "input_slice": "development_inner_validation",
   "interpretation_limits": [
     "SHAP values explain model behavior on validation rows only.",
-    "SHAP values are not causal effects.",
+    "SHAP values are model associations, not causal effects.",
     "Preprocessed one-hot features may split one business concept across multiple rows."
   ],
   "issue": "#30",
+  "limitations": [
+    "SHAP values explain model behavior on validation rows only.",
+    "SHAP values are model associations, not causal effects.",
+    "Preprocessed one-hot features may split one business concept across multiple rows.",
+    "The workflow deterministically reconstructs the selected XGBoost specification instead of loading a saved fitted model artifact."
+  ],
   "metadata_status": "ao1_shap_explainability_completed",
+  "model_source": "deterministic_reconstruction",
+  "model_source_detail": {
+    "limitation": "SHAP explains the reconstructed selected-model specification; it does not select a new model or explain final-test performance.",
+    "reason_saved_model_loading_was_not_used": "The AO1 XGBoost workflow stores selected-model metadata and can optionally save a fitted model artifact. This SHAP workflow reconstructs the selected candidate specification deterministically from the metadata and approved candidate grid.",
+    "xgboost_parameter_source": "selected AO1 XGBoost metadata candidate_results matched to `deeper_conservative`; pipeline rebuilt with the approved candidate grid"
+  },
+  "output_artifacts": {
+    "driver_summary_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_shap_driver_summary.csv",
+    "findings_markdown": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_shap_explainability_findings.md",
+    "metadata_json": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/explainability/ao1_shap_explainability_metadata.json",
+    "shap_importance_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_shap_feature_importance.csv",
+    "top_features_figure": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/figures/ao1_shap_top_features.png"
+  },
+  "positive_class": "Late_delivery_risk = 1",
+  "random_state": 620,
   "sample_row_count": 5000,
+  "sample_size": 5000,
   "selected_candidate_id": "deeper_conservative",
+  "selected_candidate_name": "deeper_conservative",
   "selected_model": "ao1_xgboost_classifier",
+  "shap_method": "TreeExplainer",
+  "shap_output_space": "raw margin / log-odds",
+  "shap_version": "0.44.1",
   "target_column": "Late_delivery_risk",
+  "top_driver_count": 20,
   "top_n_features": 20,
   "training_slice": "development_inner_train",
-  "validation_slice": "development_inner_validation"
+  "validation_slice": "development_inner_validation",
+  "xgboost_metadata_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json",
+  "xgboost_version": "2.0.3"
 }
