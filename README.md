@@ -60,6 +60,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO2 Preprocessing Pipeline](docs/ao2_preprocessing_pipeline.md)
 - [AO2 Ridge Baseline](docs/ao2_ridge_baseline.md)
 - [AO2 Gradient Boosting Regressor](docs/ao2_gradient_boosting_regressor.md)
+- [AO2 Model Evaluation](docs/ao2_model_evaluation.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)

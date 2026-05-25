@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -37,6 +37,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO2 Ridge baseline validation | `tests/data_validation/validate_ao2_ridge_baseline.py` | Validate Ridge baseline artifacts, fit boundaries, regression metrics, residual diagnostics, parameters, predictions, and coefficient output. | Completed AO2 Ridge baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_RIDGE_BASELINE` and `RUN_AO2_RIDGE_BASELINE_VALIDATION`. | Runs after Ridge training. Confirms final test is marked as unused and target-reconstruction fields are not predictors. |
 | AO2 Gradient Boosting regressor training | `src/modeling/train_ao2_gradient_boosting_regressor.py` | Train the AO2 primary Gradient Boosting regressor on the approved training slice, compare a small validation-only candidate set, and evaluate validation only. | AO2 chronological partition Delta table, AO2 preprocessing factory, and optional Ridge validation metrics for comparison. | Metrics JSON, metadata JSON, validation metrics CSV, residual diagnostics CSV, validation predictions CSV, model comparison CSV, and feature-importance CSV. | Optional and disabled by default; controlled by `RUN_AO2_GRADIENT_BOOSTING_REGRESSOR`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, derive AO3 margins, assign AO3 segments, or run broad tuning. |
 | AO2 Gradient Boosting regressor validation | `tests/data_validation/validate_ao2_gradient_boosting_regressor.py` | Validate Gradient Boosting artifacts, fit boundaries, regression metrics, selected candidate metadata, target-policy exclusions, predictions, residuals, and Ridge comparison state. | Completed AO2 Gradient Boosting artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_GRADIENT_BOOSTING_REGRESSOR` and `RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION`. | Runs after Gradient Boosting training. Confirms final test is marked as unused and `ao3_order_value` and target-reconstruction fields are not predictors. |
+| AO2 validation evaluation pack | `src/modeling/evaluate_ao2_models.py` | Compare available AO2 candidate validation predictions using RMSE, MAE, R-squared, residual diagnostics, and compact error slices. | Row-level validation prediction CSVs and model artifacts from AO2 Ridge and Gradient Boosting. | Evaluation metrics, residual diagnostics, error slices, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO2_EVALUATION_PACK`. | Runs on validation only. Final test rows are rejected and H2 language is limited to validation-stage evidence. |
+| AO2 validation evaluation pack validation | `tests/data_validation/validate_ao2_evaluation_pack.py` | Validate AO2 evaluation metadata, comparison metrics, residual diagnostics, error slices, and findings coverage. | Completed AO2 evaluation pack artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_EVALUATION_PACK` and `RUN_AO2_EVALUATION_PACK_VALIDATION`. | Runs after the AO2 evaluation pack. Confirms final test is marked as unused and target-policy caveats are documented. |
 | AO1 Logistic Regression baseline training | `src/modeling/train_ao1_logistic_regression_baseline.py` | Train the AO1 Logistic Regression baseline on the approved training slice and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, and coefficient CSV. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, train XGBoost, tune thresholds, or apply SMOTE. |
 | AO1 Logistic Regression baseline validation | `tests/data_validation/validate_ao1_logistic_regression_baseline.py` | Validate Logistic Regression baseline artifacts, fit boundaries, metric ranges, parameters, and coefficient output. | Completed AO1 Logistic Regression baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE` and `RUN_AO1_LOGISTIC_BASELINE_VALIDATION`. | Runs after baseline training. Confirms final test is marked as unused and forbidden leakage fields are not predictors. |
 | AO1 validation evaluation pack | `src/modeling/evaluate_ao1_models.py` | Compare available AO1 candidate validation predictions using ranking metrics, threshold grids, confusion matrices, operating curves, and calibration bins. | Row-level validation prediction CSVs from AO1 candidate models. | Evaluation metrics, threshold grid, curve points, calibration table, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO1_EVALUATION_PACK`. | Runs on validation only. The final test set is not used and the final operating threshold is selected in the separate threshold-governance task. |
@@ -64,7 +66,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -112,6 +114,8 @@ RUN_AO2_RIDGE_BASELINE = False
 RUN_AO2_RIDGE_BASELINE_VALIDATION = False
 RUN_AO2_GRADIENT_BOOSTING_REGRESSOR = False
 RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION = False
+RUN_AO2_EVALUATION_PACK = False
+RUN_AO2_EVALUATION_PACK_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
@@ -169,6 +173,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO2 Ridge validation predictions CSV.
 - AO2 Gradient Boosting metadata JSON.
 - AO2 Gradient Boosting validation predictions CSV.
+- AO2 evaluation metadata JSON.
 - AO1 Logistic Regression metadata JSON.
 - AO1 evaluation metadata JSON.
 - AO1 XGBoost metadata JSON.
