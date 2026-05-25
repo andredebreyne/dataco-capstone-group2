@@ -48,7 +48,7 @@ Known validation results:
 
 | Model | ROC-AUC | PR-AUC | Recall at 0.50 | Audit Interpretation |
 | --- | ---: | ---: | ---: | --- |
-| Logistic Regression baseline | 0.742996 | 0.831239 | 0.563924 | Plausible baseline performance; no obvious sign of target leakage. |
+| Logistic Regression baseline | 0.742553 | 0.830665 | 0.564495 | Plausible baseline performance; no obvious sign of target leakage. |
 | XGBoost classifier | 0.775279 | 0.848912 | 0.583973 | Plausible improvement over baseline; not suspiciously high. |
 
 The performance level does not by itself indicate leakage. If a future model
@@ -80,6 +80,10 @@ The current modeling scripts explicitly exclude these fields from the feature
 matrix. The SHAP workflow also validates against obvious leakage-like feature
 tokens before the explainability output is accepted.
 
+Historical aggregate features were not used in the current AO1 modeling
+workflow. Future customer, product, region, or route-history aggregates would
+need separate time-aware, train-only construction before approval.
+
 ## Training-Only Transformation Review
 
 The AO1 preprocessing and modeling workflow follows the train-only fitting rule:
@@ -96,33 +100,46 @@ SMOTE is not used in the current AO1 model workflow. XGBoost uses
 
 ## Explainability Plausibility Review
 
-SHAP outputs must be reviewed for business plausibility before H1 is finalized.
-The expected dominant drivers should align with operationally available factors,
-such as shipping promise, service level, order timing, product/category context,
-and geography. Any SHAP feature that resembles an actual delivery outcome,
-shipping completion status, or realized profit field must trigger corrective
-action before final reporting.
+The finalized Issue `#30` SHAP artifacts were reviewed using:
 
-The current audit status is conditional on successful execution of:
+- `report/tables/ao1_shap_driver_summary.csv`;
+- `report/tables/ao1_shap_feature_importance.csv`;
+- `report/tables/ao1_shap_explainability_findings.md`;
+- `models/ao1_late_delivery/explainability/ao1_shap_explainability_metadata.json`.
 
-```text
-src/modeling/explain_ao1_xgboost_shap.py
-tests/data_validation/validate_ao1_shap_explainability.py
-```
+The SHAP workflow explains validation rows only and records
+`final_test_used = false`. SHAP values are model explanations and associations,
+not causal effects.
+
+Top SHAP driver review:
+
+| Driver or driver group | Current evidence | Decision-time validity | Audit interpretation |
+| --- | --- | --- | --- |
+| `categorical__shipping_mode_normalized_first_class` | Rank 1; importance share `0.3810`; positive average contribution | Shipping mode is known before dispatch. | Operationally plausible as a service-promise signal, but unusually dominant. Treat as a reporting caveat and monitor for service-level or data-pattern concentration. |
+| `numeric_continuous__scheduled_shipping_days` and `categorical__shipping_speed_tier_standard` | Ranks 4 and 5; importance shares `0.0199` and `0.0177` | Scheduled shipping window and speed tier are pre-dispatch planning fields. | Plausible timing and promise signals; no sign of delivery-outcome leakage. |
+| Granular geography one-hot features such as `order_state_normalized_tabasco`, `order_state_normalized_murcia`, `order_country_normalized_repblica_democrtica_del_congo`, and related `order_state_normalized_*` features | Many top-20 drivers are order geography indicators. | Order geography is available at order creation. | Plausible route or regional operations signal, but potentially sparse or high-cardinality. Interpret cautiously and avoid broad causal claims from individual one-hot states. |
+
+No reviewed SHAP driver resembles the AO1 target, actual shipping duration,
+delivery status, shipping completion status, final-test labels, realized profit,
+or another direct post-outcome proxy. The SHAP review therefore does not require
+removing a feature or rerunning AO1 models before reporting.
 
 ## Corrective Actions
 
-No corrective action is required for the current AO1 validation model evidence.
+No model-removal corrective action is required based on the current audit.
 
-Required follow-up before H1 is finalized:
+Reporting caveats and follow-up:
 
-- attach or reference the validated SHAP driver summary from Issue `#30`;
-- confirm the top SHAP features are business-plausible;
+- disclose the unusually dominant First Class shipping-mode effect as a
+  service-level or data-pattern concentration to monitor;
+- describe granular geography SHAP effects as validation-slice model
+  associations that may be sparse or high-cardinality;
 - keep final test metrics out of this audit until the W8 final QA task.
 
 ## Audit Conclusion
 
 AO1 is acceptable to continue toward reporting, threshold review, and AO3
-integration under a provisional leakage-safe status. The status becomes fully
-ready for H1 write-up after the SHAP explainability PR is validated and reviewed.
-
+integration under a leakage-safe-with-caveats status. The reviewed artifacts
+show no evidence of post-outcome leakage in AO1 validation modeling, but this
+does not prove leakage is impossible. The final test partition remains untouched
+for final QA and reporting.
