@@ -26,49 +26,85 @@ from pathlib import Path
 from typing import Any, Callable
 
 
-# Keep these switches simple for Databricks review runs.
+# ============================================================
+# Project workflow switches for issue #35: AO2 Ridge baseline
+# ============================================================
+
+# ----------------------------
+# 0. Environment and repository checks
+# ----------------------------
 RUN_ENV_CHECK = True
 RUN_REPO_STRUCTURE_CHECK = True
 RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
-RUN_REFERENCE_REGISTRATION = True
-RUN_BRONZE = True
-RUN_SILVER = True
-RUN_SILVER_VALIDATION = True
-RUN_FEATURE_ENGINEERING = True
-RUN_GOLD = True
+
+# ----------------------------
+# 1. Reference and governance setup
+# ----------------------------
+RUN_REFERENCE_REGISTRATION = False
+
+# ----------------------------
+# 2. Medallion data pipeline
+# ----------------------------
+RUN_BRONZE = False
+RUN_SILVER = False
+RUN_SILVER_VALIDATION = False
+RUN_FEATURE_ENGINEERING = False
+RUN_GOLD = False
+
+RUN_ORDER_TIME_FEATURES = False
+RUN_SHIPPING_PRODUCT_FEATURES = False
+RUN_CUSTOMER_REGIONAL_FEATURES = False
+
+RUN_AO1_GOLD = False
+RUN_AO2_GOLD = False
+
+# ----------------------------
+# 3. Chronological partitions
+# ----------------------------
 RUN_AO1_PARTITIONS = False
 RUN_AO1_PARTITION_VALIDATION = False
+
 RUN_AO2_PARTITIONS = False
-RUN_AO2_PARTITION_VALIDATION = False
+RUN_AO2_PARTITION_VALIDATION = True
+
+# ----------------------------
+# 4. AO1 modeling workflow
+# ----------------------------
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
-RUN_AO2_PREPROCESSING = False
-RUN_AO2_PREPROCESSING_VALIDATION = False
+
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
-RUN_AO1_EVALUATION_PACK = False
+
 RUN_AO1_EVALUATION_PACK_VALIDATION = False
+
 RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
 RUN_AO1_SHAP_EXPLAINABILITY = False
 RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
+
 RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
 RUN_AO1_RESULTS_H1_VALIDATION = False
+
+# ----------------------------
+# 5. AO2 modeling workflow
+# ----------------------------
+RUN_AO2_PREPROCESSING = True
+RUN_AO2_PREPROCESSING_VALIDATION = True
+
+RUN_AO2_RIDGE_BASELINE = True
+RUN_AO2_RIDGE_BASELINE_VALIDATION = True
+
+# ----------------------------
+# 6. EDA, exports, and final checks
+# ----------------------------
 RUN_SILVER_CSV_EXPORT = False
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
 RUN_FINAL_CHECKLIST = True
-
-# Feature engineering substeps. These are only considered when
-# RUN_FEATURE_ENGINEERING is True.
-RUN_ORDER_TIME_FEATURES = True
-RUN_SHIPPING_PRODUCT_FEATURES = True
-RUN_CUSTOMER_REGIONAL_FEATURES = True
-RUN_AO1_GOLD = True
-RUN_AO2_GOLD = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
 # report artifacts. Use "check" for artifact validation or "run_python_scripts"
@@ -107,6 +143,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/build_ao1_preprocessing_pipeline.py"),
     Path("src/modeling/build_ao2_preprocessing_pipeline.py"),
     Path("src/modeling/train_ao1_logistic_regression_baseline.py"),
+    Path("src/modeling/train_ao2_ridge_baseline.py"),
     Path("src/modeling/evaluate_ao1_models.py"),
     Path("src/modeling/train_ao1_xgboost_classifier.py"),
     Path("src/modeling/explain_ao1_xgboost_shap.py"),
@@ -120,6 +157,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_preprocessing_pipeline.py"),
     Path("tests/data_validation/validate_ao2_preprocessing_pipeline.py"),
     Path("tests/data_validation/validate_ao1_logistic_regression_baseline.py"),
+    Path("tests/data_validation/validate_ao2_ridge_baseline.py"),
     Path("tests/data_validation/validate_ao1_evaluation_pack.py"),
     Path("tests/data_validation/validate_ao1_xgboost_classifier.py"),
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
@@ -271,6 +309,11 @@ from src.modeling.build_ao2_preprocessing_pipeline import (  # noqa: E402
     AO2PreprocessingConfig,
     configure_logging as configure_ao2_preprocessing_logging,
     run_ao2_preprocessing_pipeline,
+)
+from src.modeling.train_ao2_ridge_baseline import (  # noqa: E402
+    AO2RidgeBaselineConfig,
+    configure_logging as configure_ao2_ridge_logging,
+    run_ao2_ridge_baseline as run_ao2_ridge_baseline_job,
 )
 from src.modeling.train_ao1_xgboost_classifier import (  # noqa: E402
     AO1XGBoostClassifierConfig,
@@ -546,6 +589,19 @@ def run_ao1_logistic_baseline_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_logistic_regression_baseline.py"))
 
 
+def run_ao2_ridge_baseline_training() -> None:
+    """Run the AO2 Ridge baseline training job."""
+    run_ao2_ridge_baseline_job(
+        AO2RidgeBaselineConfig(),
+        configure_ao2_ridge_logging(),
+    )
+
+
+def run_ao2_ridge_baseline_validation() -> None:
+    """Run the AO2 Ridge baseline artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_ao2_ridge_baseline.py"))
+
+
 def run_ao1_evaluation_pack() -> None:
     """Run the AO1 model validation evaluation pack."""
     run_python_file(Path("src/modeling/evaluate_ao1_models.py"))
@@ -629,6 +685,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO2 chronological partitions run only when RUN_AO2_PARTITIONS is True.")
     print("- OPTIONAL: AO1 preprocessing runs only when RUN_AO1_PREPROCESSING is True.")
     print("- OPTIONAL: AO2 preprocessing runs only when RUN_AO2_PREPROCESSING is True.")
+    print("- OPTIONAL: AO2 Ridge baseline runs only when RUN_AO2_RIDGE_BASELINE is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -653,6 +710,7 @@ def print_final_checklist() -> None:
     ao2_partition_config = AO2ChronologicalPartitionConfig()
     ao1_preprocessing_config = AO1PreprocessingConfig()
     ao2_preprocessing_config = AO2PreprocessingConfig()
+    ao2_ridge_config = AO2RidgeBaselineConfig()
     ao1_xgboost_config = AO1XGBoostClassifierConfig()
     ao1_shap_config = AO1SHAPExplainabilityConfig()
 
@@ -673,6 +731,8 @@ def print_final_checklist() -> None:
     print(f"- AO2 chronological partitions Delta: {ao2_partition_config.partition_output_path}")
     print(f"- AO1 preprocessing metadata: {ao1_preprocessing_config.metadata_output_path}")
     print(f"- AO2 preprocessing metadata: {ao2_preprocessing_config.metadata_output_path}")
+    print(f"- AO2 Ridge baseline metadata: {ao2_ridge_config.metadata_json_path}")
+    print(f"- AO2 Ridge validation predictions: {ao2_ridge_config.validation_predictions_csv_path}")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -809,6 +869,18 @@ def main() -> None:
         RUN_AO2_PREPROCESSING and RUN_AO2_PREPROCESSING_VALIDATION,
         run_ao2_preprocessing_validation,
         required=RUN_AO2_PREPROCESSING and RUN_AO2_PREPROCESSING_VALIDATION,
+    )
+    run_step(
+        "AO2 Ridge baseline training",
+        RUN_AO2_RIDGE_BASELINE,
+        run_ao2_ridge_baseline_training,
+        required=RUN_AO2_RIDGE_BASELINE,
+    )
+    run_step(
+        "AO2 Ridge baseline validation",
+        RUN_AO2_RIDGE_BASELINE and RUN_AO2_RIDGE_BASELINE_VALIDATION,
+        run_ao2_ridge_baseline_validation,
+        required=RUN_AO2_RIDGE_BASELINE and RUN_AO2_RIDGE_BASELINE_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",
