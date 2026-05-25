@@ -137,10 +137,10 @@
     "Customer_Password",
     "Customer_Street",
     "Customer_Zipcode",
-    "Delivery Status",
-    "Delivery_Status",
     "Days for shipping (real)",
     "Days_for_shipping_real",
+    "Delivery Status",
+    "Delivery_Status",
     "Late_delivery_risk",
     "Latitude",
     "Longitude",
@@ -204,7 +204,7 @@
     "Sales_per_customer",
     "ao3_order_value"
   ],
-  "generated_timestamp_utc": "2026-05-25T00:00:00+00:00",
+  "generated_timestamp_utc": "2026-05-25T05:19:16.506450+00:00",
   "input_path": "/Volumes/workspace/default/raw_data/gold/ao2_profitability_chronological_partitions",
   "interpretation_safeguards": [
     "One-hot encoding changes coefficient interpretation for future linear models.",
@@ -218,10 +218,9 @@
     "The current AO2 partition artifact has development/test labels only; no standalone validation split is materialized.",
     "Future AO2 model selection must refit preprocessing inside each inner training fold within development.",
     "The final test partition may be transformed for compatibility checks but must not be used for fitting or model selection.",
-    "This issue does not train AO2 models, create AO2 metrics, derive AO3 margins, or assign AO3 priority groups.",
-    "This committed metadata is a lightweight specification. Databricks runtime execution will overwrite it with runtime fit status and transformed shape metadata."
+    "This issue does not train AO2 models, create AO2 metrics, derive AO3 margins, or assign AO3 priority groups."
   ],
-  "metadata_status": "specification_pending_runtime_fit",
+  "metadata_status": "runtime_fit_completed",
   "numeric_continuous_columns": [
     "order_year",
     "order_quarter",
@@ -240,7 +239,10 @@
     "development",
     "test"
   ],
-  "partition_row_counts": {},
+  "partition_row_counts": {
+    "development": 144415,
+    "test": 36104
+  },
   "partition_usage": {
     "final_test_treatment": "transformed only as a compatibility check with objects fit on development; not used for fitting, tuning, model selection, residual review, or final evaluation",
     "fitting_partition": "development",
@@ -284,7 +286,18 @@
     "target_encoding": "not_used"
   },
   "target_column": "Order_Profit_Per_Order",
-  "transformed_output_shape_by_partition": {},
+  "transformed_output_shape_by_partition": {
+    "development": {
+      "input_rows": 144415,
+      "transformed_columns": 1395,
+      "transformed_rows": 144415
+    },
+    "test": {
+      "input_rows": 36104,
+      "transformed_columns": 1395,
+      "transformed_rows": 36104
+    }
+  },
   "versions": {
     "pandas": "1.5.3",
     "pyspark": null,
