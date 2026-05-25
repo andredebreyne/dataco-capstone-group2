@@ -2,6 +2,9 @@
 # /// script
 # [tool.databricks.environment]
 # environment_version = "2"
+# dependencies = [
+#   "-r /Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/requirements.txt",
+# ]
 # ///
 """Run the DataCo project workflow from one Databricks-compatible entry point.
 
@@ -44,10 +47,10 @@ RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
 RUN_AO1_EVALUATION_PACK_VALIDATION = False
-RUN_AO1_XGBOOST_CLASSIFIER = False
-RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
-RUN_AO1_SHAP_EXPLAINABILITY = False
-RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+RUN_AO1_XGBOOST_CLASSIFIER = True
+RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = True
+RUN_AO1_SHAP_EXPLAINABILITY = True
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = True
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True

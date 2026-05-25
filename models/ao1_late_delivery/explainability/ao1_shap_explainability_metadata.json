@@ -7,7 +7,7 @@
     "top_features_figure": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/figures/ao1_shap_top_features.png"
   },
   "final_test_used": false,
-  "generated_timestamp_utc": "2026-05-24T23:16:20.498575+00:00",
+  "generated_timestamp_utc": "2026-05-25T01:03:46.554466+00:00",
   "interpretation_limits": [
     "SHAP values explain model behavior on validation rows only.",
     "SHAP values are not causal effects.",
