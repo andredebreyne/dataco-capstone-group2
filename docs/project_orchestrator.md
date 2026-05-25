@@ -42,6 +42,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO1 decision-threshold selection | `src/modeling/select_ao1_decision_threshold.py` | Select the AO1 operating threshold from validation threshold trade-offs using the documented recall-first operational rule. | AO1 evaluation metrics and threshold grid from issue `#29`. | Policy CSV, threshold metadata JSON, and recommendation note. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD`. | Runs on validation evidence only. Produces a provisional policy until the primary AO1 model artifact is available. |
 | AO1 decision-threshold validation | `tests/data_validation/validate_ao1_decision_threshold_policy.py` | Validate the AO1 threshold policy, metadata, final-test exclusion, and AO3/dashboard reuse rule. | Completed AO1 threshold policy artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD` and `RUN_AO1_DECISION_THRESHOLD_VALIDATION`. | Runs after threshold selection. |
 | AO1 post-model leakage audit validation | `tests/data_validation/validate_ao1_post_model_leakage_audit.py` | Validate the AO1 post-model leakage audit memo and checklist. | `docs/ao1_post_model_leakage_audit.md` and `data/references/ao1_post_model_leakage_audit.csv`. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION`. | Confirms final-test boundary, train-only transformation review, forbidden predictor review, reviewed SHAP caveats, and sign-off language are documented. |
+| AO1 H1 results validation | `tests/data_validation/validate_ao1_results_h1.py` | Validate the AO1 results write-up, H1 conclusion, threshold reference, and final-test caveat. | AO1 evaluation pack, threshold grid, and `docs/ao1_results_h1_validation.md`. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_RESULTS_H1_VALIDATION`. | Confirms XGBoost outperforms Logistic Regression on validation ROC-AUC and recall and that the document avoids final-test claims. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -110,6 +111,7 @@ RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
+RUN_AO1_RESULTS_H1_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -157,6 +159,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 SHAP driver summary CSV.
 - AO1 decision threshold policy CSV.
 - AO1 post-model leakage audit reference CSV.
+- AO1 H1 results summary CSV.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling

@@ -54,6 +54,7 @@ RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = True
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
 RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
+RUN_AO1_RESULTS_H1_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -120,6 +121,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"),
+    Path("tests/data_validation/validate_ao1_results_h1.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -565,6 +567,11 @@ def run_ao1_post_model_leakage_audit_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"))
 
 
+def run_ao1_results_h1_validation() -> None:
+    """Run the AO1 results and H1 validation."""
+    run_python_file(Path("tests/data_validation/validate_ao1_results_h1.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -613,6 +620,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO1 SHAP explainability runs only when RUN_AO1_SHAP_EXPLAINABILITY is True.")
     print("- OPTIONAL: AO1 decision threshold runs only when RUN_AO1_DECISION_THRESHOLD is True.")
     print("- OPTIONAL: AO1 post-model leakage audit validation runs only when RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION is True.")
+    print("- OPTIONAL: AO1 H1 results validation runs only when RUN_AO1_RESULTS_H1_VALIDATION is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -655,6 +663,7 @@ def print_final_checklist() -> None:
     print(f"- AO1 SHAP driver summary: {ao1_shap_config.driver_summary_output_path}")
     print("- AO1 decision threshold policy: data/references/ao1_decision_threshold_policy.csv")
     print("- AO1 post-model leakage audit: data/references/ao1_post_model_leakage_audit.csv")
+    print("- AO1 H1 results summary: data/references/ao1_results_h1_summary.csv")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -840,6 +849,12 @@ def main() -> None:
         RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION,
         run_ao1_post_model_leakage_audit_validation,
         required=RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION,
+    )
+    run_step(
+        "AO1 H1 results validation",
+        RUN_AO1_RESULTS_H1_VALIDATION,
+        run_ao1_results_h1_validation,
+        required=RUN_AO1_RESULTS_H1_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
