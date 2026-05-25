@@ -106,40 +106,146 @@ preprocessing includes one-hot encoding and scaled numeric features, which can
 introduce multicollinearity. Ridge gives a more stable linear baseline while
 remaining simple and reproducible.
 
-## Validation Outputs
+## Validation Results
 
-The training script writes validation-only metrics:
+These are validation-only results from `development_inner_validation`.
+They are not final test metrics.
 
-- RMSE
-- MAE
-- R2
-- median absolute error
-- mean error / bias
-- validation row count
-- target mean and standard deviation
-- prediction mean and standard deviation
+| Metric | Value |
+| --- | ---: |
+| Validation rows | 28,883 |
+| RMSE | 96.8276 |
+| MAE | 54.2191 |
+| R2 | -0.0133 |
+| Median absolute error | 32.5591 |
+| Mean error / bias | 0.6453 |
+| Target mean | 21.7130 |
+| Target standard deviation | 96.1905 |
+| Prediction mean | 21.0677 |
+| Prediction standard deviation | 19.5479 |
 
-Residual diagnostics include:
+The mean prediction is close to the validation target mean, and the mean
+residual is small. However, RMSE is approximately as large as the target
+standard deviation and R2 is slightly negative, so this Ridge model does not
+explain validation profitability better than a mean-only benchmark on this
+slice. It is still useful because it establishes a conservative linear baseline
+for the future nonlinear AO2 model comparison.
 
-- residual mean, standard deviation, median, min, and max
-- residual percentiles p10, p25, p50, p75, and p90
-- absolute-error percentiles p10, p25, p50, p75, and p90
-- share of predictions with the wrong profit sign
+## Residual Diagnostics
 
-This local workspace does not contain the mounted Databricks Delta partition
-path, so runtime metrics are not fabricated in this document. After running the
-script in Databricks, use the JSON/CSV artifacts above as the source of truth.
+Residuals are defined as:
 
-## Interpretation Notes
+```text
+actual Order_Profit_Per_Order - predicted_profit
+```
 
-The coefficient table saves the largest coefficients by absolute magnitude.
-Coefficient interpretation has important caveats:
+| Diagnostic | Value |
+| --- | ---: |
+| Residual mean | 0.6453 |
+| Residual median | 15.6653 |
+| Residual standard deviation | 96.8271 |
+| Residual minimum | -1124.2730 |
+| Residual maximum | 258.5917 |
+| Absolute error median | 32.5591 |
+| Absolute error p90 | 112.9203 |
+| Wrong profit-sign share | 0.2536 |
 
-- coefficients are from scaled and one-hot encoded features;
-- coefficient signs and magnitudes are associative, not causal;
-- correlated predictors can make individual coefficients unstable;
-- Ridge shrinks coefficients for stability;
-- the baseline may underfit nonlinear profitability patterns.
+The model is only slightly low-biased on average: actual profit exceeds
+predicted profit by about 0.65 on average. The positive residual median shows a
+more typical low prediction of about 15.67, while the large negative residual
+minimum indicates at least one severe overprediction on an extreme low-profit
+or loss-making order. The prediction standard deviation is much smaller than
+the target standard deviation, which means the Ridge baseline compresses
+predictions toward the mean and struggles with high-variance or extreme-profit
+orders.
+
+Errors are large relative to the target scale. The median absolute error is
+32.56, the 90th percentile absolute error is 112.92, and about 25.36% of
+validation rows have the wrong predicted profit sign. This is a clear weakness
+for a profitability model because sign errors can change whether an order looks
+profitable or loss-making.
+
+## Baseline Interpretation for H2
+
+Ridge is the AO2 linear baseline for H2. It provides a credible benchmark
+because it uses the approved AO2 preprocessing pipeline, respects the
+chronological validation design, excludes target-reconstruction fields, and
+keeps the final test set untouched.
+
+The current validation results also show why a nonlinear model is worth testing:
+the Ridge baseline captures the broad target mean but underfits the spread of
+profitability outcomes. H2 should not be evaluated yet; that requires the
+future gradient boosting regressor to be trained and compared against this
+baseline on the same validation design.
+
+## Where Ridge Performs Reasonably
+
+- The prediction mean is close to the validation target mean.
+- The mean error is small, suggesting little average directional bias.
+- Ridge provides a stable, reproducible baseline under a high-dimensional
+  one-hot encoded feature space.
+- The median absolute error is lower than RMSE, indicating many ordinary
+  validation rows have moderate errors even though larger misses inflate RMSE.
+
+## Where Ridge Falls Short
+
+- R2 is slightly negative on validation, so the baseline does not improve on a
+  mean-only benchmark for this slice.
+- The model has a linear/additive structure and is not designed to capture
+  nonlinear pricing, discount, product, geography, and fulfillment-service
+  interactions.
+- Predictions are compressed toward the mean, as shown by prediction standard
+  deviation of 19.55 versus target standard deviation of 96.19.
+- Extreme-profit and loss-making orders appear difficult for the model, as
+  shown by the large residual range and high RMSE.
+- About one quarter of validation rows have the wrong predicted profit sign.
+
+## Coefficient Interpretation
+
+The coefficient artifact contains the top 100 transformed features by absolute
+coefficient magnitude from a 1,306-feature preprocessed space. The largest
+coefficients are dominated by one-hot encoded geography fields, especially
+`order_state_normalized` levels. Examples include:
+
+| Feature | Coefficient |
+| --- | ---: |
+| `categorical__order_state_normalized_kandahar` | -178.5716 |
+| `categorical__order_state_normalized_diana` | -153.0425 |
+| `categorical__order_state_normalized_mie` | -146.4498 |
+| `categorical__order_state_normalized_jeju` | -143.0345 |
+| `categorical__order_state_normalized_kabarole` | -134.8577 |
+| `categorical__order_state_normalized_oriental` | 91.6901 |
+| `categorical__order_country_normalized_nepal` | 84.7405 |
+| `categorical__order_state_normalized_lusaka` | 76.9818 |
+
+These coefficients should be treated as associative screening evidence only.
+They are affected by standard scaling, one-hot encoding, category frequency,
+and correlations among region, market, product, and shipping fields. They do
+not support causal claims. The dominance of geographic dummies is a useful
+review signal for future model interpretation, but individual coefficients
+should not be over-interpreted.
+
+## Target-Policy Confirmation
+
+The runtime metadata confirms:
+
+- `Order_Profit_Per_Order` was used as the target only.
+- `Benefit_per_order`, `Order_Item_Profit_Ratio`, `Order_Item_Total`, `Sales`,
+  `Sales_per_customer`, `Order_Item_Discount`, `Product_Price`, and other
+  target/proxy or post-shipment fields were excluded from predictors.
+- `ao3_order_value` was excluded from AO2 predictors.
+- preprocessing was fit only on `development_inner_train`.
+- validation rows were transformed with the training-fitted preprocessing
+  object.
+- the final `test` partition was not used for training, preprocessing fit,
+  validation metrics, residual diagnostics, model selection, or predictions.
+
+## Validation Status
+
+After Databricks artifact generation,
+`tests/data_validation/validate_ao2_ridge_baseline.py` passed. The script
+confirmed required artifacts, metric fields, residual diagnostics, prediction
+row counts, Ridge parameters, target-policy exclusions, and final-test non-use.
 
 ## Assumptions and Limitations
 
