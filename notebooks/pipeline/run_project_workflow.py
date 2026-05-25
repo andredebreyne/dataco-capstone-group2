@@ -26,51 +26,88 @@ from pathlib import Path
 from typing import Any, Callable
 
 
-# Keep these switches simple for Databricks review runs.
+# ============================================================
+# Project workflow switches for issue #35: AO2 Ridge baseline
+# ============================================================
+
+# ----------------------------
+# 0. Environment and repository checks
+# ----------------------------
 RUN_ENV_CHECK = True
 RUN_REPO_STRUCTURE_CHECK = True
 RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
-RUN_REFERENCE_REGISTRATION = True
-RUN_BRONZE = True
-RUN_SILVER = True
-RUN_SILVER_VALIDATION = True
-RUN_FEATURE_ENGINEERING = True
-RUN_GOLD = True
+
+# ----------------------------
+# 1. Reference and governance setup
+# ----------------------------
+RUN_REFERENCE_REGISTRATION = False
+RUN_PRE_GOLD_GOVERNANCE_CHECKS = False
+
+# ----------------------------
+# 2. Medallion data pipeline
+# ----------------------------
+RUN_BRONZE = False
+RUN_SILVER = False
+RUN_SILVER_VALIDATION = False
+RUN_FEATURE_ENGINEERING = False
+RUN_GOLD = False
+
+RUN_ORDER_TIME_FEATURES = False
+RUN_SHIPPING_PRODUCT_FEATURES = False
+RUN_CUSTOMER_REGIONAL_FEATURES = False
+
+RUN_AO1_GOLD = False
+RUN_AO2_GOLD = False
+
+# ----------------------------
+# 3. Chronological partitions
+# ----------------------------
 RUN_AO1_PARTITIONS = False
 RUN_AO1_PARTITION_VALIDATION = False
+
 RUN_AO2_PARTITIONS = False
-RUN_AO2_PARTITION_VALIDATION = False
+RUN_AO2_PARTITION_VALIDATION = True
+
+# ----------------------------
+# 4. AO1 modeling workflow
+# ----------------------------
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
-RUN_AO2_PREPROCESSING = False
-RUN_AO2_PREPROCESSING_VALIDATION = False
-RUN_AO2_RIDGE_BASELINE = False
-RUN_AO2_RIDGE_BASELINE_VALIDATION = False
+
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
+
+RUN_AO1_XGBOOST_CLASSIFIER = False
+RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
+
 RUN_AO1_EVALUATION_PACK = False
 RUN_AO1_EVALUATION_PACK_VALIDATION = False
-RUN_AO1_XGBOOST_CLASSIFIER = True
-RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = True
-RUN_AO1_SHAP_EXPLAINABILITY = True
-RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = True
+
+RUN_AO1_SHAP_EXPLAINABILITY = False
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+
 RUN_AO1_DECISION_THRESHOLD = False
 RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
+
 RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
 RUN_AO1_RESULTS_H1_VALIDATION = False
-RUN_SILVER_CSV_EXPORT = True
-RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
-RUN_EDA = False
-RUN_FINAL_CHECKLIST = True
 
-# Feature engineering substeps. These are only considered when
-# RUN_FEATURE_ENGINEERING is True.
-RUN_ORDER_TIME_FEATURES = True
-RUN_SHIPPING_PRODUCT_FEATURES = True
-RUN_CUSTOMER_REGIONAL_FEATURES = True
-RUN_AO1_GOLD = True
-RUN_AO2_GOLD = True
+# ----------------------------
+# 5. AO2 modeling workflow
+# ----------------------------
+RUN_AO2_PREPROCESSING = True
+RUN_AO2_PREPROCESSING_VALIDATION = True
+
+RUN_AO2_RIDGE_BASELINE = True
+RUN_AO2_RIDGE_BASELINE_VALIDATION = True
+
+# ----------------------------
+# 6. EDA, exports, and final checks
+# ----------------------------
+RUN_EDA = False
+RUN_SILVER_CSV_EXPORT = False
+RUN_FINAL_CHECKLIST = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
 # report artifacts. Use "check" for artifact validation or "run_python_scripts"
