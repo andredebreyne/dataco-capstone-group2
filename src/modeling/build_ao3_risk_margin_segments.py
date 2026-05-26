@@ -15,10 +15,9 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, current_timestamp, lit, sum as spark_sum, when
+from pyspark.sql.functions import avg, col, current_timestamp, lit, sum as spark_sum, when
 from pyspark.sql.types import BooleanType, DoubleType, StringType
 
 
@@ -314,27 +313,31 @@ def write_delta(df: DataFrame, output_path: str, config: AO3RiskMarginSegmentCon
 def build_summary(df: DataFrame) -> list[dict[str, object]]:
     """Build segment-level summary rows for report and validation."""
     total_rows = df.count()
-    summary_df = (
-        df.groupBy("ao3_priority_segment")
-        .agg(
-            spark_sum(lit(1)).alias("row_count"),
-            {"ao1_predicted_late_delivery_probability": "avg", "ao2_predicted_order_profit": "avg", "ao3_predicted_margin": "avg"},
-        )
+    summary_df = df.groupBy("ao3_priority_segment").agg(
+        spark_sum(lit(1)).alias("row_count"),
+        avg("ao1_predicted_late_delivery_probability").alias(
+            "avg_ao1_predicted_late_delivery_probability"
+        ),
+        avg("ao2_predicted_order_profit").alias("avg_ao2_predicted_order_profit"),
+        avg("ao3_predicted_margin").alias("avg_ao3_predicted_margin"),
     )
 
     rows = []
     for row in summary_df.collect():
         row_dict = row.asDict()
+        row_count = int(row_dict["row_count"])
         rows.append(
             {
                 "ao3_priority_segment": row_dict["ao3_priority_segment"],
-                "row_count": int(row_dict["row_count"]),
-                "share_of_rows": int(row_dict["row_count"]) / total_rows if total_rows else 0.0,
+                "row_count": row_count,
+                "share_of_rows": row_count / total_rows if total_rows else 0.0,
                 "avg_ao1_predicted_late_delivery_probability": row_dict[
-                    "avg(ao1_predicted_late_delivery_probability)"
+                    "avg_ao1_predicted_late_delivery_probability"
                 ],
-                "avg_ao2_predicted_order_profit": row_dict["avg(ao2_predicted_order_profit)"],
-                "avg_ao3_predicted_margin": row_dict["avg(ao3_predicted_margin)"],
+                "avg_ao2_predicted_order_profit": row_dict[
+                    "avg_ao2_predicted_order_profit"
+                ],
+                "avg_ao3_predicted_margin": row_dict["avg_ao3_predicted_margin"],
             }
         )
     return sorted(rows, key=lambda item: str(item["ao3_priority_segment"]))
