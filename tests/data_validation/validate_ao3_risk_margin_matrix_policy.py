@@ -39,6 +39,12 @@ AO3_POLICY_PATH = Path(
         str(REPO_ROOT / "data/references/ao3_risk_margin_matrix_policy.csv"),
     )
 )
+AO3_GENERATOR_PATH = Path(
+    os.getenv(
+        "DATACO_AO3_RISK_MARGIN_GENERATOR_PATH",
+        str(REPO_ROOT / "src/modeling/define_ao3_risk_margin_matrix_policy.py"),
+    )
+)
 AO1_THRESHOLD_PATH = Path(
     os.getenv(
         "DATACO_AO1_DECISION_THRESHOLD_POLICY_PATH",
@@ -70,6 +76,7 @@ REQUIRED_DOC_PHRASES = {
     "ao1_predicted_late_delivery_probability >= 0.35",
     "ao3_predicted_margin = ao2_predicted_order_profit / ao3_order_value",
     "high_margin = ao3_predicted_margin >= 0.00",
+    "src/modeling/define_ao3_risk_margin_matrix_policy.py",
     "protect_high_value_at_risk",
     "expedite_selectively",
     "preserve_service",
@@ -83,6 +90,7 @@ def main() -> None:
     """Run AO3 risk-margin matrix policy validation."""
     assert AO3_DOC_PATH.exists(), f"Missing AO3 design document: {AO3_DOC_PATH}"
     assert AO3_POLICY_PATH.exists(), f"Missing AO3 policy CSV: {AO3_POLICY_PATH}"
+    assert AO3_GENERATOR_PATH.exists(), f"Missing AO3 policy generator: {AO3_GENERATOR_PATH}"
     assert AO1_THRESHOLD_PATH.exists(), f"Missing AO1 threshold policy: {AO1_THRESHOLD_PATH}"
 
     document_text = AO3_DOC_PATH.read_text(encoding="utf-8")
