@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -39,6 +39,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO2 Gradient Boosting regressor validation | `tests/data_validation/validate_ao2_gradient_boosting_regressor.py` | Validate Gradient Boosting artifacts, fit boundaries, regression metrics, selected candidate metadata, target-policy exclusions, predictions, residuals, and Ridge comparison state. | Completed AO2 Gradient Boosting artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_GRADIENT_BOOSTING_REGRESSOR` and `RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION`. | Runs after Gradient Boosting training. Confirms final test is marked as unused and `ao3_order_value` and target-reconstruction fields are not predictors. |
 | AO2 validation evaluation pack | `src/modeling/evaluate_ao2_models.py` | Compare available AO2 candidate validation predictions using RMSE, MAE, R-squared, residual diagnostics, and compact error slices. | Row-level validation prediction CSVs and model artifacts from AO2 Ridge and Gradient Boosting. | Evaluation metrics, residual diagnostics, error slices, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO2_EVALUATION_PACK`. | Runs on validation only. Final test rows are rejected and H2 language is limited to validation-stage evidence. |
 | AO2 validation evaluation pack validation | `tests/data_validation/validate_ao2_evaluation_pack.py` | Validate AO2 evaluation metadata, comparison metrics, residual diagnostics, error slices, and findings coverage. | Completed AO2 evaluation pack artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_EVALUATION_PACK` and `RUN_AO2_EVALUATION_PACK_VALIDATION`. | Runs after the AO2 evaluation pack. Confirms final test is marked as unused and target-policy caveats are documented. |
+| AO2 SHAP explainability | `src/modeling/explain_ao2_gradient_boosting_shap.py` | Generate SHAP-based explanations for the selected AO2 Gradient Boosting validation model. | AO2 chronological partition Delta table, AO2 preprocessing factory, selected Gradient Boosting metadata, and AO2 evaluation metadata. | SHAP feature-importance CSV, driver summary CSV, top-feature plot, findings note, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO2_SHAP_EXPLAINABILITY`. | Uses the saved selected pipeline when available, otherwise deterministically reconstructs the selected candidate on the approved training slice. Explains validation rows only and rejects final-test use. |
+| AO2 SHAP explainability validation | `tests/data_validation/validate_ao2_shap_explainability.py` | Validate AO2 SHAP metadata, artifact paths, target-policy guardrails, non-negative SHAP importances, rank validity, findings language, and final-test exclusion. | Completed AO2 SHAP explainability artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_SHAP_EXPLAINABILITY` and `RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION`. | Runs after AO2 SHAP explainability. Confirms forbidden target/proxy fields and `ao3_order_value` do not appear as SHAP drivers. |
 | AO1 Logistic Regression baseline training | `src/modeling/train_ao1_logistic_regression_baseline.py` | Train the AO1 Logistic Regression baseline on the approved training slice and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, and coefficient CSV. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, train XGBoost, tune thresholds, or apply SMOTE. |
 | AO1 Logistic Regression baseline validation | `tests/data_validation/validate_ao1_logistic_regression_baseline.py` | Validate Logistic Regression baseline artifacts, fit boundaries, metric ranges, parameters, and coefficient output. | Completed AO1 Logistic Regression baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE` and `RUN_AO1_LOGISTIC_BASELINE_VALIDATION`. | Runs after baseline training. Confirms final test is marked as unused and forbidden leakage fields are not predictors. |
 | AO1 validation evaluation pack | `src/modeling/evaluate_ao1_models.py` | Compare available AO1 candidate validation predictions using ranking metrics, threshold grids, confusion matrices, operating curves, and calibration bins. | Row-level validation prediction CSVs from AO1 candidate models. | Evaluation metrics, threshold grid, curve points, calibration table, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO1_EVALUATION_PACK`. | Runs on validation only. The final test set is not used and the final operating threshold is selected in the separate threshold-governance task. |
@@ -66,7 +68,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 SHAP explainability, and AO1 decision-threshold selection.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 and AO2 SHAP explainability, and AO1 decision-threshold selection.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -116,6 +118,8 @@ RUN_AO2_GRADIENT_BOOSTING_REGRESSOR = False
 RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION = False
 RUN_AO2_EVALUATION_PACK = False
 RUN_AO2_EVALUATION_PACK_VALIDATION = False
+RUN_AO2_SHAP_EXPLAINABILITY = False
+RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
@@ -174,6 +178,7 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO2 Gradient Boosting metadata JSON.
 - AO2 Gradient Boosting validation predictions CSV.
 - AO2 evaluation metadata JSON.
+- AO2 SHAP driver summary CSV.
 - AO1 Logistic Regression metadata JSON.
 - AO1 evaluation metadata JSON.
 - AO1 XGBoost metadata JSON.

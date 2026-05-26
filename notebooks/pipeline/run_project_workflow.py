@@ -108,6 +108,9 @@ RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION = False
 RUN_AO2_EVALUATION_PACK = False
 RUN_AO2_EVALUATION_PACK_VALIDATION = False
 
+RUN_AO2_SHAP_EXPLAINABILITY = False
+RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
+
 # ----------------------------
 # 6. EDA, exports, and final checks
 # ----------------------------
@@ -158,6 +161,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/evaluate_ao2_models.py"),
     Path("src/modeling/train_ao1_xgboost_classifier.py"),
     Path("src/modeling/explain_ao1_xgboost_shap.py"),
+    Path("src/modeling/explain_ao2_gradient_boosting_shap.py"),
     Path("src/modeling/select_ao1_decision_threshold.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
@@ -174,6 +178,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao2_evaluation_pack.py"),
     Path("tests/data_validation/validate_ao1_xgboost_classifier.py"),
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
+    Path("tests/data_validation/validate_ao2_shap_explainability.py"),
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"),
     Path("tests/data_validation/validate_ao1_results_h1.py"),
@@ -342,6 +347,11 @@ from src.modeling.explain_ao1_xgboost_shap import (  # noqa: E402
     AO1SHAPExplainabilityConfig,
     configure_logging as configure_ao1_shap_logging,
     run_ao1_shap_explainability,
+)
+from src.modeling.explain_ao2_gradient_boosting_shap import (  # noqa: E402
+    AO2SHAPExplainabilityConfig,
+    configure_logging as configure_ao2_shap_logging,
+    run_ao2_shap_explainability,
 )
 
 
@@ -643,6 +653,11 @@ def run_ao2_evaluation_pack_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao2_evaluation_pack.py"))
 
 
+def run_ao2_shap_validation() -> None:
+    """Run the AO2 SHAP explainability artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_ao2_shap_explainability.py"))
+
+
 def run_ao1_evaluation_pack() -> None:
     """Run the AO1 model validation evaluation pack."""
     run_python_file(Path("src/modeling/evaluate_ao1_models.py"))
@@ -729,6 +744,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO2 Ridge baseline runs only when RUN_AO2_RIDGE_BASELINE is True.")
     print("- OPTIONAL: AO2 Gradient Boosting regressor runs only when RUN_AO2_GRADIENT_BOOSTING_REGRESSOR is True.")
     print("- OPTIONAL: AO2 evaluation pack runs only when RUN_AO2_EVALUATION_PACK is True.")
+    print("- OPTIONAL: AO2 SHAP explainability runs only when RUN_AO2_SHAP_EXPLAINABILITY is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -757,6 +773,7 @@ def print_final_checklist() -> None:
     ao2_gradient_boosting_config = AO2GradientBoostingRegressorConfig()
     ao1_xgboost_config = AO1XGBoostClassifierConfig()
     ao1_shap_config = AO1SHAPExplainabilityConfig()
+    ao2_shap_config = AO2SHAPExplainabilityConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -780,6 +797,7 @@ def print_final_checklist() -> None:
     print(f"- AO2 Gradient Boosting metadata: {ao2_gradient_boosting_config.metadata_json_path}")
     print(f"- AO2 Gradient Boosting validation predictions: {ao2_gradient_boosting_config.validation_predictions_csv_path}")
     print("- AO2 evaluation metadata: models/ao2_profitability/evaluation/ao2_evaluation_metadata.json")
+    print(f"- AO2 SHAP driver summary: {ao2_shap_config.driver_summary_output_path}")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -953,6 +971,21 @@ def main() -> None:
         RUN_AO2_EVALUATION_PACK and RUN_AO2_EVALUATION_PACK_VALIDATION,
         run_ao2_evaluation_pack_validation,
         required=RUN_AO2_EVALUATION_PACK and RUN_AO2_EVALUATION_PACK_VALIDATION,
+    )
+    run_step(
+        "AO2 SHAP explainability",
+        RUN_AO2_SHAP_EXPLAINABILITY,
+        lambda: run_ao2_shap_explainability(
+            AO2SHAPExplainabilityConfig(),
+            configure_ao2_shap_logging(),
+        ),
+        required=RUN_AO2_SHAP_EXPLAINABILITY,
+    )
+    run_step(
+        "AO2 SHAP explainability validation",
+        RUN_AO2_SHAP_EXPLAINABILITY and RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION,
+        run_ao2_shap_validation,
+        required=RUN_AO2_SHAP_EXPLAINABILITY and RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",

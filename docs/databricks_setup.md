@@ -63,7 +63,7 @@ If the notebook cannot resolve the repository-relative path, install the current
 
 Restart Python or restart the attached session if Databricks prompts for it after package installation.
 
-The project pins `xgboost==2.0.3`, which is the Databricks-stable version confirmed for this workflow. `xgboost` is required for AO1 primary XGBoost model training and for generating the XGBoost validation prediction artifact used by the AO1 evaluation pack. `shap==0.44.1` is required for the AO1 SHAP explainability workflow.
+The project pins `xgboost==2.0.3`, which is the Databricks-stable version confirmed for this workflow. `xgboost` is required for AO1 primary XGBoost model training, AO2 Gradient Boosting profitability modeling, and the related validation prediction artifacts. `shap==0.44.1` is required for the AO1 and AO2 SHAP explainability workflows.
 
 ## Manual CSV Upload to Unity Catalog Volumes
 
