@@ -27,9 +27,7 @@ from typing import Any, Callable
 
 
 # ============================================================
-
 # Project workflow switches
-
 # ============================================================
 
 # ----------------------------
@@ -44,6 +42,7 @@ RUN_RAW_DATA_CHECK = True
 # 1. Reference and governance setup
 # ----------------------------
 RUN_REFERENCE_REGISTRATION = False
+RUN_PRE_GOLD_GOVERNANCE_CHECKS = False
 
 # ----------------------------
 # 2. Medallion data pipeline
@@ -79,7 +78,6 @@ RUN_AO1_PREPROCESSING_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 
-RUN_AO1_EVALUATION_PACK_VALIDATION = False
 RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
 
@@ -98,20 +96,23 @@ RUN_AO1_RESULTS_H1_VALIDATION = False
 # ----------------------------
 # 5. AO2 modeling workflow
 # ----------------------------
+RUN_AO2_PREPROCESSING = False
+RUN_AO2_PREPROCESSING_VALIDATION = False
 
-RUN_AO2_PREPROCESSING = True
-RUN_AO2_PREPROCESSING_VALIDATION = True
+RUN_AO2_RIDGE_BASELINE = False
+RUN_AO2_RIDGE_BASELINE_VALIDATION = False
 
-RUN_AO2_RIDGE_BASELINE = True
-RUN_AO2_RIDGE_BASELINE_VALIDATION = True
+RUN_AO2_GRADIENT_BOOSTING_REGRESSOR = False
+RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION = False
+
+RUN_AO2_EVALUATION_PACK = False
+RUN_AO2_EVALUATION_PACK_VALIDATION = False
 
 # ----------------------------
 # 6. EDA, exports, and final checks
 # ----------------------------
-
-RUN_SILVER_CSV_EXPORT = False
-RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
+RUN_SILVER_CSV_EXPORT = False
 RUN_FINAL_CHECKLIST = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
@@ -154,6 +155,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/train_ao2_ridge_baseline.py"),
     Path("src/modeling/train_ao2_gradient_boosting_regressor.py"),
     Path("src/modeling/evaluate_ao1_models.py"),
+    Path("src/modeling/evaluate_ao2_models.py"),
     Path("src/modeling/train_ao1_xgboost_classifier.py"),
     Path("src/modeling/explain_ao1_xgboost_shap.py"),
     Path("src/modeling/select_ao1_decision_threshold.py"),
@@ -169,6 +171,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao2_ridge_baseline.py"),
     Path("tests/data_validation/validate_ao2_gradient_boosting_regressor.py"),
     Path("tests/data_validation/validate_ao1_evaluation_pack.py"),
+    Path("tests/data_validation/validate_ao2_evaluation_pack.py"),
     Path("tests/data_validation/validate_ao1_xgboost_classifier.py"),
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
@@ -325,13 +328,11 @@ from src.modeling.train_ao2_ridge_baseline import (  # noqa: E402
     configure_logging as configure_ao2_ridge_logging,
     run_ao2_ridge_baseline as run_ao2_ridge_baseline_job,
 )
-
 from src.modeling.train_ao2_gradient_boosting_regressor import (  # noqa: E402
     AO2GradientBoostingRegressorConfig,
     configure_logging as configure_ao2_gradient_boosting_logging,
     run_ao2_gradient_boosting_regressor as run_ao2_gradient_boosting_regressor_job,
 )
-
 from src.modeling.train_ao1_xgboost_classifier import (  # noqa: E402
     AO1XGBoostClassifierConfig,
     configure_logging as configure_ao1_xgboost_logging,
@@ -619,7 +620,6 @@ def run_ao2_ridge_baseline_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao2_ridge_baseline.py"))
 
 
-
 def run_ao2_gradient_boosting_regressor_training() -> None:
     """Run the AO2 Gradient Boosting regressor training job."""
     run_ao2_gradient_boosting_regressor_job(
@@ -632,6 +632,15 @@ def run_ao2_gradient_boosting_regressor_validation() -> None:
     """Run the AO2 Gradient Boosting regressor artifact validation."""
     run_python_file(Path("tests/data_validation/validate_ao2_gradient_boosting_regressor.py"))
 
+
+def run_ao2_evaluation_pack() -> None:
+    """Run the AO2 model validation evaluation pack."""
+    run_python_file(Path("src/modeling/evaluate_ao2_models.py"))
+
+
+def run_ao2_evaluation_pack_validation() -> None:
+    """Run the AO2 model validation evaluation artifact checks."""
+    run_python_file(Path("tests/data_validation/validate_ao2_evaluation_pack.py"))
 
 
 def run_ao1_evaluation_pack() -> None:
@@ -719,6 +728,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO2 preprocessing runs only when RUN_AO2_PREPROCESSING is True.")
     print("- OPTIONAL: AO2 Ridge baseline runs only when RUN_AO2_RIDGE_BASELINE is True.")
     print("- OPTIONAL: AO2 Gradient Boosting regressor runs only when RUN_AO2_GRADIENT_BOOSTING_REGRESSOR is True.")
+    print("- OPTIONAL: AO2 evaluation pack runs only when RUN_AO2_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -744,9 +754,7 @@ def print_final_checklist() -> None:
     ao1_preprocessing_config = AO1PreprocessingConfig()
     ao2_preprocessing_config = AO2PreprocessingConfig()
     ao2_ridge_config = AO2RidgeBaselineConfig()
-
     ao2_gradient_boosting_config = AO2GradientBoostingRegressorConfig()
-
     ao1_xgboost_config = AO1XGBoostClassifierConfig()
     ao1_shap_config = AO1SHAPExplainabilityConfig()
 
@@ -771,6 +779,7 @@ def print_final_checklist() -> None:
     print(f"- AO2 Ridge validation predictions: {ao2_ridge_config.validation_predictions_csv_path}")
     print(f"- AO2 Gradient Boosting metadata: {ao2_gradient_boosting_config.metadata_json_path}")
     print(f"- AO2 Gradient Boosting validation predictions: {ao2_gradient_boosting_config.validation_predictions_csv_path}")
+    print("- AO2 evaluation metadata: models/ao2_profitability/evaluation/ao2_evaluation_metadata.json")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -932,6 +941,18 @@ def main() -> None:
         run_ao2_gradient_boosting_regressor_validation,
         required=RUN_AO2_GRADIENT_BOOSTING_REGRESSOR
         and RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION,
+    )
+    run_step(
+        "AO2 model evaluation pack",
+        RUN_AO2_EVALUATION_PACK,
+        run_ao2_evaluation_pack,
+        required=RUN_AO2_EVALUATION_PACK,
+    )
+    run_step(
+        "AO2 model evaluation pack validation",
+        RUN_AO2_EVALUATION_PACK and RUN_AO2_EVALUATION_PACK_VALIDATION,
+        run_ao2_evaluation_pack_validation,
+        required=RUN_AO2_EVALUATION_PACK and RUN_AO2_EVALUATION_PACK_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",
