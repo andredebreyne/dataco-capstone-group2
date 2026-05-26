@@ -1,0 +1,14 @@
+{
+  "absolute_error_p50": 31.395399094682617,
+  "absolute_error_p90": 110.37245330876951,
+  "mae": 52.646255065500654,
+  "mean_error_bias": 0.9627362709037213,
+  "median_absolute_error": 31.395399094682617,
+  "prediction_mean": 20.750242233276367,
+  "prediction_standard_deviation": 11.915903091430664,
+  "r2": 0.011785892044576474,
+  "rmse": 95.62030998471721,
+  "target_mean": 21.71297859202074,
+  "target_standard_deviation": 96.19049081230229,
+  "validation_row_count": 28883
+}
