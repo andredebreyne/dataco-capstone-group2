@@ -68,6 +68,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO3 Risk-Margin Matrix](docs/ao3_risk_margin_matrix.md)
 - [AO3 Segment Assignment](docs/ao3_segment_assignment.md)
 - [AO3 Risk-Margin Benchmark](docs/ao3_risk_margin_benchmark.md)
+- [AO3 K-means Extension](docs/ao3_kmeans_extension.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)
