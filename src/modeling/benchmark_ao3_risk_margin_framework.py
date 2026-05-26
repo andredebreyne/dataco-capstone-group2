@@ -380,10 +380,14 @@ def build_insights(df: DataFrame) -> list[dict[str, object]]:
         },
         {
             "metric_name": "h3_support_statement",
-            "metric_value": "AO3 separates risk-only and margin-only groups into operationally distinct quadrants.",
+            "metric_value": (
+                "AO3 adds decision-layer value mainly by splitting high-margin orders into high-risk "
+                "protection priorities and low-risk preserve-service orders; risk-only differentiation "
+                "should be interpreted from the observed split in this held-out sample."
+            ),
             "decision_relevance": (
-                "Supports H3 as a decision-layer comparison, without claiming causal impact or final-test "
-                "outcome performance."
+                "Supports H3 as a practical prioritization comparison, without overstating causal impact "
+                "or final-test outcome performance."
             ),
         },
     ]

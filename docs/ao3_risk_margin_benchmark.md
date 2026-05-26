@@ -68,7 +68,9 @@ low-risk actions.
 ## H3 Interpretation
 
 The benchmark supports H3 if the combined AO3 view separates single-signal groups
-into operationally different actions. For example:
+into operationally different actions. The conclusion should be based on the
+observed held-out benchmark, not assumed to be equally strong for both
+single-signal views. For example:
 
 - risk-only prioritization groups `protect_high_value_at_risk` and
   `expedite_selectively` together, even though their margin implications differ;
@@ -80,6 +82,13 @@ The conclusion should be stated in practical terms: AO3 helps managers separate
 urgent high-value protection, selective expediting, service preservation, and
 standard processing. It should not be stated as proof that AO3 improves realized
 profit or delivery outcomes without a later outcome-based evaluation.
+
+If the benchmark shows stronger separation for margin-only prioritization than
+for risk-only prioritization, the H3 statement should emphasize that nuance. In
+that case, AO3 still adds decision-layer value by separating high-margin orders
+that need risk protection from high-margin orders that can remain in
+preserve-service handling, while risk-only differentiation should be described
+according to the observed split.
 
 ## Validation
 
