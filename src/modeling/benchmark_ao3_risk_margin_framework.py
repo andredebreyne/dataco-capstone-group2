@@ -214,19 +214,25 @@ def validate_input_contract(df: DataFrame) -> None:
 def add_single_signal_groups(df: DataFrame) -> DataFrame:
     """Add risk-only and margin-only priority groups for comparison."""
     return (
-        df.withColumn(
-            "risk_only_group",
-            when(col("ao3_high_risk_flag").isNull(), lit("requires_score_review"))
-            .when(col("ao3_high_risk_flag"), lit("high_risk"))
-            .otherwise(lit("low_risk")),
+    df.withColumn(
+        "risk_only_group",
+        when(
+            col("ao3_priority_segment") == lit("requires_score_review"),
+            lit("requires_score_review"),
         )
-        .withColumn(
-            "margin_only_group",
-            when(col("ao3_high_margin_flag").isNull(), lit("requires_margin_review"))
-            .when(col("ao3_high_margin_flag"), lit("high_margin"))
-            .otherwise(lit("low_margin")),
-        )
+        .when(col("ao3_high_risk_flag"), lit("high_risk"))
+        .otherwise(lit("low_risk")),
     )
+    .withColumn(
+        "margin_only_group",
+        when(
+            col("ao3_priority_segment") == lit("requires_margin_review"),
+            lit("requires_margin_review"),
+        )
+        .when(col("ao3_high_margin_flag"), lit("high_margin"))
+        .otherwise(lit("low_margin")),
+    )
+)
 
 
 def rows_from_df(df: DataFrame) -> list[dict[str, object]]:
@@ -407,12 +413,17 @@ def write_metadata(
     config: AO3RiskMarginBenchmarkConfig,
     row_count: int,
     insight_rows: list[dict[str, object]],
+    ao3_risk_cutoff: float,
+    ao3_margin_cutoff: float,
 ) -> None:
     """Write AO3 benchmark metadata."""
     config.metadata_output_path.parent.mkdir(parents=True, exist_ok=True)
     metadata = {
+        "ao3_risk_cutoff_used": ao3_risk_cutoff,
+        "ao3_margin_cutoff_used": ao3_margin_cutoff,
         "issue": "#43",
         "workflow": "ao3_risk_margin_framework_benchmark",
+        "metadata_status": "ao3_risk_margin_benchmark_completed",
         "segment_input_path": config.segment_input_path,
         "segment_summary_output_path": str(config.segment_summary_output_path),
         "crosswalk_output_path": str(config.crosswalk_output_path),
@@ -443,6 +454,10 @@ def run_ao3_risk_margin_benchmark(
     logger.info("Segment input path: %s", config.segment_input_path)
 
     segment_df = spark.read.format(config.read_format).load(config.segment_input_path)
+    cutoff_row = segment_df.select(
+    "ao3_risk_cutoff",
+    "ao3_margin_cutoff",
+).first()
     validate_input_contract(segment_df)
 
     benchmark_df = add_single_signal_groups(segment_df)
@@ -453,7 +468,13 @@ def run_ao3_risk_margin_benchmark(
     write_csv(segment_summary_rows, SEGMENT_SUMMARY_COLUMNS, config.segment_summary_output_path)
     write_csv(crosswalk_rows, CROSSWALK_COLUMNS, config.crosswalk_output_path)
     write_csv(insight_rows, INSIGHT_COLUMNS, config.insight_output_path)
-    write_metadata(config=config, row_count=benchmark_df.count(), insight_rows=insight_rows)
+    write_metadata(
+    config=config,
+    row_count=benchmark_df.count(),
+    insight_rows=insight_rows,
+    ao3_risk_cutoff=float(cutoff_row["ao3_risk_cutoff"]),
+    ao3_margin_cutoff=float(cutoff_row["ao3_margin_cutoff"]),
+)
 
     logger.info("AO3 risk-margin framework benchmark completed successfully.")
 
