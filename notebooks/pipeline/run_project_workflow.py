@@ -4,6 +4,7 @@
 # environment_version = "2"
 # dependencies = [
 #   "-r requirements.txt",
+#   "xgboost==2.0.3",
 # ]
 # ///
 """Run the DataCo project workflow from one Databricks-compatible entry point.
@@ -21,6 +22,7 @@ import logging
 import os
 import runpy
 import sys
+import traceback
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -118,9 +120,11 @@ RUN_AO2_RESULTS_H2 = False
 RUN_AO2_RESULTS_H2_VALIDATION = False
 
 # ----------------------------
-# 6. AO3 decision-support policy
+# 6. AO3 integration workflow
 # ----------------------------
 RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = False
+RUN_AO1_AO2_TEST_SCORING = False
+RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
 
 # ----------------------------
 # 7. EDA, exports, and final checks
@@ -175,6 +179,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/explain_ao2_gradient_boosting_shap.py"),
     Path("src/modeling/audit_ao2_target_reconstruction.py"),
     Path("src/modeling/select_ao1_decision_threshold.py"),
+    Path("src/modeling/score_ao1_ao2_test_set.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -197,6 +202,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"),
     Path("tests/data_validation/validate_ao1_results_h1.py"),
+    Path("tests/data_validation/validate_ao1_ao2_test_scores.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -474,6 +480,7 @@ def run_step(
         detail = f"{type(exc).__name__}: {exc}"
         STEP_RESULTS.append(StepResult(step_name, "failed", required, detail))
         print(f"[FAIL] {step_name}: {detail}")
+        traceback.print_exc()
         if required:
             raise RuntimeError(f"Project workflow failed during step: {step_name}") from exc
         LOGGER.warning("Optional workflow step failed: %s", step_name, exc_info=True)
@@ -752,6 +759,25 @@ def run_ao1_results_h1_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao1_results_h1.py"))
 
 
+def run_ao1_ao2_test_scoring() -> None:
+    """Run AO1/AO2 held-out test scoring for AO3 integration."""
+    try:
+        import xgboost  # noqa: F401
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "Missing dependency: xgboost. On Databricks Serverless, make sure "
+            "the notebook environment installs xgboost==2.0.3 from the "
+            "Databricks environment dependencies block, then detach/restart "
+            "the Python session before rerunning this workflow."
+        ) from exc
+    run_python_file(Path("src/modeling/score_ao1_ao2_test_set.py"))
+
+
+def run_ao1_ao2_test_scoring_validation() -> None:
+    """Run AO1/AO2 held-out test score validation."""
+    run_python_file(Path("tests/data_validation/validate_ao1_ao2_test_scores.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -810,6 +836,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO1 decision threshold runs only when RUN_AO1_DECISION_THRESHOLD is True.")
     print("- OPTIONAL: AO1 post-model leakage audit validation runs only when RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION is True.")
     print("- OPTIONAL: AO1 H1 results validation runs only when RUN_AO1_RESULTS_H1_VALIDATION is True.")
+    print("- OPTIONAL: AO1/AO2 test scoring runs only when RUN_AO1_AO2_TEST_SCORING is True.")
+    print("- OPTIONAL: AO1/AO2 test score validation runs only when RUN_AO1_AO2_TEST_SCORING_VALIDATION is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -869,6 +897,8 @@ def print_final_checklist() -> None:
     print("- AO1 decision threshold policy: data/references/ao1_decision_threshold_policy.csv")
     print("- AO1 post-model leakage audit: data/references/ao1_post_model_leakage_audit.csv")
     print("- AO1 H1 results summary: data/references/ao1_results_h1_summary.csv")
+    print(f"- AO1/AO2 test score Delta: {VOLUME_ROOT}/gold/ao1_ao2_test_scores")
+    print("- AO1/AO2 test score metadata: models/ao3_integration/ao1_ao2_test_scores/ao1_ao2_test_score_metadata.json")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -1162,6 +1192,18 @@ def main() -> None:
         RUN_AO1_RESULTS_H1_VALIDATION,
         run_ao1_results_h1_validation,
         required=RUN_AO1_RESULTS_H1_VALIDATION,
+    )
+    run_step(
+        "AO1/AO2 held-out test scoring",
+        RUN_AO1_AO2_TEST_SCORING,
+        run_ao1_ao2_test_scoring,
+        required=RUN_AO1_AO2_TEST_SCORING,
+    )
+    run_step(
+        "AO1/AO2 held-out test score validation",
+        RUN_AO1_AO2_TEST_SCORING and RUN_AO1_AO2_TEST_SCORING_VALIDATION,
+        run_ao1_ao2_test_scoring_validation,
+        required=RUN_AO1_AO2_TEST_SCORING and RUN_AO1_AO2_TEST_SCORING_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
