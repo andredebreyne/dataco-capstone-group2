@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
 from pyspark.sql.functions import col, count as spark_count, sum as spark_sum, when
 
 
@@ -108,6 +109,9 @@ def main() -> None:
     """Run AO1/AO2 test score validation."""
     metadata = read_json(METADATA_PATH)
     assert SUMMARY_PATH.exists(), f"Missing scoring summary CSV: {SUMMARY_PATH}"
+    summary_df = pd.read_csv(SUMMARY_PATH)
+    assert len(summary_df) == 1, "AO1/AO2 score summary must contain exactly one row."
+    summary_row = summary_df.iloc[0]
 
     assert metadata["issue"] == "#41"
     assert metadata["metadata_status"] == "runtime_scoring_completed"
@@ -129,7 +133,10 @@ def main() -> None:
 
     row_count = score_df.count()
     assert row_count == metadata["summary"]["integrated_scored_rows"]
+    assert row_count == int(summary_row["integrated_scored_rows"])
     assert row_count > 0
+    assert int(summary_row["ao1_test_rows_excluded_without_ao2_test_match"]) >= 0
+    assert int(summary_row["ao2_test_rows_excluded_without_ao1_test_match"]) >= 0
 
     partition_summary = score_df.groupBy("split_partition").agg(spark_count("*").alias("rows")).collect()
     observed_partitions = {row["split_partition"] for row in partition_summary}
