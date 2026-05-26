@@ -65,6 +65,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO2 Target-Reconstruction Review](docs/ao2_target_reconstruction_review.md)
 - [AO2 Results and H2](docs/ao2_results_h2.md)
 - [AO1/AO2 Held-Out Test Scoring](docs/ao1_ao2_test_scoring.md)
+- [AO3 Segment Assignment](docs/ao3_segment_assignment.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
 - [AO1 XGBoost Classifier](docs/ao1_xgboost_classifier.md)

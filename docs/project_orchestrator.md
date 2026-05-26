@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO2 H2 results validation, optional AO1 decision-threshold selection, optional AO1/AO2 held-out test scoring, optional EDA artifact checks, and pre-Gold governance checks. Dashboard exports and final test-set performance evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO2 H2 results validation, optional AO1 decision-threshold selection, optional AO1/AO2 held-out test scoring, optional AO3 segment assignment, optional EDA artifact checks, and pre-Gold governance checks. Dashboard exports and final test-set performance evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -59,6 +59,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO1 H1 results validation | `tests/data_validation/validate_ao1_results_h1.py` | Validate the AO1 results write-up, H1 conclusion, threshold reference, and final-test caveat. | AO1 evaluation pack, threshold grid, and `docs/ao1_results_h1_validation.md`. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_RESULTS_H1_VALIDATION`. | Confirms XGBoost outperforms Logistic Regression on validation ROC-AUC and recall and that the document avoids final-test claims. |
 | AO1/AO2 held-out test scoring | `src/modeling/score_ao1_ao2_test_set.py` | Fit the frozen selected AO1/AO2 configurations on development partitions and generate integrated held-out test predictions for AO3. | AO1/AO2 chronological partitions, AO1/AO2 selected model metadata, and AO1 threshold policy. | Delta score table, metadata JSON, and summary CSV. | Optional and disabled by default; controlled by `RUN_AO1_AO2_TEST_SCORING`. | Uses test rows for prediction only. Does not train on test, tune thresholds, calculate final-test metrics, or assign AO3 segments. |
 | AO1/AO2 held-out test score validation | `tests/data_validation/validate_ao1_ao2_test_scores.py` | Validate the integrated score table contract, test-only partitions, probability range, AO1 threshold reuse, and final-test target exclusion. | Completed AO1/AO2 held-out test score table and metadata. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_AO2_TEST_SCORING` and `RUN_AO1_AO2_TEST_SCORING_VALIDATION`. | Runs in Databricks because it reads Delta paths. Does not calculate performance metrics. |
+| AO3 risk-margin segment assignment | `src/modeling/build_ao3_risk_margin_segments.py` | Apply the governed AO3 risk-margin policy to the integrated AO1/AO2 held-out test score table. | Issue `#40` AO3 policy CSV and Issue `#41` AO1/AO2 test score Delta table. | AO3 segment Delta table, metadata JSON, and summary CSV. | Optional and disabled by default; controlled by `RUN_AO3_SEGMENT_ASSIGNMENT`. | Assigns operational segments only. Does not train models, tune thresholds, use final-test targets, calculate performance metrics, or benchmark H3. |
+| AO3 risk-margin segment validation | `tests/data_validation/validate_ao3_risk_margin_segments.py` | Validate the AO3 segment table contract, valid segment labels, test-only partition boundary, target exclusion, metadata, and summary row counts. | Completed AO3 segment Delta table and artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO3_SEGMENT_ASSIGNMENT` and `RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION`. | Runs in Databricks because it reads Delta paths. Benchmarking against single-signal prioritization remains Issue `#43`. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -74,7 +76,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
-- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 and AO2 SHAP explainability, the AO2 target-reconstruction audit, AO1 decision-threshold selection, and AO1/AO2 held-out test scoring for AO3 integration.
+- `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 and AO2 SHAP explainability, the AO2 target-reconstruction audit, AO1 decision-threshold selection, AO1/AO2 held-out test scoring, and AO3 segment assignment for integration.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -144,6 +146,8 @@ RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
 RUN_AO1_RESULTS_H1_VALIDATION = False
 RUN_AO1_AO2_TEST_SCORING = False
 RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
+RUN_AO3_SEGMENT_ASSIGNMENT = False
+RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = False
 RUN_SILVER_CSV_EXPORT = True
 RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
@@ -204,6 +208,8 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO1 H1 results summary CSV.
 - AO1/AO2 held-out test score Delta table.
 - AO1/AO2 held-out test score metadata JSON.
+- AO3 risk-margin segment Delta table.
+- AO3 segment assignment metadata JSON.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling
