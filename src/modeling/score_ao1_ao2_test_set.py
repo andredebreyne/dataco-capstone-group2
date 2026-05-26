@@ -339,22 +339,24 @@ def score_ao2_test_set(
     return score_df
 
 
-def build_integrated_scores(ao1_scores: pd.DataFrame, ao2_scores: pd.DataFrame) -> pd.DataFrame:
-    """Join AO1 and AO2 test scores for AO3 downstream use."""
+def build_integrated_scores(
+    ao1_scores: pd.DataFrame,
+    ao2_scores: pd.DataFrame,
+) -> tuple[pd.DataFrame, dict[str, int]]:
+    """Join the common AO1/AO2 held-out score population for AO3 downstream use."""
     join_keys = ["Order_Id", "Order_Item_Id", "order_date_DateOrders"]
     integrated_df = ao1_scores.merge(
         ao2_scores,
-        how="left",
+        how="inner",
         on=join_keys,
         validate="one_to_one",
     )
 
-    missing_ao2_count = int(integrated_df["ao2_predicted_order_profit"].isna().sum())
-    if missing_ao2_count:
-        raise ValueError(
-            "AO2 predictions are missing for AO1 scored rows. "
-            f"Missing count: {missing_ao2_count}"
-        )
+    common_row_count = int(len(integrated_df))
+    ao1_only_row_count = int(len(ao1_scores) - common_row_count)
+    ao2_only_row_count = int(len(ao2_scores) - common_row_count)
+    if common_row_count == 0:
+        raise ValueError("No common held-out AO1/AO2 score rows were found.")
 
     integrated_df["ao3_predicted_margin"] = integrated_df["ao2_predicted_order_profit"] / integrated_df[
         AO3_ORDER_VALUE_COLUMN
@@ -388,7 +390,14 @@ def build_integrated_scores(ao1_scores: pd.DataFrame, ao2_scores: pd.DataFrame) 
         "ao3_predicted_margin",
         "scoring_timestamp_utc",
     ]
-    return integrated_df.loc[:, output_columns]
+    join_summary = {
+        "ao1_scored_test_rows": int(len(ao1_scores)),
+        "ao2_scored_test_rows": int(len(ao2_scores)),
+        "integrated_common_test_rows": common_row_count,
+        "ao1_test_rows_excluded_without_ao2_test_match": ao1_only_row_count,
+        "ao2_test_rows_excluded_without_ao1_test_match": ao2_only_row_count,
+    }
+    return integrated_df.loc[:, output_columns], join_summary
 
 
 def write_summary_csv(summary: dict[str, Any], path: Path) -> None:
@@ -500,7 +509,7 @@ def run_ao1_ao2_test_scoring(
         ao2_selected_candidate,
     )
 
-    integrated_scores = build_integrated_scores(ao1_scores, ao2_scores)
+    integrated_scores, join_summary = build_integrated_scores(ao1_scores, ao2_scores)
     spark.createDataFrame(integrated_scores).write.format(config.write_format).mode(
         config.write_mode
     ).save(config.output_path)
@@ -516,6 +525,7 @@ def run_ao1_ao2_test_scoring(
         "ao2_development_rows": int(len(ao2_development_pdf)),
         "ao2_test_rows": int(len(ao2_test_pdf)),
         "integrated_scored_rows": int(len(integrated_scores)),
+        **join_summary,
         "ao1_high_risk_count": int(integrated_scores["ao1_high_risk_flag"].sum()),
         "ao3_margin_missing_count": int(integrated_scores["ao3_predicted_margin"].isna().sum()),
         "output_path": config.output_path,

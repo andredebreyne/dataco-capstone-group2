@@ -4,6 +4,7 @@
 # environment_version = "2"
 # dependencies = [
 #   "-r requirements.txt",
+#   "xgboost==2.0.3",
 # ]
 # ///
 """Run the DataCo project workflow from one Databricks-compatible entry point.
@@ -21,6 +22,7 @@ import logging
 import os
 import runpy
 import sys
+import traceback
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -120,6 +122,7 @@ RUN_AO2_RESULTS_H2_VALIDATION = False
 # ----------------------------
 # 6. AO3 integration workflow
 # ----------------------------
+RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = False
 RUN_AO1_AO2_TEST_SCORING = False
 RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
 RUN_AO3_SEGMENT_ASSIGNMENT = False
@@ -198,6 +201,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao2_shap_explainability.py"),
     Path("tests/data_validation/validate_ao2_target_reconstruction_audit.py"),
     Path("tests/data_validation/validate_ao2_results_h2.py"),
+    Path("tests/data_validation/validate_ao3_risk_margin_matrix_policy.py"),
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"),
     Path("tests/data_validation/validate_ao1_results_h1.py"),
@@ -480,6 +484,7 @@ def run_step(
         detail = f"{type(exc).__name__}: {exc}"
         STEP_RESULTS.append(StepResult(step_name, "failed", required, detail))
         print(f"[FAIL] {step_name}: {detail}")
+        traceback.print_exc()
         if required:
             raise RuntimeError(f"Project workflow failed during step: {step_name}") from exc
         LOGGER.warning("Optional workflow step failed: %s", step_name, exc_info=True)
@@ -713,6 +718,11 @@ def run_ao2_results_h2_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao2_results_h2.py"))
 
 
+def run_ao3_risk_margin_matrix_validation() -> None:
+    """Run the AO3 risk-margin matrix policy validation."""
+    run_python_file(Path("tests/data_validation/validate_ao3_risk_margin_matrix_policy.py"))
+
+
 def run_ao1_evaluation_pack() -> None:
     """Run the AO1 model validation evaluation pack."""
     run_python_file(Path("src/modeling/evaluate_ao1_models.py"))
@@ -755,6 +765,15 @@ def run_ao1_results_h1_validation() -> None:
 
 def run_ao1_ao2_test_scoring() -> None:
     """Run AO1/AO2 held-out test scoring for AO3 integration."""
+    try:
+        import xgboost  # noqa: F401
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "Missing dependency: xgboost. On Databricks Serverless, make sure "
+            "the notebook environment installs xgboost==2.0.3 from the "
+            "Databricks environment dependencies block, then detach/restart "
+            "the Python session before rerunning this workflow."
+        ) from exc
     run_python_file(Path("src/modeling/score_ao1_ao2_test_set.py"))
 
 
@@ -823,6 +842,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO2 target-reconstruction audit runs only when RUN_AO2_TARGET_RECONSTRUCTION_AUDIT is True.")
     print("- OPTIONAL: AO2 H2 result artifact check runs only when RUN_AO2_RESULTS_H2 is True.")
     print("- OPTIONAL: AO2 H2 results validation runs only when RUN_AO2_RESULTS_H2_VALIDATION is True.")
+    print("- OPTIONAL: AO3 risk-margin matrix validation runs only when RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -884,6 +904,7 @@ def print_final_checklist() -> None:
     print(f"- AO2 target-reconstruction audit metadata: {ao2_target_reconstruction_config.metadata_output_path}")
     print("- AO2 H2 results metadata: models/ao2_profitability/results/ao2_results_h2_metadata.json")
     print("- AO2 H2 results summary: report/tables/ao2_results_h2_summary.csv")
+    print("- AO3 risk-margin matrix policy: data/references/ao3_risk_margin_matrix_policy.csv")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -1105,6 +1126,12 @@ def main() -> None:
         RUN_AO2_RESULTS_H2_VALIDATION,
         run_ao2_results_h2_validation,
         required=RUN_AO2_RESULTS_H2_VALIDATION,
+    )
+    run_step(
+        "AO3 risk-margin matrix validation",
+        RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION,
+        run_ao3_risk_margin_matrix_validation,
+        required=RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",

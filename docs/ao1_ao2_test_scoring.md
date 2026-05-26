@@ -29,6 +29,24 @@ The scoring job is intentionally limited to prediction generation:
 This means the final test set is touched for prediction only, not for model
 evaluation or policy tuning.
 
+## Common Held-Out Population
+
+AO1 and AO2 use different analytical populations. AO1 excludes records that are
+not valid for late-delivery modeling, while AO2 keeps the broader profitability
+population. Because the chronological partitions are created independently from
+those populations, a small number of rows can be in the AO1 `test` partition but
+not in the AO2 `test` partition, or vice versa.
+
+For AO3, the integrated scored table uses the common held-out population only:
+
+- rows must be present in the AO1 `test` score output;
+- rows must be present in the AO2 `test` score output;
+- rows outside that intersection are excluded from the integrated AO3 scoring
+  input and counted in the summary artifact.
+
+This keeps AO3 leakage-safe because no row is scored as final held-out AO3 input
+unless it is held out for both upstream objectives.
+
 ## Inputs
 
 | Input | Default path | Purpose |
@@ -110,4 +128,6 @@ metadata row count.
 - The final-test labels remain outside the scored output and should be reserved
   for the later final evaluation workflow.
 - The integrated AO3 scoring population is anchored on AO1 test rows and
-  requires matching AO2 predictions for the same order keys.
+  requires matching AO2 test predictions for the same order keys.
+- Rows not held out for both AO1 and AO2 are excluded from the integrated AO3
+  score table and reported in `data/references/ao1_ao2_test_score_summary.csv`.

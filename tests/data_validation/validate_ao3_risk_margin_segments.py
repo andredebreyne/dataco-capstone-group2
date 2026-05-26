@@ -7,8 +7,8 @@ import os
 from pathlib import Path
 
 import pandas as pd
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql.functions import col, lit, when
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -56,6 +56,13 @@ VALID_SEGMENTS = {
     "requires_margin_review",
 }
 
+SEGMENT_RULE_COLUMNS = {
+    "high_risk_high_margin_segment",
+    "high_risk_low_margin_segment",
+    "low_risk_high_margin_segment",
+    "low_risk_low_margin_segment",
+}
+
 
 def resolve_repo_root() -> Path:
     """Resolve repository root for local artifact paths."""
@@ -100,6 +107,50 @@ def get_spark_session() -> SparkSession:
     return SparkSession.builder.getOrCreate()
 
 
+def read_policy() -> dict[str, str]:
+    """Read the approved AO3 policy row used for segment assignment."""
+    policy_df = pd.read_csv(POLICY_PATH)
+    assert len(policy_df) == 1, f"AO3 policy CSV must contain one row; found {len(policy_df)}."
+    policy = policy_df.iloc[0].to_dict()
+    missing_columns = sorted(SEGMENT_RULE_COLUMNS.difference(policy))
+    assert not missing_columns, f"AO3 policy missing segment rule columns: {missing_columns}"
+    return {key: str(value) for key, value in policy.items()}
+
+
+def validate_segment_rules(segment_df: DataFrame, policy: dict[str, str]) -> None:
+    """Recompute AO3 policy rules and verify stored segment assignments."""
+    high_risk = col("ao1_predicted_late_delivery_probability") >= col("ao3_risk_cutoff")
+    high_margin = col("ao3_predicted_margin") >= col("ao3_margin_cutoff")
+    invalid_score = (
+        col("ao1_predicted_late_delivery_probability").isNull()
+        | col("ao2_predicted_order_profit").isNull()
+    )
+    invalid_margin = (
+        col("ao3_order_value").isNull()
+        | col("ao3_predicted_margin").isNull()
+        | (col("ao3_order_value") <= lit(0))
+    )
+
+    expected_segment = (
+        when(invalid_score, lit("requires_score_review"))
+        .when(invalid_margin, lit("requires_margin_review"))
+        .when(high_risk & high_margin, lit(policy["high_risk_high_margin_segment"]))
+        .when(high_risk & ~high_margin, lit(policy["high_risk_low_margin_segment"]))
+        .when(~high_risk & high_margin, lit(policy["low_risk_high_margin_segment"]))
+        .otherwise(lit(policy["low_risk_low_margin_segment"]))
+    )
+
+    rule_mismatch_count = segment_df.withColumn(
+        "expected_ao3_priority_segment",
+        expected_segment,
+    ).filter(
+        col("ao3_priority_segment") != col("expected_ao3_priority_segment")
+    ).count()
+    assert rule_mismatch_count == 0, (
+        f"AO3 segment assignments do not match the approved policy: {rule_mismatch_count}"
+    )
+
+
 def main() -> None:
     """Run AO3 risk-margin segment validation."""
     assert POLICY_PATH.exists(), f"Missing AO3 policy CSV: {POLICY_PATH}"
@@ -138,6 +189,9 @@ def main() -> None:
     assert threshold_mismatch_count == 0, (
         f"AO3 risk cutoff differs from AO1 threshold on {threshold_mismatch_count} rows."
     )
+
+    policy = read_policy()
+    validate_segment_rules(segment_df, policy)
 
     metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
     assert metadata["issue"] == "#42"

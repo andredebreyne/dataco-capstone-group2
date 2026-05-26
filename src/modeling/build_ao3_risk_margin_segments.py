@@ -322,25 +322,35 @@ def build_summary(df: DataFrame) -> list[dict[str, object]]:
         avg("ao3_predicted_margin").alias("avg_ao3_predicted_margin"),
     )
 
-    rows = []
+    rows_by_segment = {}
     for row in summary_df.collect():
         row_dict = row.asDict()
         row_count = int(row_dict["row_count"])
-        rows.append(
+        rows_by_segment[row_dict["ao3_priority_segment"]] = {
+            "ao3_priority_segment": row_dict["ao3_priority_segment"],
+            "row_count": row_count,
+            "share_of_rows": row_count / total_rows if total_rows else 0.0,
+            "avg_ao1_predicted_late_delivery_probability": row_dict[
+                "avg_ao1_predicted_late_delivery_probability"
+            ],
+            "avg_ao2_predicted_order_profit": row_dict["avg_ao2_predicted_order_profit"],
+            "avg_ao3_predicted_margin": row_dict["avg_ao3_predicted_margin"],
+        }
+
+    for segment in VALID_SEGMENTS:
+        rows_by_segment.setdefault(
+            segment,
             {
-                "ao3_priority_segment": row_dict["ao3_priority_segment"],
-                "row_count": row_count,
-                "share_of_rows": row_count / total_rows if total_rows else 0.0,
-                "avg_ao1_predicted_late_delivery_probability": row_dict[
-                    "avg_ao1_predicted_late_delivery_probability"
-                ],
-                "avg_ao2_predicted_order_profit": row_dict[
-                    "avg_ao2_predicted_order_profit"
-                ],
-                "avg_ao3_predicted_margin": row_dict["avg_ao3_predicted_margin"],
-            }
+                "ao3_priority_segment": segment,
+                "row_count": 0,
+                "share_of_rows": 0.0,
+                "avg_ao1_predicted_late_delivery_probability": None,
+                "avg_ao2_predicted_order_profit": None,
+                "avg_ao3_predicted_margin": None,
+            },
         )
-    return sorted(rows, key=lambda item: str(item["ao3_priority_segment"]))
+
+    return sorted(rows_by_segment.values(), key=lambda item: str(item["ao3_priority_segment"]))
 
 
 def write_summary_csv(summary_rows: list[dict[str, object]], output_path: Path) -> None:
