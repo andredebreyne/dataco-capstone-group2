@@ -98,6 +98,17 @@ def normalized_name(value: str) -> str:
 def assert_path_exists(path_value: str | Path, description: str) -> Path:
     """Assert an expected artifact path exists and return it."""
     path = Path(path_value)
+    if path.exists():
+        return path
+
+    path_parts = path.parts
+    if REPO_ROOT.name in path_parts:
+        repo_name_index = path_parts.index(REPO_ROOT.name)
+        repo_relative_path = Path(*path_parts[repo_name_index + 1 :])
+        local_path = REPO_ROOT / repo_relative_path
+        if local_path.exists():
+            return local_path
+
     assert path.exists(), f"Missing {description}: {path}"
     return path
 
