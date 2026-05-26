@@ -56,13 +56,17 @@ REQUIRED_POLICY_COLUMNS = {
     "policy_name",
     "issue",
     "policy_status",
+    "policy_type",
     "risk_signal",
     "risk_cutoff",
     "risk_cutoff_source",
+    "risk_signal_lineage",
     "margin_signal",
     "margin_cutoff",
     "margin_cutoff_source",
     "order_value_denominator",
+    "profit_signal_lineage",
+    "margin_signal_lineage",
     "high_risk_high_margin_segment",
     "high_risk_low_margin_segment",
     "low_risk_high_margin_segment",
@@ -76,6 +80,9 @@ REQUIRED_DOC_PHRASES = {
     "ao1_predicted_late_delivery_probability >= 0.35",
     "ao3_predicted_margin = ao2_predicted_order_profit / ao3_order_value",
     "high_margin = ao3_predicted_margin >= 0.00",
+    "AO3 does not introduce a new model score",
+    "not tuned by AO3",
+    "Issue `#41` AO1/AO2 score table",
     "src/modeling/define_ao3_risk_margin_matrix_policy.py",
     "protect_high_value_at_risk",
     "expedite_selectively",
@@ -109,11 +116,15 @@ def main() -> None:
     assert policy["issue"] == "#40"
     assert policy["policy_name"] == "ao3_risk_margin_matrix"
     assert policy["policy_status"] == "ready_for_team_review"
+    assert policy["policy_type"] == "deterministic_decision_policy"
     assert policy["risk_signal"] == "ao1_predicted_late_delivery_probability"
     assert float(policy["risk_cutoff"]) == 0.35
     assert policy["margin_signal"] == "ao3_predicted_margin"
     assert float(policy["margin_cutoff"]) == 0.0
     assert policy["order_value_denominator"] == "ao3_order_value"
+    assert "AO3 reuses the frozen AO1 output" in policy["risk_signal_lineage"]
+    assert "AO3 reuses the frozen AO2 output" in policy["profit_signal_lineage"]
+    assert "Deterministic ratio" in policy["margin_signal_lineage"]
     assert str(policy["final_test_used"]).lower() == "false"
 
     segments = {

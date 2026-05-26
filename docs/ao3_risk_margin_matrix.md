@@ -55,6 +55,26 @@ groups. It must not use `Late_delivery_risk`, `Delivery_Status`,
 `Days_for_shipping_real`, `Order_Profit_Per_Order`, realized profit ratios, or
 other target/outcome fields to define operational quadrants.
 
+## Field Lineage And Alias Rules
+
+AO3 does not introduce a new model score, a new profit estimate, or an
+independent threshold-optimization process. The AO3 fields are aliases or
+deterministic derivations from governed AO1/AO2 artifacts:
+
+| AO3 field | Source artifact | Source field or rule | Interpretation |
+| --- | --- | --- | --- |
+| `ao1_predicted_late_delivery_probability` | Issue `#41` AO1/AO2 score table | AO1 XGBoost prediction generated from the selected AO1 candidate. | Reused risk score; not recalculated by AO3. |
+| `ao1_decision_threshold` | `data/references/ao1_decision_threshold_policy.csv` | `selected_threshold`, currently `0.35`. | Reused AO1 operating threshold; not tuned by AO3. |
+| `ao1_high_risk_flag` | Issue `#41` AO1/AO2 score table | `ao1_predicted_late_delivery_probability >= ao1_decision_threshold`. | Alias/reuse of the governed AO1 threshold rule. |
+| `ao2_predicted_order_profit` | Issue `#41` AO1/AO2 score table | AO2 Gradient Boosting prediction generated from the selected AO2 candidate. | Reused expected-profit estimate; not recalculated by AO3. |
+| `ao3_order_value` | AO2 Gold support field | Derived from `Order_Item_Total` and excluded from AO2 predictors. | Denominator for margin only; not a predictor or target. |
+| `ao3_predicted_margin` | Issue `#41` AO1/AO2 score table | `ao2_predicted_order_profit / ao3_order_value`. | Deterministic ratio for matrix placement. |
+| `ao3_margin_cutoff` | This policy | Break-even cutoff `0.00`. | Governance cutoff for positive versus negative expected margin; not learned from final test outcomes. |
+
+The AO3 policy therefore combines frozen upstream outputs into a decision layer.
+It must not be interpreted as a third predictive model or as a new training
+workflow.
+
 ## Risk Cutoff
 
 High AO1 risk is defined using the approved AO1 operating threshold:
