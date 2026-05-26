@@ -127,6 +127,8 @@ RUN_AO1_AO2_TEST_SCORING = False
 RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
 RUN_AO3_SEGMENT_ASSIGNMENT = False
 RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = False
+RUN_AO3_RISK_MARGIN_BENCHMARK = False
+RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = False
 
 # ----------------------------
 # 7. EDA, exports, and final checks
@@ -183,6 +185,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/select_ao1_decision_threshold.py"),
     Path("src/modeling/score_ao1_ao2_test_set.py"),
     Path("src/modeling/build_ao3_risk_margin_segments.py"),
+    Path("src/modeling/benchmark_ao3_risk_margin_framework.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -207,6 +210,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_results_h1.py"),
     Path("tests/data_validation/validate_ao1_ao2_test_scores.py"),
     Path("tests/data_validation/validate_ao3_risk_margin_segments.py"),
+    Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -792,6 +796,16 @@ def run_ao3_segment_assignment_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao3_risk_margin_segments.py"))
 
 
+def run_ao3_risk_margin_benchmark() -> None:
+    """Run AO3 risk-margin benchmark against single-signal prioritization."""
+    run_python_file(Path("src/modeling/benchmark_ao3_risk_margin_framework.py"))
+
+
+def run_ao3_risk_margin_benchmark_validation() -> None:
+    """Run AO3 risk-margin benchmark validation."""
+    run_python_file(Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -854,6 +868,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO1/AO2 test score validation runs only when RUN_AO1_AO2_TEST_SCORING_VALIDATION is True.")
     print("- OPTIONAL: AO3 segment assignment runs only when RUN_AO3_SEGMENT_ASSIGNMENT is True.")
     print("- OPTIONAL: AO3 segment validation runs only when RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION is True.")
+    print("- OPTIONAL: AO3 risk-margin benchmark runs only when RUN_AO3_RISK_MARGIN_BENCHMARK is True.")
+    print("- OPTIONAL: AO3 risk-margin benchmark validation runs only when RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -917,6 +933,8 @@ def print_final_checklist() -> None:
     print("- AO1/AO2 test score metadata: models/ao3_integration/ao1_ao2_test_scores/ao1_ao2_test_score_metadata.json")
     print(f"- AO3 risk-margin segments Delta: {VOLUME_ROOT}/gold/ao3_risk_margin_segments")
     print("- AO3 segment assignment metadata: models/ao3_integration/risk_margin_segments/ao3_segment_assignment_metadata.json")
+    print("- AO3 risk-margin benchmark metadata: models/ao3_integration/risk_margin_benchmark/ao3_risk_margin_benchmark_metadata.json")
+    print("- AO3 risk-margin benchmark insights: data/references/ao3_risk_margin_benchmark_insights.csv")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -1234,6 +1252,18 @@ def main() -> None:
         RUN_AO3_SEGMENT_ASSIGNMENT and RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION,
         run_ao3_segment_assignment_validation,
         required=RUN_AO3_SEGMENT_ASSIGNMENT and RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION,
+    )
+    run_step(
+        "AO3 risk-margin benchmark",
+        RUN_AO3_RISK_MARGIN_BENCHMARK,
+        run_ao3_risk_margin_benchmark,
+        required=RUN_AO3_RISK_MARGIN_BENCHMARK,
+    )
+    run_step(
+        "AO3 risk-margin benchmark validation",
+        RUN_AO3_RISK_MARGIN_BENCHMARK and RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION,
+        run_ao3_risk_margin_benchmark_validation,
+        required=RUN_AO3_RISK_MARGIN_BENCHMARK and RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
