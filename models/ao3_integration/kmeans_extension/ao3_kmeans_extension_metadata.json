@@ -1,0 +1,120 @@
+{
+  "issue": "#44",
+  "workflow": "ao3_kmeans_extension",
+  "metadata_status": "ao3_kmeans_extension_completed",
+  "input_artifact_path": "/Volumes/workspace/default/raw_data/gold/ao3_risk_margin_segments",
+  "input_source": "Issue #42 AO3 risk-margin segment table",
+  "evidence_slice": "held_out_test_ao3_segment_table",
+  "final_test_used": true,
+  "final_test_use_scope": "AO3 decision signals only; no target/outcome fields used",
+  "final_test_targets_used": false,
+  "clustering_features": [
+    "ao1_predicted_late_delivery_probability",
+    "ao3_predicted_margin"
+  ],
+  "profiling_only_fields": [
+    "Order_Id",
+    "Order_Item_Id",
+    "ao2_predicted_order_profit",
+    "ao3_priority_segment"
+  ],
+  "preprocessing_steps": [
+    "median_imputation",
+    "standard_scaling"
+  ],
+  "k_candidates": [
+    3,
+    4,
+    5
+  ],
+  "selected_k": 3,
+  "selection_rationale": "Selected highest-silhouette candidate after applying the minimum cluster share screen where possible.",
+  "quality_metrics": [
+    {
+      "k": 3,
+      "inertia": 19671.679491913892,
+      "silhouette_score": 0.6859044690010159,
+      "min_cluster_size": 658,
+      "min_cluster_share": 0.019090724461078713,
+      "max_cluster_share": 0.6115995009719442,
+      "cluster_size_summary": "{\"0\": 21080, \"1\": 12729, \"2\": 658}",
+      "meets_min_share_rule": true,
+      "selected": true
+    },
+    {
+      "k": 4,
+      "inertia": 14793.199653930173,
+      "silhouette_score": 0.6877834910328005,
+      "min_cluster_size": 6,
+      "min_cluster_share": 0.00017407955435634086,
+      "max_cluster_share": 0.6114544346766472,
+      "cluster_size_summary": "{\"0\": 21075, \"1\": 12728, \"2\": 658, \"3\": 6}",
+      "meets_min_share_rule": false,
+      "selected": false
+    },
+    {
+      "k": 5,
+      "inertia": 12255.56006216654,
+      "silhouette_score": 0.6308676675875631,
+      "min_cluster_size": 6,
+      "min_cluster_share": 0.00017407955435634086,
+      "max_cluster_share": 0.6110192357907563,
+      "cluster_size_summary": "{\"0\": 6109, \"1\": 21060, \"2\": 658, \"3\": 6634, \"4\": 6}",
+      "meets_min_share_rule": false,
+      "selected": false
+    }
+  ],
+  "selected_quality_metric": {
+    "k": 3,
+    "inertia": 19671.679491913892,
+    "silhouette_score": 0.6859044690010159,
+    "min_cluster_size": 658,
+    "min_cluster_share": 0.019090724461078713,
+    "max_cluster_share": 0.6115995009719442,
+    "cluster_size_summary": "{\"0\": 21080, \"1\": 12729, \"2\": 658}",
+    "meets_min_share_rule": true,
+    "selected": true
+  },
+  "row_count": 34467,
+  "cluster_size_summary": {
+    "0": {
+      "row_count": 21080,
+      "row_share": 0.6115995009719442,
+      "dominant_ao3_priority_segment": "preserve_service"
+    },
+    "1": {
+      "row_count": 12729,
+      "row_share": 0.3693097745669771,
+      "dominant_ao3_priority_segment": "protect_high_value_at_risk"
+    },
+    "2": {
+      "row_count": 658,
+      "row_share": 0.019090724461078713,
+      "dominant_ao3_priority_segment": "preserve_service"
+    }
+  },
+  "comparison_to_ao3_result": {
+    "weighted_dominant_ao3_segment_share": 0.9657063277918009,
+    "mostly_duplicates_ao3_2x2": true,
+    "hard_to_explain": false,
+    "segments_split_into_meaningful_clusters": [],
+    "clusters_add_value_beyond_2x2": false
+  },
+  "recommendation": "do_not_adopt",
+  "recommendation_reason": "Selected clusters mostly duplicate existing AO3 risk-margin matrix segments (weighted dominant segment share 0.966).",
+  "output_artifact_paths": {
+    "metadata": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao3_integration/kmeans_extension/ao3_kmeans_extension_metadata.json",
+    "quality_metrics": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao3_kmeans_quality_metrics.csv",
+    "cluster_profiles": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao3_kmeans_cluster_profiles.csv",
+    "assignments_sample": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao3_kmeans_cluster_assignments_sample.csv",
+    "findings": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao3_kmeans_extension_findings.md",
+    "documentation": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/docs/ao3_kmeans_extension.md"
+  },
+  "created_at_utc": "2026-05-26T23:01:21.926917+00:00",
+  "limitations": [
+    "K-means is sensitive to scaling and outliers.",
+    "Cluster stability is not formally tested in this lightweight extension.",
+    "No target or outcome fields are used.",
+    "The AO3 2x2 risk-margin matrix remains the primary decision tool."
+  ]
+}
