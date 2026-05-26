@@ -27,7 +27,9 @@ from typing import Any, Callable
 
 
 # ============================================================
+
 # Project workflow switches
+
 # ============================================================
 
 # ----------------------------
@@ -42,7 +44,6 @@ RUN_RAW_DATA_CHECK = True
 # 1. Reference and governance setup
 # ----------------------------
 RUN_REFERENCE_REGISTRATION = False
-RUN_PRE_GOLD_GOVERNANCE_CHECKS = False
 
 # ----------------------------
 # 2. Medallion data pipeline
@@ -78,6 +79,7 @@ RUN_AO1_PREPROCESSING_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 
+RUN_AO1_EVALUATION_PACK_VALIDATION = False
 RUN_AO1_XGBOOST_CLASSIFIER = False
 RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
 
@@ -96,20 +98,20 @@ RUN_AO1_RESULTS_H1_VALIDATION = False
 # ----------------------------
 # 5. AO2 modeling workflow
 # ----------------------------
-RUN_AO2_PREPROCESSING = False
-RUN_AO2_PREPROCESSING_VALIDATION = False
 
-RUN_AO2_RIDGE_BASELINE = False
-RUN_AO2_RIDGE_BASELINE_VALIDATION = False
+RUN_AO2_PREPROCESSING = True
+RUN_AO2_PREPROCESSING_VALIDATION = True
 
-RUN_AO2_GRADIENT_BOOSTING_REGRESSOR = False
-RUN_AO2_GRADIENT_BOOSTING_REGRESSOR_VALIDATION = False
+RUN_AO2_RIDGE_BASELINE = True
+RUN_AO2_RIDGE_BASELINE_VALIDATION = True
 
 # ----------------------------
 # 6. EDA, exports, and final checks
 # ----------------------------
-RUN_EDA = False
+
 RUN_SILVER_CSV_EXPORT = False
+RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
+RUN_EDA = False
 RUN_FINAL_CHECKLIST = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
@@ -323,11 +325,13 @@ from src.modeling.train_ao2_ridge_baseline import (  # noqa: E402
     configure_logging as configure_ao2_ridge_logging,
     run_ao2_ridge_baseline as run_ao2_ridge_baseline_job,
 )
+
 from src.modeling.train_ao2_gradient_boosting_regressor import (  # noqa: E402
     AO2GradientBoostingRegressorConfig,
     configure_logging as configure_ao2_gradient_boosting_logging,
     run_ao2_gradient_boosting_regressor as run_ao2_gradient_boosting_regressor_job,
 )
+
 from src.modeling.train_ao1_xgboost_classifier import (  # noqa: E402
     AO1XGBoostClassifierConfig,
     configure_logging as configure_ao1_xgboost_logging,
@@ -615,6 +619,7 @@ def run_ao2_ridge_baseline_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao2_ridge_baseline.py"))
 
 
+
 def run_ao2_gradient_boosting_regressor_training() -> None:
     """Run the AO2 Gradient Boosting regressor training job."""
     run_ao2_gradient_boosting_regressor_job(
@@ -626,6 +631,7 @@ def run_ao2_gradient_boosting_regressor_training() -> None:
 def run_ao2_gradient_boosting_regressor_validation() -> None:
     """Run the AO2 Gradient Boosting regressor artifact validation."""
     run_python_file(Path("tests/data_validation/validate_ao2_gradient_boosting_regressor.py"))
+
 
 
 def run_ao1_evaluation_pack() -> None:
@@ -738,7 +744,9 @@ def print_final_checklist() -> None:
     ao1_preprocessing_config = AO1PreprocessingConfig()
     ao2_preprocessing_config = AO2PreprocessingConfig()
     ao2_ridge_config = AO2RidgeBaselineConfig()
+
     ao2_gradient_boosting_config = AO2GradientBoostingRegressorConfig()
+
     ao1_xgboost_config = AO1XGBoostClassifierConfig()
     ao1_shap_config = AO1SHAPExplainabilityConfig()
 
