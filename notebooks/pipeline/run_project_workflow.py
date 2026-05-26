@@ -114,6 +114,9 @@ RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION = False
 
+RUN_AO2_RESULTS_H2 = False
+RUN_AO2_RESULTS_H2_VALIDATION = False
+
 # ----------------------------
 # 6. EDA, exports, and final checks
 # ----------------------------
@@ -184,6 +187,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_shap_explainability.py"),
     Path("tests/data_validation/validate_ao2_shap_explainability.py"),
     Path("tests/data_validation/validate_ao2_target_reconstruction_audit.py"),
+    Path("tests/data_validation/validate_ao2_results_h2.py"),
     Path("tests/data_validation/validate_ao1_decision_threshold_policy.py"),
     Path("tests/data_validation/validate_ao1_post_model_leakage_audit.py"),
     Path("tests/data_validation/validate_ao1_results_h1.py"),
@@ -673,6 +677,30 @@ def run_ao2_target_reconstruction_audit_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao2_target_reconstruction_audit.py"))
 
 
+def check_ao2_results_h2_artifacts() -> None:
+    """Validate that manually generated AO2 H2 result artifacts exist."""
+    expected_artifacts = (
+        Path("docs/ao2_results_h2.md"),
+        Path("report/tables/ao2_results_h2_summary.csv"),
+        Path("report/tables/ao2_results_h2_findings.md"),
+        Path("models/ao2_profitability/results/ao2_results_h2_metadata.json"),
+    )
+    missing_artifacts = [
+        str(REPO_ROOT / artifact)
+        for artifact in expected_artifacts
+        if not local_path_exists(REPO_ROOT / artifact)
+    ]
+    if missing_artifacts:
+        raise FileNotFoundError(f"Missing AO2 H2 result artifacts: {missing_artifacts}")
+
+    print("AO2 H2 result documentation artifacts are present.")
+
+
+def run_ao2_results_h2_validation() -> None:
+    """Run the AO2 results and H2 artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_ao2_results_h2.py"))
+
+
 def run_ao1_evaluation_pack() -> None:
     """Run the AO1 model validation evaluation pack."""
     run_python_file(Path("src/modeling/evaluate_ao1_models.py"))
@@ -761,6 +789,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO2 evaluation pack runs only when RUN_AO2_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO2 SHAP explainability runs only when RUN_AO2_SHAP_EXPLAINABILITY is True.")
     print("- OPTIONAL: AO2 target-reconstruction audit runs only when RUN_AO2_TARGET_RECONSTRUCTION_AUDIT is True.")
+    print("- OPTIONAL: AO2 H2 result artifact check runs only when RUN_AO2_RESULTS_H2 is True.")
+    print("- OPTIONAL: AO2 H2 results validation runs only when RUN_AO2_RESULTS_H2_VALIDATION is True.")
     print("- OPTIONAL: AO1 Logistic Regression runs only when RUN_AO1_LOGISTIC_BASELINE is True.")
     print("- OPTIONAL: AO1 evaluation pack runs only when RUN_AO1_EVALUATION_PACK is True.")
     print("- OPTIONAL: AO1 XGBoost runs only when RUN_AO1_XGBOOST_CLASSIFIER is True.")
@@ -816,6 +846,8 @@ def print_final_checklist() -> None:
     print("- AO2 evaluation metadata: models/ao2_profitability/evaluation/ao2_evaluation_metadata.json")
     print(f"- AO2 SHAP driver summary: {ao2_shap_config.driver_summary_output_path}")
     print(f"- AO2 target-reconstruction audit metadata: {ao2_target_reconstruction_config.metadata_output_path}")
+    print("- AO2 H2 results metadata: models/ao2_profitability/results/ao2_results_h2_metadata.json")
+    print("- AO2 H2 results summary: report/tables/ao2_results_h2_summary.csv")
     print("- AO1 Logistic Regression metadata: models/ao1_late_delivery/logistic_regression/ao1_logistic_regression_metadata.json")
     print("- AO1 evaluation metadata: models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json")
     print(f"- AO1 XGBoost metadata: {ao1_xgboost_config.metadata_json_path}")
@@ -1021,6 +1053,18 @@ def main() -> None:
         run_ao2_target_reconstruction_audit_validation,
         required=RUN_AO2_TARGET_RECONSTRUCTION_AUDIT
         and RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION,
+    )
+    run_step(
+        "AO2 H2 result artifact check",
+        RUN_AO2_RESULTS_H2,
+        check_ao2_results_h2_artifacts,
+        required=RUN_AO2_RESULTS_H2,
+    )
+    run_step(
+        "AO2 H2 results validation",
+        RUN_AO2_RESULTS_H2_VALIDATION,
+        run_ao2_results_h2_validation,
+        required=RUN_AO2_RESULTS_H2_VALIDATION,
     )
     run_step(
         "AO1 Logistic Regression baseline training",
