@@ -1,0 +1,121 @@
+{
+  "metadata_status": "ao2_results_h2_documented",
+  "issue": "#39",
+  "issue_id": "#39",
+  "generated_timestamp_utc": "2026-05-26T01:03:49.5488046Z",
+  "target_column": "Order_Profit_Per_Order",
+  "target_definition": "AO2 estimates expected order-level profitability before dispatch using Order_Profit_Per_Order as the regression target.",
+  "evidence_slice": "development_inner_validation",
+  "final_test_used": false,
+  "final_test_boundary": "The final test partition is reserved for future final AO2 evaluation and was not used for this H2 validation-stage synthesis.",
+  "models_compared": {
+    "baseline_model": "ao2_ridge_baseline",
+    "baseline_candidate": "fixed_alpha_1_0",
+    "primary_model": "ao2_gradient_boosting_regressor",
+    "primary_candidate": "conservative_baseline"
+  },
+  "h2_statement": "For order-profitability estimation, a gradient boosting regressor will outperform linear or ridge regression on held-out data, particularly in RMSE and MAE.",
+  "h2_decision": "validation_supported",
+  "h2_conclusion": "H2 is supported on the held-out validation slice because the Gradient Boosting Regressor outperforms the Ridge baseline on RMSE and MAE and improves R-squared from negative to slightly positive; support is modest and not a final-test conclusion.",
+  "support_strength": "modest_supportive",
+  "target_policy_status": "accepted_with_caution",
+  "target_reconstruction_audit": {
+    "metadata_path": "models/ao2_profitability/target_reconstruction_audit/ao2_target_reconstruction_audit_metadata.json",
+    "final_audit_decision": "accepted_with_caution",
+    "forbidden_feature_count": 0,
+    "caution_feature_count": 1308,
+    "predictor_audit_status": "passed",
+    "shap_driver_audit_status": "passed",
+    "feature_importance_audit_status": "passed",
+    "ao3_order_value_detected": false,
+    "final_test_used": false
+  },
+  "key_metrics": {
+    "validation_row_count": 28883,
+    "ridge_baseline": {
+      "rmse": 96.8276235490268,
+      "mae": 54.21910781630418,
+      "r2": -0.01332626896535638,
+      "median_absolute_error": 32.55914083289696,
+      "mean_error_bias": 0.6453064001768685,
+      "absolute_error_p90": 112.92034408442468,
+      "prediction_standard_deviation": 19.54790273253932,
+      "wrong_profit_sign_share": 0.2536093896063428
+    },
+    "gradient_boosting_regressor": {
+      "rmse": 95.62030998097259,
+      "mae": 52.646255058382366,
+      "r2": 0.011785892121975783,
+      "median_absolute_error": 31.395399169999997,
+      "mean_error_bias": 0.962736252259876,
+      "absolute_error_p90": 110.37245351999998,
+      "prediction_standard_deviation": 11.915903574115456,
+      "wrong_profit_sign_share": 0.19741716580687602
+    },
+    "improvement_vs_ridge": {
+      "rmse_improvement": 1.2073135680542,
+      "mae_improvement": 1.5728527579218,
+      "r2_improvement": 0.02511216108733216,
+      "median_absolute_error_improvement": 1.1637416628969612,
+      "wrong_profit_sign_share_reduction": 0.05619222379946678
+    }
+  },
+  "explainability_summary": {
+    "method": "SHAP TreeExplainer",
+    "input_slice": "development_inner_validation",
+    "sample_size": 5000,
+    "final_test_used": false,
+    "top_driver_families": [
+      "commercial price",
+      "geography one-hot levels",
+      "product mix one-hot levels",
+      "discount rate",
+      "order quantity"
+    ],
+    "interpretation_caveat": "SHAP values explain selected model behavior and are not causal effects."
+  },
+  "input_artifacts_used": [
+    "docs/ao2_preprocessing_pipeline.md",
+    "docs/ao2_ridge_baseline.md",
+    "docs/ao2_gradient_boosting_regressor.md",
+    "docs/ao2_model_evaluation.md",
+    "docs/ao2_shap_explainability.md",
+    "docs/ao2_target_reconstruction_review.md",
+    "docs/pre_gold_modeling_decisions.md",
+    "docs/leakage_control_plan.md",
+    "docs/chronological_split_policy.md",
+    "models/ao2_profitability/ridge_baseline/ao2_ridge_baseline_metadata.json",
+    "models/ao2_profitability/gradient_boosting/ao2_gradient_boosting_metadata.json",
+    "models/ao2_profitability/evaluation/ao2_evaluation_metadata.json",
+    "models/ao2_profitability/explainability/ao2_shap_explainability_metadata.json",
+    "models/ao2_profitability/target_reconstruction_audit/ao2_target_reconstruction_audit_metadata.json",
+    "report/tables/ao2_model_evaluation_metrics.csv",
+    "report/tables/ao2_residual_diagnostics_by_model.csv",
+    "report/tables/ao2_error_slices.csv",
+    "report/tables/ao2_model_evaluation_findings.md",
+    "report/tables/ao2_shap_feature_importance.csv",
+    "report/tables/ao2_shap_driver_summary.csv",
+    "report/tables/ao2_shap_explainability_findings.md",
+    "report/tables/ao2_target_reconstruction_forbidden_feature_check.csv",
+    "report/tables/ao2_target_reconstruction_driver_review.csv",
+    "report/tables/ao2_target_reconstruction_audit_findings.md",
+    "report/figures/modeling/ao2_shap_top_features.png"
+  ],
+  "output_artifact_paths": {
+    "documentation_markdown": "docs/ao2_results_h2.md",
+    "summary_csv": "report/tables/ao2_results_h2_summary.csv",
+    "findings_markdown": "report/tables/ao2_results_h2_findings.md",
+    "metadata_json": "models/ao2_profitability/results/ao2_results_h2_metadata.json",
+    "validation_script": "tests/data_validation/validate_ao2_results_h2.py"
+  },
+  "limitations": [
+    "This synthesis uses validation-slice evidence only.",
+    "The final test partition remains untouched.",
+    "No model training, retuning, SHAP rerun, target-policy change, or AO3 implementation is performed.",
+    "Gradient Boosting improvement over Ridge is modest.",
+    "Residual errors remain large and predictions are compressed toward the mean.",
+    "SHAP and feature importance are model associations, not causal effects.",
+    "Approved commercial predictors and granular one-hot drivers require target-policy and stability caution.",
+    "The target-reconstruction audit did not perform a formal ablation rerun."
+  ]
+}

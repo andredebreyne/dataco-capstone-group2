@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO2 H2 results validation, optional AO1 decision-threshold selection, optional EDA artifact checks, and pre-Gold governance checks. Scoring, dashboard exports, and final test-set evaluation are not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -43,6 +43,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO2 SHAP explainability validation | `tests/data_validation/validate_ao2_shap_explainability.py` | Validate AO2 SHAP metadata, artifact paths, target-policy guardrails, non-negative SHAP importances, rank validity, findings language, and final-test exclusion. | Completed AO2 SHAP explainability artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_SHAP_EXPLAINABILITY` and `RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION`. | Runs after AO2 SHAP explainability. Confirms forbidden target/proxy fields and `ao3_order_value` do not appear as SHAP drivers. |
 | AO2 target-reconstruction audit | `src/modeling/audit_ao2_target_reconstruction.py` | Review the selected AO2 predictor set, XGBoost feature importance, SHAP drivers, and validation evidence for target-reconstruction or proxy leakage risk. | Completed AO2 preprocessing, Gradient Boosting, evaluation, and SHAP artifacts. | Forbidden-feature check CSV, driver-review CSV, findings note, documentation note, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO2_TARGET_RECONSTRUCTION_AUDIT`. | Artifact-only audit. Does not retrain, retune, change preprocessing, use final test, change target policy, or implement AO3. |
 | AO2 target-reconstruction audit validation | `tests/data_validation/validate_ao2_target_reconstruction_audit.py` | Validate audit metadata, issue id, final-test exclusion, forbidden count logic, `ao3_order_value` exclusion, output tables, and findings coverage. | Completed AO2 target-reconstruction audit artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_TARGET_RECONSTRUCTION_AUDIT` and `RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION`. | Runs after the audit and blocks accepted decisions if any forbidden feature is detected. |
+| AO2 H2 result artifact check | `notebooks/pipeline/run_project_workflow.py` | Confirm the manually generated AO2 results/H2 documentation package exists. | Completed AO2 evaluation, SHAP, and target-reconstruction audit artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_RESULTS_H2`. | Documentation/result check only. Does not train, rerun SHAP, use final test, or implement AO3. |
+| AO2 H2 results validation | `tests/data_validation/validate_ao2_results_h2.py` | Validate the AO2 H2 metadata, summary CSV, findings note, documentation page, final-test exclusion, model comparison metrics, and target-reconstruction audit dependency. | Completed AO2 results/H2 documentation package and issue `#73` audit metadata. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO2_RESULTS_H2_VALIDATION`. | Confirms H2 is supported only on validation evidence and blocks supported wording if the target-reconstruction audit is missing or blocked. |
 | AO1 Logistic Regression baseline training | `src/modeling/train_ao1_logistic_regression_baseline.py` | Train the AO1 Logistic Regression baseline on the approved training slice and evaluate validation only. | AO1 chronological partition Delta table and AO1 preprocessing factory. | Metrics JSON, metadata JSON, validation metrics CSV, and coefficient CSV. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE`. | Uses an inner chronological validation split inside `development` when only `development`/`test` partitions exist. Does not use final test, train XGBoost, tune thresholds, or apply SMOTE. |
 | AO1 Logistic Regression baseline validation | `tests/data_validation/validate_ao1_logistic_regression_baseline.py` | Validate Logistic Regression baseline artifacts, fit boundaries, metric ranges, parameters, and coefficient output. | Completed AO1 Logistic Regression baseline artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_LOGISTIC_BASELINE` and `RUN_AO1_LOGISTIC_BASELINE_VALIDATION`. | Runs after baseline training. Confirms final test is marked as unused and forbidden leakage fields are not predictors. |
 | AO1 validation evaluation pack | `src/modeling/evaluate_ao1_models.py` | Compare available AO1 candidate validation predictions using ranking metrics, threshold grids, confusion matrices, operating curves, and calibration bins. | Row-level validation prediction CSVs from AO1 candidate models. | Evaluation metrics, threshold grid, curve points, calibration table, findings note, and metadata. | Optional and disabled by default; controlled by `RUN_AO1_EVALUATION_PACK`. | Runs on validation only. The final test set is not used and the final operating threshold is selected in the separate threshold-governance task. |
@@ -124,6 +126,8 @@ RUN_AO2_SHAP_EXPLAINABILITY = False
 RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION = False
+RUN_AO2_RESULTS_H2 = False
+RUN_AO2_RESULTS_H2_VALIDATION = False
 RUN_AO1_LOGISTIC_BASELINE = False
 RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
 RUN_AO1_EVALUATION_PACK = False
@@ -184,6 +188,8 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO2 evaluation metadata JSON.
 - AO2 SHAP driver summary CSV.
 - AO2 target-reconstruction audit metadata JSON.
+- AO2 H2 results metadata JSON.
+- AO2 H2 results summary CSV.
 - AO1 Logistic Regression metadata JSON.
 - AO1 evaluation metadata JSON.
 - AO1 XGBoost metadata JSON.
