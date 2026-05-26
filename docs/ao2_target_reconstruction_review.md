@@ -77,7 +77,7 @@ Accepted with caution: no forbidden target-reconstruction fields were detected. 
 
 ## Output Artifacts
 
-- Forbidden feature check: `C:\Users\bruno\OneDrive - GUSCanada\data_analytics_MSc\T4-MDA-Winter_26\CPSC_620_-_Agile_-_Omid\Final_project\dataco-capstone-group2\report\tables\ao2_target_reconstruction_forbidden_feature_check.csv`
-- Driver review: `C:\Users\bruno\OneDrive - GUSCanada\data_analytics_MSc\T4-MDA-Winter_26\CPSC_620_-_Agile_-_Omid\Final_project\dataco-capstone-group2\report\tables\ao2_target_reconstruction_driver_review.csv`
-- Findings note: `C:\Users\bruno\OneDrive - GUSCanada\data_analytics_MSc\T4-MDA-Winter_26\CPSC_620_-_Agile_-_Omid\Final_project\dataco-capstone-group2\report\tables\ao2_target_reconstruction_audit_findings.md`
-- Metadata: `C:\Users\bruno\OneDrive - GUSCanada\data_analytics_MSc\T4-MDA-Winter_26\CPSC_620_-_Agile_-_Omid\Final_project\dataco-capstone-group2\models\ao2_profitability\target_reconstruction_audit\ao2_target_reconstruction_audit_metadata.json`
+- Forbidden feature check: `report/tables/ao2_target_reconstruction_forbidden_feature_check.csv`
+- Driver review: `report/tables/ao2_target_reconstruction_driver_review.csv`
+- Findings note: `report/tables/ao2_target_reconstruction_audit_findings.md`
+- Metadata: `models/ao2_profitability/target_reconstruction_audit/ao2_target_reconstruction_audit_metadata.json`

@@ -690,19 +690,28 @@ def write_markdown(path: Path, lines: list[str]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def display_path(path: Path) -> str:
+    """Return a repository-relative path when possible for portable artifacts."""
+    resolved_path = path.expanduser().resolve()
+    try:
+        return resolved_path.relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return resolved_path.as_posix()
+
+
 def artifact_path_list(config: AO2TargetReconstructionAuditConfig) -> list[str]:
     """Return reviewed artifact paths."""
     return [
-        str(config.preprocessing_metadata_path),
-        str(config.gradient_boosting_metadata_path),
-        str(config.evaluation_metadata_path),
-        str(config.shap_metadata_path),
-        str(config.model_evaluation_metrics_path),
-        str(config.model_validation_comparison_path),
-        str(config.model_evaluation_findings_path),
-        str(config.xgboost_importance_path),
-        str(config.shap_importance_path),
-        str(config.shap_driver_summary_path),
+        display_path(config.preprocessing_metadata_path),
+        display_path(config.gradient_boosting_metadata_path),
+        display_path(config.evaluation_metadata_path),
+        display_path(config.shap_metadata_path),
+        display_path(config.model_evaluation_metrics_path),
+        display_path(config.model_validation_comparison_path),
+        display_path(config.model_evaluation_findings_path),
+        display_path(config.xgboost_importance_path),
+        display_path(config.shap_importance_path),
+        display_path(config.shap_driver_summary_path),
     ]
 
 
@@ -1002,11 +1011,11 @@ def run_ao2_target_reconstruction_audit(
         final_decision = "accepted"
 
     output_paths = {
-        "forbidden_feature_check_csv": str(config.forbidden_check_output_path),
-        "driver_review_csv": str(config.driver_review_output_path),
-        "findings_markdown": str(config.findings_output_path),
-        "docs_markdown": str(config.docs_output_path),
-        "metadata_json": str(config.metadata_output_path),
+        "forbidden_feature_check_csv": display_path(config.forbidden_check_output_path),
+        "driver_review_csv": display_path(config.driver_review_output_path),
+        "findings_markdown": display_path(config.findings_output_path),
+        "docs_markdown": display_path(config.docs_output_path),
+        "metadata_json": display_path(config.metadata_output_path),
     }
 
     config.forbidden_check_output_path.parent.mkdir(parents=True, exist_ok=True)
