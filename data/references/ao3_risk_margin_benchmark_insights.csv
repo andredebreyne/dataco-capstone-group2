@@ -1,0 +1,9 @@
+metric_name,metric_value,decision_relevance
+total_scored_orders,34467,Benchmark population size from the AO3 held-out segment table.
+high_risk_orders,13804,Orders that risk-only prioritization would group together.
+high_risk_share_high_margin,0.9962329759490003,Share of high-risk orders that AO3 separates as high-margin protection priorities.
+high_risk_share_low_margin,0.0037670240509997104,Share of high-risk orders that AO3 separates as selective-expedite candidates.
+high_margin_orders,34355,Orders that margin-only prioritization would group together.
+high_margin_share_high_risk,0.4002910784456411,Share of high-margin orders that AO3 elevates because delivery risk is also high.
+high_margin_share_low_risk,0.599708921554359,Share of high-margin orders that AO3 keeps in preserve-service rather than urgent intervention.
+h3_support_statement,AO3 adds decision-layer value mainly by splitting high-margin orders into high-risk protection priorities and low-risk preserve-service orders; risk-only differentiation should be interpreted from the observed split in this held-out sample.,"Supports H3 as a practical prioritization comparison, without overstating causal impact or final-test outcome performance."

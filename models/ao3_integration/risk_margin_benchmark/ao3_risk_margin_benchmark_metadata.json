@@ -1,0 +1,23 @@
+{
+  "ao3_risk_cutoff_used": 0.35,
+  "ao3_margin_cutoff_used": 0.0,
+  "issue": "#43",
+  "workflow": "ao3_risk_margin_framework_benchmark",
+  "metadata_status": "ao3_risk_margin_benchmark_completed",
+  "segment_input_path": "/Volumes/workspace/default/raw_data/gold/ao3_risk_margin_segments",
+  "segment_summary_output_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao3_risk_margin_benchmark_segment_summary.csv",
+  "crosswalk_output_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao3_risk_margin_benchmark_crosswalk.csv",
+  "insight_output_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao3_risk_margin_benchmark_insights.csv",
+  "row_count": 34467,
+  "comparison_signals": [
+    "ao3_combined",
+    "risk_only",
+    "margin_only"
+  ],
+  "input_source": "Issue #42 AO3 risk-margin segment table",
+  "same_held_out_scored_data_as_ao3": true,
+  "final_test_targets_used_for_benchmark": false,
+  "performance_metrics_calculated": false,
+  "h3_support_statement": "AO3 adds decision-layer value mainly by splitting high-margin orders into high-risk protection priorities and low-risk preserve-service orders; risk-only differentiation should be interpreted from the observed split in this held-out sample.",
+  "created_at_utc": "2026-05-26T22:24:12.142109+00:00"
+}

@@ -3,8 +3,7 @@
 # [tool.databricks.environment]
 # environment_version = "2"
 # dependencies = [
-#   "-r requirements.txt",
-#   "xgboost==2.0.3",
+#   "-r /Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/requirements.txt",
 # ]
 # ///
 """Run the DataCo project workflow from one Databricks-compatible entry point.
@@ -66,7 +65,7 @@ RUN_AO2_GOLD = False
 # 3. Chronological partitions
 # ----------------------------
 RUN_AO1_PARTITIONS = False
-RUN_AO1_PARTITION_VALIDATION = False
+RUN_AO1_PARTITION_VALIDATION = True
 
 RUN_AO2_PARTITIONS = False
 RUN_AO2_PARTITION_VALIDATION = True
@@ -117,18 +116,21 @@ RUN_AO2_TARGET_RECONSTRUCTION_AUDIT = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION = False
 
 RUN_AO2_RESULTS_H2 = False
-RUN_AO2_RESULTS_H2_VALIDATION = False
+RUN_AO2_RESULTS_H2_VALIDATION = True
 
 # ----------------------------
 # 6. AO3 integration workflow
 # ----------------------------
-RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = False
+RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = True
+
 RUN_AO1_AO2_TEST_SCORING = False
-RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
+RUN_AO1_AO2_TEST_SCORING_VALIDATION = True
+
 RUN_AO3_SEGMENT_ASSIGNMENT = False
-RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = False
+RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = True
+
 RUN_AO3_RISK_MARGIN_BENCHMARK = False
-RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = False
+RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = True
 
 # ----------------------------
 # 7. EDA, exports, and final checks

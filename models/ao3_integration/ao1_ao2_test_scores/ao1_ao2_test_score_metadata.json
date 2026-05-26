@@ -1,0 +1,64 @@
+{
+  "ao1_model_reference": {
+    "metadata_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao1_late_delivery/xgboost_classifier/ao1_xgboost_classifier_metadata.json",
+    "model_name": "ao1_xgboost_classifier",
+    "selected_candidate_id": "deeper_conservative",
+    "source_issue": "#28"
+  },
+  "ao1_partition_input_path": "/Volumes/workspace/default/raw_data/gold/ao1_late_delivery_chronological_partitions",
+  "ao1_threshold_reference": {
+    "final_test_used_for_threshold_selection": false,
+    "policy_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao1_decision_threshold_policy.csv",
+    "selected_threshold": 0.35
+  },
+  "ao2_model_reference": {
+    "metadata_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/models/ao2_profitability/gradient_boosting/ao2_gradient_boosting_metadata.json",
+    "model_name": "ao2_gradient_boosting_regressor",
+    "selected_candidate_id": "conservative_baseline",
+    "source_issue": "#36"
+  },
+  "ao2_partition_input_path": "/Volumes/workspace/default/raw_data/gold/ao2_profitability_chronological_partitions",
+  "generated_timestamp_utc": "2026-05-26T22:23:43.293081+00:00",
+  "issue": "#41",
+  "limitations": [
+    "The integrated table is the AO1/AO2 scoring input for AO3 and does not assign final AO3 segments.",
+    "Final-test labels remain excluded from the scored output and are not used for performance metrics.",
+    "The AO3 scoring population is anchored on AO1 test rows and requires matching AO2 scores."
+  ],
+  "metadata_status": "runtime_scoring_completed",
+  "output_path": "/Volumes/workspace/default/raw_data/gold/ao1_ao2_test_scores",
+  "scoring_mode": "development_refit_test_score",
+  "summary": {
+    "ao1_decision_threshold": 0.35,
+    "ao1_development_rows": 138212,
+    "ao1_high_risk_count": 13804,
+    "ao1_scored_test_rows": 34553,
+    "ao1_selected_candidate": "deeper_conservative",
+    "ao1_test_rows": 34553,
+    "ao1_test_rows_excluded_without_ao2_test_match": 86,
+    "ao2_development_rows": 144415,
+    "ao2_scored_test_rows": 36104,
+    "ao2_selected_candidate": "conservative_baseline",
+    "ao2_test_rows": 36104,
+    "ao2_test_rows_excluded_without_ao1_test_match": 1637,
+    "ao3_margin_missing_count": 0,
+    "execution_timestamp_utc": "2026-05-26T22:23:43.258864+00:00",
+    "final_test_metrics_calculated": false,
+    "final_test_used_for_model_selection": false,
+    "final_test_used_for_threshold_selection": false,
+    "final_test_used_for_training": false,
+    "integrated_common_test_rows": 34467,
+    "integrated_scored_rows": 34467,
+    "issue": "#41",
+    "output_path": "/Volumes/workspace/default/raw_data/gold/ao1_ao2_test_scores",
+    "scoring_mode": "development_refit_test_score"
+  },
+  "summary_output_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao1_ao2_test_score_summary.csv",
+  "test_set_usage": {
+    "used_for_model_selection": false,
+    "used_for_performance_metrics": false,
+    "used_for_prediction_only": true,
+    "used_for_threshold_selection": false,
+    "used_for_training": false
+  }
+}

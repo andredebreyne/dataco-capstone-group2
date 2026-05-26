@@ -1,0 +1,22 @@
+{
+  "issue": "#42",
+  "workflow": "ao3_risk_margin_segment_assignment",
+  "input_score_path": "/Volumes/workspace/default/raw_data/gold/ao1_ao2_test_scores",
+  "output_segment_path": "/Volumes/workspace/default/raw_data/gold/ao3_risk_margin_segments",
+  "policy_csv_path": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/data/references/ao3_risk_margin_matrix_policy.csv",
+  "policy_name": "ao3_risk_margin_matrix",
+  "risk_cutoff": 0.35,
+  "margin_cutoff": 0.0,
+  "row_count": 34467,
+  "segment_counts": {
+    "expedite_selectively": 52,
+    "preserve_service": 20603,
+    "protect_high_value_at_risk": 13752,
+    "requires_margin_review": 0,
+    "requires_score_review": 0,
+    "standard_process": 60
+  },
+  "final_test_targets_used_for_assignment": false,
+  "performance_metrics_calculated": false,
+  "created_at_utc": "2026-05-26T22:23:58.720599+00:00"
+}
