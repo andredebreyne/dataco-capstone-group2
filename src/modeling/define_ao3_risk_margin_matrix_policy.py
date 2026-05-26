@@ -80,7 +80,10 @@ def build_policy_row(risk_cutoff: float) -> dict[str, object]:
         "low_risk_high_margin_segment": "preserve_service",
         "low_risk_low_margin_segment": "standard_process",
         "final_test_used": False,
-        "notes": "Use predicted AO1 risk and predicted AO2 profit only for segment assignment.",
+        "notes": (
+            "Use predicted AO1 risk and predicted AO2 profit only; do not use "
+            "realized delivery or profit outcomes for segment assignment."
+        ),
     }
 
 
