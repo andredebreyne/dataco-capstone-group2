@@ -132,6 +132,9 @@ RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = True
 RUN_AO3_RISK_MARGIN_BENCHMARK = False
 RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = True
 
+RUN_AO3_KMEANS_EXTENSION = False
+RUN_AO3_KMEANS_EXTENSION_VALIDATION = False
+
 # ----------------------------
 # 7. EDA, exports, and final checks
 # ----------------------------
@@ -188,6 +191,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/score_ao1_ao2_test_set.py"),
     Path("src/modeling/build_ao3_risk_margin_segments.py"),
     Path("src/modeling/benchmark_ao3_risk_margin_framework.py"),
+    Path("src/modeling/run_ao3_kmeans_extension.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -213,6 +217,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao1_ao2_test_scores.py"),
     Path("tests/data_validation/validate_ao3_risk_margin_segments.py"),
     Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"),
+    Path("tests/data_validation/validate_ao3_kmeans_extension.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -388,6 +393,11 @@ from src.modeling.audit_ao2_target_reconstruction import (  # noqa: E402
     AO2TargetReconstructionAuditConfig,
     configure_logging as configure_ao2_target_reconstruction_logging,
     run_ao2_target_reconstruction_audit,
+)
+from src.modeling.run_ao3_kmeans_extension import (  # noqa: E402
+    AO3KMeansExtensionConfig,
+    configure_logging as configure_ao3_kmeans_logging,
+    run_ao3_kmeans_extension as run_ao3_kmeans_extension_job,
 )
 
 
@@ -808,6 +818,19 @@ def run_ao3_risk_margin_benchmark_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"))
 
 
+def run_ao3_kmeans_extension() -> None:
+    """Run the optional AO3 K-means clustering extension."""
+    run_ao3_kmeans_extension_job(
+        AO3KMeansExtensionConfig(),
+        configure_ao3_kmeans_logging(),
+    )
+
+
+def run_ao3_kmeans_extension_validation() -> None:
+    """Run AO3 K-means extension artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_ao3_kmeans_extension.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -872,6 +895,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO3 segment validation runs only when RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION is True.")
     print("- OPTIONAL: AO3 risk-margin benchmark runs only when RUN_AO3_RISK_MARGIN_BENCHMARK is True.")
     print("- OPTIONAL: AO3 risk-margin benchmark validation runs only when RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION is True.")
+    print("- OPTIONAL: AO3 K-means extension runs only when RUN_AO3_KMEANS_EXTENSION is True.")
+    print("- OPTIONAL: AO3 K-means extension validation runs only when RUN_AO3_KMEANS_EXTENSION_VALIDATION is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -895,6 +920,7 @@ def print_final_checklist() -> None:
     ao1_shap_config = AO1SHAPExplainabilityConfig()
     ao2_shap_config = AO2SHAPExplainabilityConfig()
     ao2_target_reconstruction_config = AO2TargetReconstructionAuditConfig()
+    ao3_kmeans_config = AO3KMeansExtensionConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -937,6 +963,8 @@ def print_final_checklist() -> None:
     print("- AO3 segment assignment metadata: models/ao3_integration/risk_margin_segments/ao3_segment_assignment_metadata.json")
     print("- AO3 risk-margin benchmark metadata: models/ao3_integration/risk_margin_benchmark/ao3_risk_margin_benchmark_metadata.json")
     print("- AO3 risk-margin benchmark insights: data/references/ao3_risk_margin_benchmark_insights.csv")
+    print(f"- AO3 K-means extension metadata: {ao3_kmeans_config.metadata_output_path}")
+    print(f"- AO3 K-means cluster profiles: {ao3_kmeans_config.cluster_profiles_output_path}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -1266,6 +1294,18 @@ def main() -> None:
         RUN_AO3_RISK_MARGIN_BENCHMARK and RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION,
         run_ao3_risk_margin_benchmark_validation,
         required=RUN_AO3_RISK_MARGIN_BENCHMARK and RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION,
+    )
+    run_step(
+        "AO3 K-means optional extension",
+        RUN_AO3_KMEANS_EXTENSION,
+        run_ao3_kmeans_extension,
+        required=False,
+    )
+    run_step(
+        "AO3 K-means optional extension validation",
+        RUN_AO3_KMEANS_EXTENSION and RUN_AO3_KMEANS_EXTENSION_VALIDATION,
+        run_ao3_kmeans_extension_validation,
+        required=False,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
