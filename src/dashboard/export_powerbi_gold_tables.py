@@ -200,28 +200,19 @@ def clear_output_path(path: Path) -> None:
 
 
 def write_single_csv(df: DataFrame, output_path: Path) -> int:
-    """Write a DataFrame to a deterministic single CSV file."""
+    """Write a DataFrame to a deterministic single CSV file.
+
+    Spark distributed CSV writes are not reliable for Databricks Workspace
+    repository paths because those paths are not normal Hadoop directories.
+    The dashboard exports are intentionally compact, so the final projection is
+    collected to the driver and written with pandas.
+    """
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    temporary_path = output_path.with_suffix(output_path.suffix + ".tmp")
     clear_output_path(output_path)
-    clear_output_path(temporary_path)
 
-    row_count = df.count()
-    (
-        df.coalesce(1)
-        .write.mode("overwrite")
-        .option("header", "true")
-        .option("encoding", "UTF-8")
-        .csv(str(temporary_path))
-    )
-
-    part_files = sorted(temporary_path.glob("part-*.csv"))
-    if len(part_files) != 1:
-        raise RuntimeError(f"Expected one CSV part file in {temporary_path}; found {len(part_files)}.")
-
-    shutil.move(str(part_files[0]), str(output_path))
-    shutil.rmtree(temporary_path)
-    return row_count
+    output_pdf = df.toPandas()
+    output_pdf.to_csv(output_path, index=False, encoding="utf-8")
+    return int(len(output_pdf))
 
 
 def copy_reference_file(source_path: Path, output_path: Path) -> int:
