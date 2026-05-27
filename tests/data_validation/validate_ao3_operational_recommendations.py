@@ -108,10 +108,30 @@ def main() -> None:
     assert len(rows) == len(EXPECTED_SEGMENTS), "AO3 recommendation matrix has duplicate segment rows."
 
     benchmark_rows = read_csv_rows(BENCHMARK_SUMMARY_PATH)
-    benchmark_segments = {normalize(row["ao3_priority_segment"]) for row in benchmark_rows}
+
+    benchmark_segments = {
+        normalize(row["ao3_priority_segment"]) for row in benchmark_rows
+    }
+    
     assert EXPECTED_SEGMENTS.issubset(benchmark_segments), (
         "AO3 benchmark summary does not cover every recommendation segment."
     )
+    
+    benchmark_counts = {
+        normalize(row["ao3_priority_segment"]): int(float(row["row_count"]))
+        for row in benchmark_rows
+    }
+    
+    for row in rows:
+        segment = normalize(row["ao3_priority_segment"])
+        basis = normalize(row["evidence_basis"]).lower()
+    
+        expected_count = str(benchmark_counts.get(segment, ""))
+    
+        if expected_count and expected_count != "0":
+            assert expected_count in basis, (
+                f"{segment} evidence_basis cites stale count; expected {expected_count}"
+            )
 
     for row in rows:
         segment = normalize(row["ao3_priority_segment"])
