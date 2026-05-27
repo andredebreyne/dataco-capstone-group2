@@ -1,0 +1,105 @@
+-- DataCo Capstone Power BI Measures
+-- These measures assume the governed Power BI table names defined in
+-- dashboard/powerbi_semantic_model.md.
+
+AO1 Validation Rows =
+MAX ( AO1_Model_Validation[row_count] )
+
+AO1 Best ROC AUC =
+MAX ( AO1_Model_Validation[roc_auc] )
+
+AO1 Best PR AUC =
+MAX ( AO1_Model_Validation[pr_auc] )
+
+AO1 Best Recall =
+MAX ( AO1_Model_Validation[recall] )
+
+AO1 Best Precision =
+MAX ( AO1_Model_Validation[precision] )
+
+AO1 Selected Threshold =
+MAX ( AO1_Decision_Threshold_Policy[selected_threshold] )
+
+AO1 Selected Threshold Recall =
+MAX ( AO1_Decision_Threshold_Policy[validation_recall] )
+
+AO1 Selected Threshold Precision =
+MAX ( AO1_Decision_Threshold_Policy[validation_precision] )
+
+AO1 Selected Threshold Alert Rate =
+MAX ( AO1_Decision_Threshold_Policy[validation_predicted_positive_rate] )
+
+AO1 False Positives =
+SUM ( AO1_Confusion_By_Threshold[false_positive] )
+
+AO1 False Negatives =
+SUM ( AO1_Confusion_By_Threshold[false_negative] )
+
+AO1 True Positives =
+SUM ( AO1_Confusion_By_Threshold[true_positive] )
+
+AO1 True Negatives =
+SUM ( AO1_Confusion_By_Threshold[true_negative] )
+
+AO2 Validation Rows =
+MAX ( AO2_Model_Validation[validation_rows] )
+
+AO2 Best RMSE =
+MIN ( AO2_Model_Validation[rmse] )
+
+AO2 Best MAE =
+MIN ( AO2_Model_Validation[mae] )
+
+AO2 Best R2 =
+MAX ( AO2_Model_Validation[r2] )
+
+AO2 Wrong Profit Sign Share =
+MAX ( AO2_Evaluation_Metrics[wrong_profit_sign_share] )
+
+AO3 Risk Cutoff =
+MAX ( AO3_Risk_Margin_Policy[risk_cutoff] )
+
+AO3 Margin Cutoff =
+MAX ( AO3_Risk_Margin_Policy[margin_cutoff] )
+
+Total Orders =
+COUNTROWS ( AO3_Order_Segments )
+
+High Risk Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = TRUE ()
+)
+
+High Risk Rate =
+DIVIDE ( [High Risk Orders], [Total Orders] )
+
+High Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_high_margin_flag] = TRUE ()
+)
+
+High Margin Rate =
+DIVIDE ( [High Margin Orders], [Total Orders] )
+
+Expected Profit =
+SUM ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Average Expected Profit =
+AVERAGE ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Average AO1 Late Risk =
+AVERAGE ( AO3_Order_Segments[ao1_predicted_late_delivery_probability] )
+
+Average Predicted Margin =
+AVERAGE ( AO3_Order_Segments[ao3_predicted_margin] )
+
+Protect High Value At Risk Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] = "protect_high_value_at_risk"
+)
+
+Protect High Value At Risk Share =
+DIVIDE ( [Protect High Value At Risk Orders], [Total Orders] )
