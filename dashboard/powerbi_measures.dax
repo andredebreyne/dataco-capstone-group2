@@ -1,0 +1,408 @@
+-- DataCo Capstone Power BI Measures
+-- These measures assume the governed Power BI table names defined in
+-- dashboard/powerbi_semantic_model.md.
+--
+-- Scope:
+-- - Starter operational measures for AO1 delivery risk, AO2 profitability,
+--   AO3 risk-margin segmentation, AO3 benchmark interpretation, and dashboard QA.
+-- - Power BI must not recreate model scores, thresholds, margins, or segment
+--   assignments. Those values are imported from governed Databricks exports.
+
+-- ============================================================
+-- AO1 validation and threshold evidence
+-- ============================================================
+
+AO1 Validation Rows =
+MAX ( AO1_Model_Validation[row_count] )
+
+AO1 Best ROC AUC =
+MAX ( AO1_Model_Validation[roc_auc] )
+
+AO1 Best PR AUC =
+MAX ( AO1_Model_Validation[pr_auc] )
+
+AO1 Best Recall =
+MAX ( AO1_Model_Validation[recall] )
+
+AO1 Best Precision =
+MAX ( AO1_Model_Validation[precision] )
+
+AO1 Selected Threshold =
+MAX ( AO1_Decision_Threshold_Policy[selected_threshold] )
+
+AO1 Selected Threshold Recall =
+MAX ( AO1_Decision_Threshold_Policy[validation_recall] )
+
+AO1 Selected Threshold Precision =
+MAX ( AO1_Decision_Threshold_Policy[validation_precision] )
+
+AO1 Selected Threshold Alert Rate =
+MAX ( AO1_Decision_Threshold_Policy[validation_predicted_positive_rate] )
+
+AO1 False Positives =
+SUM ( AO1_Confusion_By_Threshold[false_positive] )
+
+AO1 False Negatives =
+SUM ( AO1_Confusion_By_Threshold[false_negative] )
+
+AO1 True Positives =
+SUM ( AO1_Confusion_By_Threshold[true_positive] )
+
+AO1 True Negatives =
+SUM ( AO1_Confusion_By_Threshold[true_negative] )
+
+AO1 Confusion Matrix Total =
+[AO1 False Positives] + [AO1 False Negatives] + [AO1 True Positives] + [AO1 True Negatives]
+
+AO1 Confusion Matrix Accuracy =
+DIVIDE ( [AO1 True Positives] + [AO1 True Negatives], [AO1 Confusion Matrix Total] )
+
+AO1 Confusion Matrix Precision =
+DIVIDE ( [AO1 True Positives], [AO1 True Positives] + [AO1 False Positives] )
+
+AO1 Confusion Matrix Recall =
+DIVIDE ( [AO1 True Positives], [AO1 True Positives] + [AO1 False Negatives] )
+
+AO1 Confusion Matrix F1 =
+VAR PrecisionValue = [AO1 Confusion Matrix Precision]
+VAR RecallValue = [AO1 Confusion Matrix Recall]
+RETURN
+DIVIDE ( 2 * PrecisionValue * RecallValue, PrecisionValue + RecallValue )
+
+AO1 Threshold Grid Best F1 =
+MAX ( AO1_Threshold_Tradeoff[f1] )
+
+AO1 Threshold Grid Max Recall =
+MAX ( AO1_Threshold_Tradeoff[recall] )
+
+AO1 Threshold Grid Min Alert Rate =
+MIN ( AO1_Threshold_Tradeoff[predicted_positive_rate] )
+
+-- ============================================================
+-- AO2 validation and profitability evidence
+-- ============================================================
+
+AO2 Validation Rows =
+MAX ( AO2_Model_Validation[validation_rows] )
+
+AO2 Best RMSE =
+MIN ( AO2_Model_Validation[rmse] )
+
+AO2 Best MAE =
+MIN ( AO2_Model_Validation[mae] )
+
+AO2 Best R2 =
+MAX ( AO2_Model_Validation[r2] )
+
+AO2 Wrong Profit Sign Share =
+MAX ( AO2_Evaluation_Metrics[wrong_profit_sign_share] )
+
+AO2 Correct Profit Sign Share =
+1 - [AO2 Wrong Profit Sign Share]
+
+-- ============================================================
+-- AO3 policy and core operational KPIs
+-- ============================================================
+
+AO3 Risk Cutoff =
+MAX ( AO3_Risk_Margin_Policy[risk_cutoff] )
+
+AO3 Margin Cutoff =
+MAX ( AO3_Risk_Margin_Policy[margin_cutoff] )
+
+Total Orders =
+COUNTROWS ( AO3_Order_Segments )
+
+High Risk Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = TRUE ()
+)
+
+High Risk Rate =
+DIVIDE ( [High Risk Orders], [Total Orders] )
+
+Low Risk Orders =
+[Total Orders] - [High Risk Orders]
+
+Low Risk Rate =
+DIVIDE ( [Low Risk Orders], [Total Orders] )
+
+High Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_high_margin_flag] = TRUE ()
+)
+
+High Margin Rate =
+DIVIDE ( [High Margin Orders], [Total Orders] )
+
+Low Margin Orders =
+[Total Orders] - [High Margin Orders]
+
+Low Margin Rate =
+DIVIDE ( [Low Margin Orders], [Total Orders] )
+
+Expected Profit =
+SUM ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Average Expected Profit =
+AVERAGE ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Median Expected Profit =
+MEDIAN ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Average AO1 Late Risk =
+AVERAGE ( AO3_Order_Segments[ao1_predicted_late_delivery_probability] )
+
+Median AO1 Late Risk =
+MEDIAN ( AO3_Order_Segments[ao1_predicted_late_delivery_probability] )
+
+Average Predicted Margin =
+AVERAGE ( AO3_Order_Segments[ao3_predicted_margin] )
+
+Median Predicted Margin =
+MEDIAN ( AO3_Order_Segments[ao3_predicted_margin] )
+
+Total Order Value =
+SUM ( AO3_Order_Segments[ao3_order_value] )
+
+Average Order Value =
+AVERAGE ( AO3_Order_Segments[ao3_order_value] )
+
+Expected Profit Margin =
+DIVIDE ( [Expected Profit], [Total Order Value] )
+
+Positive Expected Profit Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao2_predicted_order_profit] >= 0
+)
+
+Negative Expected Profit Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao2_predicted_order_profit] < 0
+)
+
+Positive Expected Profit Share =
+DIVIDE ( [Positive Expected Profit Orders], [Total Orders] )
+
+Negative Expected Profit Share =
+DIVIDE ( [Negative Expected Profit Orders], [Total Orders] )
+
+-- ============================================================
+-- AO3 segment counts and shares
+-- ============================================================
+
+Protect High Value At Risk Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] = "protect_high_value_at_risk"
+)
+
+Protect High Value At Risk Share =
+DIVIDE ( [Protect High Value At Risk Orders], [Total Orders] )
+
+Expedite Selectively Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] = "expedite_selectively"
+)
+
+Expedite Selectively Share =
+DIVIDE ( [Expedite Selectively Orders], [Total Orders] )
+
+Preserve Service Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] = "preserve_service"
+)
+
+Preserve Service Share =
+DIVIDE ( [Preserve Service Orders], [Total Orders] )
+
+Standard Process Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] = "standard_process"
+)
+
+Standard Process Share =
+DIVIDE ( [Standard Process Orders], [Total Orders] )
+
+Review Segment Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_priority_segment] IN { "requires_score_review", "requires_margin_review" }
+)
+
+Review Segment Share =
+DIVIDE ( [Review Segment Orders], [Total Orders] )
+
+-- ============================================================
+-- AO3 segment economics and risk profile
+-- These measures respond to the current segment filter context.
+-- ============================================================
+
+Segment Orders =
+COUNTROWS ( AO3_Order_Segments )
+
+Segment Share =
+DIVIDE ( [Segment Orders], CALCULATE ( [Total Orders], ALL ( AO3_Order_Segments[ao3_priority_segment] ) ) )
+
+Segment Expected Profit =
+SUM ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Segment Expected Profit Share =
+DIVIDE ( [Segment Expected Profit], CALCULATE ( [Expected Profit], ALL ( AO3_Order_Segments[ao3_priority_segment] ) ) )
+
+Segment Average Expected Profit =
+AVERAGE ( AO3_Order_Segments[ao2_predicted_order_profit] )
+
+Segment Average Risk =
+AVERAGE ( AO3_Order_Segments[ao1_predicted_late_delivery_probability] )
+
+Segment Average Predicted Margin =
+AVERAGE ( AO3_Order_Segments[ao3_predicted_margin] )
+
+Segment Average Order Value =
+AVERAGE ( AO3_Order_Segments[ao3_order_value] )
+
+Segment High Risk Rate =
+DIVIDE (
+    CALCULATE (
+        COUNTROWS ( AO3_Order_Segments ),
+        AO3_Order_Segments[ao1_high_risk_flag] = TRUE ()
+    ),
+    [Segment Orders]
+)
+
+Segment High Margin Rate =
+DIVIDE (
+    CALCULATE (
+        COUNTROWS ( AO3_Order_Segments ),
+        AO3_Order_Segments[ao3_high_margin_flag] = TRUE ()
+    ),
+    [Segment Orders]
+)
+
+-- ============================================================
+-- AO3 2x2 matrix helper measures
+-- ============================================================
+
+High Risk High Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = TRUE (),
+    AO3_Order_Segments[ao3_high_margin_flag] = TRUE ()
+)
+
+High Risk Low Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = TRUE (),
+    AO3_Order_Segments[ao3_high_margin_flag] = FALSE ()
+)
+
+Low Risk High Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = FALSE (),
+    AO3_Order_Segments[ao3_high_margin_flag] = TRUE ()
+)
+
+Low Risk Low Margin Orders =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_high_risk_flag] = FALSE (),
+    AO3_Order_Segments[ao3_high_margin_flag] = FALSE ()
+)
+
+High Risk High Margin Share =
+DIVIDE ( [High Risk High Margin Orders], [Total Orders] )
+
+High Risk Low Margin Share =
+DIVIDE ( [High Risk Low Margin Orders], [Total Orders] )
+
+Low Risk High Margin Share =
+DIVIDE ( [Low Risk High Margin Orders], [Total Orders] )
+
+Low Risk Low Margin Share =
+DIVIDE ( [Low Risk Low Margin Orders], [Total Orders] )
+
+-- ============================================================
+-- AO3 benchmark support
+-- These measures assume the exported benchmark tables are imported with the
+-- names defined in dashboard/powerbi_semantic_model.md.
+-- ============================================================
+
+AO3 Benchmark Segment Rows =
+SUM ( AO3_Benchmark_Segment_Summary[row_count] )
+
+AO3 Benchmark Average Risk =
+AVERAGE ( AO3_Benchmark_Segment_Summary[avg_ao1_predicted_late_delivery_probability] )
+
+AO3 Benchmark Average Profit =
+AVERAGE ( AO3_Benchmark_Segment_Summary[avg_ao2_predicted_order_profit] )
+
+AO3 Benchmark Average Margin =
+AVERAGE ( AO3_Benchmark_Segment_Summary[avg_ao3_predicted_margin] )
+
+AO3 Benchmark Max Segment Share =
+MAX ( AO3_Benchmark_Segment_Summary[share_of_rows] )
+
+AO3 Benchmark Insight Count =
+COUNTROWS ( AO3_Benchmark_Insights )
+
+-- ============================================================
+-- Dashboard QA measures
+-- ============================================================
+
+Rows Missing Segment =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    ISBLANK ( AO3_Order_Segments[ao3_priority_segment] )
+)
+
+Rows Missing Risk Score =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    ISBLANK ( AO3_Order_Segments[ao1_predicted_late_delivery_probability] )
+)
+
+Rows Missing Expected Profit =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    ISBLANK ( AO3_Order_Segments[ao2_predicted_order_profit] )
+)
+
+Rows Missing Predicted Margin =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    ISBLANK ( AO3_Order_Segments[ao3_predicted_margin] )
+)
+
+Rows With Invalid Risk Probability =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao1_predicted_late_delivery_probability] < 0
+        || AO3_Order_Segments[ao1_predicted_late_delivery_probability] > 1
+)
+
+Rows With Nonpositive Order Value =
+CALCULATE (
+    COUNTROWS ( AO3_Order_Segments ),
+    AO3_Order_Segments[ao3_order_value] <= 0
+)
+
+Dashboard QA Issue Rows =
+[Rows Missing Segment]
+    + [Rows Missing Risk Score]
+    + [Rows Missing Expected Profit]
+    + [Rows Missing Predicted Margin]
+    + [Rows With Invalid Risk Probability]
+    + [Rows With Nonpositive Order Value]
+
+Dashboard QA Pass Flag =
+IF ( [Dashboard QA Issue Rows] = 0, 1, 0 )

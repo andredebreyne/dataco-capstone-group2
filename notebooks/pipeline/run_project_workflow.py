@@ -140,6 +140,8 @@ RUN_AO3_KMEANS_EXTENSION_VALIDATION = False
 # ----------------------------
 RUN_EDA = False
 RUN_SILVER_CSV_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
 RUN_FINAL_CHECKLIST = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
@@ -192,6 +194,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/build_ao3_risk_margin_segments.py"),
     Path("src/modeling/benchmark_ao3_risk_margin_framework.py"),
     Path("src/modeling/run_ao3_kmeans_extension.py"),
+    Path("src/dashboard/export_powerbi_gold_tables.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -218,6 +221,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao3_risk_margin_segments.py"),
     Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"),
     Path("tests/data_validation/validate_ao3_kmeans_extension.py"),
+    Path("tests/data_validation/validate_powerbi_gold_exports.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -398,6 +402,11 @@ from src.modeling.run_ao3_kmeans_extension import (  # noqa: E402
     AO3KMeansExtensionConfig,
     configure_logging as configure_ao3_kmeans_logging,
     run_ao3_kmeans_extension as run_ao3_kmeans_extension_job,
+)
+from src.dashboard.export_powerbi_gold_tables import (  # noqa: E402
+    PowerBIExportConfig,
+    configure_logging as configure_powerbi_export_logging,
+    run_powerbi_gold_export,
 )
 
 
@@ -831,6 +840,16 @@ def run_ao3_kmeans_extension_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_ao3_kmeans_extension.py"))
 
 
+def run_powerbi_dashboard_export() -> None:
+    """Export dashboard-ready Gold outputs for Power BI."""
+    run_powerbi_gold_export(PowerBIExportConfig(), configure_powerbi_export_logging())
+
+
+def run_powerbi_dashboard_export_validation() -> None:
+    """Run Power BI export artifact validation."""
+    run_python_file(Path("tests/data_validation/validate_powerbi_gold_exports.py"))
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -869,7 +888,7 @@ def print_final_checklist() -> None:
         detail = f" - {result.detail}" if result.detail else ""
         print(f"- {result.status.upper()}: {result.name} ({required_label}){detail}")
 
-    print("- NOT RUN: scoring, dashboard exports, and final model evaluation are outside this orchestrator.")
+    print("- NOT RUN: final test-set performance evaluation is outside this orchestrator.")
     print("- OPTIONAL: AO1 chronological partitions run only when RUN_AO1_PARTITIONS is True.")
     print("- OPTIONAL: AO2 chronological partitions run only when RUN_AO2_PARTITIONS is True.")
     print("- OPTIONAL: AO1 preprocessing runs only when RUN_AO1_PREPROCESSING is True.")
@@ -897,6 +916,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO3 risk-margin benchmark validation runs only when RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION is True.")
     print("- OPTIONAL: AO3 K-means extension runs only when RUN_AO3_KMEANS_EXTENSION is True.")
     print("- OPTIONAL: AO3 K-means extension validation runs only when RUN_AO3_KMEANS_EXTENSION_VALIDATION is True.")
+    print("- OPTIONAL: Power BI Gold export runs only when RUN_POWERBI_GOLD_EXPORT is True.")
+    print("- OPTIONAL: Power BI Gold export validation runs only when RUN_POWERBI_GOLD_EXPORT_VALIDATION is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -921,6 +942,7 @@ def print_final_checklist() -> None:
     ao2_shap_config = AO2SHAPExplainabilityConfig()
     ao2_target_reconstruction_config = AO2TargetReconstructionAuditConfig()
     ao3_kmeans_config = AO3KMeansExtensionConfig()
+    powerbi_export_config = PowerBIExportConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -965,6 +987,7 @@ def print_final_checklist() -> None:
     print("- AO3 risk-margin benchmark insights: data/references/ao3_risk_margin_benchmark_insights.csv")
     print(f"- AO3 K-means extension metadata: {ao3_kmeans_config.metadata_output_path}")
     print(f"- AO3 K-means cluster profiles: {ao3_kmeans_config.cluster_profiles_output_path}")
+    print(f"- Power BI dashboard export folder: {powerbi_export_config.export_root}")
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -1306,6 +1329,18 @@ def main() -> None:
         RUN_AO3_KMEANS_EXTENSION and RUN_AO3_KMEANS_EXTENSION_VALIDATION,
         run_ao3_kmeans_extension_validation,
         required=False,
+    )
+    run_step(
+        "Power BI Gold dashboard export",
+        RUN_POWERBI_GOLD_EXPORT,
+        run_powerbi_dashboard_export,
+        required=RUN_POWERBI_GOLD_EXPORT,
+    )
+    run_step(
+        "Power BI Gold dashboard export validation",
+        RUN_POWERBI_GOLD_EXPORT and RUN_POWERBI_GOLD_EXPORT_VALIDATION,
+        run_powerbi_dashboard_export_validation,
+        required=RUN_POWERBI_GOLD_EXPORT and RUN_POWERBI_GOLD_EXPORT_VALIDATION,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)

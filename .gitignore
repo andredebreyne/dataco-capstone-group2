@@ -244,3 +244,10 @@ report/tables/ao1_precision_recall_curve_points.csv
 
 # Proposal source documents may contain student identifiers.
 docs/proposal/*.docx
+
+# Power BI local export files are generated from Databricks Gold Delta outputs.
+# Keep the export folder placeholder and documentation tracked, but regenerate
+# CSV/JSON outputs from src/dashboard/export_powerbi_gold_tables.py.
+dashboard/*.pbix
+dashboard/exports/*
+!dashboard/exports/.gitkeep
