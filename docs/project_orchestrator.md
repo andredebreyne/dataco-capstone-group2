@@ -98,6 +98,7 @@ The earlier medallion-only runner was removed after the project-level orchestrat
 - Use Databricks Community Edition with runtime `14.3 LTS` where available, or `13.3 LTS` as the documented fallback.
 - Run the orchestrator from the full repository checkout in Databricks or set `DATACO_REPO_ROOT` to the repository checkout path.
 - The orchestrator assumes the project files are already available in Databricks. It does not manage external workspace setup or version-control operations.
+- Requirements installation is optional and disabled by default. If dependency installation is needed, set `RUN_REQUIREMENTS_INSTALL = True`; the orchestrator checks `DATACO_REQUIREMENTS_PATH` first, then looks for `requirements.txt` in the resolved repository checkout. Do not use a personal Databricks Workspace requirements path in shared code.
 - The default Volume root is `DATACO_VOLUME_ROOT=/Volumes/workspace/default/raw_data`.
 - The default raw DataCo CSV path is `/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`; override with `DATACO_RAW_INPUT_PATH` only when needed.
 - Bronze, Silver, feature, and reference output paths use Unity Catalog Volume paths by default.
@@ -109,24 +110,46 @@ The earlier medallion-only runner was removed after the project-level orchestrat
 
 Open `notebooks/pipeline/run_project_workflow.py` in Databricks and run it top to bottom. Adjust only the flags at the top of the file for partial reruns.
 
-Common flag usage:
+The default flags are intentionally conservative. They should not accidentally rerun data generation, model training, scoring, dashboard exports, or broad EDA. Turn on only the stage needed for the current review or execution task, and reuse committed or previously generated artifacts where appropriate. Some downstream validation switches default to `True`, but the orchestrator still gates those checks behind their paired upstream run flag when a dependency must be regenerated first.
+
+Current default switch values:
 
 ```python
+RUN_REQUIREMENTS_INSTALL = False
 RUN_ENV_CHECK = True
 RUN_REPO_STRUCTURE_CHECK = True
 RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
-RUN_BRONZE = True
-RUN_SILVER = True
-RUN_SILVER_VALIDATION = True
-RUN_FEATURE_ENGINEERING = True
-RUN_GOLD = True
+RUN_REFERENCE_REGISTRATION = False
+RUN_PRE_GOLD_GOVERNANCE_CHECKS = False
+RUN_BRONZE = False
+RUN_SILVER = False
+RUN_SILVER_VALIDATION = False
+RUN_FEATURE_ENGINEERING = False
+RUN_GOLD = False
+RUN_ORDER_TIME_FEATURES = False
+RUN_SHIPPING_PRODUCT_FEATURES = False
+RUN_CUSTOMER_REGIONAL_FEATURES = False
+RUN_AO1_GOLD = False
+RUN_AO2_GOLD = False
 RUN_AO1_PARTITIONS = False
-RUN_AO1_PARTITION_VALIDATION = False
+RUN_AO1_PARTITION_VALIDATION = True
 RUN_AO2_PARTITIONS = False
-RUN_AO2_PARTITION_VALIDATION = False
+RUN_AO2_PARTITION_VALIDATION = True
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO1_LOGISTIC_BASELINE = False
+RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
+RUN_AO1_XGBOOST_CLASSIFIER = False
+RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
+RUN_AO1_EVALUATION_PACK = False
+RUN_AO1_EVALUATION_PACK_VALIDATION = False
+RUN_AO1_SHAP_EXPLAINABILITY = False
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+RUN_AO1_DECISION_THRESHOLD = False
+RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
+RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
+RUN_AO1_RESULTS_H1_VALIDATION = False
 RUN_AO2_PREPROCESSING = False
 RUN_AO2_PREPROCESSING_VALIDATION = False
 RUN_AO2_RIDGE_BASELINE = False
@@ -140,31 +163,36 @@ RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION = False
 RUN_AO2_RESULTS_H2 = False
-RUN_AO2_RESULTS_H2_VALIDATION = False
-RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = False
-RUN_AO1_LOGISTIC_BASELINE = False
-RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
-RUN_AO1_EVALUATION_PACK = False
-RUN_AO1_EVALUATION_PACK_VALIDATION = False
-RUN_AO1_XGBOOST_CLASSIFIER = False
-RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
-RUN_AO1_SHAP_EXPLAINABILITY = False
-RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
-RUN_AO1_DECISION_THRESHOLD = False
-RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
-RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
-RUN_AO1_RESULTS_H1_VALIDATION = False
+RUN_AO2_RESULTS_H2_VALIDATION = True
+RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = True
 RUN_AO1_AO2_TEST_SCORING = False
-RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
+RUN_AO1_AO2_TEST_SCORING_VALIDATION = True
 RUN_AO3_SEGMENT_ASSIGNMENT = False
-RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = False
+RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = True
 RUN_AO3_RISK_MARGIN_BENCHMARK = False
-RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = False
+RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = True
 RUN_AO3_KMEANS_EXTENSION = False
 RUN_AO3_KMEANS_EXTENSION_VALIDATION = False
-RUN_SILVER_CSV_EXPORT = True
-RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
+RUN_SILVER_CSV_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
+RUN_FINAL_CHECKLIST = True
+```
+
+Example full medallion rerun flags, not the default state:
+
+```python
+RUN_BRONZE = True
+RUN_SILVER = True
+RUN_SILVER_VALIDATION = True
+RUN_FEATURE_ENGINEERING = True
+RUN_ORDER_TIME_FEATURES = True
+RUN_SHIPPING_PRODUCT_FEATURES = True
+RUN_CUSTOMER_REGIONAL_FEATURES = True
+RUN_GOLD = True
+RUN_AO1_GOLD = True
+RUN_AO2_GOLD = True
 ```
 
 For EDA, leave `RUN_EDA = False` during normal pipeline runs. To validate that expected EDA artifacts exist without rerunning EDA, set:
