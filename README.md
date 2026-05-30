@@ -123,6 +123,8 @@ A task is considered **Done** only when:
 
 ## Next Steps
 
-- Finalize feature engineering for late-delivery modeling.
-- Benchmark baseline and advanced models for AO1 and AO2.
-- Connect curated Gold tables to the executive Power BI dashboard.
+- Review staged validation outputs for AO1, AO2, AO3, and Power BI exports.
+- Confirm lightweight Databricks artifacts and reference files are committed where appropriate.
+- Review final AO1/AO2/AO3 result documents before report and presentation packaging.
+- Prepare the final report, presentation, and dashboard submission package.
+- Run the final validation checklist before submission.
