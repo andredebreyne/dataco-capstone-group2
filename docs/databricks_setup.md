@@ -74,7 +74,7 @@ Recommended upload process:
 1. Open the Databricks Community Edition workspace.
 2. Go to the workspace home page or data upload area.
 3. Select the option to upload data.
-4. Choose the local CSV file from the project Bronze folder.
+4. Choose the local CSV staged at `data/bronze/dataco/DataCoSupplyChainDataset.csv`.
 5. Upload the file to the standard project Volume.
 6. Record the Volume path shown by Databricks.
 7. Use that path in notebooks or PySpark scripts when reading the file.
@@ -82,6 +82,11 @@ Recommended upload process:
 For consistency, team members should use the following project path when possible:
 
 `/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`
+
+The pipeline reads this Databricks Volume path by default through
+`DATACO_RAW_INPUT_PATH`. The local `data/bronze/dataco/DataCoSupplyChainDataset.csv`
+file is only a gitignored staging copy for upload; committed raw data is not
+required.
 
 The broader Bronze, Silver, Gold, and References destination convention is documented in `docs/medallion_structure.md`.
 
