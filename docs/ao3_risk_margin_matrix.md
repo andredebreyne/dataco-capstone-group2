@@ -9,9 +9,11 @@ DataCo Capstone project. AO3 combines AO1 predicted late-delivery risk with AO2
 predicted profitability to create operational priority groups for pre-dispatch
 decision support.
 
-This task defines the design only. It does not score the final test set,
-materialize order-level AO3 segments, build dashboard pages, retrain AO1 or
-AO2 models, change thresholds, or evaluate final test outcomes.
+This document is the governed AO3 policy reference for capstone submission.
+Downstream AO1/AO2 score integration, AO3 segment assignment, benchmark, and
+recommendation artifacts now exist and apply this policy rather than redefining
+it. The policy itself does not retrain AO1 or AO2 models, change thresholds, or
+evaluate realized delivery or profit outcomes.
 
 ## Governed Policy Artifact
 
@@ -33,12 +35,15 @@ The validation script remains:
 tests/data_validation/validate_ao3_risk_margin_matrix_policy.py
 ```
 
-The intended flow is:
+The implemented governance flow is:
 
 1. The Python generator defines the AO3 policy.
 2. The generator writes the governed reference CSV.
 3. The validation script checks the CSV, this document, the generator presence,
    and alignment with the approved AO1 threshold policy.
+
+The AO3 matrix policy status for capstone submission is
+`approved_for_submission`.
 
 ## Input Signals
 
@@ -91,7 +96,8 @@ uses:
 | --- | --- |
 | Model | `ao1_xgboost_classifier` |
 | Selected threshold | `0.35` |
-| Decision status | `ready_for_team_review` |
+| AO3 reuse status | `approved_for_submission` |
+| AO1 source policy | `data/references/ao1_decision_threshold_policy.csv` |
 | Selection reason | `fallback_max_recall_under_alert_rate_cap` |
 
 This threshold is reused by AO3 and dashboard logic. It must not be retuned
@@ -127,9 +133,9 @@ Rationale:
 - It aligns with the operational distinction between expected profit and
   expected loss.
 
-The team may add sensitivity views later, such as percentile-based margin tiers,
-but the official first-pass AO3 matrix should use the break-even cutoff unless
-a later reviewed issue changes the policy.
+The official capstone AO3 matrix uses the break-even cutoff. Any sensitivity
+view, such as percentile-based margin tiers, would be a separate reviewed
+extension and would not supersede the governed 2x2 matrix.
 
 ## Quadrant Definitions
 
@@ -142,7 +148,7 @@ a later reviewed issue changes the policy.
 
 ## Fallback Rules
 
-The later scoring task should apply these fallback rules:
+The implemented segmenter applies these fallback rules:
 
 1. If AO1 probability is missing, set the AO3 segment to
    `requires_score_review`.
@@ -167,10 +173,14 @@ prediction signals:
 - AO2 identifies expected economic value.
 - AO3 combines both into operationally distinct actions.
 
-Issue `#43` should later benchmark the combined matrix against risk-only and
-profit-only prioritization. Issue `#42` should materialize segment assignments
-using this policy. Issue `#41` should produce the AO1 and AO2 score inputs
-needed by the segmenter.
+The completed AO3 benchmark artifacts compare the combined matrix against
+risk-only and profit-only prioritization on the held-out scored population.
+Issue `#42` materialized segment assignments using this policy, and Issue `#41`
+produced the AO1 and AO2 score inputs used by the segmenter.
+
+This supports H3 as decision-layer evidence only. It does not make a causal
+claim, does not evaluate realized delivery or profit outcomes, and does not
+replace the governed 2x2 risk-margin matrix as the primary AO3 framework.
 
 ## Leakage Controls
 
@@ -180,12 +190,13 @@ AO3 assignments must obey these controls:
 - Use predicted AO2 profit, not actual `Order_Profit_Per_Order`.
 - Use `ao3_order_value` only as the predicted-margin denominator.
 - Do not select risk or margin cutoffs from final test outcomes.
-- Keep final test labels reserved for later final QA and evaluation.
+- Do not use held-out target labels for assignment, benchmarking, or
+  recommendation wording.
 - Preserve row-level identifiers and split metadata for auditability.
 
-## Output Contract For Future Scoring
+## Output Contract For Scoring
 
-Future AO3 scoring should produce at least:
+AO3 scoring produces at least:
 
 | Column | Description |
 | --- | --- |
@@ -209,5 +220,6 @@ Future AO3 scoring should produce at least:
 - `docs/ao2_target_policy.md`
 - `docs/ao2_results_h2.md`
 - `docs/ao2_target_reconstruction_review.md`
+- `docs/ao3_methodology_and_results.md`
 - `docs/pre_gold_modeling_decisions.md`
 - `docs/proposal/proposal_summary.md`
