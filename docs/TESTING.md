@@ -1,123 +1,229 @@
 # Testing Strategy
 
-Task: `[W2][P0][#13] Quality Framework and Git Strategy Documentation`
-
-Issue: `#80`
-
 ## Purpose
 
-This document defines the testing approach for the DataCo Medallion architecture. The goal is to validate data quality at each layer before downstream feature engineering, modeling, evaluation, and dashboard outputs depend on the data.
+This document summarizes the current validation strategy for the DataCo capstone. The test suite protects project validity rather than full model performance. It focuses on data contracts, leakage controls, chronological split integrity, AO1/AO2 model artifact boundaries, AO2 target-reconstruction risk, AO3 segmentation policy, and dashboard/export artifact checks.
 
-Testing is part of the project Definition of Done. A transformation is not complete until its critical assumptions are validated, documented, and reviewed.
+The project uses both local Python validators and Databricks/PySpark/Delta-dependent validators. Do not overstate local pass status for validators that require Databricks Delta tables.
 
-## Medallion Testing Strategy
+## Validation Scope
 
-### Bronze
+The validation suite covers:
 
-Bronze tests confirm that source registration preserves the raw dataset contract.
+- Silver and Gold data quality contracts;
+- feature availability and leakage screening;
+- chronological split policy and partition outputs;
+- AO1 target, preprocessing, model, evaluation, threshold, SHAP, leakage, and H1 artifacts;
+- AO2 target policy, preprocessing, model, evaluation, SHAP, target-reconstruction audit, and H2 artifacts;
+- AO3 risk-margin policy, held-out score contract, segment assignment, benchmark, recommendations, and optional K-means extension;
+- dashboard/export support files when generated.
 
-Expected checks:
+The suite does not validate final dashboard design quality, Power BI visual formatting, `.pbix` files, or exact future model performance values.
 
-- source row count matches the verified DataCo source
-- source column count matches the verified DataCo source
-- raw business fields remain strings to prevent type loss
-- lineage fields are present
-- technical column-name cleaning is traceable through mapping metadata
+## Local Python Validators
 
-### Silver
+These validators run against checked-in CSV, JSON, Markdown, and report artifacts. They do not require Spark or Delta tables.
 
-Silver tests confirm that deterministic cleaning produced an analysis-ready table without applying model-training transformations.
-
-Expected checks:
-
-- row count remains stable unless a documented exclusion rule exists
-- required analytical fields are present
-- critical modeling fields do not contain nulls
-- date fields are parsed as timestamps
-- numeric fields are cast to approved analytical types
-- Bronze lineage is preserved
-- Silver processing metadata is appended
-- Silver quality-report metrics are written for auditability
-
-Silver must not perform fitted preprocessing such as statistical imputation, scaling, one-hot encoding, label encoding, target encoding, or resampling. Those transformations belong in model pipelines and must be fit on training data only.
-
-The detailed Silver transformation rules are documented in `docs/silver_cleaning_rules.md`.
-
-### Gold
-
-Gold tests confirm that curated outputs are ready for modeling, evaluation, or dashboard consumption.
-
-Expected checks:
-
-- target definitions match AO1 and AO2 policies
-- leakage-forbidden predictor fields are excluded from model feature matrices
-- training, validation, and test splits are reproducible
-- model-ready tables contain expected feature and target columns
-- dashboard-ready outputs contain required business metrics and labels
-- scored outputs include run metadata and enough context for auditability
-
-## Silver Quality Validation Script
-
-The Silver validation script is located at:
+### Governance and Reference Checks
 
 ```text
-tests/data_validation/test_silver_quality.py
+python tests/data_validation/validate_silver_schema_dictionary.py
+python tests/data_validation/validate_leakage_conceptual_screening.py
+python tests/data_validation/validate_chronological_split_policy.py
 ```
 
-The script reads the Silver Delta dataset from:
+### AO1 Checks
 
 ```text
-/Volumes/workspace/default/raw_data/silver/dataco_orders_silver
+python tests/data_validation/validate_ao1_logistic_regression_baseline.py
+python tests/data_validation/validate_ao1_xgboost_classifier.py
+python tests/data_validation/validate_ao1_evaluation_pack.py
+python tests/data_validation/validate_ao1_decision_threshold_policy.py
+python tests/data_validation/validate_ao1_post_model_leakage_audit.py
+python tests/data_validation/validate_ao1_shap_explainability.py
+python tests/data_validation/validate_ao1_results_h1.py
 ```
 
-It reads the Silver quality-report Delta dataset from:
+### AO2 Checks
 
 ```text
-/Volumes/workspace/default/raw_data/silver/dataco_orders_silver_quality_report
+python tests/data_validation/validate_ao2_ridge_baseline.py
+python tests/data_validation/validate_ao2_gradient_boosting_regressor.py
+python tests/data_validation/validate_ao2_evaluation_pack.py
+python tests/data_validation/validate_ao2_shap_explainability.py
+python tests/data_validation/validate_ao2_target_reconstruction_audit.py
+python tests/data_validation/validate_ao2_results_h2.py
 ```
 
-It validates:
-
-- exactly `180,519` rows
-- required Silver contract columns exist
-- Bronze lineage columns are preserved
-- `_silver_processed_timestamp` exists
-- zero nulls in critical fields: `Order_Id`, `order_date_DateOrders`, `Sales`, and `Late_delivery_risk`
-- key identifier, timestamp, target, financial, and lineage columns have approved Spark data types
-- the Silver quality report contains required audit metrics
-
-## Why These Checks Matter
-
-The row-count check protects against accidental record loss between Bronze and Silver. Unexpected row loss can bias model training, reduce comparability with source verification, and make later dashboard totals inconsistent.
-
-The required non-null checks protect core modeling and analytical fields:
-
-- `Order_Id` is required for traceability, joins, and duplicate investigation.
-- `order_date_DateOrders` is required for time-aware feature engineering and leakage-safe train/test separation.
-- `Sales` is required for profitability analysis and AO2 feature/target logic.
-- `Late_delivery_risk` is required for AO1 late-delivery modeling and target validation.
-
-The timestamp check ensures order-time feature engineering can derive calendar fields, lead-time controls, and time-based splits without relying on string parsing later in the pipeline.
-
-## Running the Silver Tests in Databricks
-
-Run the Bronze and Silver jobs first from Databricks Repos or the Databricks workspace location where the repository scripts are available:
+### AO3 Checks
 
 ```text
-src/data_engineering/ingest_bronze.py
-src/data_engineering/clean_silver.py
+python tests/data_validation/validate_ao3_risk_margin_matrix_policy.py
+python tests/data_validation/validate_ao3_operational_recommendations.py
+python tests/data_validation/validate_ao3_kmeans_extension.py
 ```
 
-Then run the validation script in Databricks from the repository root context:
-
-```python
-%run /path/to/tests/data_validation/test_silver_quality
-```
-
-If the repository is not mounted in Databricks Repos, copy the full script into a temporary notebook cell after running Bronze and Silver. The script should finish with:
+### Dashboard Export Check
 
 ```text
-All Silver quality tests passed.
+python tests/data_validation/validate_powerbi_gold_exports.py
 ```
 
-If a test fails, do not merge the related pull request until the root cause is understood and documented.
+This validator is local, but it requires generated export files under `dashboard/exports/`. Those files are gitignored and are absent unless the Power BI export script has been run intentionally from Databricks.
+
+## Databricks / PySpark / Delta Validators
+
+These validators require Databricks Community Edition or an equivalent PySpark/Delta environment with the project Volume outputs available.
+
+```text
+python tests/data_validation/test_silver_quality.py
+python tests/data_validation/test_gold_ao1_table.py
+python tests/data_validation/test_gold_ao2_table.py
+python tests/data_validation/validate_ao1_chronological_partitions.py
+python tests/data_validation/validate_ao2_chronological_partitions.py
+python tests/data_validation/validate_ao1_ao2_test_scores.py
+python tests/data_validation/validate_ao3_risk_margin_segments.py
+python tests/data_validation/validate_ao3_risk_margin_benchmark.py
+```
+
+These scripts read Delta tables from the configured project Volume. They should be run after the corresponding Databricks pipeline outputs exist. Environment setup is documented in [databricks_setup.md](databricks_setup.md), and the workflow inventory is documented in [project_orchestrator.md](project_orchestrator.md).
+
+## Hybrid Validators
+
+The preprocessing validators include static metadata checks and optional data-dependent checks. The static portions can run locally after artifacts are present, but full validation requires Delta partition tables.
+
+```text
+python tests/data_validation/validate_ao1_preprocessing_pipeline.py
+python tests/data_validation/validate_ao2_preprocessing_pipeline.py
+```
+
+## AO1 Validation Status
+
+AO1 has checked-in validators for:
+
+- chronological partition integrity;
+- preprocessing fit boundaries and leakage exclusions;
+- Logistic Regression baseline artifacts;
+- XGBoost classifier artifacts;
+- validation evaluation pack;
+- operating threshold policy;
+- SHAP explainability;
+- post-model leakage audit;
+- H1 validation summary.
+
+Current report status: H1 is supported on chronological validation evidence. XGBoost outperforms Logistic Regression on ROC-AUC and recall in the validation artifacts. Final test performance is not claimed from AO1 validation documents.
+
+## AO2 Validation Status
+
+AO2 has checked-in validators for:
+
+- chronological partition integrity;
+- preprocessing fit boundaries and target/proxy exclusions;
+- Ridge baseline artifacts;
+- Gradient Boosting Regressor artifacts;
+- validation evaluation pack;
+- SHAP explainability;
+- target-reconstruction audit;
+- H2 validation summary.
+
+Current report status: H2 is supported on chronological validation evidence, with modest improvement. Gradient Boosting improves RMSE and MAE relative to Ridge, but explanatory power remains limited. The AO2 target-reconstruction audit is accepted with caution.
+
+## AO3 Validation Status
+
+AO3 has checked-in validators for:
+
+- AO1/AO2 held-out score contract;
+- risk-margin matrix policy;
+- segment assignment;
+- benchmark against risk-only and margin-only views;
+- operational recommendation matrix;
+- optional K-means extension.
+
+Current report status: H3 is supported by AO3 segmentation and benchmark evidence with caveats. AO3 shows decision-layer separation of predicted-score groups, but it does not prove realized delivery or profit improvement from intervention.
+
+## Dashboard / Export Validation Status
+
+Dashboard status:
+
+- Dashboard deliverable is still pending.
+- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
+- Power BI semantic-model, DAX, and export-validation artifacts remain as one possible dashboard path.
+- Generated Power BI exports are absent unless regenerated from Databricks.
+- No `.pbix` file is claimed as present.
+
+Dashboard/export validation:
+
+- `src/dashboard/export_powerbi_gold_tables.py` is the optional Databricks export script for the Power BI path.
+- `tests/data_validation/validate_powerbi_gold_exports.py` validates generated exports after they exist.
+- Do not run export validation as evidence of dashboard readiness unless export files have been regenerated and are available locally.
+
+## Final Validation Command Groups
+
+Use these groups for final review.
+
+### Local Governance
+
+```text
+python tests/data_validation/validate_silver_schema_dictionary.py
+python tests/data_validation/validate_leakage_conceptual_screening.py
+python tests/data_validation/validate_chronological_split_policy.py
+```
+
+### Local AO1
+
+```text
+python tests/data_validation/validate_ao1_logistic_regression_baseline.py
+python tests/data_validation/validate_ao1_xgboost_classifier.py
+python tests/data_validation/validate_ao1_evaluation_pack.py
+python tests/data_validation/validate_ao1_decision_threshold_policy.py
+python tests/data_validation/validate_ao1_post_model_leakage_audit.py
+python tests/data_validation/validate_ao1_shap_explainability.py
+python tests/data_validation/validate_ao1_results_h1.py
+```
+
+### Local AO2
+
+```text
+python tests/data_validation/validate_ao2_ridge_baseline.py
+python tests/data_validation/validate_ao2_gradient_boosting_regressor.py
+python tests/data_validation/validate_ao2_evaluation_pack.py
+python tests/data_validation/validate_ao2_shap_explainability.py
+python tests/data_validation/validate_ao2_target_reconstruction_audit.py
+python tests/data_validation/validate_ao2_results_h2.py
+```
+
+### Local AO3
+
+```text
+python tests/data_validation/validate_ao3_risk_margin_matrix_policy.py
+python tests/data_validation/validate_ao3_operational_recommendations.py
+python tests/data_validation/validate_ao3_kmeans_extension.py
+```
+
+### Databricks / Delta
+
+```text
+python tests/data_validation/test_silver_quality.py
+python tests/data_validation/test_gold_ao1_table.py
+python tests/data_validation/test_gold_ao2_table.py
+python tests/data_validation/validate_ao1_chronological_partitions.py
+python tests/data_validation/validate_ao2_chronological_partitions.py
+python tests/data_validation/validate_ao1_ao2_test_scores.py
+python tests/data_validation/validate_ao3_risk_margin_segments.py
+python tests/data_validation/validate_ao3_risk_margin_benchmark.py
+```
+
+### Dashboard Export, Only After Export Generation
+
+```text
+python tests/data_validation/validate_powerbi_gold_exports.py
+```
+
+## Known Deferred Items
+
+- Final dashboard implementation.
+- Final dashboard technology decision between native Databricks AI/BI and Power BI.
+- Regenerated dashboard export files, if the Power BI path is chosen.
+- `.pbix` creation, if the team later chooses Power BI.
+- Realized intervention outcome evaluation for AO3.
+- Production model monitoring, drift review, and fairness review beyond the academic prototype.
