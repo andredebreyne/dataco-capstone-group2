@@ -676,6 +676,7 @@ def run_pre_gold_governance_checks() -> None:
     """Run lightweight governance validations for reference documentation."""
     run_python_file(Path("tests/data_validation/validate_silver_schema_dictionary.py"))
     run_python_file(Path("tests/data_validation/validate_leakage_conceptual_screening.py"))
+    run_python_file(Path("tests/data_validation/validate_chronological_split_policy.py"))
 
 
 def run_ao1_gold_validation() -> None:

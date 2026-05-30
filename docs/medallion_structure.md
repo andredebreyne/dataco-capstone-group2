@@ -34,27 +34,27 @@ data/
 
 ### `data/raw/`
 
-Local-only landing area for manually downloaded source files. This folder may exist on team members' machines but should not contain committed large CSV files.
+Local-only scratch area for manually downloaded source files that are not part
+of the current DataCo staging convention. This folder may exist on team
+members' machines but should not contain committed large CSV files.
 
-Expected local files:
-
-```text
-data/raw/DataCoSupplyChainDataset.csv
-data/raw/DescriptionDataCoSupplyChain.csv
-data/raw/tokenized_access_logs.csv
-```
-
-`DataCoSupplyChainDataset.csv` and `tokenized_access_logs.csv` are ignored by Git because they are large source files. The official source and checksum rules are documented in `docs/data_source_verification.md`.
+For the current DataCo workflow, use the dataset-specific local staging path
+under `data/bronze/dataco/` before uploading the raw CSV to Databricks.
+`data/raw/` should not be treated as the default pipeline input location.
 
 ### `data/bronze/`
 
-Versioned Bronze references and small source-support files. Large Bronze source CSVs should remain ignored unless the team explicitly changes the repository policy.
+Versioned Bronze references, small source-support files, and the canonical
+local staging folder for the raw DataCo CSV before Databricks upload. Large
+Bronze source CSVs should remain ignored unless the team explicitly changes the
+repository policy.
 
 Current structured DataCo convention:
 
 ```text
 data/bronze/dataco/
 |-- README.md
+|-- DataCoSupplyChainDataset.csv        # local only, ignored by Git
 `-- DescriptionDataCoSupplyChain.csv
 ```
 
