@@ -425,6 +425,38 @@ def read_csv_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def metadata_path_to_repo_relative(path_value: str, artifact_key: str) -> Path:
+    """Resolve local or Databricks metadata paths to repo-relative paths."""
+    assert path_value, f"Metadata artifact path for {artifact_key} is empty."
+
+    raw_value = str(path_value)
+    local_candidate = Path(raw_value)
+    if local_candidate.is_absolute():
+        try:
+            return local_candidate.resolve().relative_to(REPO_ROOT.resolve())
+        except ValueError:
+            pass
+
+    normalized_value = raw_value.replace("\\", "/")
+    normalized_repo_root = str(REPO_ROOT.resolve()).replace("\\", "/")
+    if normalized_value.startswith(f"{normalized_repo_root}/"):
+        return Path(normalized_value.removeprefix(f"{normalized_repo_root}/"))
+
+    repo_marker = f"/{REPO_ROOT.name}/"
+    if repo_marker in normalized_value:
+        return Path(normalized_value.split(repo_marker, maxsplit=1)[1])
+
+    if normalized_value.startswith(f"{REPO_ROOT.name}/"):
+        return Path(normalized_value.removeprefix(f"{REPO_ROOT.name}/"))
+
+    if not local_candidate.is_absolute():
+        return local_candidate
+
+    raise AssertionError(
+        f"Metadata artifact path for {artifact_key} cannot be mapped to this repo: {path_value}"
+    )
+
+
 def assert_metrics_csv_exists() -> None:
     """Validate the report-facing metrics CSV exists and has expected columns."""
     header = set(read_csv_header(METRICS_CSV_PATH))
@@ -504,7 +536,7 @@ def assert_validation_predictions_table_exists(metadata: dict[str, Any]) -> None
 
 
 def assert_artifact_paths_match(metadata: dict[str, Any]) -> None:
-    """Validate metadata artifact path fields match the validator expectations."""
+    """Validate metadata artifact paths point to the expected repo-relative files."""
     artifacts = metadata["artifacts"]
     expected_paths = {
         "metrics_json": METRICS_PATH,
@@ -516,9 +548,15 @@ def assert_artifact_paths_match(metadata: dict[str, Any]) -> None:
     }
 
     for artifact_key, expected_path in expected_paths.items():
-        assert Path(artifacts[artifact_key]) == expected_path, (
-            f"Metadata artifact path for {artifact_key} does not match. "
-            f"Expected: {expected_path}; found: {artifacts[artifact_key]}"
+        expected_relative = expected_path.resolve().relative_to(REPO_ROOT.resolve())
+        actual_relative = metadata_path_to_repo_relative(artifacts[artifact_key], artifact_key)
+        assert actual_relative == expected_relative, (
+            f"Metadata artifact path for {artifact_key} does not map to the expected "
+            f"repo-relative file. Expected: {expected_relative}; found: {artifacts[artifact_key]}"
+        )
+        assert expected_path.exists(), (
+            f"Metadata artifact path for {artifact_key} maps to {expected_relative}, "
+            "but the equivalent local artifact is missing."
         )
 
 
