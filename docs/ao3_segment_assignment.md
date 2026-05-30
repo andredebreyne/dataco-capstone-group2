@@ -19,9 +19,9 @@ AO3 segment assignment depends on:
 - Issue `#40`: `data/references/ao3_risk_margin_matrix_policy.csv`.
 - Issue `#41`: `/Volumes/workspace/default/raw_data/gold/ao1_ao2_test_scores`.
 
-The script is safe to implement before those upstream PRs are merged, but it
-should only be executed after both upstream artifacts exist in the working branch
-or Databricks workspace.
+These upstream artifacts now exist for the capstone AO3 workflow. The segmenter
+should be executed only when the governed policy CSV and held-out score table
+are present in the working branch or Databricks workspace.
 
 ## Input Contract
 
@@ -117,6 +117,8 @@ rows receive a valid AO3 segment, and summary counts match the output row count.
 
 ## Boundary
 
-AO3 segment assignment is a decision-support materialization step. It does not
-prove H3. Issue `#43` should benchmark the AO3 matrix against risk-only and
-profit-only prioritization before H3 is reported as supported.
+AO3 segment assignment is a decision-support materialization step. The completed
+Issue `#43` benchmark compares the AO3 matrix against risk-only and profit-only
+prioritization for the held-out scored population. H3 support is therefore based
+on benchmarked decision-layer separation, not on a causal claim or realized
+delivery/profit outcome evaluation.

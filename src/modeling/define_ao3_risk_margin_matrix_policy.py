@@ -30,6 +30,8 @@ POLICY_COLUMNS = [
     "notes",
 ]
 
+APPROVED_POLICY_STATUS = "approved_for_submission"
+
 
 def resolve_repo_root() -> Path:
     """Resolve repository root for local and Databricks executions."""
@@ -71,7 +73,7 @@ def build_policy_row(risk_cutoff: float) -> dict[str, object]:
     return {
         "policy_name": "ao3_risk_margin_matrix",
         "issue": "#40",
-        "policy_status": "ready_for_team_review",
+        "policy_status": APPROVED_POLICY_STATUS,
         "policy_type": "deterministic_decision_policy",
         "risk_signal": "ao1_predicted_late_delivery_probability",
         "risk_cutoff": risk_cutoff,
