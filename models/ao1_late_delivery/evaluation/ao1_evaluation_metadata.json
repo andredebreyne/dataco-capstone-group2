@@ -1,32 +1,53 @@
 {
   "artifacts": {
-    "calibration_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_calibration_by_probability_bin.csv",
-    "confusion_matrix_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_confusion_matrix_by_threshold.csv",
-    "findings_markdown": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_model_evaluation_findings.md",
-    "metrics_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_model_validation_comparison.csv",
-    "precision_recall_curve_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_precision_recall_curve_points.csv",
-    "roc_curve_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_roc_curve_points.csv",
-    "threshold_tradeoff_csv": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_threshold_tradeoff_grid.csv"
+    "calibration_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_calibration_by_probability_bin.csv",
+    "confusion_matrix_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_confusion_matrix_by_threshold.csv",
+    "findings_markdown": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_model_evaluation_findings.md",
+    "metrics_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_model_validation_comparison.csv",
+    "precision_recall_curve_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_precision_recall_curve_points.csv",
+    "roc_curve_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_roc_curve_points.csv",
+    "threshold_tradeoff_csv": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_threshold_tradeoff_grid.csv"
   },
+  "available_model_artifacts": {
+    "logistic_regression": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_xgboost_validation_predictions.csv"
+  },
+  "comparison_status": "complete",
   "default_threshold": 0.5,
   "evaluated_models": [
     "ao1_logistic_regression_baseline",
     "ao1_xgboost_classifier"
   ],
+  "evaluation_slice": "development_inner_validation",
+  "evaluation_status": "complete_validation_model_comparison",
+  "expected_model_artifacts": {
+    "logistic_regression": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_xgboost_validation_predictions.csv"
+  },
+  "expected_models": [
+    "ao1_logistic_regression_baseline",
+    "ao1_xgboost_classifier"
+  ],
   "final_test_used": false,
-  "generated_timestamp_utc": "2026-05-24T19:31:34.467609+00:00",
+  "generated_timestamp_utc": "2026-05-30T05:10:24.364228+00:00",
+  "h1_comparison_complete": true,
   "input_prediction_paths": {
-    "logistic_regression": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_logistic_regression_validation_predictions.csv",
-    "xgboost": "/Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/report/tables/ao1_xgboost_validation_predictions.csv"
+    "logistic_regression": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_logistic_regression_validation_predictions.csv",
+    "xgboost": "C:\\Users\\bruno\\OneDrive - GUSCanada\\data_analytics_MSc\\T4-MDA-Winter_26\\CPSC_620_-_Agile_-_Omid\\Final_project\\dataco-capstone-group2\\report\\tables\\ao1_xgboost_validation_predictions.csv"
   },
   "issue": "#29",
   "metadata_status": "ao1_validation_evaluation_completed",
+  "missing_model_artifacts": {},
+  "missing_models": [],
   "probability_column": "predicted_probability",
   "required_prediction_columns": [
     "Late_delivery_risk",
+    "evaluation_slice",
     "model_name",
-    "predicted_probability"
+    "predicted_probability",
+    "split_partition"
   ],
+  "split_partition": "development",
   "target_column": "Late_delivery_risk",
   "threshold_grid": [
     0.3,
