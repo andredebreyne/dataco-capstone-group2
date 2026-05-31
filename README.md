@@ -50,6 +50,7 @@ The detailed Git workflow, squash-and-merge rule, branch cleanup process, and ca
 The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
 The decision-time feature availability map is documented in `docs/feature_availability_map.md`.
 - [Project Orchestrator](docs/project_orchestrator.md)
+- [Power BI Databricks SQL Serving Layer](docs/powerbi_databricks_serving_layer.md)
 - [Conceptual Leakage Screening](docs/leakage_conceptual_screening.md)
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
 - [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
@@ -78,6 +79,33 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Post-Model Leakage Audit](docs/ao1_post_model_leakage_audit.md)
 - [AO1 Results and H1 Validation](docs/ao1_results_h1_validation.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
+
+### 3) Power BI serving layer
+
+Power BI can consume governed dashboard artifacts through two supported paths:
+
+- CSV export workflow from `src/dashboard/export_powerbi_gold_tables.py`.
+- Direct Databricks SQL serving layer from `src/dashboard/register_powerbi_databricks_tables.py`.
+
+The Databricks serving layer publishes one managed `workspace.default.powerbi_*` table per governed dashboard artifact. It preserves the same logical architecture as the CSV export workflow and does not recreate AO1/AO2 scores, AO3 margins, thresholds, segments, or final-test outcome fields.
+
+To refresh the Databricks SQL serving layer from a Databricks notebook:
+
+```python
+import os
+import runpy
+from pathlib import Path
+
+repo_root = Path("/Workspace/Users/andredebreyne@gmail.com/dataco-capstone-group2")
+os.environ["DATACO_REPO_ROOT"] = str(repo_root)
+
+runpy.run_path(
+    str(repo_root / "src/dashboard/register_powerbi_databricks_tables.py"),
+    run_name="__main__",
+)
+```
+
+See `docs/powerbi_databricks_serving_layer.md` for table mappings and Power BI connection steps.
 
 ## Data Quality
 
