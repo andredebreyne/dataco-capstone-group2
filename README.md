@@ -9,16 +9,34 @@ The project combines predictive modeling and business intelligence to support pr
 - **AO1:** Predict late delivery risk at order level.
 - **AO2:** Estimate order-level profitability.
 - **AO3:** Create a risk-margin segmentation framework for operations.
-- **Executive Dashboard:** Deliver insights for tactical and strategic decisions.
+- **Executive Dashboard:** Final dashboard deliverable is still pending; native Databricks AI/BI is being evaluated as an alternative to Power BI.
 
 ## Tech Stack
 
 - **Language:** Python (PySpark)
 - **Data Platform:** Databricks
 - **Processing Engine:** Apache Spark + Delta Lake
-- **Visualization:** Power BI
+- **Dashboard/BI:** tool choice pending; Power BI support artifacts are retained and native Databricks AI/BI is under evaluation
 - **Version Control:** GitHub
 - **IDE:** Cursor
+
+## Final Navigation and Status
+
+Use these links for final-facing review:
+
+- [Final Capstone Report Draft](report/final_capstone_report.md)
+- [Final Artifact Index](report/final_artifact_index.md)
+- [Final Validation Summary](report/final_validation_summary.md)
+- [Testing Strategy](docs/TESTING.md)
+- [Databricks Setup](docs/databricks_setup.md)
+- [Dashboard Status and Support Artifacts](dashboard/README.md)
+
+Current dashboard status:
+
+- Dashboard deliverable is still pending.
+- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
+- Power BI semantic-model, DAX, and export-validation files remain available as one possible dashboard path.
+- No `.pbix` file is claimed as present in this repository.
 
 ## Development Workflow
 
@@ -50,6 +68,7 @@ The detailed Git workflow, squash-and-merge rule, branch cleanup process, and ca
 The detailed folder, Databricks destination, and rerun conventions are documented in `docs/medallion_structure.md`.
 The decision-time feature availability map is documented in `docs/feature_availability_map.md`.
 - [Project Orchestrator](docs/project_orchestrator.md)
+- [Databricks Setup](docs/databricks_setup.md)
 - [Power BI Databricks SQL Serving Layer](docs/powerbi_databricks_serving_layer.md)
 - [Conceptual Leakage Screening](docs/leakage_conceptual_screening.md)
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
@@ -70,6 +89,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO3 Segment Assignment](docs/ao3_segment_assignment.md)
 - [AO3 Risk-Margin Benchmark](docs/ao3_risk_margin_benchmark.md)
 - [AO3 Operational Recommendations](docs/ao3_operational_recommendations.md)
+- [AO3 Methodology and Results](docs/ao3_methodology_and_results.md)
 - [AO3 K-means Extension](docs/ao3_kmeans_extension.md)
 - [AO1 Logistic Regression Baseline](docs/ao1_logistic_regression_baseline.md)
 - [AO1 Model Evaluation Pack](docs/ao1_model_evaluation.md)
@@ -80,9 +100,9 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Results and H1 Validation](docs/ao1_results_h1_validation.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
 
-### 3) Power BI serving layer
+### 3) Optional Power BI serving layer
 
-Power BI can consume governed dashboard artifacts through two supported paths:
+Power BI remains one supported dashboard path while the final dashboard tool decision is pending. It can consume governed dashboard artifacts through two supported paths:
 
 - CSV export workflow from `src/dashboard/export_powerbi_gold_tables.py`.
 - Direct Databricks SQL serving layer from `src/dashboard/register_powerbi_databricks_tables.py`.
@@ -109,7 +129,7 @@ See `docs/powerbi_databricks_serving_layer.md` for table mappings and Power BI c
 
 ## Data Quality
 
-Data quality is validated across the Medallion architecture before downstream feature engineering, modeling, or dashboard outputs depend on the data. Silver-layer validation currently checks row count, required columns, critical non-null fields, key data types, lineage metadata, and quality-report metrics for the cleaned DataCo orders table.
+Data quality and methodology are validated across the Medallion architecture, model artifacts, AO3 decision layer, and dashboard/export support files. Silver-layer validation checks row count, required columns, critical non-null fields, key data types, lineage metadata, and quality-report metrics for the cleaned DataCo orders table. Additional validators cover leakage screening, chronological split policy, AO1, AO2, AO3, and dashboard exports when generated.
 
 To run the Silver quality validation in Databricks, execute the Bronze and Silver jobs first, then run:
 
@@ -117,7 +137,7 @@ To run the Silver quality validation in Databricks, execute the Bronze and Silve
 tests/data_validation/test_silver_quality.py
 ```
 
-See `docs/TESTING.md` for the complete testing strategy and validation details.
+See [docs/TESTING.md](docs/TESTING.md) and [report/final_validation_summary.md](report/final_validation_summary.md) for the current testing strategy and validation details.
 
 ## Repository Structure
 
@@ -126,7 +146,7 @@ See `docs/TESTING.md` for the complete testing strategy and validation details.
 - `/src` - reusable modules for cleaning, feature engineering, and modeling
 - `/models` - trained model artifacts and outputs
 - `/docs` - governance and project documentation
-- `/dashboard` - Power BI files (`.pbix`)
+- `/dashboard` - dashboard status and optional Power BI support artifacts
 - `/report` - final academic report and presentation materials
 
 ## Project Management (Agile/Kanban)
@@ -149,8 +169,10 @@ A task is considered **Done** only when:
 - README/Wiki documentation is updated.
 - PR is merged and working branch is deleted.
 
-## Next Steps
+## Final Review Checklist
 
-- Finalize feature engineering for late-delivery modeling.
-- Benchmark baseline and advanced models for AO1 and AO2.
-- Connect curated Gold tables to the executive Power BI dashboard.
+- Use the final report draft and artifact index for grader navigation.
+- Treat H1 and H2 as validation-evidence conclusions unless a cited artifact explicitly states otherwise.
+- Treat H3 as AO3 segmentation and benchmark evidence, not realized intervention outcome evidence.
+- Re-run local or Databricks validators only in the appropriate environment described in `docs/TESTING.md`.
+- Keep the dashboard tool decision open until the team formally chooses native Databricks AI/BI or Power BI.
