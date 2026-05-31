@@ -1,11 +1,7 @@
 # Databricks notebook source
-# /// script
-# [tool.databricks.environment]
-# environment_version = "2"
-# dependencies = [
-#   "-r /Workspace/Users/bruno.de8627@myunfc.ca/dataco-capstone-group2/requirements.txt",
-# ]
-# ///
+# Dependency installation is controlled by RUN_REQUIREMENTS_INSTALL below.
+# Do not declare a Databricks Workspace requirements path in notebook metadata:
+# each Community Edition user has a different /Workspace/Users/<email>/ path.
 """Run the DataCo project workflow from one Databricks-compatible entry point.
 
 This notebook is intentionally thin. Reusable Bronze, Silver, feature
@@ -20,6 +16,7 @@ from __future__ import annotations
 import logging
 import os
 import runpy
+import subprocess
 import sys
 import traceback
 from dataclasses import dataclass
@@ -34,6 +31,7 @@ from typing import Any, Callable
 # ----------------------------
 # 0. Environment and repository checks
 # ----------------------------
+RUN_REQUIREMENTS_INSTALL = False
 RUN_ENV_CHECK = True
 RUN_REPO_STRUCTURE_CHECK = True
 RUN_VOLUME_SETUP = True
@@ -304,6 +302,53 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 print(f"Repo root: {REPO_ROOT}")
+
+
+def resolve_requirements_path() -> Path:
+    """Resolve the project requirements file without user-specific Workspace paths."""
+    override_path = os.getenv("DATACO_REQUIREMENTS_PATH")
+    if override_path:
+        candidate = Path(override_path).expanduser()
+        if local_path_exists(candidate):
+            return candidate.resolve()
+        raise FileNotFoundError(
+            "DATACO_REQUIREMENTS_PATH is set, but the file was not found: "
+            f"{candidate}. Point DATACO_REQUIREMENTS_PATH to this repo's requirements.txt."
+        )
+
+    candidate_paths = [
+        REPO_ROOT / "requirements.txt",
+        Path.cwd().resolve() / "requirements.txt",
+    ]
+
+    try:
+        workflow_path = Path(__file__).resolve()
+        candidate_paths.extend(parent / "requirements.txt" for parent in workflow_path.parents)
+    except NameError:
+        pass
+
+    for candidate in candidate_paths:
+        if local_path_exists(candidate):
+            return candidate.resolve()
+
+    raise FileNotFoundError(
+        "Could not find requirements.txt. Set DATACO_REQUIREMENTS_PATH to the "
+        "requirements.txt file in your Databricks repo checkout before enabling "
+        "RUN_REQUIREMENTS_INSTALL."
+    )
+
+
+def install_project_requirements() -> None:
+    """Install project requirements from a portable, resolved requirements path."""
+    requirements_path = resolve_requirements_path()
+    print(f"Installing project requirements from: {requirements_path}")
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install", "-r", str(requirements_path)]
+    )
+
+
+if RUN_REQUIREMENTS_INSTALL:
+    install_project_requirements()
 
 
 # COMMAND ----------
@@ -631,6 +676,7 @@ def run_pre_gold_governance_checks() -> None:
     """Run lightweight governance validations for reference documentation."""
     run_python_file(Path("tests/data_validation/validate_silver_schema_dictionary.py"))
     run_python_file(Path("tests/data_validation/validate_leakage_conceptual_screening.py"))
+    run_python_file(Path("tests/data_validation/validate_chronological_split_policy.py"))
 
 
 def run_ao1_gold_validation() -> None:

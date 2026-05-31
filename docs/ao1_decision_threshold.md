@@ -29,8 +29,9 @@ models/ao1_late_delivery/evaluation/ao1_evaluation_metadata.json
 ```
 
 The primary AO1 model from issue `#28` should publish validation predictions
-before the final threshold is frozen. Until that artifact is available, this
-policy can be generated as provisional only.
+before the threshold is frozen for AO3 and dashboard reuse. The current policy
+artifact uses the primary XGBoost validation predictions and remains an
+operational threshold recommendation, not model-selection logic.
 
 ## Threshold Selection Rule
 
@@ -50,10 +51,9 @@ preferred_model_name = ao1_xgboost_classifier
 
 Selection logic:
 
-1. Prefer the primary AO1 XGBoost model when its evaluation artifact is
-   available.
-2. Otherwise use the highest-ranked available validation model as a provisional
-   fallback.
+1. Use the primary AO1 XGBoost validation rows from the evaluation pack.
+2. If the primary model rows are unavailable in a future partial rerun, rerun
+   the AO1 evaluation pack before freezing the AO3/dashboard threshold.
 3. Select the threshold with the highest recall among rows that satisfy both:
    `recall >= minimum_recall` and
    `predicted_positive_rate <= maximum_alert_rate`.
@@ -91,11 +91,6 @@ predicted_probability >= selected_threshold
 
 ## Decision Status Values
 
-`provisional_pending_primary_model`
-
-Used when the threshold was generated before the primary AO1 model artifact was
-available. This status is acceptable for draft PRs only.
-
 `ready_for_team_review`
 
 Used when the primary AO1 model is available and the threshold selector has
@@ -125,6 +120,7 @@ The validation checks:
 
 ## Current Project Status
 
-The threshold framework can be reviewed before issue `#28` is complete. The
-final AO1 operating threshold should be frozen only after the AO1 evaluation
-pack includes the primary XGBoost validation predictions.
+The current threshold artifact is `ready_for_team_review` and is based on the
+primary XGBoost validation predictions in the AO1 evaluation pack. The threshold
+supports AO3 and dashboard operational policy; it does not change AO1 model
+selection and must not use the final test partition.

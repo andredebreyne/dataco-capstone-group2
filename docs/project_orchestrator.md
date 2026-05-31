@@ -54,14 +54,14 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO1 XGBoost classifier validation | `tests/data_validation/validate_ao1_xgboost_classifier.py` | Validate XGBoost artifacts, fit boundaries, metric ranges, selected candidate metadata, and feature-importance output. | Completed AO1 XGBoost classifier artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_XGBOOST_CLASSIFIER` and `RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION`. | Runs after XGBoost training. Confirms final test is marked as unused, exactly one candidate is selected, and forbidden leakage fields are not predictors. |
 | AO1 SHAP explainability | `src/modeling/explain_ao1_xgboost_shap.py` | Generate SHAP-based explanations for the selected AO1 XGBoost validation model. | AO1 chronological partition Delta table, AO1 preprocessing factory, and required selected XGBoost metadata. | SHAP feature-importance CSV, driver summary CSV, top-feature plot, findings note, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY`. | Deterministically reconstructs the selected XGBoost candidate on the approved training slice and explains validation rows only. Does not use final test or select thresholds. |
 | AO1 SHAP explainability validation | `tests/data_validation/validate_ao1_shap_explainability.py` | Validate SHAP artifacts, metadata, figure generation, leakage-token guardrails, and final-test exclusion. | Completed AO1 SHAP explainability artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_SHAP_EXPLAINABILITY` and `RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION`. | Runs after SHAP explainability. |
-| AO1 decision-threshold selection | `src/modeling/select_ao1_decision_threshold.py` | Select the AO1 operating threshold from validation threshold trade-offs using the documented recall-first operational rule. | AO1 evaluation metrics and threshold grid from issue `#29`. | Policy CSV, threshold metadata JSON, and recommendation note. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD`. | Runs on validation evidence only. Produces a provisional policy until the primary AO1 model artifact is available. |
+| AO1 decision-threshold selection | `src/modeling/select_ao1_decision_threshold.py` | Select the AO1 operating threshold from validation threshold trade-offs using the documented recall-first operational rule. | AO1 evaluation metrics and threshold grid from issue `#29`. | Policy CSV, threshold metadata JSON, and recommendation note. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD`. | Runs on validation evidence only. Produces an operational policy recommendation for team review; it does not participate in AO1 model selection or use final test data. |
 | AO1 decision-threshold validation | `tests/data_validation/validate_ao1_decision_threshold_policy.py` | Validate the AO1 threshold policy, metadata, final-test exclusion, and AO3/dashboard reuse rule. | Completed AO1 threshold policy artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_DECISION_THRESHOLD` and `RUN_AO1_DECISION_THRESHOLD_VALIDATION`. | Runs after threshold selection. |
 | AO1 post-model leakage audit validation | `tests/data_validation/validate_ao1_post_model_leakage_audit.py` | Validate the AO1 post-model leakage audit memo and checklist. | `docs/ao1_post_model_leakage_audit.md` and `data/references/ao1_post_model_leakage_audit.csv`. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION`. | Confirms final-test boundary, train-only transformation review, forbidden predictor review, reviewed SHAP caveats, and sign-off language are documented. |
 | AO1 H1 results validation | `tests/data_validation/validate_ao1_results_h1.py` | Validate the AO1 results write-up, H1 conclusion, threshold reference, and final-test caveat. | AO1 evaluation pack, threshold grid, and `docs/ao1_results_h1_validation.md`. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_RESULTS_H1_VALIDATION`. | Confirms XGBoost outperforms Logistic Regression on validation ROC-AUC and recall and that the document avoids final-test claims. |
 | AO1/AO2 held-out test scoring | `src/modeling/score_ao1_ao2_test_set.py` | Fit the frozen selected AO1/AO2 configurations on development partitions and generate integrated held-out test predictions for AO3. | AO1/AO2 chronological partitions, AO1/AO2 selected model metadata, and AO1 threshold policy. | Delta score table, metadata JSON, and summary CSV. | Optional and disabled by default; controlled by `RUN_AO1_AO2_TEST_SCORING`. | Uses test rows for prediction only. Does not train on test, tune thresholds, calculate final-test metrics, or assign AO3 segments. |
 | AO1/AO2 held-out test score validation | `tests/data_validation/validate_ao1_ao2_test_scores.py` | Validate the integrated score table contract, test-only partitions, probability range, AO1 threshold reuse, and final-test target exclusion. | Completed AO1/AO2 held-out test score table and metadata. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO1_AO2_TEST_SCORING` and `RUN_AO1_AO2_TEST_SCORING_VALIDATION`. | Runs in Databricks because it reads Delta paths. Does not calculate performance metrics. |
 | AO3 risk-margin segment assignment | `src/modeling/build_ao3_risk_margin_segments.py` | Apply the governed AO3 risk-margin policy to the integrated AO1/AO2 held-out test score table. | Issue `#40` AO3 policy CSV and Issue `#41` AO1/AO2 test score Delta table. | AO3 segment Delta table, metadata JSON, and summary CSV. | Optional and disabled by default; controlled by `RUN_AO3_SEGMENT_ASSIGNMENT`. | Assigns operational segments only. Does not train models, tune thresholds, use final-test targets, calculate performance metrics, or benchmark H3. |
-| AO3 risk-margin segment validation | `tests/data_validation/validate_ao3_risk_margin_segments.py` | Validate the AO3 segment table contract, valid segment labels, test-only partition boundary, target exclusion, metadata, and summary row counts. | Completed AO3 segment Delta table and artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO3_SEGMENT_ASSIGNMENT` and `RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION`. | Runs in Databricks because it reads Delta paths. Benchmarking against single-signal prioritization remains Issue `#43`. |
+| AO3 risk-margin segment validation | `tests/data_validation/validate_ao3_risk_margin_segments.py` | Validate the AO3 segment table contract, valid segment labels, test-only partition boundary, target exclusion, metadata, and summary row counts. | Completed AO3 segment Delta table and artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO3_SEGMENT_ASSIGNMENT` and `RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION`. | Runs in Databricks because it reads Delta paths. Benchmarking against single-signal prioritization is covered by Issue `#43`. |
 | AO3 risk-margin benchmark | `src/modeling/benchmark_ao3_risk_margin_framework.py` | Compare the AO3 combined risk-margin framework against risk-only and margin-only prioritization. | Completed AO3 segment Delta table from Issue `#42`. | Segment summary CSV, single-signal crosswalk CSV, insight CSV, and metadata JSON. | Optional and disabled by default; controlled by `RUN_AO3_RISK_MARGIN_BENCHMARK`. | Supports H3 in decision-layer terms. Does not train models, change thresholds, use final-test targets, or calculate realized-outcome performance metrics. |
 | AO3 risk-margin benchmark validation | `tests/data_validation/validate_ao3_risk_margin_benchmark.py` | Validate benchmark artifacts, test-only source boundaries, target exclusion, comparison signals, and metadata caveats. | Completed AO3 benchmark artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO3_RISK_MARGIN_BENCHMARK` and `RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION`. | Runs in Databricks because it reads the AO3 segment Delta path. |
 | AO3 operational recommendations validation | `tests/data_validation/validate_ao3_operational_recommendations.py` | Validate the AO3 action matrix for full segment coverage, evidence links, limitations, fallback treatment, and guarded recommendation language. | `data/references/ao3_operational_recommendation_matrix.csv`, AO3 benchmark summary, and AO3 benchmark insights. | Console pass/fail result. | Manual validation step for Issue `#45`. | Documentation and reference-artifact check only; no Databricks Delta read is required. |
@@ -77,6 +77,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | EDA summary | `docs/eda_findings_summary.md` | Synthesize implemented EDA outputs for reviewers. | Existing EDA tables, figures, and documentation. | Documentation only. | Manual documentation step. | No executable generator exists yet; document as manual unless one is added later. |
 | Silver schema dictionary validation | `tests/data_validation/validate_silver_schema_dictionary.py` | Validate the Silver dictionary reference against `clean_silver.py`. | `data/references/silver_schema_data_dictionary.csv` and `src/data_engineering/clean_silver.py`. | Console pass/fail result. | Required for pre-Gold governance; controlled by `RUN_PRE_GOLD_GOVERNANCE_CHECKS`. | Does not require Spark. |
 | Leakage conceptual screening validation | `tests/data_validation/validate_leakage_conceptual_screening.py` | Validate leakage screening coverage and controlled values. | Reference CSVs and implemented feature scripts. | Console pass/fail result. | Required for pre-Gold governance; controlled by `RUN_PRE_GOLD_GOVERNANCE_CHECKS`. | Does not require Spark. |
+| Chronological split policy validation | `tests/data_validation/validate_chronological_split_policy.py` | Validate the frozen chronological split policy reference and documentation before Gold/modeling work. | `data/references/chronological_split_policy.csv` and `docs/chronological_split_policy.md`. | Console pass/fail result. | Required for pre-Gold governance; controlled by `RUN_PRE_GOLD_GOVERNANCE_CHECKS`. | Does not require Spark. |
 | Pre-Gold modeling decisions | `docs/pre_gold_modeling_decisions.md`, `data/references/pre_gold_modeling_decisions.csv` | Document pre-Gold modeling and leakage decisions. | Completed Silver, feature engineering, EDA, and governance review. | Documentation and reference CSV. | Manual documentation step. | No executable validator exists yet; do not invent one in this issue. |
 | Pre-Gold decision log | `docs/pre_gold_decision_log.md`, `data/references/pre_gold_decision_log.csv` | Track review decisions before Gold/modeling work. | Team review. | Documentation and reference CSV. | Manual documentation step. | No executable validator exists yet; do not invent one in this issue. |
 
@@ -98,8 +99,10 @@ The earlier medallion-only runner was removed after the project-level orchestrat
 - Use Databricks Community Edition with runtime `14.3 LTS` where available, or `13.3 LTS` as the documented fallback.
 - Run the orchestrator from the full repository checkout in Databricks or set `DATACO_REPO_ROOT` to the repository checkout path.
 - The orchestrator assumes the project files are already available in Databricks. It does not manage external workspace setup or version-control operations.
+- Requirements installation is optional and disabled by default. If dependency installation is needed, set `RUN_REQUIREMENTS_INSTALL = True`; the orchestrator checks `DATACO_REQUIREMENTS_PATH` first, then looks for `requirements.txt` in the resolved repository checkout. Do not use a personal Databricks Workspace requirements path in shared code.
 - The default Volume root is `DATACO_VOLUME_ROOT=/Volumes/workspace/default/raw_data`.
 - The default raw DataCo CSV path is `/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`; override with `DATACO_RAW_INPUT_PATH` only when needed.
+- The local staging copy used for manual upload is `data/bronze/dataco/DataCoSupplyChainDataset.csv`; it is ignored by Git and is not the pipeline read path.
 - Bronze, Silver, feature, and reference output paths use Unity Catalog Volume paths by default.
 - The standard Volume setup creates or validates `bronze`, `silver`, `gold`, `references`, and `eda` folders under the configured Volume root.
 - The local Silver CSV clone expected by EDA scripts is `data/silver/dataco_orders_silver.csv`.
@@ -109,24 +112,46 @@ The earlier medallion-only runner was removed after the project-level orchestrat
 
 Open `notebooks/pipeline/run_project_workflow.py` in Databricks and run it top to bottom. Adjust only the flags at the top of the file for partial reruns.
 
-Common flag usage:
+The default flags are intentionally conservative. They should not accidentally rerun data generation, model training, scoring, dashboard exports, or broad EDA. Turn on only the stage needed for the current review or execution task, and reuse committed or previously generated artifacts where appropriate. Some downstream validation switches default to `True`, but the orchestrator still gates those checks behind their paired upstream run flag when a dependency must be regenerated first.
+
+Current default switch values:
 
 ```python
+RUN_REQUIREMENTS_INSTALL = False
 RUN_ENV_CHECK = True
 RUN_REPO_STRUCTURE_CHECK = True
 RUN_VOLUME_SETUP = True
 RUN_RAW_DATA_CHECK = True
-RUN_BRONZE = True
-RUN_SILVER = True
-RUN_SILVER_VALIDATION = True
-RUN_FEATURE_ENGINEERING = True
-RUN_GOLD = True
+RUN_REFERENCE_REGISTRATION = False
+RUN_PRE_GOLD_GOVERNANCE_CHECKS = False
+RUN_BRONZE = False
+RUN_SILVER = False
+RUN_SILVER_VALIDATION = False
+RUN_FEATURE_ENGINEERING = False
+RUN_GOLD = False
+RUN_ORDER_TIME_FEATURES = False
+RUN_SHIPPING_PRODUCT_FEATURES = False
+RUN_CUSTOMER_REGIONAL_FEATURES = False
+RUN_AO1_GOLD = False
+RUN_AO2_GOLD = False
 RUN_AO1_PARTITIONS = False
-RUN_AO1_PARTITION_VALIDATION = False
+RUN_AO1_PARTITION_VALIDATION = True
 RUN_AO2_PARTITIONS = False
-RUN_AO2_PARTITION_VALIDATION = False
+RUN_AO2_PARTITION_VALIDATION = True
 RUN_AO1_PREPROCESSING = False
 RUN_AO1_PREPROCESSING_VALIDATION = False
+RUN_AO1_LOGISTIC_BASELINE = False
+RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
+RUN_AO1_XGBOOST_CLASSIFIER = False
+RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
+RUN_AO1_EVALUATION_PACK = False
+RUN_AO1_EVALUATION_PACK_VALIDATION = False
+RUN_AO1_SHAP_EXPLAINABILITY = False
+RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
+RUN_AO1_DECISION_THRESHOLD = False
+RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
+RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
+RUN_AO1_RESULTS_H1_VALIDATION = False
 RUN_AO2_PREPROCESSING = False
 RUN_AO2_PREPROCESSING_VALIDATION = False
 RUN_AO2_RIDGE_BASELINE = False
@@ -140,31 +165,36 @@ RUN_AO2_SHAP_EXPLAINABILITY_VALIDATION = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT = False
 RUN_AO2_TARGET_RECONSTRUCTION_AUDIT_VALIDATION = False
 RUN_AO2_RESULTS_H2 = False
-RUN_AO2_RESULTS_H2_VALIDATION = False
-RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = False
-RUN_AO1_LOGISTIC_BASELINE = False
-RUN_AO1_LOGISTIC_BASELINE_VALIDATION = False
-RUN_AO1_EVALUATION_PACK = False
-RUN_AO1_EVALUATION_PACK_VALIDATION = False
-RUN_AO1_XGBOOST_CLASSIFIER = False
-RUN_AO1_XGBOOST_CLASSIFIER_VALIDATION = False
-RUN_AO1_SHAP_EXPLAINABILITY = False
-RUN_AO1_SHAP_EXPLAINABILITY_VALIDATION = False
-RUN_AO1_DECISION_THRESHOLD = False
-RUN_AO1_DECISION_THRESHOLD_VALIDATION = False
-RUN_AO1_POST_MODEL_LEAKAGE_AUDIT_VALIDATION = False
-RUN_AO1_RESULTS_H1_VALIDATION = False
+RUN_AO2_RESULTS_H2_VALIDATION = True
+RUN_AO3_RISK_MARGIN_MATRIX_VALIDATION = True
 RUN_AO1_AO2_TEST_SCORING = False
-RUN_AO1_AO2_TEST_SCORING_VALIDATION = False
+RUN_AO1_AO2_TEST_SCORING_VALIDATION = True
 RUN_AO3_SEGMENT_ASSIGNMENT = False
-RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = False
+RUN_AO3_SEGMENT_ASSIGNMENT_VALIDATION = True
 RUN_AO3_RISK_MARGIN_BENCHMARK = False
-RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = False
+RUN_AO3_RISK_MARGIN_BENCHMARK_VALIDATION = True
 RUN_AO3_KMEANS_EXTENSION = False
 RUN_AO3_KMEANS_EXTENSION_VALIDATION = False
-RUN_SILVER_CSV_EXPORT = True
-RUN_PRE_GOLD_GOVERNANCE_CHECKS = True
 RUN_EDA = False
+RUN_SILVER_CSV_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT = False
+RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
+RUN_FINAL_CHECKLIST = True
+```
+
+Example full medallion rerun flags, not the default state:
+
+```python
+RUN_BRONZE = True
+RUN_SILVER = True
+RUN_SILVER_VALIDATION = True
+RUN_FEATURE_ENGINEERING = True
+RUN_ORDER_TIME_FEATURES = True
+RUN_SHIPPING_PRODUCT_FEATURES = True
+RUN_CUSTOMER_REGIONAL_FEATURES = True
+RUN_GOLD = True
+RUN_AO1_GOLD = True
+RUN_AO2_GOLD = True
 ```
 
 For EDA, leave `RUN_EDA = False` during normal pipeline runs. To validate that expected EDA artifacts exist without rerunning EDA, set:

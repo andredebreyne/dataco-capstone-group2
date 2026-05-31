@@ -82,6 +82,8 @@ The AO3 segment policy is versioned at:
 data/references/ao3_risk_margin_matrix_policy.csv
 ```
 
+The capstone submission policy status is `approved_for_submission`.
+
 Segmentation is executed by:
 
 ```

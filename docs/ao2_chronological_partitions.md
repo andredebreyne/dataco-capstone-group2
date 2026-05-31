@@ -152,11 +152,12 @@ src/modeling/create_ao2_chronological_partitions.py
 tests/data_validation/validate_ao2_chronological_partitions.py
 ```
 
-The project orchestrator also exposes disabled-by-default flags:
+The project orchestrator keeps AO2 partitioning disabled by default. When AO2
+partitioning is enabled, partition validation should be enabled with it:
 
 ```python
-RUN_AO2_PARTITIONS = False
-RUN_AO2_PARTITION_VALIDATION = False
+RUN_AO2_PARTITIONS = True
+RUN_AO2_PARTITION_VALIDATION = True
 ```
 
 Set both to `True` only when the AO2 Gold table already exists and reviewers

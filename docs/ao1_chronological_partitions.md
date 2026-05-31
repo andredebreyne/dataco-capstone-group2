@@ -154,9 +154,12 @@ The project orchestrator also exposes disabled-by-default flags:
 
 ```python
 RUN_AO1_PARTITIONS = False
-RUN_AO1_PARTITION_VALIDATION = False
+RUN_AO1_PARTITION_VALIDATION = True
 ```
 
-Set both to `True` only when the AO1 Gold table already exists and reviewers
-are ready to materialize the official AO1 development/test partitions.
+Set `RUN_AO1_PARTITIONS = True` only when the AO1 Gold table already exists
+and reviewers are ready to materialize the official AO1 development/test
+partitions. The validation switch is enabled by default, but the orchestrator
+gates it behind `RUN_AO1_PARTITIONS` so validation runs only when partitioning
+is run.
 

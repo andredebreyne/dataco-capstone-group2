@@ -77,6 +77,7 @@ REQUIRED_POLICY_COLUMNS = {
 
 REQUIRED_DOC_PHRASES = {
     "AO3 Risk-Margin Matrix Logic",
+    "approved_for_submission",
     "ao1_predicted_late_delivery_probability >= 0.35",
     "ao3_predicted_margin = ao2_predicted_order_profit / ao3_order_value",
     "high_margin = ao3_predicted_margin >= 0.00",
@@ -91,6 +92,8 @@ REQUIRED_DOC_PHRASES = {
     "Use predicted AO1 risk, not actual `Late_delivery_risk`",
     "Use predicted AO2 profit, not actual `Order_Profit_Per_Order`",
 }
+
+EXPECTED_POLICY_STATUS = "approved_for_submission"
 
 
 def main() -> None:
@@ -115,7 +118,7 @@ def main() -> None:
     policy = policy_df.iloc[0]
     assert policy["issue"] == "#40"
     assert policy["policy_name"] == "ao3_risk_margin_matrix"
-    assert policy["policy_status"] == "ready_for_team_review"
+    assert policy["policy_status"] == EXPECTED_POLICY_STATUS
     assert policy["policy_type"] == "deterministic_decision_policy"
     assert policy["risk_signal"] == "ao1_predicted_late_delivery_probability"
     assert float(policy["risk_cutoff"]) == 0.35

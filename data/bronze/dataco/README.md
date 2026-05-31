@@ -1,8 +1,12 @@
 # DataCo Bronze Files
 
-This folder is the local Bronze landing area for the DataCo Smart Supply Chain dataset.
+This folder contains the tracked Bronze metadata file and is the canonical
+local staging area for the uncommitted DataCo Smart Supply Chain CSV before it
+is uploaded to Databricks.
 
-The main raw dataset is intentionally not committed because it is a large source file. Download it from the official Mendeley Data record and verify it against the checksum below.
+The main raw dataset is intentionally not committed because it is a large
+source file. Download it from the official Mendeley Data record and verify it
+against the checksum below.
 
 ## Official Source
 
@@ -22,8 +26,18 @@ The main raw dataset is intentionally not committed because it is a large source
 
 The `tokenized_access_logs.csv` clickstream file is not part of the current predictive modeling scope and is not downloaded for the core Bronze verification task.
 
-## File placement localy
+## File Placement
 
-To avoid conflicts among team structure, each team member must place the uncommitted raw dataset locally at:
+Use one local staging path for the uncommitted raw dataset:
 
 `data/bronze/dataco/DataCoSupplyChainDataset.csv`
+
+Then upload that file to the standard Databricks Volume path used by the
+pipeline:
+
+`/Volumes/workspace/default/raw_data/DataCoSupplyChainDataset.csv`
+
+The pipeline reads from the Databricks Volume path by default through
+`DATACO_RAW_INPUT_PATH`. Do not point `DATACO_RAW_INPUT_PATH` at a local
+repository path; the ingestion job expects a `/Volumes/...` path. Large raw CSV
+files remain ignored by Git.
