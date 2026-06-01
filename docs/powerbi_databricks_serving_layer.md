@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Power BI Databricks SQL serving layer publishes governed dashboard artifacts as managed Databricks tables under `workspace.default`. This allows Power BI Desktop to connect directly through the Azure Databricks connector instead of relying only on local CSV imports.
+The Power BI Databricks SQL serving layer publishes governed dashboard artifacts as managed Databricks tables under the configured catalog/schema, defaulting to `workspace.default`. This is the preferred Power BI path for issue #139 because Power BI Desktop can refresh directly through the Azure Databricks connector instead of relying on local CSV imports.
 
 This layer is a dashboard-serving layer, not a modeling layer.
 
@@ -21,16 +21,19 @@ src/dashboard/register_powerbi_databricks_tables.py
 ```
 
 Run from Databricks after AO1/AO2 scoring, AO3 segmentation, AO3 benchmark, and the reference/report artifacts exist.
+The project orchestrator can also run this step when `RUN_POWERBI_DATABRICKS_SERVING_LAYER = True`; it is disabled by default.
 
-Example:
+Example. Replace `<your-email>` with the Databricks Workspace user folder for your own checkout:
 
 ```python
 import os
 import runpy
 from pathlib import Path
 
-repo_root = Path("/Workspace/Users/andredebreyne@gmail.com/dataco-capstone-group2")
+repo_root = Path("/Workspace/Users/<your-email>/dataco-capstone-group2")
 os.environ["DATACO_REPO_ROOT"] = str(repo_root)
+os.environ["DATACO_POWERBI_SERVING_CATALOG"] = "workspace"
+os.environ["DATACO_POWERBI_SERVING_SCHEMA"] = "default"
 
 runpy.run_path(
     str(repo_root / "src/dashboard/register_powerbi_databricks_tables.py"),
@@ -38,9 +41,22 @@ runpy.run_path(
 )
 ```
 
+## Configuration
+
+Supported environment overrides:
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `DATACO_REPO_ROOT` | Repository checkout path in Databricks Repos. | Current repo discovery. |
+| `DATACO_POWERBI_SERVING_CATALOG` | Unity Catalog catalog for managed serving tables. | `workspace` |
+| `DATACO_POWERBI_SERVING_SCHEMA` | Unity Catalog schema for managed serving tables. | `default` |
+| `DATACO_VOLUME_ROOT` | Base Volume root used to resolve default Delta source paths. | `/Volumes/workspace/default/raw_data` |
+| `DATACO_AO1_AO2_TEST_SCORE_OUTPUT_PATH` | Source Delta path for integrated AO1/AO2 held-out scores. | `${DATACO_VOLUME_ROOT}/gold/ao1_ao2_test_scores` |
+| `DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH` | Source Delta path for AO3 risk-margin segment assignments. | `${DATACO_VOLUME_ROOT}/gold/ao3_risk_margin_segments` |
+
 ## Published tables
 
-The script publishes one managed Databricks SQL table per governed dashboard artifact:
+The script publishes one managed Databricks SQL table per governed dashboard artifact. Delta-sourced fact tables are projected to dashboard-safe allowlisted schemas that match the CSV export contract, so target/outcome columns and unnecessary upstream fields are not published.
 
 | Databricks table | Power BI semantic-model table |
 | --- | --- |
@@ -58,7 +74,7 @@ The script publishes one managed Databricks SQL table per governed dashboard art
 | `workspace.default.powerbi_ao1_confusion_by_threshold` | `AO1_Confusion_By_Threshold` |
 | `workspace.default.powerbi_ao2_model_validation` | `AO2_Model_Validation` |
 | `workspace.default.powerbi_ao2_evaluation_metrics` | `AO2_Evaluation_Metrics` |
-| `workspace.default.powerbi_serving_layer_manifest` | Optional QA manifest |
+| `workspace.default.powerbi_serving_layer_manifest` | QA manifest |
 
 ## Power BI connection steps
 
@@ -67,13 +83,21 @@ The script publishes one managed Databricks SQL table per governed dashboard art
 3. Select **Get data > Azure Databricks**.
 4. Use the Databricks SQL Warehouse `Server hostname` and `HTTP Path`.
 5. Authenticate with the permitted workspace method, such as a Personal Access Token or organizational account.
-6. In the Navigator, open `workspace > default`.
+6. In the Navigator, open the configured catalog/schema, defaulting to `workspace > default`.
 7. Select the required `powerbi_*` tables.
 8. Rename imported tables to the semantic-model names listed above.
 9. Add DAX measures from `dashboard/powerbi_measures.dax`.
 10. Build pages #48, #49, and #50 from the curated serving tables.
 
+`.pbix` files are not tracked in Git because `.gitignore` excludes `dashboard/*.pbix`. Submit the `.pbix` outside Git or rebuild it locally from these connection and semantic-model instructions.
+
 ## Validation expectations
+
+Before live Databricks execution, run the static contract validator from the repository root:
+
+```text
+python tests/data_validation/validate_powerbi_databricks_serving_layer.py
+```
 
 After running the script, confirm:
 
@@ -88,11 +112,11 @@ SELECT *
 FROM workspace.default.powerbi_serving_layer_manifest;
 ```
 
-The manifest should list every published table and its row count.
+The manifest should list every published table with generated timestamp, workflow name, serving catalog/schema, fully qualified target table, source type, source path, artifact category, row count, column count, run status, and description. The script also logs row counts while publishing, and Power BI Navigator should discover the selected `powerbi_*` tables under the configured catalog/schema.
 
 ## Relationship to CSV export
 
-The CSV export workflow from issue #47 remains valid for reproducibility and offline review. The Databricks SQL serving layer provides a direct Power BI connection option using the same logical table structure.
+The CSV export workflow from issue #47 remains valid for reproducibility and offline review. The Databricks SQL serving layer is the preferred Power BI Desktop connection and refresh workflow for issue #139, using the same core logical table structure without requiring local CSV imports.
 
 Recommended use:
 

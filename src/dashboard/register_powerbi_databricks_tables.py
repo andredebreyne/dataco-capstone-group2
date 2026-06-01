@@ -17,8 +17,8 @@ import logging
 import os
 import sys
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
 
 from pyspark.sql import DataFrame, SparkSession
 
@@ -26,6 +26,7 @@ from pyspark.sql import DataFrame, SparkSession
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
 DEFAULT_CATALOG = os.getenv("DATACO_POWERBI_SERVING_CATALOG", "workspace")
 DEFAULT_SCHEMA = os.getenv("DATACO_POWERBI_SERVING_SCHEMA", "default")
+WORKFLOW_NAME = "powerbi_databricks_serving_layer_registration"
 
 FORBIDDEN_TARGET_COLUMNS = {
     "Late_delivery_risk",
@@ -36,6 +37,48 @@ FORBIDDEN_TARGET_COLUMNS = {
     "Benefit_per_order",
 }
 
+AO1_AO2_SCORE_COLUMNS = (
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "split_partition",
+    "ao2_split_partition",
+    "ao1_model_name",
+    "ao1_selected_candidate",
+    "ao1_scoring_mode",
+    "ao1_predicted_late_delivery_probability",
+    "ao1_decision_threshold",
+    "ao1_high_risk_flag",
+    "ao2_model_name",
+    "ao2_selected_candidate",
+    "ao2_scoring_mode",
+    "ao2_predicted_order_profit",
+    "ao3_order_value",
+    "ao3_predicted_margin",
+    "scoring_timestamp_utc",
+)
+
+AO3_SEGMENT_COLUMNS = (
+    "Order_Id",
+    "Order_Item_Id",
+    "order_date_DateOrders",
+    "split_partition",
+    "ao2_split_partition",
+    "ao1_predicted_late_delivery_probability",
+    "ao1_decision_threshold",
+    "ao1_high_risk_flag",
+    "ao2_predicted_order_profit",
+    "ao3_order_value",
+    "ao3_predicted_margin",
+    "ao3_policy_name",
+    "ao3_risk_cutoff",
+    "ao3_margin_cutoff",
+    "ao3_high_risk_flag",
+    "ao3_high_margin_flag",
+    "ao3_priority_segment",
+    "ao3_segment_assignment_timestamp_utc",
+)
+
 
 @dataclass(frozen=True)
 class PowerBIDatabricksTableSpec:
@@ -44,7 +87,9 @@ class PowerBIDatabricksTableSpec:
     table_name: str
     source_type: str
     source_path: str
+    artifact_category: str
     description: str
+    dashboard_columns: tuple[str, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -116,84 +161,100 @@ def build_table_specs(config: PowerBIDatabricksRegistrationConfig) -> tuple[Powe
             table_name="powerbi_ao3_order_segments",
             source_type="delta",
             source_path=config.ao3_segment_path,
+            artifact_category="gold_delta_dashboard_fact",
             description="AO3 order-level risk-margin segment fact table.",
+            dashboard_columns=AO3_SEGMENT_COLUMNS,
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_ao2_test_scores",
             source_type="delta",
             source_path=config.ao1_ao2_score_path,
+            artifact_category="gold_delta_dashboard_fact",
             description="Integrated AO1/AO2 held-out prediction table used upstream of AO3.",
+            dashboard_columns=AO1_AO2_SCORE_COLUMNS,
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_decision_threshold_policy",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao1_decision_threshold_policy.csv"),
+            artifact_category="reference_csv",
             description="Approved AO1 operating threshold policy.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_ao2_test_score_summary",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao1_ao2_test_score_summary.csv"),
+            artifact_category="reference_csv",
             description="AO1/AO2 test-score summary artifact.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao3_risk_margin_policy",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao3_risk_margin_matrix_policy.csv"),
+            artifact_category="reference_csv",
             description="Governed AO3 risk-margin matrix policy.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao3_segment_summary",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao3_segment_summary.csv"),
+            artifact_category="reference_csv",
             description="AO3 segment count and average-score summary.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao3_benchmark_segment_summary",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao3_risk_margin_benchmark_segment_summary.csv"),
+            artifact_category="reference_csv",
             description="AO3 benchmark segment summary.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao3_benchmark_insights",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao3_risk_margin_benchmark_insights.csv"),
+            artifact_category="reference_csv",
             description="AO3 benchmark insight table.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao3_operational_recommendations",
             source_type="csv",
             source_path=str(repo_root / "data/references/ao3_operational_recommendation_matrix.csv"),
+            artifact_category="reference_csv",
             description="AO3 operational recommendation matrix by segment.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_model_validation",
             source_type="csv",
             source_path=str(repo_root / "report/tables/ao1_model_validation_comparison.csv"),
+            artifact_category="report_csv",
             description="AO1 validation-stage model comparison table.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_threshold_tradeoff",
             source_type="csv",
             source_path=str(repo_root / "report/tables/ao1_threshold_tradeoff_grid.csv"),
+            artifact_category="report_csv",
             description="AO1 validation threshold trade-off grid.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_confusion_by_threshold",
             source_type="csv",
             source_path=str(repo_root / "report/tables/ao1_confusion_matrix_by_threshold.csv"),
+            artifact_category="report_csv",
             description="AO1 confusion matrix by validation threshold.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao2_model_validation",
             source_type="csv",
             source_path=str(repo_root / "report/tables/ao2_model_validation_comparison.csv"),
+            artifact_category="report_csv",
             description="AO2 validation-stage model comparison table.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao2_evaluation_metrics",
             source_type="csv",
             source_path=str(repo_root / "report/tables/ao2_model_evaluation_metrics.csv"),
+            artifact_category="report_csv",
             description="AO2 validation diagnostic metrics table.",
         ),
     )
@@ -209,6 +270,22 @@ def assert_no_forbidden_targets(df: DataFrame, table_name: str) -> None:
     forbidden_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(df.columns))
     if forbidden_columns:
         raise ValueError(f"{table_name} contains forbidden target/outcome columns: {forbidden_columns}")
+
+
+def assert_required_columns(df: DataFrame, columns: tuple[str, ...], table_name: str) -> None:
+    """Validate that a serving table source contains the governed dashboard columns."""
+    missing_columns = sorted(column for column in columns if column not in df.columns)
+    if missing_columns:
+        raise ValueError(f"{table_name} is missing required serving-layer columns: {missing_columns}")
+
+
+def project_dashboard_columns(df: DataFrame, spec: PowerBIDatabricksTableSpec) -> DataFrame:
+    """Apply dashboard-safe column projection before publishing serving tables."""
+    assert_no_forbidden_targets(df, spec.table_name)
+    if spec.dashboard_columns is None:
+        return df
+    assert_required_columns(df, spec.dashboard_columns, spec.table_name)
+    return df.select(*spec.dashboard_columns)
 
 
 def read_source_dataframe(spark: SparkSession, spec: PowerBIDatabricksTableSpec) -> DataFrame:
@@ -234,20 +311,32 @@ def publish_table(
     spark: SparkSession,
     config: PowerBIDatabricksRegistrationConfig,
     spec: PowerBIDatabricksTableSpec,
-) -> int:
+) -> dict[str, object]:
     """Publish one artifact as a managed Databricks SQL serving table."""
-    df = read_source_dataframe(spark, spec)
-    assert_no_forbidden_targets(df, spec.table_name)
+    source_df = read_source_dataframe(spark, spec)
+    serving_df = project_dashboard_columns(source_df, spec)
 
     target_table = full_table_name(config, spec.table_name)
     (
-        df.write.mode("overwrite")
+        serving_df.write.mode("overwrite")
         .option("overwriteSchema", "true")
         .saveAsTable(target_table)
     )
 
-    row_count = int(spark.table(target_table).count())
-    return row_count
+    written_df = spark.table(target_table)
+    return {
+        "serving_catalog": config.catalog,
+        "serving_schema": config.schema,
+        "target_table": target_table,
+        "table_name": spec.table_name,
+        "source_type": spec.source_type,
+        "source_path": spec.source_path,
+        "artifact_category": spec.artifact_category,
+        "row_count": int(written_df.count()),
+        "column_count": len(written_df.columns),
+        "run_status": "success",
+        "description": spec.description,
+    }
 
 
 def run_powerbi_databricks_registration(
@@ -263,15 +352,22 @@ def run_powerbi_databricks_registration(
     logger.info("Target schema: %s.%s", config.catalog, config.schema)
     logger.info("Repository root: %s", config.repo_root)
 
-    summary_rows: list[tuple[str, str, str, int]] = []
+    generated_timestamp_utc = datetime.now(timezone.utc).isoformat()
+    summary_rows: list[dict[str, object]] = []
     for spec in build_table_specs(config):
-        row_count = publish_table(spark=spark, config=config, spec=spec)
-        summary_rows.append((spec.table_name, spec.source_type, spec.description, row_count))
-        logger.info("Published %s with %d rows.", full_table_name(config, spec.table_name), row_count)
+        summary_row = publish_table(spark=spark, config=config, spec=spec)
+        summary_row["generated_timestamp_utc"] = generated_timestamp_utc
+        summary_row["workflow_name"] = WORKFLOW_NAME
+        summary_rows.append(summary_row)
+        logger.info(
+            "Published %s with %d rows and %d columns.",
+            summary_row["target_table"],
+            summary_row["row_count"],
+            summary_row["column_count"],
+        )
 
     summary_df = spark.createDataFrame(
         summary_rows,
-        ["table_name", "source_type", "description", "row_count"],
     )
     summary_table = full_table_name(config, "powerbi_serving_layer_manifest")
     (

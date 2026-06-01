@@ -35,8 +35,8 @@ Current dashboard status:
 
 - Dashboard deliverable is still pending.
 - Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
-- Power BI semantic-model, DAX, and export-validation files remain available as one possible dashboard path.
-- No `.pbix` file is claimed as present in this repository.
+- Power BI semantic-model, DAX, Databricks serving-layer, and CSV export-validation files remain available as one possible dashboard path.
+- No `.pbix` file is claimed as present in this repository; `.pbix` files are ignored by Git and should be submitted outside the repository or rebuilt locally from the documented model instructions.
 
 ## Development Workflow
 
@@ -102,12 +102,14 @@ The decision-time feature availability map is documented in `docs/feature_availa
 
 ### 3) Optional Power BI serving layer
 
-Power BI remains one supported dashboard path while the final dashboard tool decision is pending. It can consume governed dashboard artifacts through two supported paths:
+Power BI remains one supported dashboard path while the final dashboard tool decision is pending. For issue #139, the preferred Power BI path is the direct Azure Databricks connector pointed at governed serving-layer tables.
 
-- CSV export workflow from `src/dashboard/export_powerbi_gold_tables.py`.
-- Direct Databricks SQL serving layer from `src/dashboard/register_powerbi_databricks_tables.py`.
+Supported Power BI consumption paths:
 
-The Databricks serving layer publishes one managed `workspace.default.powerbi_*` table per governed dashboard artifact. It preserves the same logical architecture as the CSV export workflow and does not recreate AO1/AO2 scores, AO3 margins, thresholds, segments, or final-test outcome fields.
+- Preferred: direct Databricks SQL serving layer from `src/dashboard/register_powerbi_databricks_tables.py`.
+- Offline fallback: CSV export workflow from `src/dashboard/export_powerbi_gold_tables.py`.
+
+The Databricks serving layer publishes one managed `powerbi_*` table per governed dashboard artifact under the configured catalog/schema, defaulting to `workspace.default`. It preserves the same logical architecture as the CSV export workflow and does not recreate AO1/AO2 scores, AO3 margins, thresholds, segments, or final-test outcome fields.
 
 To refresh the Databricks SQL serving layer from a Databricks notebook:
 
@@ -116,14 +118,18 @@ import os
 import runpy
 from pathlib import Path
 
-repo_root = Path("/Workspace/Users/andredebreyne@gmail.com/dataco-capstone-group2")
+repo_root = Path("/Workspace/Users/<your-email>/dataco-capstone-group2")
 os.environ["DATACO_REPO_ROOT"] = str(repo_root)
+os.environ["DATACO_POWERBI_SERVING_CATALOG"] = "workspace"
+os.environ["DATACO_POWERBI_SERVING_SCHEMA"] = "default"
 
 runpy.run_path(
     str(repo_root / "src/dashboard/register_powerbi_databricks_tables.py"),
     run_name="__main__",
 )
 ```
+
+Override `DATACO_AO1_AO2_TEST_SCORE_OUTPUT_PATH`, `DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH`, or `DATACO_VOLUME_ROOT` only when the upstream Databricks Delta artifacts live outside the documented defaults.
 
 See `docs/powerbi_databricks_serving_layer.md` for table mappings and Power BI connection steps.
 
