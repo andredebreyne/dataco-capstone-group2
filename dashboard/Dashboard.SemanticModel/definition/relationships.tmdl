@@ -1,0 +1,28 @@
+relationship ao3_segment_summary_to_order_segments
+	fromColumn: powerbi_ao3_order_segments.ao3_priority_segment
+	toColumn: powerbi_ao3_segment_summary.ao3_priority_segment
+
+relationship ao3_benchmark_segment_to_segment_summary
+	fromColumn: powerbi_ao3_benchmark_segment_summary.ao3_priority_segment
+	toColumn: powerbi_ao3_segment_summary.ao3_priority_segment
+
+relationship ao3_operational_recs_to_segment_summary
+	fromColumn: powerbi_ao3_operational_recommendations.ao3_priority_segment
+	toColumn: powerbi_ao3_segment_summary.ao3_priority_segment
+
+relationship ao3_order_segments_to_risk_margin_policy
+	fromColumn: powerbi_ao3_order_segments.ao3_policy_name
+	toColumn: powerbi_ao3_risk_margin_policy.policy_name
+
+relationship ao1_decision_threshold_to_model_validation
+	fromColumn: powerbi_ao1_decision_threshold_policy.model_name
+	toColumn: powerbi_ao1_model_validation.model_name
+
+relationship ao1_confusion_to_model_validation
+	fromColumn: powerbi_ao1_confusion_by_threshold.model_name
+	toColumn: powerbi_ao1_model_validation.model_name
+
+relationship ao1_threshold_tradeoff_to_model_validation
+	fromColumn: powerbi_ao1_threshold_tradeoff.model_name
+	toColumn: powerbi_ao1_model_validation.model_name
+

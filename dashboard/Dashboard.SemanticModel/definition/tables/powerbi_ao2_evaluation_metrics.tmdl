@@ -1,0 +1,164 @@
+table powerbi_ao2_evaluation_metrics
+	lineageTag: 98703a50-9101-4df1-9a36-3da813012ffd
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 92fbc7cd-35eb-44fd-b184-f7e639aef596
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column candidate_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 312dc510-0998-4f94-8beb-33124a88cf58
+		summarizeBy: none
+		sourceColumn: candidate_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column validation_rows
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 895e09ec-c77e-4da3-898d-f23886dece13
+		summarizeBy: sum
+		sourceColumn: validation_rows
+
+		annotation SummarizationSetBy = Automatic
+
+	column rmse
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f9f2316b-21fc-4dc5-a04a-073a3edce78d
+		summarizeBy: sum
+		sourceColumn: rmse
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column mae
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f44eebdc-b2b6-4538-ac79-36a14469f1b0
+		summarizeBy: sum
+		sourceColumn: mae
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column r2
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f3c4d089-3d1a-4f41-a7e9-5a3f0079dcb8
+		summarizeBy: sum
+		sourceColumn: r2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column median_absolute_error
+		dataType: double
+		sourceProviderType: double
+		lineageTag: bd9af007-e573-4846-a92d-b0ce323ef4b9
+		summarizeBy: sum
+		sourceColumn: median_absolute_error
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column mean_error
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 69b9f6de-54f9-4b76-9cd7-14eebb45afa0
+		summarizeBy: sum
+		sourceColumn: mean_error
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column target_mean
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 794dda57-348d-4211-aeb0-55e1ffb3b13e
+		summarizeBy: sum
+		sourceColumn: target_mean
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column target_std
+		dataType: double
+		sourceProviderType: double
+		lineageTag: af695153-182e-442e-928c-7586119ad22a
+		summarizeBy: sum
+		sourceColumn: target_std
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column prediction_mean
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 4c908e98-a86e-406a-b1d4-3e02ac2c3950
+		summarizeBy: sum
+		sourceColumn: prediction_mean
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column prediction_std
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 07b7767a-1c99-4435-90c7-225b985ac539
+		summarizeBy: sum
+		sourceColumn: prediction_std
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column wrong_profit_sign_share
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 103c5e0f-fa07-4470-b49d-28280c9a432f
+		summarizeBy: sum
+		sourceColumn: wrong_profit_sign_share
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column final_test_used
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 15037c05-d5a6-4114-b9f7-722596ff5201
+		summarizeBy: none
+		sourceColumn: final_test_used
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao2_evaluation_metrics = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao2_evaluation_metrics_Table = default_Schema{[Name="powerbi_ao2_evaluation_metrics",Kind="Table"]}[Data]
+				in
+				    powerbi_ao2_evaluation_metrics_Table
+
+	annotation PBI_ResultType = Table
+

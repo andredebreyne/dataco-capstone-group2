@@ -1,11 +1,9 @@
 # Dashboard Status and Support Artifacts
 
-This folder contains governed dashboard support artifacts. The final dashboard
-deliverable is still pending, and the team is evaluating a native Databricks
-AI/BI dashboard as an alternative to Power BI.
-
-Power BI artifacts in this folder remain one possible implementation path. This
-folder does not currently claim a completed dashboard file.
+This folder contains the governed Power BI dashboard project and its support
+artifacts. Power BI is the selected executive-dashboard implementation path.
+Dashboard pages are developed incrementally from approved Databricks Gold
+outputs and governed reference artifacts.
 
 ## Files
 
@@ -14,6 +12,9 @@ folder does not currently claim a completed dashboard file.
 | `powerbi_semantic_model.md` | Semantic-model blueprint and import instructions for the Power BI path. |
 | `powerbi_measures.dax` | Draft DAX measures for AO1, AO2, and AO3 dashboard pages if Power BI is selected. |
 | `exports/` | Gitignored local export folder generated from Databricks Gold outputs when the Power BI export path is run. |
+| `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification for Issue `#48`. |
+| `themes/dataco_executive_operations_dark.json` | Shared executive dashboard theme. |
+| `wireframes/` | Versioned SVG backgrounds and layout standards. |
 
 ## Optional Power BI Export Path
 
@@ -45,9 +46,9 @@ The validation checks required files, manifest metadata, AO3 columns, probabilit
 ranges, and target-column exclusions. It should be run only after the export
 files exist.
 
-## Dashboard Decision Status
+## Dashboard Delivery Status
 
-- Dashboard deliverable is still pending.
-- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
-- Power BI remains documented as one possible path.
-- No `.pbix` artifact is required or claimed here.
+- The Power BI semantic model is connected to governed Databricks outputs.
+- The AO1 delivery-risk executive page is implemented and documented.
+- AO2 and AO3 executive pages remain incremental dashboard tasks.
+- Generated data exports remain reproducible and must not be edited manually.

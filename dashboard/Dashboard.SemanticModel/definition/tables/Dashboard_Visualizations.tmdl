@@ -1,0 +1,236 @@
+/// Dedicated semantic-model table for presentation-only SVG measures. Visual measures must not recreate AO1, AO2, or AO3 decision logic.
+table Dashboard_Visualizations
+	lineageTag: 7ff464a1-814c-4868-83af-56de81d6922c
+
+	/// Executive SVG KPI card for AO1 high-risk exposure using governed AO3 measures.
+	measure 'SVG KPI Risk Indicator' =
+			VAR RateValue = [High Risk Rate]
+			VAR RiskOrders = [High Risk Orders]
+			VAR TotalRows = [Total Orders]
+			VAR Accent = IF ( RateValue >= [AO3 Risk Cutoff], "%23D95555", "%232D8C73" )
+			VAR WidthValue = MIN ( 100, MAX ( 0, RateValue * 100 ) )
+			RETURN
+			"data:image/svg+xml;utf8," &
+			"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 150'>" &
+			"<rect width='360' height='150' rx='14' fill='%23141B24'/>" &
+			"<rect x='20' y='20' width='6' height='48' rx='3' fill='" & Accent & "'/>" &
+			"<text x='40' y='39' fill='%23AAB6C5' font-family='Segoe UI' font-size='14'>HIGH RISK EXPOSURE</text>" &
+			"<text x='40' y='78' fill='%23F4F7FB' font-family='Segoe UI' font-size='34' font-weight='700'>" & FORMAT ( RateValue, "0.0%" ) & "</text>" &
+			"<text x='40' y='104' fill='%238C9AAA' font-family='Segoe UI' font-size='12'>" & FORMAT ( RiskOrders, "#,0" ) & " of " & FORMAT ( TotalRows, "#,0" ) & " scored rows</text>" &
+			"<rect x='40' y='121' width='290' height='8' rx='4' fill='%2327323F'/>" &
+			"<rect x='40' y='121' width='" & FORMAT ( 2.9 * WidthValue, "0.0", "en-US" ) & "' height='8' rx='4' fill='" & Accent & "'/>" &
+			"</svg>"
+		displayFolder: Library | Legacy SVG Components
+		lineageTag: 9d9b6e88-e51c-43e4-a904-61d4df9fbdf2
+		dataCategory: ImageUrl
+
+	/// Executive SVG KPI card for frozen AO2 expected profit and predicted margin.
+	measure 'SVG KPI Expected Profit Indicator' =
+			VAR ProfitValue = [Expected Profit]
+			VAR MarginValue = [Expected Profit Margin]
+			VAR Accent = IF ( ProfitValue >= 0, "%232D8C73", "%23D95555" )
+			RETURN
+			"data:image/svg+xml;utf8," &
+			"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 150'>" &
+			"<rect width='360' height='150' rx='14' fill='%23141B24'/>" &
+			"<rect x='20' y='20' width='6' height='48' rx='3' fill='" & Accent & "'/>" &
+			"<text x='40' y='39' fill='%23AAB6C5' font-family='Segoe UI' font-size='14'>EXPECTED PROFIT</text>" &
+			"<text x='40' y='78' fill='%23F4F7FB' font-family='Segoe UI' font-size='32' font-weight='700'>" & FORMAT ( ProfitValue, "$#,0;($#,0);$0" ) & "</text>" &
+			"<text x='40' y='106' fill='%238C9AAA' font-family='Segoe UI' font-size='12'>Projected margin  " & FORMAT ( MarginValue, "0.0%" ) & "</text>" &
+			"<line x1='40' y1='124' x2='330' y2='124' stroke='%232D3947' stroke-width='1'/>" &
+			"<circle cx='322' cy='39' r='7' fill='" & Accent & "'/>" &
+			"</svg>"
+		displayFolder: Library | Legacy SVG Components
+		lineageTag: 76939ed6-989f-4e13-90c5-bbcc64d82714
+		dataCategory: ImageUrl
+
+	/// Executive SVG KPI card for deterministic AO3 predicted margin compared with the frozen policy cutoff.
+	measure 'SVG KPI Margin Indicator' =
+			VAR MarginValue = [Average Predicted Margin]
+			VAR CutoffValue = [AO3 Margin Cutoff]
+			VAR Accent = IF ( MarginValue >= CutoffValue, "%232D8C73", "%23DFA64C" )
+			RETURN
+			"data:image/svg+xml;utf8," &
+			"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 150'>" &
+			"<rect width='360' height='150' rx='14' fill='%23141B24'/>" &
+			"<rect x='20' y='20' width='6' height='48' rx='3' fill='" & Accent & "'/>" &
+			"<text x='40' y='39' fill='%23AAB6C5' font-family='Segoe UI' font-size='14'>AVERAGE PREDICTED MARGIN</text>" &
+			"<text x='40' y='78' fill='%23F4F7FB' font-family='Segoe UI' font-size='34' font-weight='700'>" & FORMAT ( MarginValue, "0.0%" ) & "</text>" &
+			"<text x='40' y='106' fill='%238C9AAA' font-family='Segoe UI' font-size='12'>Policy cutoff  " & FORMAT ( CutoffValue, "0.0%" ) & "</text>" &
+			"<rect x='40' y='122' width='290' height='7' rx='3.5' fill='%2327323F'/>" &
+			"<rect x='40' y='122' width='" & FORMAT ( MIN ( 290, MAX ( 0, MarginValue * 580 ) ), "0.0", "en-US" ) & "' height='7' rx='3.5' fill='" & Accent & "'/>" &
+			"</svg>"
+		displayFolder: Library | Legacy SVG Components
+		lineageTag: 9aa089c9-a977-43d2-a5d0-53b4d4fd7e31
+		dataCategory: ImageUrl
+
+	/// Executive SVG QA badge driven only by governed dashboard validation measures.
+	measure 'SVG QA Status' =
+			VAR IssueRows = [Dashboard QA Issue Rows]
+			VAR Passed = [Dashboard QA Pass Flag] = 1
+			VAR Accent = IF ( Passed, "%232D8C73", "%23D95555" )
+			VAR LabelText = IF ( Passed, "DATA QUALITY VERIFIED", "QUALITY REVIEW REQUIRED" )
+			VAR DetailText = IF ( Passed, "All governed AO3 checks passed", FORMAT ( IssueRows, "#,0" ) & " issue rows require review" )
+			RETURN
+			"data:image/svg+xml;utf8," &
+			"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 92'>" &
+			"<rect width='360' height='92' rx='14' fill='%23141B24'/>" &
+			"<circle cx='34' cy='45' r='15' fill='" & Accent & "' opacity='0.20'/>" &
+			"<circle cx='34' cy='45' r='7' fill='" & Accent & "'/>" &
+			"<text x='62' y='39' fill='%23F4F7FB' font-family='Segoe UI' font-size='14' font-weight='700'>" & LabelText & "</text>" &
+			"<text x='62' y='61' fill='%238C9AAA' font-family='Segoe UI' font-size='12'>" & DetailText & "</text>" &
+			"</svg>"
+		displayFolder: Library | Legacy SVG Components
+		lineageTag: daffd934-79eb-4afe-a74c-9c06d66b9382
+		dataCategory: ImageUrl
+
+	/// Premium HTML Content lite header for the AO3 executive page. Uses governed measures only.
+	measure 'HTML AO3 Executive Header' =
+			VAR TotalRows = [Total Orders]
+			VAR QaPassed = [Dashboard QA Pass Flag] = 1
+			VAR StatusColor = IF ( QaPassed, "#2D8C73", "#D95555" )
+			VAR StatusLabel = IF ( QaPassed, "GOVERNED DATA VERIFIED", "QUALITY REVIEW REQUIRED" )
+			RETURN
+			"<div style='box-sizing:border-box;width:100%;padding:22px 24px;background:#141B24;border:1px solid #263342;border-radius:14px;font-family:Segoe UI,Arial;color:#F4F7FB;'>" &
+			"<div style='display:flex;justify-content:space-between;align-items:flex-start;gap:18px;'>" &
+			"<div><div style='font-size:12px;color:#8C9AAA;letter-spacing:1px;'>DATACO SMART SUPPLY CHAIN</div>" &
+			"<div style='margin-top:6px;font-size:25px;font-weight:700;'>AO3 Risk-Margin Command Center</div>" &
+			"<div style='margin-top:7px;font-size:13px;color:#AAB6C5;'>Operational prioritization built from frozen AO1 delivery-risk and AO2 profitability outputs.</div></div>" &
+			"<div style='min-width:178px;padding:11px 13px;border-radius:10px;background:#1B2531;border-left:4px solid " & StatusColor & ";'>" &
+			"<div style='font-size:10px;color:#8C9AAA;'>MODEL STATUS</div><div style='margin-top:4px;font-size:12px;font-weight:700;color:" & StatusColor & ";'>" & StatusLabel & "</div>" &
+			"<div style='margin-top:5px;font-size:11px;color:#AAB6C5;'>" & FORMAT ( TotalRows, "#,0" ) & " scored order items</div></div></div></div>"
+		displayFolder: Library | Draft AO3 Components
+		lineageTag: 2791e896-e45c-4970-be30-5462cd35fa6f
+
+	/// Premium HTML Content lite KPI card for governed AO1 high-risk exposure.
+	measure 'HTML KPI Risk Indicator' =
+			VAR RateValue = [High Risk Rate]
+			VAR RiskRows = [High Risk Orders]
+			VAR TotalRows = [Total Orders]
+			VAR WidthValue = FORMAT ( MIN ( 100, MAX ( 0, RateValue * 100 ) ), "0.0", "en-US" )
+			VAR Accent = IF ( RateValue >= [AO3 Risk Cutoff], "#D95555", "#2D8C73" )
+			RETURN
+			"<div style='box-sizing:border-box;width:100%;height:100%;min-height:148px;padding:18px 20px;background:#141B24;border:1px solid #263342;border-radius:14px;font-family:Segoe UI,Arial;color:#F4F7FB;'>" &
+			"<div style='font-size:11px;color:#AAB6C5;letter-spacing:.7px;'>HIGH RISK EXPOSURE</div>" &
+			"<div style='display:flex;align-items:baseline;gap:9px;margin-top:9px;'><span style='font-size:33px;font-weight:700;'>" & FORMAT ( RateValue, "0.0%" ) & "</span><span style='font-size:12px;color:" & Accent & ";'>AO1 governed flag</span></div>" &
+			"<div style='margin-top:7px;font-size:12px;color:#8C9AAA;'>" & FORMAT ( RiskRows, "#,0" ) & " of " & FORMAT ( TotalRows, "#,0" ) & " scored rows</div>" &
+			"<div style='margin-top:17px;height:7px;background:#27323F;border-radius:7px;overflow:hidden;'><div style='width:" & WidthValue & "%;height:7px;background:" & Accent & ";border-radius:7px;'></div></div></div>"
+		displayFolder: Library | Draft Generic HTML Components
+		lineageTag: b3b13343-373b-40d9-8a7c-5d846f9713a1
+
+	/// Premium HTML Content lite KPI card for frozen AO2 expected profit.
+	measure 'HTML KPI Expected Profit Indicator' =
+			VAR ProfitValue = [Expected Profit]
+			VAR MarginValue = [Expected Profit Margin]
+			VAR AverageProfit = [Average Expected Profit]
+			VAR Accent = IF ( ProfitValue >= 0, "#2D8C73", "#D95555" )
+			RETURN
+			"<div style='box-sizing:border-box;width:100%;height:100%;min-height:148px;padding:18px 20px;background:#141B24;border:1px solid #263342;border-radius:14px;font-family:Segoe UI,Arial;color:#F4F7FB;'>" &
+			"<div style='font-size:11px;color:#AAB6C5;letter-spacing:.7px;'>EXPECTED PROFIT</div>" &
+			"<div style='display:flex;align-items:center;gap:10px;margin-top:9px;'><span style='font-size:31px;font-weight:700;'>" & FORMAT ( ProfitValue, "$#,0;($#,0);$0" ) & "</span><span style='width:9px;height:9px;border-radius:50%;background:" & Accent & ";'></span></div>" &
+			"<div style='margin-top:8px;font-size:12px;color:#8C9AAA;'>Projected margin <span style='color:#D9E2EC;font-weight:600;'>" & FORMAT ( MarginValue, "0.0%" ) & "</span></div>" &
+			"<div style='margin-top:13px;padding-top:10px;border-top:1px solid #2D3947;font-size:12px;color:#8C9AAA;'>Average per row <span style='color:#D9E2EC;'>" & FORMAT ( AverageProfit, "$#,0.00;($#,0.00);$0.00" ) & "</span></div></div>"
+		displayFolder: Library | Draft Generic HTML Components
+		lineageTag: aad62638-db84-4afa-a74e-0216dfda22ad
+
+	/// Premium HTML Content lite KPI card for deterministic AO3 predicted margin.
+	measure 'HTML KPI Margin Indicator' =
+			VAR MarginValue = [Average Predicted Margin]
+			VAR CutoffValue = [AO3 Margin Cutoff]
+			VAR WidthValue = FORMAT ( MIN ( 100, MAX ( 0, MarginValue * 200 ) ), "0.0", "en-US" )
+			VAR Accent = IF ( MarginValue >= CutoffValue, "#2D8C73", "#DFA64C" )
+			RETURN
+			"<div style='box-sizing:border-box;width:100%;height:100%;min-height:148px;padding:18px 20px;background:#141B24;border:1px solid #263342;border-radius:14px;font-family:Segoe UI,Arial;color:#F4F7FB;'>" &
+			"<div style='font-size:11px;color:#AAB6C5;letter-spacing:.7px;'>AVERAGE PREDICTED MARGIN</div>" &
+			"<div style='display:flex;align-items:baseline;gap:9px;margin-top:9px;'><span style='font-size:33px;font-weight:700;'>" & FORMAT ( MarginValue, "0.0%" ) & "</span><span style='font-size:12px;color:" & Accent & ";'>AO3 ratio</span></div>" &
+			"<div style='margin-top:7px;font-size:12px;color:#8C9AAA;'>Policy cutoff <span style='color:#D9E2EC;font-weight:600;'>" & FORMAT ( CutoffValue, "0.0%" ) & "</span></div>" &
+			"<div style='margin-top:17px;height:7px;background:#27323F;border-radius:7px;overflow:hidden;'><div style='width:" & WidthValue & "%;height:7px;background:" & Accent & ";border-radius:7px;'></div></div></div>"
+		displayFolder: Library | Draft Generic HTML Components
+		lineageTag: b10b14c7-a92b-4b72-9c1e-45edf88adee1
+
+	/// Premium HTML Content lite QA badge driven by governed dashboard validation measures.
+	measure 'HTML QA Status' =
+			VAR IssueRows = [Dashboard QA Issue Rows]
+			VAR Passed = [Dashboard QA Pass Flag] = 1
+			VAR Accent = IF ( Passed, "#2D8C73", "#D95555" )
+			VAR LabelText = IF ( Passed, "DATA QUALITY VERIFIED", "QUALITY REVIEW REQUIRED" )
+			VAR DetailText = IF ( Passed, "All governed AO3 dashboard checks passed", FORMAT ( IssueRows, "#,0" ) & " issue rows require review" )
+			RETURN
+			"<div style='box-sizing:border-box;width:100%;padding:15px 18px;background:#141B24;border:1px solid #263342;border-radius:14px;font-family:Segoe UI,Arial;color:#F4F7FB;'>" &
+			"<div style='display:flex;align-items:center;gap:13px;'><div style='width:15px;height:15px;border-radius:50%;background:" & Accent & ";box-shadow:0 0 0 7px " & Accent & "22;'></div>" &
+			"<div><div style='font-size:12px;font-weight:700;color:" & Accent & ";'>" & LabelText & "</div><div style='margin-top:4px;font-size:12px;color:#8C9AAA;'>" & DetailText & "</div></div></div></div>"
+		displayFolder: Library | Draft Generic HTML Components
+		lineageTag: af4cf59b-80fb-467a-ab29-33cbd7642846
+
+	/// AO1 executive page header with approved threshold and governed-data status.
+	measure 'Q01 | 01 Header' =
+			VAR Threshold = FORMAT ( [AO1 Selected Threshold], "0.0%" )
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:20px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='display:flex;justify-content:space-between;align-items:center;height:100%;'><div><div style='font-size:18px;color:#7D9FC5;'>AO1 · DELIVERY RISK INTELLIGENCE</div><div style='font-size:44px;font-weight:700;margin-top:8px;'>Preventive Prioritization Before Dispatch</div><div style='font-size:22px;color:#AAB6C5;margin-top:8px;'>Surface late-delivery risk before dispatch using the approved AO1 policy.</div></div><div style='min-width:250px;padding:14px 18px;background:#1B2531;border-left:5px solid #2D8C73;border-radius:10px;'><div style='font-size:16px;color:#8FA6C2;'>OPERATING POLICY</div><div style='font-size:25px;font-weight:700;margin-top:5px;'>Threshold " & Threshold & "</div><div style='font-size:17px;color:#2D8C73;margin-top:5px;'>GOVERNED DATA VERIFIED</div></div></div></div>"
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: 7fa01782-c6e8-4f83-bee3-e1a807842b87
+
+	/// AO1 executive KPI strip summarizing scored population and operational risk exposure.
+	measure 'Q01 | 02 KPI Exposure Strip' =
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:14px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;font-family:Segoe UI;color:#F4F7FB;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;'>" &
+			"<div><div style='font-size:18px;color:#8FA6C2;'>SCORED ORDER ITEMS</div><div style='font-size:48px;font-weight:700;margin-top:8px;'>" & FORMAT([Total Orders],"#,##0") & "</div></div>" &
+			"<div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>HIGH RISK ITEMS</div><div style='font-size:48px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT([High Risk Orders],"#,##0") & "</div></div>" &
+			"<div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>HIGH RISK RATE</div><div style='font-size:48px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT([High Risk Rate],"0.0%") & "</div></div>" &
+			"<div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>AVERAGE LATE RISK</div><div style='font-size:48px;font-weight:700;color:#4F83B4;margin-top:8px;'>" & FORMAT([Average AO1 Late Risk],"0.0%") & "</div></div>" &
+			"<div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>APPROVED THRESHOLD</div><div style='font-size:48px;font-weight:700;color:#DFA64C;margin-top:8px;'>" & FORMAT([AO1 Selected Threshold],"0.0%") & "</div></div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: 6280414e-e80b-44c8-b661-23ccdc385644
+
+	/// AO1 approved-threshold policy block with validation trade-offs.
+	measure 'Q01 | 04 Threshold Policy' =
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>APPROVED DECISION POLICY</div><div style='margin-top:8px;'><span style='font-size:54px;font-weight:700;color:#DFA64C;'>" & FORMAT([AO1 Selected Threshold],"0.0%") & "</span><span style='font-size:19px;color:#AAB6C5;margin-left:10px;'>late-delivery probability</span></div><div style='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;'><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>RECALL</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO1 Validation Recall],"0.0%") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>PRECISION</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO1 Validation Precision],"0.0%") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>ALERT RATE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO1 Validation Alert Rate],"0.0%") & "</div></div></div><div style='font-size:18px;color:#AAB6C5;margin-top:10px;'>Frozen upstream. Reused without recalculation in Power BI.</div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: 3875b9c9-1f45-4041-859e-d59c5a250982
+
+	/// AO1 validation confusion matrix at the frozen operating threshold.
+	measure 'Q01 | 05 Confusion Matrix' =
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>VALIDATION CONFUSION MATRIX</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;'><div style='padding:12px 16px;background:#193B36;border:1px solid #2D8C73;border-radius:8px;'><div style='font-size:17px;color:#72C9B5;'>TRUE POSITIVE</div><div style='font-size:40px;font-weight:700;margin-top:6px;'>" & FORMAT([AO1 True Positives],"#,##0") & "</div></div><div style='padding:12px 16px;background:#3A3020;border:1px solid #DFA64C;border-radius:8px;'><div style='font-size:17px;color:#F0C46E;'>FALSE POSITIVE</div><div style='font-size:40px;font-weight:700;margin-top:6px;'>" & FORMAT([AO1 False Positives],"#,##0") & "</div></div><div style='padding:12px 16px;background:#43272B;border:1px solid #D95555;border-radius:8px;'><div style='font-size:17px;color:#F08B8B;'>FALSE NEGATIVE</div><div style='font-size:40px;font-weight:700;margin-top:6px;'>" & FORMAT([AO1 False Negatives],"#,##0") & "</div></div><div style='padding:12px 16px;background:#1B2D3D;border:1px solid #4F83B4;border-radius:8px;'><div style='font-size:17px;color:#91BCE3;'>TRUE NEGATIVE</div><div style='font-size:40px;font-weight:700;margin-top:6px;'>" & FORMAT([AO1 True Negatives],"#,##0") & "</div></div></div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: c39a2c4c-3477-44b3-932c-9d886c20671d
+
+	/// AO1 executive narrative takeaway grounded in governed exposure and validation metrics.
+	measure 'Q01 | 07 Executive Takeaway' =
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #D95555;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>EXECUTIVE TAKEAWAY</div><div style='font-size:24px;font-weight:700;margin-top:8px;'>" & FORMAT([High Risk Orders],"#,##0") & " order items require preventive attention.</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>The approved " & FORMAT([AO1 Selected Threshold],"0.0%") & " policy flags " & FORMAT([High Risk Rate],"0.0%") & " of the held-out scored population while maintaining " & FORMAT([AO1 Validation Precision],"0.0%") & " validation precision.</div><div style='font-size:17px;color:#8C9AAA;margin-top:7px;'>Decision support only; realized intervention outcomes are outside scope.</div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: 83e28052-098f-428a-96bc-114b30315249
+
+	/// AO1 HTML exposure distribution showing scored order items above and below the frozen operating threshold.
+	measure 'Q01 | 03 Exposure Distribution' =
+			VAR RiskRate = [High Risk Rate]
+			VAR LowRate = [Low Risk Rate]
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:20px 24px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>OPERATIONAL RISK EXPOSURE</div><div style='font-size:21px;color:#AAB6C5;margin-top:8px;'>Held-out scored order-item distribution.</div><div style='display:flex;height:30px;margin-top:14px;border-radius:8px;overflow:hidden;'><div style='width:" & FORMAT(RiskRate,"0.0%") & ";background:#D95555;'></div><div style='width:" & FORMAT(LowRate,"0.0%") & ";background:#4F83B4;'></div></div><div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;'><div style='padding:12px 16px;background:#1B2531;border-left:5px solid #D95555;border-radius:8px;'><div style='font-size:17px;color:#8FA6C2;'>HIGH RISK</div><div style='font-size:40px;font-weight:700;margin-top:5px;'>" & FORMAT([High Risk Orders],"#,##0") & "</div><div style='font-size:19px;color:#D95555;margin-top:3px;'>" & FORMAT(RiskRate,"0.0%") & " of scored items</div></div><div style='padding:12px 16px;background:#1B2531;border-left:5px solid #4F83B4;border-radius:8px;'><div style='font-size:17px;color:#8FA6C2;'>BELOW THRESHOLD</div><div style='font-size:40px;font-weight:700;margin-top:5px;'>" & FORMAT([Low Risk Orders],"#,##0") & "</div><div style='font-size:19px;color:#4F83B4;margin-top:3px;'>" & FORMAT(LowRate,"0.0%") & " of scored items</div></div></div></div>"
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: a31d9127-6da2-4afc-987e-01218c6f6ddd
+
+	/// AO1 methodology note separating validation evidence from held-out operational scoring outputs.
+	measure 'Q01 | 06 Methodology Note' =
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>METHODOLOGY NOTE</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>Threshold approved on <b style='color:#F4F7FB;'>" & FORMAT([AO1 Validation Rows],"#,##0") & " validation rows</b> · Exposure: <b style='color:#F4F7FB;'>" & FORMAT([Total Orders],"#,##0") & " held-out scored items</b> · Frozen upstream outputs</div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q01 Where Is Preventive Attention Required?
+		lineageTag: fdd414cd-c0ce-47ab-91d2-ce623614d27c
+
+	column 'Visualization Group'
+		isHidden
+		lineageTag: 8d8fe495-d0fa-4908-b837-6dc1690028e0
+		isNameInferred
+		sourceColumn: [Visualization Group]
+
+	partition Dashboard_Visualizations = calculated
+		mode: import
+		source = DATATABLE ( "Visualization Group", STRING, { { "Executive SVG Measures" } } )
+

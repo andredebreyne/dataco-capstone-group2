@@ -1,0 +1,220 @@
+table powerbi_ao1_decision_threshold_policy
+	lineageTag: e258e87c-0b00-473b-ba2d-1cb02dd1053e
+
+	column policy_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 62202350-bdeb-4a9a-8a4c-8ea449d29e83
+		summarizeBy: none
+		sourceColumn: policy_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column issue
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 0d48e8a1-3682-43ee-8308-7db461b6b338
+		summarizeBy: none
+		sourceColumn: issue
+
+		annotation SummarizationSetBy = Automatic
+
+	column decision_status
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 012f28a1-5a0b-40a4-9390-916f49deb269
+		summarizeBy: none
+		sourceColumn: decision_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: abda4817-7443-4aa4-a55e-143d0ff62554
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column selected_threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 5bc548f8-b6b2-463e-8f39-c47b9b61168e
+		summarizeBy: sum
+		sourceColumn: selected_threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column selection_reason
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5b4274b1-1c69-4089-9305-9b54740386bc
+		summarizeBy: none
+		sourceColumn: selection_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column minimum_recall_target
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 16b0198b-7586-4671-96f1-bddd62df8c47
+		summarizeBy: sum
+		sourceColumn: minimum_recall_target
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column maximum_alert_rate_target
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 36acbad3-098b-41a2-9cd2-7d93b68d1deb
+		summarizeBy: sum
+		sourceColumn: maximum_alert_rate_target
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_row_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: b6c8c6e6-4222-4262-9e04-54dffca82a8a
+		summarizeBy: sum
+		sourceColumn: validation_row_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column validation_positive_class_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: a75feed1-57cc-4568-a39d-b3a372a34d7b
+		summarizeBy: sum
+		sourceColumn: validation_positive_class_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_predicted_positive_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 15965dd3-7d14-4aae-a121-681ddb2f76dd
+		summarizeBy: sum
+		sourceColumn: validation_predicted_positive_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_precision
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 02cb97ac-5087-4007-b60b-17d9bff6d91e
+		summarizeBy: sum
+		sourceColumn: validation_precision
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_recall
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 07806d2b-e0c0-4990-886c-4d6954c126a4
+		summarizeBy: sum
+		sourceColumn: validation_recall
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_f1
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f02eea03-39ba-4647-aef7-48a2719d6279
+		summarizeBy: sum
+		sourceColumn: validation_f1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_true_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: af8c8ddb-a703-4e33-b440-7c1237974a21
+		summarizeBy: sum
+		sourceColumn: validation_true_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column validation_false_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 8ccabc3b-8258-41b6-b209-af1f804d8336
+		summarizeBy: sum
+		sourceColumn: validation_false_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column validation_false_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: c1b5be06-02aa-4605-9ffd-d48be7d292f8
+		summarizeBy: sum
+		sourceColumn: validation_false_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column validation_true_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d14ff312-035b-4660-afd6-7fcd4a5399bf
+		summarizeBy: sum
+		sourceColumn: validation_true_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column final_test_used
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: ab33adbc-82b1-4f6f-badf-d020fc7d7287
+		summarizeBy: none
+		sourceColumn: final_test_used
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_dashboard_reuse_rule
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 69ec303a-d7f2-4e3e-bb4c-0cd8f7523dd6
+		summarizeBy: none
+		sourceColumn: ao3_dashboard_reuse_rule
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao1_decision_threshold_policy = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao1_decision_threshold_policy_Table = default_Schema{[Name="powerbi_ao1_decision_threshold_policy",Kind="Table"]}[Data]
+				in
+				    powerbi_ao1_decision_threshold_policy_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

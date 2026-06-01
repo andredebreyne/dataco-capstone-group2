@@ -1,0 +1,43 @@
+table powerbi_ao3_benchmark_insights
+	lineageTag: c6921309-5527-4f1a-a4e2-79e8804edeac
+
+	column metric_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: d104f526-fcba-462c-8f33-ce4fb642b85e
+		summarizeBy: none
+		sourceColumn: metric_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column metric_value
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: c91c3e8b-8173-42c8-8ed8-df10e7fb7654
+		summarizeBy: none
+		sourceColumn: metric_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column decision_relevance
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: acebf12c-c987-4e70-a83f-09d51efc0c49
+		summarizeBy: none
+		sourceColumn: decision_relevance
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao3_benchmark_insights = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao3_benchmark_insights_Table = default_Schema{[Name="powerbi_ao3_benchmark_insights",Kind="Table"]}[Data]
+				in
+				    powerbi_ao3_benchmark_insights_Table
+
+	annotation PBI_ResultType = Table
+

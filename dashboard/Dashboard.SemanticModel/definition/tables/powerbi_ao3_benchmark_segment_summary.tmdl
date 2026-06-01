@@ -1,0 +1,79 @@
+table powerbi_ao3_benchmark_segment_summary
+	lineageTag: 95ed244d-c11a-4efb-a5f7-25355a9e273d
+
+	column ao3_priority_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 0f82605a-d82f-48b1-b8e4-22e72e124874
+		summarizeBy: none
+		sourceColumn: ao3_priority_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 16dc7f74-ed8a-4631-8f8f-f5fe91581212
+		summarizeBy: sum
+		sourceColumn: row_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column share_of_rows
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 9a888f99-6081-4658-a1ac-5dbac15012ed
+		summarizeBy: sum
+		sourceColumn: share_of_rows
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao1_predicted_late_delivery_probability
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 5c38baa0-da8f-46f4-bfd8-8f43b3738203
+		summarizeBy: sum
+		sourceColumn: avg_ao1_predicted_late_delivery_probability
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao2_predicted_order_profit
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 1d293fbf-1500-4dfe-bcf9-383ff588c8cd
+		summarizeBy: sum
+		sourceColumn: avg_ao2_predicted_order_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao3_predicted_margin
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f755f830-3609-46c0-9cf9-148303b4b776
+		summarizeBy: sum
+		sourceColumn: avg_ao3_predicted_margin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition powerbi_ao3_benchmark_segment_summary = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao3_benchmark_segment_summary_Table = default_Schema{[Name="powerbi_ao3_benchmark_segment_summary",Kind="Table"]}[Data]
+				in
+				    powerbi_ao3_benchmark_segment_summary_Table
+
+	annotation PBI_ResultType = Table
+
