@@ -140,6 +140,7 @@ RUN_EDA = False
 RUN_SILVER_CSV_EXPORT = False
 RUN_POWERBI_GOLD_EXPORT = False
 RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
+RUN_POWERBI_DATABRICKS_SERVING_LAYER = False
 RUN_FINAL_CHECKLIST = True
 
 # EDA is optional and disabled by default because broad EDA reruns can overwrite
@@ -193,6 +194,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/benchmark_ao3_risk_margin_framework.py"),
     Path("src/modeling/run_ao3_kmeans_extension.py"),
     Path("src/dashboard/export_powerbi_gold_tables.py"),
+    Path("src/dashboard/register_powerbi_databricks_tables.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
     Path("tests/data_validation/test_gold_ao1_table.py"),
@@ -220,6 +222,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao3_risk_margin_benchmark.py"),
     Path("tests/data_validation/validate_ao3_kmeans_extension.py"),
     Path("tests/data_validation/validate_powerbi_gold_exports.py"),
+    Path("tests/data_validation/validate_powerbi_databricks_serving_layer.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
 )
@@ -452,6 +455,11 @@ from src.dashboard.export_powerbi_gold_tables import (  # noqa: E402
     PowerBIExportConfig,
     configure_logging as configure_powerbi_export_logging,
     run_powerbi_gold_export,
+)
+from src.dashboard.register_powerbi_databricks_tables import (  # noqa: E402
+    PowerBIDatabricksRegistrationConfig,
+    configure_logging as configure_powerbi_databricks_logging,
+    run_powerbi_databricks_registration,
 )
 
 
@@ -896,6 +904,14 @@ def run_powerbi_dashboard_export_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_powerbi_gold_exports.py"))
 
 
+def run_powerbi_databricks_serving_layer_registration() -> None:
+    """Register dashboard-ready Power BI serving tables in Databricks SQL."""
+    run_powerbi_databricks_registration(
+        PowerBIDatabricksRegistrationConfig(),
+        configure_powerbi_databricks_logging(),
+    )
+
+
 def check_eda_artifacts() -> None:
     """Validate that expected EDA documentation and artifact files exist."""
     missing_artifacts = [
@@ -964,6 +980,7 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: AO3 K-means extension validation runs only when RUN_AO3_KMEANS_EXTENSION_VALIDATION is True.")
     print("- OPTIONAL: Power BI Gold export runs only when RUN_POWERBI_GOLD_EXPORT is True.")
     print("- OPTIONAL: Power BI Gold export validation runs only when RUN_POWERBI_GOLD_EXPORT_VALIDATION is True.")
+    print("- OPTIONAL: Power BI Databricks serving layer runs only when RUN_POWERBI_DATABRICKS_SERVING_LAYER is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
 
@@ -989,6 +1006,7 @@ def print_final_checklist() -> None:
     ao2_target_reconstruction_config = AO2TargetReconstructionAuditConfig()
     ao3_kmeans_config = AO3KMeansExtensionConfig()
     powerbi_export_config = PowerBIExportConfig()
+    powerbi_databricks_config = PowerBIDatabricksRegistrationConfig()
 
     print("\nPrimary workflow output paths:")
     print(f"- Volume root: {VOLUME_ROOT}")
@@ -1034,6 +1052,15 @@ def print_final_checklist() -> None:
     print(f"- AO3 K-means extension metadata: {ao3_kmeans_config.metadata_output_path}")
     print(f"- AO3 K-means cluster profiles: {ao3_kmeans_config.cluster_profiles_output_path}")
     print(f"- Power BI dashboard export folder: {powerbi_export_config.export_root}")
+    print(
+        "- Power BI Databricks serving tables: "
+        f"{powerbi_databricks_config.catalog}.{powerbi_databricks_config.schema}.powerbi_*"
+    )
+    print(
+        "- Power BI Databricks serving manifest: "
+        f"{powerbi_databricks_config.catalog}.{powerbi_databricks_config.schema}."
+        "powerbi_serving_layer_manifest"
+    )
     print(f"- Local Silver CSV clone: {REPO_ROOT / LOCAL_SILVER_CSV_RELATIVE_PATH}")
 
 
@@ -1387,6 +1414,12 @@ def main() -> None:
         RUN_POWERBI_GOLD_EXPORT and RUN_POWERBI_GOLD_EXPORT_VALIDATION,
         run_powerbi_dashboard_export_validation,
         required=RUN_POWERBI_GOLD_EXPORT and RUN_POWERBI_GOLD_EXPORT_VALIDATION,
+    )
+    run_step(
+        "Power BI Databricks serving-layer registration",
+        RUN_POWERBI_DATABRICKS_SERVING_LAYER,
+        run_powerbi_databricks_serving_layer_registration,
+        required=RUN_POWERBI_DATABRICKS_SERVING_LAYER,
     )
     run_step("Local Silver CSV export for EDA", RUN_SILVER_CSV_EXPORT, run_local_silver_csv_export)
     run_step("EDA artifact workflow", RUN_EDA, run_eda_workflow, required=False)
