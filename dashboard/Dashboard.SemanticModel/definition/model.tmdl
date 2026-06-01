@@ -1,0 +1,33 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-CA
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["powerbi_ao1_ao2_test_score_summary","powerbi_ao1_ao2_test_scores","powerbi_ao1_confusion_by_threshold","powerbi_ao1_decision_threshold_policy","powerbi_ao1_model_validation","powerbi_ao2_evaluation_metrics","powerbi_ao1_threshold_tradeoff","powerbi_ao3_benchmark_insights","powerbi_ao2_model_validation","powerbi_ao3_benchmark_segment_summary","powerbi_ao3_operational_recommendations","powerbi_ao3_order_segments","powerbi_ao3_risk_margin_policy","powerbi_ao3_segment_summary"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling","TMDLView_Desktop"]
+
+ref table powerbi_ao1_ao2_test_score_summary
+ref table powerbi_ao1_ao2_test_scores
+ref table powerbi_ao1_confusion_by_threshold
+ref table powerbi_ao1_decision_threshold_policy
+ref table powerbi_ao1_model_validation
+ref table powerbi_ao2_evaluation_metrics
+ref table powerbi_ao1_threshold_tradeoff
+ref table powerbi_ao3_benchmark_insights
+ref table powerbi_ao2_model_validation
+ref table powerbi_ao3_benchmark_segment_summary
+ref table powerbi_ao3_operational_recommendations
+ref table powerbi_ao3_order_segments
+ref table powerbi_ao3_risk_margin_policy
+ref table powerbi_ao3_segment_summary
+ref table Dashboard_Measures
+ref table Dashboard_Visualizations
+
+ref cultureInfo en-US
+

@@ -1,0 +1,118 @@
+table powerbi_ao2_model_validation
+	lineageTag: fe9415d9-fd54-438e-8145-b2b424c50e90
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: ef8d5628-f67d-4869-b0bf-4e2b6756fe49
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_type
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 45610a4e-fc61-421b-be3e-8f9ddf780143
+		summarizeBy: none
+		sourceColumn: model_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column candidate_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 09b3b010-69cd-4ad6-81f1-c70d58090b39
+		summarizeBy: none
+		sourceColumn: candidate_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column rmse
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 11f3e366-ae8a-47bf-a23c-2eb6750c5d7a
+		summarizeBy: sum
+		sourceColumn: rmse
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column mae
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 819d37ae-33c7-41b3-829e-8f2e7a37b9b6
+		summarizeBy: sum
+		sourceColumn: mae
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column r2
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c82c0449-40ed-4d87-903e-b913ed79154b
+		summarizeBy: sum
+		sourceColumn: r2
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column median_absolute_error
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 13267443-bcfe-4b09-883d-30695986556d
+		summarizeBy: sum
+		sourceColumn: median_absolute_error
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column mean_error
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 63fcff12-db76-4291-9d1b-0210914a2f87
+		summarizeBy: sum
+		sourceColumn: mean_error
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column validation_rows
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: da9cf3ac-3de7-4875-93ad-3054837ef016
+		summarizeBy: sum
+		sourceColumn: validation_rows
+
+		annotation SummarizationSetBy = Automatic
+
+	column final_test_used
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: dd5ffd35-575e-4866-8e3f-e80233a2ceb6
+		summarizeBy: none
+		sourceColumn: final_test_used
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao2_model_validation = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao2_model_validation_Table = default_Schema{[Name="powerbi_ao2_model_validation",Kind="Table"]}[Data]
+				in
+				    powerbi_ao2_model_validation_Table
+
+	annotation PBI_ResultType = Table
+

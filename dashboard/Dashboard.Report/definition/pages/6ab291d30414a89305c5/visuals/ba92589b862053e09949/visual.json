@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "ba92589b862053e09949",
+  "position": {
+    "x": 964,
+    "y": 370,
+    "z": 3000,
+    "height": 338,
+    "width": 956,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q01 | 04 Threshold Policy"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q01 | 04 Threshold Policy",
+              "nativeQueryRef": "Q01 | 04 Threshold Policy"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

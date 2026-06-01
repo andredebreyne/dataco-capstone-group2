@@ -1,0 +1,282 @@
+table powerbi_ao3_order_segments
+	lineageTag: 161a3ae2-2cc5-438f-b630-f7ca04d1eee3
+
+	column Order_Id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 97119021-c182-4c4b-b539-98589d169243
+		summarizeBy: count
+		sourceColumn: Order_Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Order_Item_Id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 07e1b6ca-f52e-4261-b20d-8817357f971d
+		summarizeBy: count
+		sourceColumn: Order_Item_Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date_DateOrders
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 58164693-39dc-457c-bcc1-e5fc51c127a4
+		summarizeBy: none
+		sourceColumn: order_date_DateOrders
+
+		annotation SummarizationSetBy = Automatic
+
+	column chronological_row_number
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 608e7c12-3c11-4a25-9bf3-3a1eeedf5d9b
+		summarizeBy: sum
+		sourceColumn: chronological_row_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column split_partition
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: c6fd9e50-8bee-4602-83a8-cc320a3c8795
+		summarizeBy: none
+		sourceColumn: split_partition
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_chronological_row_number
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 17bc4724-34c9-44bf-bc8b-c793388433dc
+		summarizeBy: sum
+		sourceColumn: ao2_chronological_row_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_split_partition
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 716b0415-9947-4b4f-a551-046cbaf345f8
+		summarizeBy: none
+		sourceColumn: ao2_split_partition
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 4287c8ba-1e58-4d69-bccc-0055e233d59a
+		summarizeBy: none
+		sourceColumn: ao1_model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_selected_candidate
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: dd62bf9f-83ac-43f7-a7c3-0624337cf23a
+		summarizeBy: none
+		sourceColumn: ao1_selected_candidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_scoring_mode
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 2f9f5a87-f741-4bb7-81fd-bc8176b456b1
+		summarizeBy: none
+		sourceColumn: ao1_scoring_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_predicted_late_delivery_probability
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 7ead7696-8f95-4d57-a395-4c981d1950ed
+		summarizeBy: sum
+		sourceColumn: ao1_predicted_late_delivery_probability
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao1_decision_threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 75fdcd7d-dfef-426f-a4cc-415518991a1e
+		summarizeBy: sum
+		sourceColumn: ao1_decision_threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao1_high_risk_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: c15f5881-d5b2-49cc-a762-0ba3a3eefae7
+		summarizeBy: none
+		sourceColumn: ao1_high_risk_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: b7924f11-5064-4950-b99a-ea8c68fcf6a8
+		summarizeBy: none
+		sourceColumn: ao2_model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_selected_candidate
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 66547dba-18a0-4d40-ad59-a9ee6b2d07ab
+		summarizeBy: none
+		sourceColumn: ao2_selected_candidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_scoring_mode
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 28e2b3d6-cd91-4845-acdc-2b82e3bea996
+		summarizeBy: none
+		sourceColumn: ao2_scoring_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_predicted_order_profit
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 8ceee661-1687-463d-aec8-9f88df176b8f
+		summarizeBy: sum
+		sourceColumn: ao2_predicted_order_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_order_value
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 542ccee4-ef3a-4101-805d-9e491db04e0c
+		summarizeBy: sum
+		sourceColumn: ao3_order_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_predicted_margin
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 952f329d-ca7d-4e87-b97a-6411e633b1a0
+		summarizeBy: sum
+		sourceColumn: ao3_predicted_margin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column scoring_timestamp_utc
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5335fbd7-b7bd-4261-af6d-b59a6593977d
+		summarizeBy: none
+		sourceColumn: scoring_timestamp_utc
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_policy_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 86d3bb84-07db-45e5-83d4-6d35c2a78a61
+		summarizeBy: none
+		sourceColumn: ao3_policy_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_risk_cutoff
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 65384fcf-b3dc-4efc-87a9-a64aa1e75f3f
+		summarizeBy: sum
+		sourceColumn: ao3_risk_cutoff
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_margin_cutoff
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 57586589-6776-4731-925e-ea6dd5c8bb1c
+		summarizeBy: sum
+		sourceColumn: ao3_margin_cutoff
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_high_risk_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 88c648ff-5adf-4bb8-8738-70144e2d1c43
+		summarizeBy: none
+		sourceColumn: ao3_high_risk_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_high_margin_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 024a7c5b-85e7-4350-bd8a-abf0358aa179
+		summarizeBy: none
+		sourceColumn: ao3_high_margin_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_priority_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 72729a18-be81-4a27-a899-cbd8c56a4ce9
+		summarizeBy: none
+		sourceColumn: ao3_priority_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao3_segment_assignment_timestamp_utc
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: c863656a-b337-49d3-b8ca-e6cd2f1e7a07
+		summarizeBy: none
+		sourceColumn: ao3_segment_assignment_timestamp_utc
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao3_order_segments = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao3_order_segments_Table = default_Schema{[Name="powerbi_ao3_order_segments",Kind="Table"]}[Data]
+				in
+				    powerbi_ao3_order_segments_Table
+
+	annotation PBI_ResultType = Table
+

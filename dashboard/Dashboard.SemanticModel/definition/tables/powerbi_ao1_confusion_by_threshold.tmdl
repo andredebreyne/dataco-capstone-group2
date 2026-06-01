@@ -1,0 +1,88 @@
+table powerbi_ao1_confusion_by_threshold
+	lineageTag: 62548550-5ba1-4c2e-8a1b-993d3409f305
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: c9ad1aa2-7d44-4b62-b135-c536c3d08b39
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: dd443b3b-d1aa-430b-ab5a-b083e1869ef9
+		summarizeBy: sum
+		sourceColumn: threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column row_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d8f85684-7d97-4941-b804-f1abc255eabf
+		summarizeBy: sum
+		sourceColumn: row_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column true_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 21445b05-c160-4b42-aa59-0d2d6ca1cf93
+		summarizeBy: sum
+		sourceColumn: true_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 4c02a432-b818-4215-955e-687700597273
+		summarizeBy: sum
+		sourceColumn: false_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 06a56954-2bb7-43fc-bae7-a5abd7067762
+		summarizeBy: sum
+		sourceColumn: false_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column true_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 77c66174-a567-4222-9d88-c98050888640
+		summarizeBy: sum
+		sourceColumn: true_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao1_confusion_by_threshold = m
+		mode: directQuery
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao1_confusion_by_threshold_Table = default_Schema{[Name="powerbi_ao1_confusion_by_threshold",Kind="Table"]}[Data]
+				in
+				    powerbi_ao1_confusion_by_threshold_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

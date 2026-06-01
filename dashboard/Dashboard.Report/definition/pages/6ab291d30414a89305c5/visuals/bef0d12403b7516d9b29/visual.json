@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "bef0d12403b7516d9b29",
+  "position": {
+    "x": 964,
+    "y": 846,
+    "z": 6000,
+    "height": 234,
+    "width": 956,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q01 | 07 Executive Takeaway"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q01 | 07 Executive Takeaway",
+              "nativeQueryRef": "Q01 | 07 Executive Takeaway"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

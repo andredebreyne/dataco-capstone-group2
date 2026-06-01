@@ -249,5 +249,6 @@ docs/proposal/*.docx
 # Keep the export folder placeholder and documentation tracked, but regenerate
 # CSV/JSON outputs from src/dashboard/export_powerbi_gold_tables.py.
 dashboard/*.pbix
+dashboard/**/.pbi/
 dashboard/exports/*
 !dashboard/exports/.gitkeep
