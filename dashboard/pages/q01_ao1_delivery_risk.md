@@ -56,6 +56,40 @@ threshold or alter the `ao1_high_risk_flag`.
 Validation metrics and operational exposure metrics refer to different
 populations and remain explicitly labeled on the page.
 
+## Page Storytelling and Business Interpretation
+
+The AO1 Delivery Risk page is designed as a preventive operations view. Its
+purpose is not to explain historical delivery failure after the fact, but to
+identify which scored order items should receive operational attention before
+dispatch.
+
+The page answers the business question in four steps:
+
+1. **Define the operational population.** The KPI strip starts by showing the
+   total number of scored order items included in the governed held-out
+   population. This establishes the denominator used by the page and avoids
+   mixing validation metrics with operational exposure metrics.
+2. **Quantify current risk exposure.** The high-risk count, high-risk rate,
+   and average late-delivery risk show how much of the scored population is
+   exposed to elevated delivery risk. These metrics allow operations leaders
+   to understand whether the alert population is small, moderate, or material
+   enough to require active triage.
+3. **Connect exposure to the approved decision policy.** The threshold policy
+   panel separates descriptive exposure from the governed decision rule. The
+   `35.0%` threshold is not recalculated in Power BI. It is reused from the
+   upstream AO1 decision policy so that the dashboard remains a consumption
+   layer, not a modeling layer.
+4. **Validate the decision rule before recommending action.** The confusion
+   matrix and validation trade-offs show how the selected threshold performed
+   on the validation population. This is important because a high-risk flag is
+   only useful if leadership understands the balance between captured
+   late-delivery cases and unnecessary alerts.
+
+The page therefore moves from operational exposure to decision policy, then to
+validation evidence, and finally to an executive takeaway. This sequence
+supports a practical decision: which order items should be reviewed first for
+preventive attention.
+
 ## Visual Narrative
 
 The page uses seven HTML Content (lite) visualization measures stored in
@@ -74,6 +108,18 @@ Q01 Where Is Preventive Attention Required?
 | 5 | `Q01 | 05 Confusion Matrix` | Show validation outcomes at the approved threshold. |
 | 6 | `Q01 | 06 Methodology Note` | Separate validation evidence from held-out scored exposure. |
 | 7 | `Q01 | 07 Executive Takeaway` | Close the page with the business interpretation. |
+
+## Why These Visuals Were Used
+
+| Visual | Rationale |
+| --- | --- |
+| Header | Establishes the page context, the AO1 decision objective, and the governed-policy status before any metric is interpreted. |
+| KPI Exposure Strip | Summarizes the operational scale of the problem by showing scored order items, high-risk items, high-risk rate, average late-delivery risk, and the approved threshold context. |
+| Exposure Distribution | Shows how the scored population is split between order items above and below the frozen AO1 threshold. This makes the alert population visually interpretable. |
+| Threshold Policy | Explains the decision rule used to classify order items as high risk. The threshold is shown separately from descriptive KPIs to emphasize that it is a governed upstream policy, not an interactive dashboard assumption. |
+| Confusion Matrix | Provides validation evidence for the selected threshold. It shows true positives, false positives, false negatives, and true negatives so reviewers can evaluate the operational trade-off between missed late deliveries and unnecessary alerts. |
+| Methodology Note | Prevents misinterpretation by separating validation evidence from held-out operational scoring. It also states that Power BI does not retrain the model, reconstruct targets, or redefine the alert policy. |
+| Executive Takeaway | Converts the analytical evidence into a concise management interpretation focused on preventive operational attention. |
 
 ## Layout Standard
 
