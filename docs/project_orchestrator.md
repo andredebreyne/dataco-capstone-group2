@@ -4,7 +4,7 @@
 
 `notebooks/pipeline/run_project_workflow.py` is the standard Databricks-compatible entry point for the current DataCo project workflow. It coordinates existing scripts in the approved order without copying transformation, feature engineering, leakage, EDA, or modeling logic into the orchestrator.
 
-This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO2 H2 results validation, optional AO3 risk-margin matrix validation, optional AO1 decision-threshold selection, optional AO1/AO2 held-out test scoring, optional AO3 segment assignment, optional AO3 risk-margin benchmarking, optional AO3 K-means clustering extension, optional Power BI Gold exports, optional EDA artifact checks, and pre-Gold governance checks. Final test-set performance evaluation is not part of this workflow.
+This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold table creation, lightweight validation, optional AO1 and AO2 chronological partition creation, optional AO1 and AO2 preprocessing, optional AO1 and AO2 validation-model training, optional AO1 and AO2 validation evaluation-pack generation, optional AO1 and AO2 SHAP explainability, optional AO2 target-reconstruction audit, optional AO2 H2 results validation, optional AO3 risk-margin matrix validation, optional AO1 decision-threshold selection, optional AO1/AO2 held-out test scoring, optional AO3 segment assignment, optional AO3 risk-margin benchmarking, optional AO3 K-means clustering extension, optional Power BI Gold CSV exports, optional Power BI Databricks serving-layer registration, optional EDA artifact checks, and pre-Gold governance checks. Final test-set performance evaluation is not part of this workflow.
 
 ## Executable Workflow Inventory
 
@@ -69,6 +69,8 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 | AO3 K-means extension validation | `tests/data_validation/validate_ao3_kmeans_extension.py` | Validate K-means extension metadata, quality metrics, cluster profiles, findings coverage, recommendation, cluster shares, and leakage exclusions. | Completed AO3 K-means extension artifacts. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_AO3_KMEANS_EXTENSION` and `RUN_AO3_KMEANS_EXTENSION_VALIDATION`. | Can run locally after artifacts are generated, but generation itself normally reads the Databricks AO3 Delta path. |
 | Power BI Gold dashboard export | `src/dashboard/export_powerbi_gold_tables.py` | Export governed Gold Delta outputs and small reference CSVs into a local Power BI import folder. | Completed AO1/AO2 score Delta table, completed AO3 segment Delta table, and reference artifacts. | Gitignored CSV files plus `powerbi_export_manifest.json` under `dashboard/exports/`. | Optional and disabled by default; controlled by `RUN_POWERBI_GOLD_EXPORT`. | Runs in Databricks because it reads Delta paths. It does not recreate model scores, retune thresholds, calculate final-test performance metrics, or use target labels. |
 | Power BI Gold dashboard export validation | `tests/data_validation/validate_powerbi_gold_exports.py` | Validate exported Power BI CSVs, manifest metadata, required AO3 fields, probability ranges, and target-column exclusions. | Completed Power BI export folder. | Console pass/fail result. | Optional and disabled by default; controlled by `RUN_POWERBI_GOLD_EXPORT` and `RUN_POWERBI_GOLD_EXPORT_VALIDATION`. | Can run after the export step from Databricks or from an environment with the generated export files. |
+| Power BI Databricks serving-layer registration | `src/dashboard/register_powerbi_databricks_tables.py` | Register governed dashboard artifacts as managed Databricks SQL `powerbi_*` tables for direct Power BI Desktop connection. | Completed AO1/AO2 score Delta table, completed AO3 segment Delta table, and reference/report artifacts. | Managed tables under the configured catalog/schema, plus `powerbi_serving_layer_manifest`. | Optional and disabled by default; controlled by `RUN_POWERBI_DATABRICKS_SERVING_LAYER`. | This is the preferred direct Power BI connection path for issue `#139`. The CSV export workflow remains available for offline review and fallback. The registration step publishes dashboard-safe projected schemas and does not recreate scores, retune thresholds, calculate final-test performance metrics, or assign AO3 segments. |
+| Power BI Databricks serving-layer static validation | `tests/data_validation/validate_powerbi_databricks_serving_layer.py` | Validate the serving-layer script contract, table names, manifest fields, docs references, safe allowlists, and absence of hard-coded personal paths in active code. | Repository files only. | Console pass/fail result. | Manual validation step for issue `#139`. | Does not require live Databricks or PySpark. It complements manual Databricks SQL verification after registration. |
 | Silver CSV export for EDA | `notebooks/pipeline/run_project_workflow.py` | Export the Silver Delta table to a gitignored local CSV clone for EDA scripts. | Silver Delta. | `data/silver/dataco_orders_silver.csv`. | Required for local EDA; controlled by `RUN_SILVER_CSV_EXPORT`. | Intended for local EDA and review only; Delta remains the source of truth. |
 | Univariate EDA | `notebooks/eda/eda_univariate_distribution_analysis.py` | Generate univariate distribution, missingness, outlier, and cardinality review outputs. | Local Silver CSV clone. | Univariate EDA summary table and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns; the renamed exploratory `.ipynb` is retained as context. |
 | AO1 bivariate EDA | `notebooks/eda/ao1_bivariate_late_delivery_eda.py` | Generate AO1 late-delivery bivariate EDA summaries and figures. | Local Silver CSV clone. | AO1 EDA tables and figures under `report/`. | Optional; controlled by `RUN_EDA` and `EDA_ACTION`. | Disabled by default to avoid broad artifact reruns. |
@@ -86,7 +88,7 @@ This orchestrator covers Bronze, Silver, feature engineering, AO1 and AO2 Gold t
 - `notebooks/pipeline/` contains the single project workflow entry point: `run_project_workflow.py`.
 - `src/data_engineering/` contains reusable Bronze, Silver, reference registration, feature engineering, and Gold table jobs.
 - `src/modeling/` contains reusable model-preparation and modeling jobs, including AO1/AO2 chronological partition creation, AO1/AO2 preprocessing metadata generation, the AO1 Logistic Regression baseline, the AO2 Ridge baseline, the AO2 Gradient Boosting regressor, the AO1 XGBoost classifier, AO1 and AO2 validation evaluation packaging, AO1 and AO2 SHAP explainability, the AO2 target-reconstruction audit, AO1 decision-threshold selection, AO1/AO2 held-out test scoring, AO3 segment assignment, AO3 risk-margin benchmarking, and the optional AO3 K-means extension for integration.
-- `src/dashboard/` contains dashboard export jobs that turn governed Delta outputs into Power BI import artifacts.
+- `src/dashboard/` contains dashboard export and serving-layer jobs that turn governed Delta outputs into Power BI-ready artifacts.
 - `tests/data_validation/` contains lightweight validation scripts for data quality and governance artifacts.
 - `notebooks/eda/` contains EDA scripts and notebooks. Python EDA scripts are the orchestrator-supported executable format; `.ipynb` files are retained only as exploratory or historical context.
 - `report/tables/` and `report/figures/` contain generated report-facing artifacts.
@@ -179,6 +181,7 @@ RUN_EDA = False
 RUN_SILVER_CSV_EXPORT = False
 RUN_POWERBI_GOLD_EXPORT = False
 RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
+RUN_POWERBI_DATABRICKS_SERVING_LAYER = False
 RUN_FINAL_CHECKLIST = True
 ```
 
@@ -260,6 +263,9 @@ At the end of each run, the orchestrator prints the primary paths that reviewers
 - AO3 operational recommendation matrix CSV.
 - AO3 K-means extension metadata JSON.
 - AO3 K-means cluster profile CSV.
+- Power BI dashboard export folder.
+- Power BI Databricks serving tables.
+- Power BI Databricks serving manifest.
 - Local Silver CSV clone for EDA.
 
 ## Failure Handling

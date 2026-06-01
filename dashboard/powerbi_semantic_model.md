@@ -1,20 +1,37 @@
 # Power BI Semantic Model Blueprint
 
 This document defines the governed semantic-model layer for the DataCo
-Capstone Power BI dashboard. The dashboard should import reproducible CSV
-exports generated from approved Databricks Gold Delta outputs and committed
-reference/report artifacts.
+Capstone Power BI dashboard. The preferred Power BI path is direct connection
+to managed Databricks SQL serving-layer tables created by
+`src/dashboard/register_powerbi_databricks_tables.py`. Reproducible CSV exports
+under `dashboard/exports/` remain available for offline review or fallback.
 
-## Export Workflow
+## Connection Workflows
 
-Run the export job in Databricks after AO1/AO2 scoring and AO3 segmentation
-have completed:
+Preferred direct Databricks path:
+
+```text
+src/dashboard/register_powerbi_databricks_tables.py
+```
+
+Or enable the optional orchestrator flag:
+
+```text
+RUN_POWERBI_DATABRICKS_SERVING_LAYER = True
+```
+
+This registers managed `powerbi_*` tables under the configured catalog/schema,
+defaulting to `workspace.default`. In Power BI Desktop, use **Get data > Azure
+Databricks**, enter the SQL Warehouse server hostname and HTTP path, select the
+`powerbi_*` tables, and rename them to the semantic-model names below.
+
+Offline CSV fallback:
 
 ```text
 src/dashboard/export_powerbi_gold_tables.py
 ```
 
-Or enable the optional orchestrator flags:
+Or enable the optional CSV export flags:
 
 ```text
 RUN_POWERBI_GOLD_EXPORT = True
@@ -27,25 +44,28 @@ The export job writes gitignored files under:
 dashboard/exports/
 ```
 
-Power BI should import from that folder. The exported files are generated
-artifacts and should not be edited manually.
+Power BI can import those fallback files with **Get data > Text/CSV** or
+**Folder**. The exported files are generated artifacts and should not be edited
+manually.
 
 ## Import Tables
 
-| Power BI table | Export file | Source system | Dashboard purpose |
+| Power BI table | Preferred Databricks serving table | Offline CSV fallback | Dashboard purpose |
 | --- | --- | --- | --- |
-| `AO3_Order_Segments` | `ao3_risk_margin_segments.csv` | Databricks Gold Delta | Primary operational fact table for AO3 segment analysis. |
-| `AO1_AO2_Test_Scores` | `ao1_ao2_test_scores.csv` | Databricks Gold Delta | Integrated held-out prediction table used upstream of AO3. |
-| `AO1_Decision_Threshold_Policy` | `ao1_decision_threshold_policy.csv` | Governed reference CSV | Display the approved AO1 operating threshold reused by AO3. |
-| `AO3_Risk_Margin_Policy` | `ao3_risk_margin_matrix_policy.csv` | Governed reference CSV | Document AO3 risk-margin policy, cutoffs, and segment definitions. |
-| `AO3_Segment_Summary` | `ao3_segment_summary.csv` | Governed reference CSV | Segment counts and average score summaries. |
-| `AO3_Benchmark_Segment_Summary` | `ao3_risk_margin_benchmark_segment_summary.csv` | Governed reference CSV | Segment-level AO3 benchmark evidence. |
-| `AO3_Benchmark_Insights` | `ao3_risk_margin_benchmark_insights.csv` | Governed reference CSV | H3 interpretation and benchmark notes. |
-| `AO1_Model_Validation` | `ao1_model_validation_comparison.csv` | Report artifact | Compare AO1 validation models and selected metrics. |
-| `AO1_Threshold_Tradeoff` | `ao1_threshold_tradeoff_grid.csv` | Report artifact | Analyze precision, recall, F1, and alert-rate trade-offs. |
-| `AO1_Confusion_By_Threshold` | `ao1_confusion_matrix_by_threshold.csv` | Report artifact | Support confusion-matrix visuals by model and threshold. |
-| `AO2_Model_Validation` | `ao2_model_validation_comparison.csv` | Report artifact | Compare AO2 validation models and regression metrics. |
-| `AO2_Evaluation_Metrics` | `ao2_model_evaluation_metrics.csv` | Report artifact | Report AO2 residual and prediction diagnostics. |
+| `AO3_Order_Segments` | `powerbi_ao3_order_segments` | `ao3_risk_margin_segments.csv` | Primary operational fact table for AO3 segment analysis. |
+| `AO1_AO2_Test_Scores` | `powerbi_ao1_ao2_test_scores` | `ao1_ao2_test_scores.csv` | Integrated held-out prediction table used upstream of AO3. |
+| `AO1_Decision_Threshold_Policy` | `powerbi_ao1_decision_threshold_policy` | `ao1_decision_threshold_policy.csv` | Display the approved AO1 operating threshold reused by AO3. |
+| `AO1_AO2_Test_Score_Summary` | `powerbi_ao1_ao2_test_score_summary` | `ao1_ao2_test_score_summary.csv` | Summarize the integrated AO1/AO2 held-out score population. |
+| `AO3_Risk_Margin_Policy` | `powerbi_ao3_risk_margin_policy` | `ao3_risk_margin_matrix_policy.csv` | Document AO3 risk-margin policy, cutoffs, and segment definitions. |
+| `AO3_Segment_Summary` | `powerbi_ao3_segment_summary` | `ao3_segment_summary.csv` | Segment counts and average score summaries. |
+| `AO3_Benchmark_Segment_Summary` | `powerbi_ao3_benchmark_segment_summary` | `ao3_risk_margin_benchmark_segment_summary.csv` | Segment-level AO3 benchmark evidence. |
+| `AO3_Benchmark_Insights` | `powerbi_ao3_benchmark_insights` | `ao3_risk_margin_benchmark_insights.csv` | H3 interpretation and benchmark notes. |
+| `AO3_Operational_Recommendations` | `powerbi_ao3_operational_recommendations` | Not currently exported by the CSV script. | Recommended action matrix by AO3 segment. |
+| `AO1_Model_Validation` | `powerbi_ao1_model_validation` | `ao1_model_validation_comparison.csv` | Compare AO1 validation models and selected metrics. |
+| `AO1_Threshold_Tradeoff` | `powerbi_ao1_threshold_tradeoff` | `ao1_threshold_tradeoff_grid.csv` | Analyze precision, recall, F1, and alert-rate trade-offs. |
+| `AO1_Confusion_By_Threshold` | `powerbi_ao1_confusion_by_threshold` | `ao1_confusion_matrix_by_threshold.csv` | Support confusion-matrix visuals by model and threshold. |
+| `AO2_Model_Validation` | `powerbi_ao2_model_validation` | `ao2_model_validation_comparison.csv` | Compare AO2 validation models and regression metrics. |
+| `AO2_Evaluation_Metrics` | `powerbi_ao2_evaluation_metrics` | `ao2_model_evaluation_metrics.csv` | Report AO2 residual and prediction diagnostics. |
 
 ## Primary Fact Grain
 
@@ -85,19 +105,28 @@ includes stable customer, region, product, or shipping columns.
 
 - Power BI must not recreate AO1/AO2 scores, AO3 margins, thresholds, or segment
   assignments.
-- The dashboard imports exported artifacts; Databricks Delta remains the source
-  of truth for Gold outputs.
-- Target and outcome labels must not enter Power BI operational exports.
+- The dashboard connects to Databricks serving tables or imports generated CSV
+  fallback files; Databricks Delta remains the source of truth for Gold outputs.
+- Target and outcome labels must not enter Power BI operational serving or
+  export tables.
 - Validation metric tables must remain clearly labeled as validation evidence,
   not final-test performance.
-- Generated files under `dashboard/exports/` are ignored by Git and should be
-  regenerated from the export script.
+- Generated files under `dashboard/exports/` and `dashboard/*.pbix` are ignored
+  by Git. CSV exports should be regenerated from the export script, and `.pbix`
+  files should be submitted outside Git or rebuilt locally from these
+  instructions.
 
 ## Manual Power BI Steps
 
-1. Run the Power BI export job in Databricks.
-2. In Power BI Desktop, select **Get data > Text/CSV** or **Folder**.
-3. Import files from `dashboard/exports/`.
-4. Rename imported tables to the names listed in this document.
-5. Add the DAX measures from `dashboard/powerbi_measures.dax`.
-6. Refresh the model and confirm row counts against `powerbi_export_manifest.json`.
+1. Run `src/dashboard/register_powerbi_databricks_tables.py` in Databricks.
+2. In Power BI Desktop, select **Get data > Azure Databricks**.
+3. Enter the Databricks SQL Warehouse server hostname and HTTP path.
+4. Select the configured catalog/schema, defaulting to `workspace > default`.
+5. Import the required `powerbi_*` serving tables.
+6. Rename imported tables to the semantic-model names listed in this document.
+7. Add the DAX measures from `dashboard/powerbi_measures.dax`.
+8. Refresh the model and confirm row counts against `powerbi_serving_layer_manifest`.
+
+For offline fallback, run `src/dashboard/export_powerbi_gold_tables.py`, import
+files from `dashboard/exports/`, and confirm row counts against
+`powerbi_export_manifest.json`.
