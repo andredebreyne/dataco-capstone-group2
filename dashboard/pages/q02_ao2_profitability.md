@@ -71,6 +71,38 @@ The semantic model derives stable display bands only from the frozen
 The `$100+` band remains visible when empty so that the visual contract is
 stable across refreshes.
 
+## Page Storytelling and Business Interpretation
+
+The AO2 Profitability page is designed as an economic exposure view. Its
+purpose is not to provide precise item-level financial forecasting, but to
+identify where expected profitability is concentrated, where margin pressure
+appears, and which scored order items may require margin-protection review.
+
+The page answers the business question in four steps:
+
+1. **Define the scored profitability population.** The KPI strip begins with
+   the same governed held-out scored population used across the dashboard. This
+   keeps AO2 profitability analysis aligned with AO1 risk and AO3
+   prioritization.
+2. **Quantify expected economic exposure.** Aggregate expected profit, average
+   expected profit, aggregate expected margin, and negative expected-profit
+   items summarize the magnitude and direction of expected profitability. These
+   metrics help leadership distinguish broad profitability exposure from a
+   small number of negative-profit cases.
+3. **Show where profitability is concentrated.** The profit-band distribution
+   translates continuous AO2 predictions into stable executive bands. This
+   makes it easier to identify whether most scored items sit near low-margin
+   ranges or whether material exposure exists in negative or high-profit bands.
+4. **Connect profitability to operational risk and prioritization.** The risk x
+   margin scatter connects AO1 predicted late-delivery risk, AO2 predicted
+   margin, and AO3 segment assignment. This shows whether profitability
+   exposure is concentrated in high-risk or low-risk operating contexts.
+
+The page therefore moves from profitability exposure to distribution, then to
+validation evidence, and finally to an executive interpretation. The intended
+decision is not to accept AO2 as a precise accounting forecast, but to use it
+as a governed signal for economic triage.
+
 ## Visual Narrative
 
 HTML Content (lite) visualization measures are stored in
@@ -89,6 +121,18 @@ Q02 Where Is Profitability Most Exposed?
 | 5 | Native scatter: `Risk x Margin Exposure by AO3 Segment` | Connect AO1 risk, AO2 predicted margin, and AO3 prioritization. |
 | 6 | `Q02 | 06 Methodology Note` | Separate validation evidence from held-out scored estimates. |
 | 7 | `Q02 | 07 Executive Takeaway` | Close the page with the margin-protection interpretation. |
+
+## Why These Visuals Were Used
+
+| Visual | Rationale |
+| --- | --- |
+| Header | Establishes the AO2 page context, the profitability question, and the governed-output status before metrics are interpreted. |
+| KPI Profitability Strip | Summarizes the economic exposure of the scored population using aggregate expected profit, average expected profit, aggregate margin, and negative expected-profit exposure. |
+| Profit Band Distribution | Converts continuous predicted-profit values into stable executive bands so leaders can see where most order items are concentrated. |
+| Validation Evidence | Shows AO2 model-performance limitations, including RMSE, MAE, R2, and wrong profit-sign share. This protects the interpretation by positioning AO2 as a triage signal rather than a precise financial forecast. |
+| Risk x Margin Scatter | Connects AO1 risk, AO2 predicted margin, and AO3 prioritization in a single executive view. The intended design is one aggregated bubble per AO3 segment. |
+| Methodology Note | Separates validation evidence from held-out scored estimates and reinforces that Power BI does not retrain AO2, reconstruct targets, or generate new predictions. |
+| Executive Takeaway | Converts profitability evidence into a management interpretation focused on margin-protection review. |
 
 ## Interactive Filters
 
@@ -118,6 +162,9 @@ ambiguous implicit aggregations:
 Do not add `Order_Item_Id` to scatter details. The intended executive view is
 one aggregated bubble per AO3 segment. Add a vertical reference line at `35%`
 AO1 risk and a horizontal reference line at `0%` predicted margin.
+
+The native scatter uses the governed AO3 segment field for grouping. A custom
+display legend may be used for executive-readable segment labels when needed.
 
 ## Layout Standard
 
