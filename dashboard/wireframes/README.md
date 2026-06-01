@@ -83,6 +83,61 @@ Q01 Where Is Preventive Attention Required?
 This pattern keeps the field panel easy to scan while allowing a visualization
 to be reused or repositioned without renaming nested display folders.
 
+## Continuation Convention
+
+Use the following structure for every new executive dashboard page:
+
+```text
+dashboard/
+  pages/
+    qNN_<analytical_domain>.md
+  themes/
+    dataco_executive_operations_dark.json
+  wireframes/
+    pNN_<analytical_domain>_background.svg
+```
+
+Use `QNN` for the stable business-question sequence and `PNN` for the physical
+Power BI page sequence. Keep these identifiers aligned whenever one page
+answers one business question:
+
+```text
+Q01 / P01  AO1 delivery risk
+Q02 / P02  AO2 profitability
+Q03 / P03  AO3 risk-margin prioritization
+```
+
+Create visualization measures in `Dashboard_Visualizations` with this pattern:
+
+```text
+QNN | 01 Header
+QNN | 02 KPI Strip
+QNN | 03 Primary Analysis
+QNN | 04 Decision Policy
+QNN | 05 Supporting Evidence
+QNN | 06 Methodology Note
+QNN | 07 Executive Takeaway
+```
+
+Adjust the descriptive suffix when the analytical content requires it, but
+preserve the numbered storytelling order. Store reusable metric measures in
+`Dashboard_Measures` under the corresponding analytical-domain folder.
+
+## HTML Content Lite Root
+
+Every HTML Content (lite) visualization must use an overflow-safe root
+container. This avoids scrollbars introduced by the visual host while
+preserving presentation-scale typography:
+
+```html
+<div style="position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;">
+  ...
+</div>
+```
+
+Reduce internal padding, gaps, or visible copy before reducing font size. Do
+not allow decision-critical text below `16 px`.
+
 ## P01 AO1 Delivery Risk
 
 Background:
