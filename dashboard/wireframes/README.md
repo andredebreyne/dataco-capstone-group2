@@ -167,3 +167,32 @@ The executive takeaway closes the analytical reading path beside the confusion
 matrix. The methodology note remains compact and sits directly above it.
 The detailed threshold trade-off chart belongs on the governance page or in a
 drill-through analytical view.
+
+## P02 AO2 Profitability
+
+Background:
+
+```text
+dashboard/wireframes/p02_ao2_profitability_background.svg
+```
+
+Business question:
+
+```text
+Where is profitability most exposed and which scored order items require
+margin-protection review?
+```
+
+| Slot | Coordinates | Recommended content |
+| --- | --- | --- |
+| Page header with synchronized slicers | `x=20, y=16, w=1880, h=190` | `Q02 | 01 Header` plus Power BI slicers |
+| KPI strip | `x=20, y=218, w=1880, h=136` | `Q02 | 02 KPI Profitability Strip` |
+| Profit-band distribution | `x=20, y=366, w=940, h=336` | `Q02 | 03 Profit Band Distribution` |
+| Validation evidence | `x=972, y=366, w=928, h=336` | `Q02 | 04 Validation Evidence` |
+| Risk x margin scatter | `x=20, y=714, w=940, h=346` | Native Power BI scatter chart |
+| Methodology note | `x=972, y=714, w=928, h=142` | `Q02 | 06 Methodology Note` |
+| Executive takeaway | `x=972, y=868, w=928, h=192` | `Q02 | 07 Executive Takeaway` |
+
+The AO2 page combines premium HTML summary surfaces with one native scatter
+chart. The scatter preserves executive interactivity while the HTML profit-band
+distribution maintains the visual language established on P01.

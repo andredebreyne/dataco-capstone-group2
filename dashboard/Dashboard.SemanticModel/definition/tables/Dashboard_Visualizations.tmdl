@@ -224,6 +224,80 @@ table Dashboard_Visualizations
 		displayFolder: Q01 Where Is Preventive Attention Required?
 		lineageTag: fdd414cd-c0ce-47ab-91d2-ce623614d27c
 
+	/// AO2 executive page header with governed profitability-estimate status.
+	measure 'Q02 | 01 Header' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:20px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='display:flex;justify-content:space-between;align-items:center;height:100%;'><div><div style='font-size:18px;color:#7D9FC5;'>AO2 · PROFITABILITY INTELLIGENCE</div><div style='font-size:44px;font-weight:700;margin-top:8px;'>Predicted Margin Exposure Review</div><div style='font-size:22px;color:#AAB6C5;margin-top:8px;'>Surface order items requiring margin attention using frozen AO2 estimates.</div></div><div style='min-width:250px;padding:14px 18px;background:#1B2531;border-left:5px solid #2D8C73;border-radius:10px;'><div style='font-size:16px;color:#8FA6C2;'>MODEL STATUS</div><div style='font-size:25px;font-weight:700;margin-top:5px;'>Frozen AO2 outputs</div><div style='font-size:17px;color:#2D8C73;margin-top:5px;'>GOVERNED DATA VERIFIED</div></div></div></div>" RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: 92e3c6a0-caf7-4866-b2b3-add2df07a4af
+
+	/// AO2 executive KPI strip summarizing predicted profitability exposure.
+	measure 'Q02 | 02 KPI Profitability Strip' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:14px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;font-family:Segoe UI;color:#F4F7FB;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;'><div><div style='font-size:18px;color:#8FA6C2;'>SCORED ORDER ITEMS</div><div style='font-size:48px;font-weight:700;margin-top:8px;'>" & FORMAT([Total Orders],"#,##0") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>EXPECTED PROFIT</div><div style='font-size:48px;font-weight:700;color:#2D8C73;margin-top:8px;'>" & FORMAT([Expected Profit],"$#,##0") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>AVG EXPECTED PROFIT</div><div style='font-size:48px;font-weight:700;color:#4F83B4;margin-top:8px;'>" & FORMAT([Average Expected Profit],"$#,##0.00") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>EXPECTED MARGIN</div><div style='font-size:48px;font-weight:700;color:#DFA64C;margin-top:8px;'>" & FORMAT([Expected Profit Margin],"0.0%") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>NEGATIVE PROFIT ITEMS</div><div style='font-size:48px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT([Negative Expected Profit Items],"#,##0") & "</div></div></div>" RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: 7a32652a-77d3-4ed2-adcf-73645abf3572
+
+	/// AO2 selected-model validation evidence with explicit model-limitation framing.
+	measure 'Q02 | 04 Validation Evidence' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>VALIDATION EVIDENCE</div><div style='font-size:22px;font-weight:700;margin-top:8px;'>Gradient Boosting · conservative baseline</div><div style='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;'><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>RMSE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation RMSE],"$#,##0.00") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>MAE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation MAE],"$#,##0.00") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>R²</div><div style='font-size:30px;font-weight:700;color:#DFA64C;margin-top:3px;'>" & FORMAT([AO2 Validation R2],"0.000") & "</div></div></div><div style='font-size:18px;color:#AAB6C5;margin-top:10px;'>Useful for triage, not for precise financial forecasting.</div></div>" RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: 246b9f9d-d35f-4a2d-b2e5-fc94ee8df541
+
+	/// AO2 methodology note separating validation evidence from held-out profitability estimates.
+	measure 'Q02 | 06 Methodology Note' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>METHODOLOGY NOTE</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>Validation evidence: <b style='color:#F4F7FB;'>" & FORMAT([AO2 Validation Rows],"#,##0") & " rows</b> · Operational exposure: <b style='color:#F4F7FB;'>" & FORMAT([Total Orders],"#,##0") & " held-out scored items</b> · Frozen upstream estimates</div></div>" RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: f9f55759-ec12-449b-bf98-acedc61ae43b
+
+	/// AO2 executive takeaway grounded in governed profitability estimates and validation caveats.
+	measure 'Q02 | 07 Executive Takeaway' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #D95555;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>EXECUTIVE TAKEAWAY</div><div style='font-size:24px;font-weight:700;margin-top:8px;'>" & FORMAT([Negative Expected Profit Items],"#,##0") & " order items require margin-protection review.</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>Frozen AO2 outputs estimate " & FORMAT([Expected Profit],"$#,##0") & " in aggregate profit with a " & FORMAT([Expected Profit Margin],"0.0%") & " expected margin.</div><div style='font-size:17px;color:#8C9AAA;margin-top:7px;'>Use the model for prioritization; validation evidence does not support precise item-level forecasting.</div></div>" RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: 4afb656d-b1a6-43e8-8d35-4c49ef3afaf7
+
+	/// Executive HTML bar chart showing governed AO2 expected-profit bands for the held-out scored population.
+	measure 'Q02 | 03 Profit Band Distribution' =
+			VAR TotalItems = [Total Orders]
+			VAR NegativeItems = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "Negative Profit" )
+			VAR Band0To10 = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "$0 to $10" )
+			VAR Band10To25 = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "$10 to $25" )
+			VAR Band25To50 = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "$25 to $50" )
+			VAR Band50To100 = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "$50 to $100" )
+			VAR Band100Plus = CALCULATE ( [Scored Items for Profit Bands], 'Dashboard_AO2_Profit_Bands'[profit_band] = "$100+" )
+			VAR MaxItems = MAX ( NegativeItems, MAX ( Band0To10, MAX ( Band10To25, MAX ( Band25To50, MAX ( Band50To100, Band100Plus ) ) ) ) )
+			VAR ResultMarkup =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>EXPECTED PROFIT DISTRIBUTION</div><div style='font-size:18px;color:#AAB6C5;margin-top:6px;'>Scored order items by frozen AO2 profit band.</div><div style='display:grid;grid-template-columns:116px 1fr 62px;column-gap:10px;row-gap:10px;align-items:center;margin-top:16px;font-size:16px;'>" &
+			"<div style='color:#D95555;'>Negative</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( NegativeItems, MaxItems, 0 ), "0.00%" ) & ";background:#D95555;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( NegativeItems, "#,##0" ) & "</div>" &
+			"<div>$0 - $10</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( Band0To10, MaxItems, 0 ), "0.00%" ) & ";background:#4F83B4;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( Band0To10, "#,##0" ) & "</div>" &
+			"<div>$10 - $25</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( Band10To25, MaxItems, 0 ), "0.00%" ) & ";background:#4F83B4;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( Band10To25, "#,##0" ) & "</div>" &
+			"<div>$25 - $50</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( Band25To50, MaxItems, 0 ), "0.00%" ) & ";background:#2D8C73;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( Band25To50, "#,##0" ) & "</div>" &
+			"<div>$50 - $100</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( Band50To100, MaxItems, 0 ), "0.00%" ) & ";background:#DFA64C;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( Band50To100, "#,##0" ) & "</div>" &
+			"<div>$100+</div><div style='height:18px;background:#27323F;border-radius:5px;overflow:hidden;'><div style='height:100%;width:" & FORMAT ( DIVIDE ( Band100Plus, MaxItems, 0 ), "0.00%" ) & ";background:#8A78B8;'></div></div><div style='text-align:right;font-weight:700;'>" & FORMAT ( Band100Plus, "#,##0" ) & "</div></div><div style='font-size:16px;color:#8C9AAA;margin-top:14px;'>" & FORMAT ( NegativeItems, "#,##0" ) & " items (" & FORMAT ( DIVIDE ( NegativeItems, TotalItems, 0 ), "0.0%" ) & ") require margin-protection review.</div></div>"
+			RETURN ResultMarkup
+		displayFolder: Q02 Where Is Profitability Most Exposed?
+		lineageTag: 1ba4d68b-dfa2-4ef9-9217-d5fb0dce0953
+
+	measure 'Q02 | Scatter Legend' =
+
+			"<div style='box-sizing:border-box;width:100%;font-family:Segoe UI,Arial;color:#AAB6C5;font-size:12px;line-height:1.4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:transparent;border:none;outline:none;box-shadow:none;'>" &
+			    "<div style='font-weight:700;color:#8C9AAA;margin-right:2px;'>AO3 Segment</div>" &
+
+			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
+			        "<span style='width:10px;height:10px;border-radius:50%;background:#4F83B4;display:inline-block;'></span>" &
+			        "<span>Expedite Selectively</span>" &
+			    "</div>" &
+
+			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
+			        "<span style='width:10px;height:10px;border-radius:50%;background:#2D8C73;display:inline-block;'></span>" &
+			        "<span>Preserve Service</span>" &
+			    "</div>" &
+
+			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
+			        "<span style='width:10px;height:10px;border-radius:50%;background:#DFA64C;display:inline-block;'></span>" &
+			        "<span>Protect High-Value At-Risk</span>" &
+			    "</div>" &
+
+			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
+			        "<span style='width:10px;height:10px;border-radius:50%;background:#D95555;display:inline-block;'></span>" &
+			        "<span>Standard Process</span>" &
+			    "</div>" &
+			"</div>"
+		lineageTag: a3e2bec9-b80a-4a07-956d-f09c29b93be2
+
 	column 'Visualization Group'
 		isHidden
 		lineageTag: 8d8fe495-d0fa-4908-b837-6dc1690028e0

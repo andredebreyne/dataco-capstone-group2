@@ -1,0 +1,22 @@
+/// Governed display dimension for stable AO2 expected-profit visualization bands, including empty bands.
+table Dashboard_AO2_Profit_Bands
+	lineageTag: 12bd5d8f-6e05-4da8-bff0-252340ae6d86
+
+	column profit_band
+		lineageTag: d5d4d99a-e8e2-4038-a3a4-8adf6a707d71
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [profit_band]
+		sortByColumn: profit_band_sort
+
+	column profit_band_sort
+		isHidden
+		lineageTag: 3c638642-a360-46d9-ba19-6eae111f0056
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [profit_band_sort]
+
+	partition Dashboard_AO2_Profit_Bands = calculated
+		mode: import
+		source = DATATABLE ( "profit_band", STRING, "profit_band_sort", INTEGER, { { "Negative Profit", 1 }, { "$0 to $10", 2 }, { "$10 to $25", 3 }, { "$25 to $50", 4 }, { "$50 to $100", 5 }, { "$100+", 6 } } )
+

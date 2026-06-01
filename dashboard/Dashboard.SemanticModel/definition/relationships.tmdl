@@ -26,3 +26,7 @@ relationship ao1_threshold_tradeoff_to_model_validation
 	fromColumn: powerbi_ao1_threshold_tradeoff.model_name
 	toColumn: powerbi_ao1_model_validation.model_name
 
+relationship ao2_profit_band_dimension_to_order_segments
+	fromColumn: powerbi_ao3_order_segments.ao2_expected_profit_band
+	toColumn: Dashboard_AO2_Profit_Bands.profit_band
+

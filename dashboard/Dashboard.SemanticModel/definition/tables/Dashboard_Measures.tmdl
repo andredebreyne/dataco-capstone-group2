@@ -188,6 +188,90 @@ table Dashboard_Measures
 		displayFolder: AO1 Delivery Risk
 		lineageTag: 718e9d6d-60b4-424b-a718-f750c25eb296
 
+	/// Scored order items with a frozen AO2 predicted profit below zero.
+	measure 'Negative Expected Profit Items' = CALCULATE ( COUNTROWS ( 'powerbi_ao3_order_segments' ), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0 )
+		formatString: #,##0
+		displayFolder: AO2 Profitability
+		lineageTag: 10dc4248-e88d-4391-bf1f-91a91541eb55
+
+	/// Share of scored order items with frozen AO2 predicted profit below zero.
+	measure 'Negative Expected Profit Rate' = DIVIDE ( [Negative Expected Profit Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability
+		lineageTag: 3d77be00-4d6f-486d-a213-00a9e346e0e6
+
+	/// Scored order items with frozen AO2 predicted profit greater than or equal to zero.
+	measure 'Positive Expected Profit Items' = [Total Orders] - [Negative Expected Profit Items]
+		formatString: #,##0
+		displayFolder: AO2 Profitability
+		lineageTag: 667c2d3f-a2fd-4539-a4b1-219656aff174
+
+	/// Share of scored order items with frozen AO2 predicted profit greater than or equal to zero.
+	measure 'Positive Expected Profit Rate' = DIVIDE ( [Positive Expected Profit Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability
+		lineageTag: cf079cdc-ee22-4003-be16-23e1b7c93179
+
+	/// Validation population size for the selected AO2 gradient boosting model.
+	measure 'AO2 Validation Rows' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[validation_rows] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: #,##0
+		displayFolder: AO2 Profitability
+		lineageTag: 8e94c991-b938-46cb-93a8-cb02016bc769
+
+	/// Validation root mean squared error for the selected AO2 gradient boosting model.
+	measure 'AO2 Validation RMSE' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[rmse] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: $#,##0.00;-$#,##0.00
+		displayFolder: AO2 Profitability
+		lineageTag: fd938b49-24bf-4f3b-8a33-825e17fe69d6
+
+	/// Validation mean absolute error for the selected AO2 gradient boosting model.
+	measure 'AO2 Validation MAE' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[mae] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: $#,##0.00;-$#,##0.00
+		displayFolder: AO2 Profitability
+		lineageTag: e4c86b37-68c1-431b-82d8-bb6f9228e6f1
+
+	/// Validation coefficient of determination for the selected AO2 gradient boosting model.
+	measure 'AO2 Validation R2' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[r2] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: 0.000
+		displayFolder: AO2 Profitability
+		lineageTag: dd2449ed-1372-49b0-9667-859018add419
+
+	/// Validation median absolute error for the selected AO2 gradient boosting model.
+	measure 'AO2 Median Absolute Error' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[median_absolute_error] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: $#,##0.00;-$#,##0.00
+		displayFolder: AO2 Profitability
+		lineageTag: 9b29e221-0e4a-4275-b2e2-dc5ccc435b10
+
+	/// Validation share of AO2 predictions with a profit sign different from the target.
+	measure 'AO2 Wrong Profit Sign Share' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[wrong_profit_sign_share] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability
+		lineageTag: c787312f-3789-4cfa-8114-a2885e1ab260
+
+	/// Explicit scatter-chart X-axis measure: average frozen AO1 late-delivery probability in the current AO3 segment context.
+	measure 'Average AO1 Risk for Scatter' = AVERAGE ( 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Scatter
+		lineageTag: 94475e90-9d77-4dbb-97e1-43cfc026b3ec
+
+	/// Explicit scatter-chart Y-axis measure: average deterministic predicted margin in the current AO3 segment context.
+	measure 'Average Predicted Margin for Scatter' = AVERAGE ( 'powerbi_ao3_order_segments'[ao3_predicted_margin] )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Scatter
+		lineageTag: 9f9cc209-b84f-4e40-b0f9-010564adb743
+
+	/// Explicit scatter-chart bubble-size measure: governed order value in the current AO3 segment context.
+	measure 'Total Order Value for Scatter' = SUM ( 'powerbi_ao3_order_segments'[ao3_order_value] )
+		formatString: $#,##0
+		displayFolder: AO2 Profitability | Scatter
+		lineageTag: 4cdca677-d63c-4ef9-ac74-2a2ca29d9ed9
+
+	/// Explicit profit-band chart value measure. Counts governed held-out scored order items and returns zero for empty stable bands.
+	measure 'Scored Items for Profit Bands' = COALESCE ( COUNTROWS ( 'powerbi_ao3_order_segments' ), 0 )
+		formatString: #,##0
+		displayFolder: AO2 Profitability | Profit Bands
+		lineageTag: bd434d1e-b8f1-4ac4-9db9-5ea164b0ce67
+
 	column 'Measure Group'
 		isHidden
 		lineageTag: 178048c3-e0aa-42d4-a92b-630cadac0387

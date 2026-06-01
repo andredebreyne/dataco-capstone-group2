@@ -267,6 +267,21 @@ table powerbi_ao3_order_segments
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Stable sort key for the AO2 expected-profit visualization bands. Derived only from frozen AO2 predicted profit.
+	column ao2_expected_profit_band_sort = SWITCH ( TRUE (), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0, 1, 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 10, 2, 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 25, 3, 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 50, 4, 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 100, 5, 6 )
+		dataType: int64
+		displayFolder: AO2 Profitability
+		lineageTag: c8ff3301-c4a9-4451-afb7-cd5420315faa
+		summarizeBy: none
+
+	/// Stable AO2 expected-profit visualization band derived only from frozen AO2 predicted profit.
+	column ao2_expected_profit_band = SWITCH ( TRUE (), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0, "Negative Profit", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 10, "$0 to $10", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 25, "$10 to $25", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 50, "$25 to $50", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 100, "$50 to $100", "$100+" )
+		dataType: string
+		displayFolder: AO2 Profitability
+		lineageTag: 2b4e3153-9567-48c9-a662-52976b7361c6
+		summarizeBy: none
+		sortByColumn: ao2_expected_profit_band_sort
+
 	partition powerbi_ao3_order_segments = m
 		mode: directQuery
 		source =
