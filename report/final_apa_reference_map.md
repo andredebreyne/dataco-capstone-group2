@@ -78,14 +78,14 @@ These references should be included only when the final text directly cites the 
 
 | Tool or platform | Repo evidence | Citation status |
 | --- | --- | --- |
-| XGBoost | `requirements.txt` records `xgboost==2.0.3`; `docs/databricks_setup.md` records Databricks-stable use | Reference needed: verified paper or official documentation |
+| XGBoost | `requirements.txt` records `xgboost==2.0.3`; `docs/databricks_setup.md` records Databricks-stable use | Use XGBoost documentation release 3.2.0 / current docs page for package implementation support; use the canonical Chen & Guestrin (2016) XGBoost paper for broader methodology only after full metadata is verified. |
 | SHAP | `requirements.txt` records `shap==0.44.1`; proposal tracker lists Lundberg and Lee (2017) | Partial: full SHAP paper metadata and/or official docs needed |
-| scikit-learn | `requirements.txt` records `scikit-learn==1.3.2` | Reference needed: official docs or accepted citation |
+| scikit-learn / Ridge | `requirements.txt` records `scikit-learn==1.3.2` | Use scikit-learn Ridge documentation only for Ridge baseline implementation details; use a scikit-learn paper/canonical citation only if the final report cites scikit-learn broadly and metadata is verified. |
 | Apache Spark | `docs/databricks_setup.md` records Spark 3.5.0 preferred and Spark 3.4.1 fallback | Partial: Zaharia et al. (2016) metadata or official docs needed |
 | Delta Lake | Pipeline docs use Delta terminology | Partial: Armbrust et al. (2020) metadata or official docs needed |
 | Databricks | `docs/databricks_setup.md` documents Community Edition setup | Reference needed if platform behavior is externally cited |
 | Microsoft Power BI | `dashboard/README.md` and `dashboard/powerbi_semantic_model.md` document the selected Power BI dashboard path | Reference needed only if final report cites Power BI mechanics |
-| Azure Databricks Power BI connector | `docs/powerbi_databricks_serving_layer.md` documents the selected direct Power BI connection to Azure Databricks serving-layer tables | Reference needed if connector instructions remain in final report |
+| Power BI with Azure Databricks | `docs/powerbi_databricks_serving_layer.md` documents the selected direct Power BI connection to Azure Databricks serving-layer tables | Use Microsoft Learn "Power BI with Azure Databricks" as the primary official source for Power BI Desktop connecting to Azure Databricks clusters and SQL warehouses. The Databricks Power Platform connector blog should be avoided unless the final report discusses Power Apps, Power Automate, or Copilot Studio integration. |
 | Python, pandas, NumPy, Matplotlib | `requirements.txt` includes Python package versions for NumPy and pandas, but no current expanded-draft marker requires these citations | Do not add unless final text makes package-specific claims |
 
 ## Dataset Reference
@@ -103,7 +103,7 @@ Use a small, verified set of literature sources instead of listing every source 
 | Predictive analytics in supply-chain management | Toorajipour et al. (2021); Ni et al. (2020); Gopal et al. (2024); Baryannis et al. (2019) |
 | Machine learning for delivery risk and logistics prediction | Baryannis et al. (2019); Ahmed et al. (2025); Douaioui et al. (2024); Liang (2025); Katangoori (2026) |
 | Profitability modeling and regression analytics | Hastie et al. (2009); Katangoori (2026), if verified as supporting DataCo profit modeling |
-| Data leakage in predictive modeling | Add a verified general leakage reference; Katangoori (2026) may support project-specific DataCo leakage concerns if verified |
+| Data leakage in predictive modeling | Use Liu, Chen, Zheng, and Feng (2022), "A Prediction Method with Data Leakage Suppression for Time Series," as the leakage/temporal-validation source after full metadata is verified. Katangoori (2026) may support project-specific DataCo leakage concerns if verified. |
 | SHAP and explainable machine learning | Lundberg and Lee (2017); Ahmed et al. (2025), if verified |
 | Segmentation and decision support | Ashraf et al. (2025); Katangoori (2026); add a stronger decision-support source if the final text keeps broad decision-support claims |
 | Business intelligence dashboards and analytics communication | Add a verified BI or analytics-communication source; Microsoft docs only support tool mechanics |
@@ -118,17 +118,17 @@ The expanded draft markers should be handled as follows:
 | Predictive analytics in supply chain management | Replace with a concise citation set from verified SCM analytics review/background sources. |
 | Machine learning for delivery risk and logistics prediction | Cite verified supply-chain risk and delivery-risk sources; keep AO1 model claims tied to internal validation artifacts. |
 | Profitability modeling and regression analytics | Cite methodology literature for regression/boosting and use internal AO2 target-policy artifacts for project-specific target-reconstruction controls. |
-| Data leakage in predictive modeling | Add a verified external leakage source for the definition; cite internal leakage artifacts for project-specific implementation controls. |
+| Data leakage in predictive modeling | Cite Liu et al. (2022) after full metadata verification for leakage caused by using future/test information during training; cite internal leakage artifacts for project-specific implementation controls. Note its limitation: time-series leakage source, not supply-chain-specific. |
 | SHAP and explainable machine learning | Cite verified SHAP source; cite internal SHAP artifacts for project results. |
 | Segmentation and decision-support frameworks | Cite verified segmentation/decision-support sources; cite AO3 artifacts for the actual 2x2 framework and K-means caveat. |
 | Business intelligence dashboards and analytics communication | Add verified BI communication literature or narrow the text to project dashboard requirements and internal status docs. |
-| XGBoost original paper or official documentation | Add verified XGBoost source if XGBoost implementation is cited. |
+| XGBoost original paper or official documentation | Use XGBoost documentation release 3.2.0 / current docs page for implementation support; use Chen and Guestrin (2016) as the preferred academic method reference only after full paper metadata is verified. |
 | SHAP original paper or official documentation | Add verified SHAP paper/docs. |
-| scikit-learn documentation | Add verified scikit-learn docs if package-specific implementation is cited. |
+| scikit-learn documentation | Use scikit-learn Ridge documentation only if the Ridge baseline implementation is discussed; use a broader scikit-learn citation only if the implementation library is cited broadly and metadata is verified. |
 | Apache Spark documentation | Use verified Spark source only if cited beyond internal setup evidence. |
 | Delta Lake documentation | Use verified Delta Lake source only if cited beyond internal pipeline evidence. |
 | Databricks documentation | Use official Databricks docs only if external platform behavior is cited. |
-| Microsoft Power BI Azure Databricks connector documentation | Use official Microsoft docs only if connector mechanics remain in final text. |
+| Microsoft Power BI Azure Databricks connector documentation | Use Microsoft Learn "Power BI with Azure Databricks" as the primary official source if connector mechanics remain in final text; do not use the Databricks Power Platform connector blog as the primary dashboard source. |
 | Supply-chain analytics literature | Select and verify the final literature set from the proposal tracker. |
 | Predictive analytics and decision-support literature | Verify a source that directly supports decision-support claims. |
 | Responsible AI, model governance, or explainability literature | Add a governance/responsible-AI source or narrow the section to internal governance controls plus SHAP. |
