@@ -18,7 +18,7 @@ Current status from checked files and the proposal reference tracker:
 | Partial literature references | The proposal tracker identifies useful sources, titles, and project relevance, but most entries still need full APA metadata before final insertion. |
 | Tool and platform references | Package versions are documented for `xgboost`, `shap`, and `scikit-learn`; official APA-ready citations or documentation metadata still need verification. |
 | Internal project artifacts | Key project artifacts can be linked directly in the report or appendix, but they are not substitutes for external academic references where the report makes literature claims. |
-| Dashboard references | Power BI is the official dashboard direction. The selected architecture is a direct Power BI connection to Azure Databricks serving-layer tables; PR #141 contains the first dashboard page. Final screenshots and page-inventory details may still be added later. Databricks native dashboards / AI/BI dashboards are not the final planned dashboard deliverable. |
+| Dashboard references | Power BI is the selected dashboard direction. The selected architecture is a direct Power BI connection to Azure Databricks serving-layer tables; PR #141 contains the first dashboard page. Final screenshots, page inventory, `.pbix` submission route if required, and serving-layer manifest details may still be added later. Databricks native dashboards / AI/BI dashboards are not the planned final dashboard deliverable. |
 
 ## References Already Available
 
@@ -84,7 +84,7 @@ These references should be included only when the final text directly cites the 
 | Apache Spark | `docs/databricks_setup.md` records Spark 3.5.0 preferred and Spark 3.4.1 fallback | Partial: Zaharia et al. (2016) metadata or official docs needed |
 | Delta Lake | Pipeline docs use Delta terminology | Partial: Armbrust et al. (2020) metadata or official docs needed |
 | Databricks | `docs/databricks_setup.md` documents Community Edition setup | Reference needed if platform behavior is externally cited |
-| Microsoft Power BI | `dashboard/README.md` and `dashboard/powerbi_semantic_model.md` document the official Power BI dashboard path | Reference needed only if final report cites Power BI mechanics |
+| Microsoft Power BI | `dashboard/README.md` and `dashboard/powerbi_semantic_model.md` document the selected Power BI dashboard path | Reference needed only if final report cites Power BI mechanics |
 | Azure Databricks Power BI connector | `docs/powerbi_databricks_serving_layer.md` documents the selected direct Power BI connection to Azure Databricks serving-layer tables | Reference needed if connector instructions remain in final report |
 | Python, pandas, NumPy, Matplotlib | `requirements.txt` includes Python package versions for NumPy and pandas, but no current expanded-draft marker requires these citations | Do not add unless final text makes package-specific claims |
 
@@ -141,7 +141,7 @@ For final report evidence, use internal links to point graders to the checked-in
 - Use `docs/ao2_results_h2.md`, `docs/ao2_target_reconstruction_review.md`, and `report/tables/ao2_model_validation_comparison.csv` for H2 validation evidence and AO2 caution.
 - Use `docs/ao3_methodology_and_results.md`, `docs/ao3_risk_margin_benchmark.md`, and `docs/ao3_operational_recommendations.md` for H3 evidence and caveats.
 - Use `docs/leakage_control_plan.md`, `docs/leakage_conceptual_screening.md`, and `docs/feature_availability_map.md` for project-specific leakage controls.
-- Use `dashboard/README.md`, `dashboard/powerbi_semantic_model.md`, and `docs/powerbi_databricks_serving_layer.md` to document the official Power BI dashboard path, the selected Azure Databricks serving-layer connection, and remaining final screenshot or page-detail update points.
+- Use `dashboard/README.md`, `dashboard/powerbi_semantic_model.md`, and `docs/powerbi_databricks_serving_layer.md` to document the selected Power BI dashboard path, the selected Azure Databricks serving-layer connection, and remaining final screenshot, page-inventory, `.pbix` submission-route, or serving-layer manifest update points.
 
 Internal project artifacts should appear in report artifact links or appendix-style navigation. They should not be formatted as peer-reviewed external references.
 
@@ -152,6 +152,6 @@ Internal project artifacts should appear in report artifact links or appendix-st
 - Keep the DataCo dataset reference exactly aligned with `docs/data_source_verification.md`.
 - Add XGBoost, SHAP, scikit-learn, Spark, Delta Lake, Databricks, and Microsoft documentation references only when the final text explicitly cites those tools or platforms.
 - Do not add SMOTE to the final references unless the final report discusses it as an alternative or rejected method; AO1 documentation says SMOTE is not used.
-- Keep dashboard wording honest: Power BI is the official dashboard direction, the direct Azure Databricks serving-layer connection worked, PR #141 contains the first dashboard page, final screenshots/page details may still be added later, and Databricks native dashboards / AI/BI dashboards are not the final planned dashboard deliverable.
+- Keep dashboard wording honest: Power BI is the selected dashboard direction, the direct Azure Databricks serving-layer connection worked, PR #141 contains the first dashboard page, final screenshots/page inventory and `.pbix` submission details may still be added later, and Databricks native dashboards / AI/BI dashboards are not the planned final dashboard deliverable.
 - Preserve analytical caveats: no causal claims, no realized intervention outcome, validation evidence only where applicable, and AO2 target-reconstruction accepted with caution.
 - Run a final marker grep after updating the expanded draft in a later task.
