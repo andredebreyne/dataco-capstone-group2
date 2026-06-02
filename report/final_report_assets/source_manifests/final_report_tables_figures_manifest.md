@@ -12,7 +12,8 @@ This manifest documents the final report table and figure assets created under `
 | `table_5_ao3_risk_margin_matrix_policy` | Table | Table 5. AO3 risk-margin matrix policy | `tables/table_5_ao3_risk_margin_matrix_policy.md`; `tables/table_5_ao3_risk_margin_matrix_policy.csv` | `ready` | `ready` | Yes | No | AO3 deterministic policy and fallback segment rows. |
 | `table_6_ao3_held_out_segment_summary` | Table | Table 6. AO3 held-out scored segment summary | `tables/table_6_ao3_held_out_segment_summary.md`; `tables/table_6_ao3_held_out_segment_summary.csv` | `ready` | `ready` | Yes | No | Held-out scored segment summary with H3 evidence note. |
 | `figure_2_powerbi_dashboard_screenshot` | Figure | Figure 2. Final Power BI dashboard page screenshot | `figures/figure_2_powerbi_dashboard_screenshot_placeholder.md` | `dashboard_pending` | `dashboard_pending` | No | No | Placeholder instruction only. No screenshot, `.pbix`, or fake Power BI artifact was created. |
-| `table_7_ao3_operational_recommendation_matrix` | Table | Table 7. AO3 operational recommendation matrix | `tables/table_7_ao3_operational_recommendation_matrix.md`; `tables/table_7_ao3_operational_recommendation_matrix.csv` | `ready` | `ready` | Yes | No | AO3 managerial action matrix with cautions and monitoring actions. |
+| `table_7_ao3_operational_recommendation_matrix` | Table | Table 7. AO3 operational recommendation matrix | `tables/table_7_ao3_operational_recommendation_matrix.md`; `tables/table_7_ao3_operational_recommendation_matrix.csv` | `ready` | `ready` | Yes | No | Full source-faithful AO3 managerial action matrix. Source columns are mapped directly and recommendation fields are preserved. |
+| `table_7_ao3_operational_recommendation_matrix_concise` | Table | Table 7. AO3 operational recommendation matrix - concise view | `tables/table_7_ao3_operational_recommendation_matrix_concise.md`; `tables/table_7_ao3_operational_recommendation_matrix_concise.csv` | `ready` | `ready` | Yes | No | Optional main-report concise view using only source wording from `segment_interpretation`, `recommended_action`, and `limitations`. |
 
 ## Dashboard-Pending Item
 
@@ -20,4 +21,4 @@ Figure 2 remains pending until the real final Power BI dashboard screenshot is c
 
 ## Appendix Candidates
 
-If the final Word/PDF report becomes too long, Table 1, Figure 1, and Table 2 can move to appendices while Tables 3 through 7 and the final Power BI screenshot remain in the main body.
+If the final Word/PDF report becomes too long, Table 1, Figure 1, and Table 2 can move to appendices while Tables 3 through 7 and the final Power BI screenshot remain in the main body. For Table 7, use the full source-faithful table when space allows, or use the concise view in the main report and place the full source-faithful table in an appendix.
