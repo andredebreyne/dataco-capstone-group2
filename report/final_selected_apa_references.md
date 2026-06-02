@@ -2,148 +2,115 @@
 
 ## Purpose
 
-This file reduces `report/final_apa_reference_inventory.csv` into a focused reference set for the expanded final report. It does not edit `report/final_capstone_report_expanded_draft.md`, remove citation markers, add fabricated metadata, or change analytical conclusions.
+This file refines the final APA reference pool for `report/final_capstone_report_expanded_draft.md`. It uses the checked-in APA planning files and the provided `apa_reference_usefulness_tracker.md` source pool. It does not edit the expanded draft, remove citation markers, add fabricated metadata, or change analytical conclusions.
 
-Only the DataCo dataset currently has complete APA metadata in checked-in project evidence. All other external sources below must be verified before they are inserted into the final References section.
+Only the DataCo dataset currently has complete APA metadata in repository evidence. All other academic, tool, and documentation references remain incomplete or missing until their source metadata is manually verified.
 
-## Selected Final External References
+## Source Pool Inspected
 
-### Dataset
+- `report/final_capstone_report_expanded_draft.md`
+- `report/final_apa_reference_map.md`
+- `report/final_apa_reference_inventory.csv`
+- `docs/proposal/proposal_summary.md`
+- `C:/Users/bruno/OneDrive - GUSCanada/data_analytics_MSc/Capstone/DataCo/Artigos/apa_reference_usefulness_tracker.md`
+- External `Artigos` folder reference files. No reference PDFs were found inside this repository. The external folder contains additional files, including a bibliography document and a data-leakage/time-series PDF, but those files do not provide complete APA metadata for the selected report references.
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `dataco_dataset_constante_2019` | DataCo Smart Supply Chain dataset source, version, DOI, contributors, and license | Constante, F., Silva, F., & Pereira, A. (2019). DataCo Smart Supply Chain for Big Data Analysis (Version 5) [Data set]. Mendeley Data. https://doi.org/10.17632/8gx2fvg2k6.5 | None | `docs/data_source_verification.md`; `report/final_capstone_report_expanded_draft.md` | required |
+## Classification Rules
 
-### Supply Chain Analytics / AI In Supply Chains
+| Slot type | Meaning |
+| --- | --- |
+| `fixed_source` | A known source from the already-used source pool. It can be cited only after complete APA metadata is verified, except DataCo, which is already complete. |
+| `replaceable_topic_slot` | A needed topic citation where the current pool does not provide a fully verified source. The final text can either add a verified source or be rewritten to avoid the unsupported claim. |
+| `official_documentation_slot` | A needed software, platform, or connector citation that must come from official documentation or a canonical source. |
+| `optional_remove_if_not_used` | A source that should not appear in the final References section unless the final report directly discusses that concept. |
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `baryannis_2019_supply_chain_risk_ml` | Supply-chain risk prediction and performance-interpretability tradeoff | Baryannis et al. (2019). Predicting supply chain risks using machine learning: The trade-off between performance and interpretability. [metadata incomplete] | Full author initials, venue, volume/issue/pages, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | required |
-| `toorajipour_2021_ai_scm_review` | Broad AI-in-supply-chain-management context | Toorajipour et al. (2021). Artificial intelligence in supply chain management: A systematic literature review. [metadata incomplete] | Full author initials, journal, volume/issue/pages, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | useful |
-| `ni_xiao_lim_2020_ml_scm_review` | Machine-learning trends in supply-chain management | Ni, Xiao, and Lim (2020). A systematic review of the research trends of machine learning in supply chain management. [metadata incomplete] | Full author initials, journal, volume/issue/pages, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | useful |
-| `gopal_2024_bda_supply_chain_performance` | Big-data analytics and supply-chain performance context | Gopal et al. (2024). Impact of big data analytics on supply chain performance. [metadata incomplete] | Full publication metadata, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | optional |
+## Core Academic / Literature Sources
 
-### Predictive Modeling / Machine Learning Methodology
+These are the main academic sources to use if complete metadata is collected.
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `hastie_tibshirani_friedman_2009_esl` | General classification, regression, and boosting methodology | Hastie, Tibshirani, and Friedman (2009). The Elements of Statistical Learning. [metadata incomplete] | Edition, publisher, URL if online version is cited | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | required |
-| `xgboost_package_reference` | XGBoost implementation and primary gradient boosting model reference | Repository records `xgboost==2.0.3`; no APA-ready source metadata is checked in | Official citation or documentation metadata, author or organization, year/date, title, version if documentation, DOI or URL | `requirements.txt`; `docs/databricks_setup.md`; `report/final_apa_reference_inventory.csv` | required |
-| `scikit_learn_package_reference` | Logistic Regression, Ridge Regression, model metrics, and optional K-means implementation | Repository records `scikit-learn==1.3.2`; no APA-ready source metadata is checked in | Official citation or documentation metadata, author or organization, year/date, title, version, DOI or URL | `requirements.txt`; `docs/ao3_kmeans_extension.md`; `report/final_apa_reference_inventory.csv` | useful |
-| `katangoori_2026_dataco_supply_chain_optimization` | DataCo-specific comparison across risk, profit, segmentation, and leakage | Katangoori (2026). An empirical analysis of data-driven supply chain optimization in retail and logistics. [metadata incomplete] | Full publication metadata, DOI or URL, source-quality review | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | useful |
+| Citation key | Source category | Slot type | Concept supported | Final report section | Metadata status | Missing fields | Should appear in final References? | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `dataco_dataset_constante_2019` | Dataset | `fixed_source` | DataCo Smart Supply Chain dataset source | Data source and pipeline overview | `complete` | None | Yes | Use the checked APA entry from `docs/data_source_verification.md`. |
+| `baryannis_2019_supply_chain_risk_ml` | Core literature | `fixed_source` | Supply-chain risk prediction and interpretability trade-offs | Business problem; AO1; explainability | `partial_needs_metadata` | Author initials, venue, volume/issue/pages, DOI or URL | Yes, after metadata verification | Strong core source for risk prediction and interpretability. |
+| `toorajipour_2021_ai_scm_review` | Core literature | `fixed_source` | AI in supply-chain management review context | Business problem and literature context | `partial_needs_metadata` | Author initials, journal, volume/issue/pages, DOI or URL | Yes, after metadata verification | Use as broad AI-in-SCM background. |
+| `ni_xiao_lim_2020_ml_scm_review` | Core literature | `fixed_source` | ML research trends in supply-chain management | Literature context | `partial_needs_metadata` | Author initials, journal, volume/issue/pages, DOI or URL | Yes, after metadata verification if used with or instead of Toorajipour | Tracker notes the PDF is image-based; verify detailed claims directly. |
+| `katangoori_2026_dataco_supply_chain_optimization` | Core literature | `fixed_source` | DataCo risk, profit, segmentation, and leakage-aware comparison | AO1/AO2/AO3 literature context | `partial_needs_metadata` | Full publication metadata, DOI or URL, source-quality review | Yes, after metadata verification | Closest applied DataCo comparison if metadata/source quality are confirmed. |
+| `ahmed_2025_interpretable_supply_chain_forecasting` | Core literature | `fixed_source` | DataCo late delivery, shipping-time forecasting, and SHAP | AO1 and explainability context | `partial_needs_metadata` | Author initials, venue, volume/issue/pages, DOI or URL | Yes, after metadata verification if DataCo late-delivery precedent is discussed | Useful applied DataCo/SHAP source. |
+| `hastie_tibshirani_friedman_2009_esl` | Methodology literature | `fixed_source` | Statistical learning, regression/classification, boosting, validation | AO1/AO2 methods | `partial_needs_metadata` | Author initials, edition, publisher, URL if online version is cited | Yes, after metadata verification | Core methods reference, not supply-chain-specific. |
+| `lundberg_lee_2017_shap` | Explainability literature | `fixed_source` | SHAP method and model interpretation | SHAP/explainability; responsible-use caveats | `partial_needs_metadata` | Author initials, proceedings or venue, DOI or URL | Yes, after metadata verification | Foundational SHAP source. |
+| `zaharia_2016_apache_spark` | Infrastructure literature | `fixed_source` | Apache Spark big-data processing | Data engineering and reproducibility | `partial_needs_metadata` | Full author list, venue, DOI or URL | Yes, after metadata verification if Spark is cited externally | Supports infrastructure only, not model validity. |
+| `armbrust_2020_delta_lake` | Infrastructure literature | `fixed_source` | Delta Lake storage and reliable lakehouse tables | Data engineering and reproducibility | `partial_needs_metadata` | Full author list, venue, DOI or URL | Yes, after metadata verification if Delta Lake is cited externally | Supports storage/reproducibility only. |
 
-### Leakage-Safe Modeling / Validation
+## Useful But Optional Sources
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `general_leakage_reference_needed` | General definition of data leakage and prediction-time feature availability | No external source metadata is checked in; the inventory only identifies the need for a general leakage source | Author(s), year, title, venue or documentation page, publisher/organization, DOI or URL | `report/final_apa_reference_inventory.csv`; `report/final_apa_reference_map.md` | required |
-| `katangoori_2026_dataco_supply_chain_optimization` | DataCo-specific leakage concerns, if verified | Katangoori (2026). An empirical analysis of data-driven supply chain optimization in retail and logistics. [metadata incomplete] | Full publication metadata, DOI or URL, source-quality review | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | useful |
+These can be used if the final report keeps the relevant claims and metadata is verified.
 
-### Explainability / SHAP
+| Citation key | Source category | Slot type | Concept supported | Final report section | Metadata status | Missing fields | Should appear in final References? | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `gopal_2024_bda_supply_chain_performance` | Optional literature | `fixed_source` | Big-data analytics and supply-chain performance | Business value and operational interpretation | `partial_needs_metadata` | Full publication metadata, DOI or URL | Conditional | Useful for business-performance framing, not model choice. |
+| `douaioui_2024_late_delivery_resilience` | Optional literature | `fixed_source` | Late-delivery prediction and resilience | AO1 literature context | `partial_needs_metadata` | Full publication metadata, DOI or URL | Conditional | Use if final report needs an additional advanced late-delivery study. |
+| `liang_2025_supply_chain_risk_decision_trees` | Optional literature | `fixed_source` | DataCo decision-tree risk prediction and interpretability | AO1 literature context | `partial_needs_metadata` | Full publication metadata, DOI or URL | Conditional | Use if final report discusses interpretable decision-tree DataCo precedent. |
+| `ashraf_2025_customer_segmentation` | Optional literature | `optional_remove_if_not_used` | Segmentation/clustering context | AO3 segmentation caveat or K-means extension | `partial_needs_metadata` | Full publication metadata, DOI or URL | No, unless segmentation literature is directly needed | Marketing-oriented; not central to risk-margin framework. |
+| `ivanov_2021_digital_supply_chain_twins` | Optional literature | `optional_remove_if_not_used` | Digital twins, disruption visibility, resilience | Limitations or decision-support context | `partial_needs_metadata` | Correct year, full title, venue, DOI or URL | No, unless digital twins/resilience framing remains | Resolve 2019/2021 year ambiguity before use. |
+| `chatrath_2026_ai_supply_chain_logistics` | Optional literature | `optional_remove_if_not_used` | Broad AI in supply chain and logistics | Background only | `partial_needs_metadata` | Full publication metadata, DOI or URL | No, unless broad background needs one more source | Use carefully; tracker marks it as broad background. |
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `lundberg_lee_2017_shap` | SHAP explanation method | Lundberg and Lee (2017). A unified approach to interpreting model predictions. [metadata incomplete] | Proceedings or publication details, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | required |
-| `shap_package_reference` | SHAP package implementation | Repository records `shap==0.44.1`; no APA-ready documentation metadata is checked in | Official docs or paper metadata, version, DOI or URL | `requirements.txt`; `docs/databricks_setup.md`; `report/final_apa_reference_inventory.csv` | useful |
-| `ahmed_2025_interpretable_supply_chain_forecasting` | Interpretable supply-chain forecasting and SHAP in a related supply-chain context | Ahmed et al. (2025). Deep learning framework for interpretable supply chain forecasting using SOM, ANN, and SHAP. [metadata incomplete] | Full author initials, venue, volume/issue/pages, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | optional |
+## Sources To Avoid Unless The Final Text Changes
 
-### Data Engineering / Spark / Delta / Databricks
+| Citation key | Source category | Slot type | Concept supported | Final report section | Metadata status | Missing fields | Should appear in final References? | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `chawla_2002_smote` | Methodology literature | `optional_remove_if_not_used` | SMOTE and class imbalance | AO1 class imbalance only if discussed | `not_needed_remove_marker` | Full metadata only needed if SMOTE is discussed | No | Current AO1 documentation says SMOTE is not used. Do not include unless class imbalance handling or SMOTE is explicitly discussed. |
+| `python_pandas_numpy_matplotlib_reference` | Tool/package slot | `optional_remove_if_not_used` | Python and common data-analysis packages | AI/tooling note only if substantively discussed | `not_needed_remove_marker` | Official docs or package citations only if final text requires them | No | Do not cite routine package use unless final report makes package-specific claims. |
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `zaharia_2016_apache_spark` | Apache Spark big-data processing engine | Zaharia et al. (2016). Apache Spark: A unified engine for big data processing. [metadata incomplete] | Full author list, venue, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | required |
-| `armbrust_2020_delta_lake` | Delta Lake storage infrastructure | Armbrust et al. (2020). Delta Lake: High-performance ACID table storage over cloud object stores. [metadata incomplete] | Full author list, venue, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | required |
-| `databricks_platform_reference` | Databricks Community Edition platform and serving-layer context | Internal setup guide documents runtime; no external APA documentation metadata is checked in | Official documentation page title, organization, year/date, URL, retrieval date if needed | `docs/databricks_setup.md`; `report/final_apa_reference_inventory.csv` | required |
+## Still Missing Official / Tool References
 
-### Power BI / Azure Databricks Connector
+These should remain as documentation slots until official or canonical metadata is collected.
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `microsoft_powerbi_reference` | Selected Power BI dashboard path and dashboard tooling | Inventory records that Power BI is the selected dashboard path and the first dashboard page was published in PR #141; no Microsoft APA metadata is checked in | Official Microsoft documentation title, date, URL, retrieval date if needed | `report/final_apa_reference_inventory.csv`; `dashboard/README.md`; `dashboard/powerbi_semantic_model.md` | required |
-| `azure_databricks_connector_reference` | Selected direct Power BI connection to Azure Databricks serving-layer tables | Inventory records selected architecture; no Microsoft connector APA metadata is checked in | Official Microsoft page title, date, URL, retrieval date if needed | `docs/powerbi_databricks_serving_layer.md`; `dashboard/powerbi_semantic_model.md`; `report/final_apa_reference_inventory.csv` | required |
+| Citation key | Source category | Slot type | Concept supported | Final report section | Metadata status | Missing fields | Should appear in final References? | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `xgboost_official_reference` | Tool documentation | `official_documentation_slot` | XGBoost canonical paper or official documentation | AO1/AO2 modeling methods | `reference_needed` | Author/organization, year/date, title, venue or documentation page, URL/DOI, version if documentation | Yes, if XGBoost is named | Current repo only verifies `xgboost==2.0.3`; no APA source details are checked in. |
+| `scikit_learn_official_reference` | Tool documentation | `official_documentation_slot` | Logistic Regression, Ridge, metrics, and K-means implementation if package-specific details remain | AO1/AO2/AO3 methods | `reference_needed` | Author/organization, year/date, title, documentation page, URL/DOI, version | Conditional | Use only if scikit-learn implementation details remain in final text. |
+| `databricks_official_reference` | Platform documentation | `official_documentation_slot` | Databricks platform and serving-layer context | Reproducibility and dashboard architecture | `reference_needed` | Organization, page title, year/date, URL, retrieval date if needed | Yes, if Databricks platform behavior is cited | Databricks native dashboards / AI/BI dashboards are not the planned final dashboard deliverable. |
+| `microsoft_powerbi_official_reference` | Tool documentation | `official_documentation_slot` | Selected Power BI dashboard direction and Power BI tooling | Dashboard status and tooling | `reference_needed` | Microsoft page title, date, URL, retrieval date if needed | Yes, if Power BI mechanics are cited | Power BI is the official/selected dashboard direction; PR #141 contains the first dashboard page. |
+| `azure_databricks_connector_official_reference` | Connector documentation | `official_documentation_slot` | Direct Power BI connection to Azure Databricks serving-layer tables | Dashboard architecture | `reference_needed` | Microsoft connector page title, date, URL, retrieval date if needed | Yes, if connector architecture is cited | Direct Power BI connection to Azure Databricks serving-layer tables is the selected architecture. |
+| `data_leakage_temporal_validation_reference` | Methodology topic slot | `replaceable_topic_slot` | Data leakage, temporal validation, prediction-time feature availability | Leakage-control and chronological split policy | `reference_needed` | Author(s), year, title, venue/page, DOI or URL | Yes, unless sentence is rewritten to rely only on project-specific artifacts | External source still needed for general leakage definition. A data-leakage/time-series PDF exists in the external folder, but complete APA metadata is not established here. |
+| `responsible_ai_governance_reference_needed` | Governance topic slot | `replaceable_topic_slot` | Responsible AI, model governance, limitations, or explainability governance | Ethical/responsible-use considerations | `reference_needed` | Author(s), year, title, venue/page, DOI or URL | Conditional | Use only if final text keeps broad responsible-AI/governance claims. Lundberg and Lee can support SHAP only, not broad governance. |
 
-### Responsible AI / Limitations
+## Practical Core Set For Final Report
 
-| Citation key | Concept supported | Current APA metadata available | Missing APA metadata | Source file found | Priority |
-| --- | --- | --- | --- | --- | --- |
-| `responsible_ai_governance_reference_needed` | Responsible AI, model governance, or limitations framing if the final text makes external claims | No responsible-AI or governance source metadata is checked in | Author(s), year, title, venue or documentation page, publisher/organization, DOI or URL | `report/final_apa_reference_inventory.csv`; `report/final_apa_reference_map.md` | optional |
-| `lundberg_lee_2017_shap` | Explainability method that may support part of the responsible-use discussion | Lundberg and Lee (2017). A unified approach to interpreting model predictions. [metadata incomplete] | Proceedings or publication details, DOI or URL | `report/final_apa_reference_inventory.csv`; proposal reference tracker path recorded there | useful |
+Use this core set if metadata is collected:
 
-## Minimum Required Reference Set
+1. `dataco_dataset_constante_2019`
+2. `baryannis_2019_supply_chain_risk_ml`
+3. `toorajipour_2021_ai_scm_review` and/or `ni_xiao_lim_2020_ml_scm_review`
+4. `katangoori_2026_dataco_supply_chain_optimization` and/or `ahmed_2025_interpretable_supply_chain_forecasting`
+5. `hastie_tibshirani_friedman_2009_esl`
+6. `lundberg_lee_2017_shap`
+7. `zaharia_2016_apache_spark`
+8. `armbrust_2020_delta_lake`
+9. `xgboost_official_reference`
+10. `databricks_official_reference`
+11. `microsoft_powerbi_official_reference`
+12. `azure_databricks_connector_official_reference`
+13. `data_leakage_temporal_validation_reference`, unless the leakage definition is rewritten to cite only internal project controls.
 
-The smallest credible external reference set for the final report is:
+## Marker Replacement Plan
 
-| Citation key | Why it is needed | Current status |
+| Expanded-draft marker | Replacement key(s) | Action |
 | --- | --- | --- |
-| `dataco_dataset_constante_2019` | Dataset source and DOI | Complete |
-| `baryannis_2019_supply_chain_risk_ml` | Supply-chain risk prediction and interpretability context | Partial metadata |
-| `hastie_tibshirani_friedman_2009_esl` | Core modeling methodology for regression/classification/boosting | Partial metadata |
-| `xgboost_package_reference` | AO1 primary model and AO2 gradient boosting implementation if XGBoost is named | Reference needed |
-| `general_leakage_reference_needed` | External support for leakage-safe modeling and prediction-time feature availability | Reference needed |
-| `lundberg_lee_2017_shap` | SHAP explainability | Partial metadata |
-| `zaharia_2016_apache_spark` | Spark data-processing implementation | Partial metadata |
-| `armbrust_2020_delta_lake` | Delta Lake storage implementation | Partial metadata |
-| `databricks_platform_reference` | Databricks platform or serving-layer context if cited externally | Reference needed |
-| `microsoft_powerbi_reference` | Selected Power BI dashboard tooling if cited | Reference needed |
-| `azure_databricks_connector_reference` | Direct Power BI to Azure Databricks serving-layer architecture | Reference needed |
-
-This minimum set still requires metadata collection before the final report can replace the markers. DataCo remains the only complete external APA reference in repository evidence.
-
-## References To Exclude Or Avoid
-
-| Citation key | Recommendation | Reason |
-| --- | --- | --- |
-| `chawla_2002_smote` | remove | AO1 documentation states SMOTE is not used. Include only if the final report discusses SMOTE as a rejected alternative. |
-| `python_pandas_numpy_matplotlib_reference` | remove | No expanded-draft marker currently requires these package citations. Add only if the final report makes substantive package-specific claims. |
-| `chatrath_2026_ai_supply_chain_logistics` | optional or avoid | Broad background source with incomplete metadata; prioritize stronger peer-reviewed SCM analytics sources. |
-| `ivanov_2021_digital_supply_chain_twins` | optional or avoid | Useful only if the final report discusses digital twins, visibility, or resilience; year ambiguity must be resolved first. |
-| `ashraf_2025_customer_segmentation` | optional | Use only if the final AO3 text needs external segmentation literature beyond internal AO3 artifacts. |
-| `douaioui_2024_late_delivery_resilience` | optional | Use only if full metadata is verified and the final report needs additional late-delivery literature. |
-| `liang_2025_supply_chain_risk_decision_trees` | optional | Use only if full metadata is verified and decision-tree late-delivery context is directly discussed. |
-| `gopal_2024_bda_supply_chain_performance` | optional | Background only unless final business-context claims need it. |
-| `ahmed_2025_interpretable_supply_chain_forecasting` | optional | Useful for related SHAP/supply-chain context, but not necessary if Lundberg and Lee plus AO1/AO2 internal SHAP artifacts are sufficient. |
-
-## Missing Metadata Collection Checklist
-
-Collect the following before updating the expanded draft:
-
-| Citation key | Author(s) | Year | Title | Venue/page | Publisher/org | Volume/issue/pages | DOI/URL | Retrieval date | Version |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `dataco_dataset_constante_2019` | complete | complete | complete | complete | complete | not applicable | complete | not needed unless style requires | complete |
-| `baryannis_2019_supply_chain_risk_ml` | missing initials | present | present | missing | missing | missing | missing | likely not needed if article DOI exists | not applicable |
-| `toorajipour_2021_ai_scm_review` | missing initials | present | present | missing | missing | missing | missing | likely not needed if article DOI exists | not applicable |
-| `ni_xiao_lim_2020_ml_scm_review` | missing initials | present | present | missing | missing | missing | missing | likely not needed if article DOI exists | not applicable |
-| `hastie_tibshirani_friedman_2009_esl` | names present, initials needed | present | present | book details missing | missing | not applicable | URL optional if online version used | not needed unless online text cited | edition needed |
-| `xgboost_package_reference` | missing | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | version available from repo |
-| `scikit_learn_package_reference` | missing | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | version available from repo |
-| `general_leakage_reference_needed` | missing | missing | missing | missing | missing | missing if article | missing | depends on source type | not applicable |
-| `lundberg_lee_2017_shap` | names present, initials needed | present | present | missing | missing | missing if applicable | missing | likely not needed if article/proceedings URL exists | not applicable |
-| `shap_package_reference` | missing | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | version available from repo |
-| `zaharia_2016_apache_spark` | missing full author list | present | present | missing | missing | missing | missing | likely not needed if paper DOI/URL exists | not applicable |
-| `armbrust_2020_delta_lake` | missing full author list | present | present | missing | missing | missing | missing | likely not needed if paper DOI/URL exists | not applicable |
-| `databricks_platform_reference` | organization likely needed | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | runtime version documented internally |
-| `microsoft_powerbi_reference` | organization likely needed | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | not applicable unless docs versioned |
-| `azure_databricks_connector_reference` | organization likely needed | missing | missing | missing | missing | not applicable | missing | needed if documentation page is used | not applicable unless docs versioned |
-| `responsible_ai_governance_reference_needed` | missing | missing | missing | missing | missing | missing if article | missing | depends on source type | not applicable |
-
-## Citation Replacement Plan
-
-| Marker from expanded draft | Selected citation key(s) | Action |
-| --- | --- | --- |
-| `[NEEDS APA SOURCE DETAILS: predictive analytics in supply chain management]` | `baryannis_2019_supply_chain_risk_ml`; `toorajipour_2021_ai_scm_review`; optionally `ni_xiao_lim_2020_ml_scm_review` | keep pending until source metadata is verified, then replace with citation |
-| `[NEEDS APA SOURCE DETAILS: machine learning for delivery risk and logistics prediction]` | `baryannis_2019_supply_chain_risk_ml`; optionally `katangoori_2026_dataco_supply_chain_optimization`, `douaioui_2024_late_delivery_resilience`, or `ahmed_2025_interpretable_supply_chain_forecasting` | keep pending until source metadata is verified, then replace with citation |
-| `[NEEDS APA SOURCE DETAILS: profitability modeling and regression analytics]` | `hastie_tibshirani_friedman_2009_esl`; optionally `katangoori_2026_dataco_supply_chain_optimization` | replace with citation after metadata verification; rewrite any unsupported profitability-literature claim if no specific source is verified |
-| `[NEEDS APA SOURCE DETAILS: data leakage in predictive modeling]` | `general_leakage_reference_needed`; optionally `katangoori_2026_dataco_supply_chain_optimization` for DataCo-specific leakage | keep pending until source is verified or rewrite sentence to cite internal leakage artifacts only |
-| `[NEEDS APA SOURCE DETAILS: SHAP and explainable machine learning]` | `lundberg_lee_2017_shap`; optionally `ahmed_2025_interpretable_supply_chain_forecasting` | keep pending until source metadata is verified, then replace with citation |
-| `[NEEDS APA SOURCE DETAILS: segmentation and decision-support frameworks]` | optionally `ashraf_2025_customer_segmentation`; optionally `katangoori_2026_dataco_supply_chain_optimization`; otherwise internal AO3 artifacts | rewrite sentence to avoid unsupported external claim or keep pending until a decision-support source is verified |
-| `[NEEDS APA SOURCE DETAILS: business intelligence dashboards and analytics communication]` | `microsoft_powerbi_reference`; `azure_databricks_connector_reference`; possible new BI communication source | rewrite broad analytics-communication claim unless a BI literature source is verified; cite Microsoft docs only for tooling mechanics |
-| `[NEEDS APA SOURCE DETAILS: XGBoost original paper or official documentation]` | `xgboost_package_reference` | keep pending until official source metadata is verified |
-| `[NEEDS APA SOURCE DETAILS: SHAP original paper or official documentation]` | `lundberg_lee_2017_shap`; optionally `shap_package_reference` | keep pending until source metadata is verified |
-| `[NEEDS APA SOURCE DETAILS: scikit-learn documentation for Logistic Regression, Ridge Regression, metrics, and K-means]` | `scikit_learn_package_reference` | replace with citation after metadata verification if package implementation remains named; otherwise remove marker |
-| `[NEEDS APA SOURCE DETAILS: Apache Spark documentation if cited]` | `zaharia_2016_apache_spark`; optionally `apache_spark_docs_reference` from inventory | replace with verified Spark paper/docs citation if Spark is cited externally |
-| `[NEEDS APA SOURCE DETAILS: Delta Lake documentation if cited]` | `armbrust_2020_delta_lake`; optionally `delta_lake_docs_reference` from inventory | replace with verified Delta Lake paper/docs citation if Delta Lake is cited externally |
-| `[NEEDS APA SOURCE DETAILS: Databricks documentation if cited]` | `databricks_platform_reference` | keep pending until official Databricks docs metadata is verified; cite only platform/serving-layer context |
-| `[NEEDS APA SOURCE DETAILS: Microsoft Power BI Azure Databricks connector documentation if cited]` | `azure_databricks_connector_reference`; `microsoft_powerbi_reference` | keep pending until official Microsoft docs metadata is verified |
-| `[NEEDS APA SOURCE DETAILS: supply chain analytics literature used in the proposal or course materials]` | `baryannis_2019_supply_chain_risk_ml`; `toorajipour_2021_ai_scm_review`; optionally `ni_xiao_lim_2020_ml_scm_review` or `gopal_2024_bda_supply_chain_performance` | keep pending until selected sources are verified, then replace with concise citation set |
-| `[NEEDS APA SOURCE DETAILS: predictive analytics and decision-support literature]` | `baryannis_2019_supply_chain_risk_ml`; `hastie_tibshirani_friedman_2009_esl`; possible new decision-support source | rewrite unsupported decision-support claim or keep pending until a direct decision-support source is verified |
-| `[NEEDS APA SOURCE DETAILS: responsible AI, model governance, or explainability literature]` | `responsible_ai_governance_reference_needed`; `lundberg_lee_2017_shap` for explainability only | keep pending until governance source is verified, or rewrite section around internal controls and SHAP caveats |
+| `[NEEDS APA SOURCE DETAILS: predictive analytics in supply chain management]` | `toorajipour_2021_ai_scm_review`; `ni_xiao_lim_2020_ml_scm_review`; optionally `gopal_2024_bda_supply_chain_performance` | Replace after metadata verification. |
+| `[NEEDS APA SOURCE DETAILS: machine learning for delivery risk and logistics prediction]` | `baryannis_2019_supply_chain_risk_ml`; `katangoori_2026_dataco_supply_chain_optimization`; optionally `ahmed_2025_interpretable_supply_chain_forecasting`, `douaioui_2024_late_delivery_resilience`, or `liang_2025_supply_chain_risk_decision_trees` | Replace after metadata verification; use optional studies only if final text discusses DataCo/late-delivery precedent. |
+| `[NEEDS APA SOURCE DETAILS: profitability modeling and regression analytics]` | `hastie_tibshirani_friedman_2009_esl`; optionally `katangoori_2026_dataco_supply_chain_optimization` | Replace after metadata verification; rewrite any broad profitability-literature claim if no specific source is verified. |
+| `[NEEDS APA SOURCE DETAILS: data leakage in predictive modeling]` | `data_leakage_temporal_validation_reference`; optionally `katangoori_2026_dataco_supply_chain_optimization` for DataCo-specific leakage | Keep pending until a verified source is added, or rewrite sentence to rely on internal leakage-control artifacts only. |
+| `[NEEDS APA SOURCE DETAILS: SHAP and explainable machine learning]` | `lundberg_lee_2017_shap`; optionally `ahmed_2025_interpretable_supply_chain_forecasting` | Replace after metadata verification. |
+| `[NEEDS APA SOURCE DETAILS: segmentation and decision-support frameworks]` | `katangoori_2026_dataco_supply_chain_optimization`; optionally `ashraf_2025_customer_segmentation`; internal AO3 artifacts | Rewrite unsupported broad decision-support claims unless a direct source is verified. |
+| `[NEEDS APA SOURCE DETAILS: business intelligence dashboards and analytics communication]` | `microsoft_powerbi_official_reference`; `azure_databricks_connector_official_reference`; possible new BI communication source | Use Microsoft docs only for tooling/connector mechanics; rewrite broad analytics-communication claim unless a BI literature source is verified. |
+| `[NEEDS APA SOURCE DETAILS: XGBoost original paper or official documentation]` | `xgboost_official_reference` | Keep pending until official/canonical metadata is verified. |
+| `[NEEDS APA SOURCE DETAILS: SHAP original paper or official documentation]` | `lundberg_lee_2017_shap`; optionally `shap_package_reference` if package docs are cited | Replace after metadata verification. |
+| `[NEEDS APA SOURCE DETAILS: scikit-learn documentation for Logistic Regression, Ridge Regression, metrics, and K-means]` | `scikit_learn_official_reference` | Replace after metadata verification if implementation details remain; otherwise remove marker. |
+| `[NEEDS APA SOURCE DETAILS: Apache Spark documentation if cited]` | `zaharia_2016_apache_spark`; optionally official Spark docs | Replace after metadata verification if Spark is cited externally. |
+| `[NEEDS APA SOURCE DETAILS: Delta Lake documentation if cited]` | `armbrust_2020_delta_lake`; optionally official Delta Lake docs | Replace after metadata verification if Delta Lake is cited externally. |
+| `[NEEDS APA SOURCE DETAILS: Databricks documentation if cited]` | `databricks_official_reference` | Keep pending until official Databricks metadata is verified; cite platform/serving-layer context only. |
+| `[NEEDS APA SOURCE DETAILS: Microsoft Power BI Azure Databricks connector documentation if cited]` | `azure_databricks_connector_official_reference`; `microsoft_powerbi_official_reference` | Keep pending until official Microsoft metadata is verified. |
+| `[NEEDS APA SOURCE DETAILS: supply chain analytics literature used in the proposal or course materials]` | `toorajipour_2021_ai_scm_review`; `ni_xiao_lim_2020_ml_scm_review`; `baryannis_2019_supply_chain_risk_ml`; optionally `gopal_2024_bda_supply_chain_performance` | Replace with concise verified citation set. |
+| `[NEEDS APA SOURCE DETAILS: predictive analytics and decision-support literature]` | `baryannis_2019_supply_chain_risk_ml`; `hastie_tibshirani_friedman_2009_esl`; optionally `ivanov_2021_digital_supply_chain_twins` only if resilience/visibility framing remains | Rewrite unsupported decision-support claim or keep pending until a direct source is verified. |
+| `[NEEDS APA SOURCE DETAILS: responsible AI, model governance, or explainability literature]` | `responsible_ai_governance_reference_needed`; `lundberg_lee_2017_shap` for explainability only | Keep pending until governance source is verified, or rewrite around internal controls and SHAP caveats. |
