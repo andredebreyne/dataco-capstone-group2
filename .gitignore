@@ -252,3 +252,12 @@ dashboard/*.pbix
 dashboard/**/.pbi/
 dashboard/exports/*
 !dashboard/exports/.gitkeep
+
+# Local Power BI working copies and connection experiments.
+# Keep the governed dashboard/Dashboard.* PBIP project tracked.
+dashboard/Dashboard_Local.Report/
+dashboard/Dashboard_Local.SemanticModel/
+dashboard/Dashboard_V2.Report/
+dashboard/Dashboard_V2.SemanticModel/
+dashboard/Dashboard_DQ.pbip
+dashboard/Dashboard_V2.pbip
