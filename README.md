@@ -70,6 +70,7 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [Project Orchestrator](docs/project_orchestrator.md)
 - [Databricks Setup](docs/databricks_setup.md)
 - [Power BI Databricks SQL Serving Layer](docs/powerbi_databricks_serving_layer.md)
+- [Power BI Geographic Global Map Data](dashboard/pages/q05_geographic_global_map.md)
 - [Conceptual Leakage Screening](docs/leakage_conceptual_screening.md)
 - [Silver Schema Data Dictionary](docs/silver_schema_data_dictionary.md)
 - [Pre-Gold Modeling Decisions](docs/pre_gold_modeling_decisions.md)
@@ -108,6 +109,7 @@ Supported Power BI consumption paths:
 
 - Preferred: direct Databricks SQL serving layer from `src/dashboard/register_powerbi_databricks_tables.py`.
 - Offline fallback: CSV export workflow from `src/dashboard/export_powerbi_gold_tables.py`.
+- Geographic global-map support: `src/dashboard/build_powerbi_geographic_summary.py`.
 
 The Databricks serving layer publishes one managed `powerbi_*` table per governed dashboard artifact under the configured catalog/schema, defaulting to `workspace.default`. It preserves the same logical architecture as the CSV export workflow and does not recreate AO1/AO2 scores, AO3 margins, thresholds, segments, or final-test outcome fields.
 

@@ -53,6 +53,7 @@ Supported environment overrides:
 | `DATACO_VOLUME_ROOT` | Base Volume root used to resolve default Delta source paths. | `/Volumes/workspace/default/raw_data` |
 | `DATACO_AO1_AO2_TEST_SCORE_OUTPUT_PATH` | Source Delta path for integrated AO1/AO2 held-out scores. | `${DATACO_VOLUME_ROOT}/gold/ao1_ao2_test_scores` |
 | `DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH` | Source Delta path for AO3 risk-margin segment assignments. | `${DATACO_VOLUME_ROOT}/gold/ao3_risk_margin_segments` |
+| `DATACO_POWERBI_GEOGRAPHIC_SUMMARY_OUTPUT_PATH` | Source Delta path for the Power BI geographic global-map summary. | `${DATACO_VOLUME_ROOT}/gold/powerbi_geographic_summary` |
 
 ## Published tables
 
@@ -62,6 +63,7 @@ The script publishes one managed Databricks SQL table per governed dashboard art
 | --- | --- |
 | `workspace.default.powerbi_ao3_order_segments` | `AO3_Order_Segments` |
 | `workspace.default.powerbi_ao1_ao2_test_scores` | `AO1_AO2_Test_Scores` |
+| `workspace.default.powerbi_geographic_summary` | `Geographic_Summary` |
 | `workspace.default.powerbi_ao1_decision_threshold_policy` | `AO1_Decision_Threshold_Policy` |
 | `workspace.default.powerbi_ao1_ao2_test_score_summary` | `AO1_AO2_Test_Score_Summary` |
 | `workspace.default.powerbi_ao3_risk_margin_policy` | `AO3_Risk_Margin_Policy` |
@@ -87,7 +89,11 @@ The script publishes one managed Databricks SQL table per governed dashboard art
 7. Select the required `powerbi_*` tables.
 8. Rename imported tables to the semantic-model names listed above.
 9. Add DAX measures from `dashboard/powerbi_measures.dax`.
-10. Build pages #48, #49, and #50 from the curated serving tables.
+10. Build pages #48, #49, #50, and #51 from the curated serving tables.
+
+For the geographic global map page, run
+`src/dashboard/build_powerbi_geographic_summary.py` before this registration
+script so `powerbi_geographic_summary` is available.
 
 `.pbix` files are not tracked in Git because `.gitignore` excludes `dashboard/*.pbix`. Submit the `.pbix` outside Git or rebuild it locally from these connection and semantic-model instructions.
 
