@@ -33,6 +33,11 @@ DEFAULT_AO3_SEGMENT_PATH = os.getenv(
     f"{VOLUME_ROOT}/gold/ao3_risk_margin_segments",
 )
 
+DEFAULT_GEOGRAPHIC_SUMMARY_PATH = os.getenv(
+    "DATACO_POWERBI_GEOGRAPHIC_SUMMARY_OUTPUT_PATH",
+    f"{VOLUME_ROOT}/gold/powerbi_geographic_summary",
+)
+
 AO1_AO2_SCORE_COLUMNS = (
     "Order_Id",
     "Order_Item_Id",
@@ -75,6 +80,35 @@ AO3_SEGMENT_COLUMNS = (
     "ao3_segment_assignment_timestamp_utc",
 )
 
+GEOGRAPHIC_SUMMARY_COLUMNS = (
+    "map_location_label",
+    "map_location_country",
+    "map_location_region",
+    "map_location_state",
+    "map_latitude",
+    "map_longitude",
+    "geo_coordinates_available",
+    "order_count",
+    "order_item_count",
+    "high_risk_order_count",
+    "high_risk_order_rate",
+    "high_margin_order_count",
+    "high_margin_order_rate",
+    "avg_ao1_predicted_late_delivery_probability",
+    "avg_ao2_predicted_order_profit",
+    "avg_ao3_predicted_margin",
+    "total_predicted_profit",
+    "total_order_value",
+    "protect_high_value_at_risk_count",
+    "expedite_selectively_count",
+    "preserve_service_count",
+    "standard_process_count",
+    "requires_review_count",
+    "min_order_date_DateOrders",
+    "max_order_date_DateOrders",
+    "powerbi_geographic_summary_timestamp_utc",
+)
+
 REFERENCE_EXPORT_FILES = (
     "ao1_decision_threshold_policy.csv",
     "ao1_ao2_test_score_summary.csv",
@@ -108,6 +142,7 @@ class PowerBIExportConfig:
 
     ao1_ao2_score_path: str = DEFAULT_AO1_AO2_SCORE_PATH
     ao3_segment_path: str = DEFAULT_AO3_SEGMENT_PATH
+    geographic_summary_path: str = DEFAULT_GEOGRAPHIC_SUMMARY_PATH
     export_root: Path = Path(
         os.getenv("DATACO_POWERBI_EXPORT_ROOT", str(Path.cwd() / "dashboard/exports"))
     )
@@ -156,6 +191,7 @@ def with_repo_defaults(config: PowerBIExportConfig) -> PowerBIExportConfig:
     return PowerBIExportConfig(
         ao1_ao2_score_path=config.ao1_ao2_score_path,
         ao3_segment_path=config.ao3_segment_path,
+        geographic_summary_path=config.geographic_summary_path,
         export_root=Path(
             os.getenv("DATACO_POWERBI_EXPORT_ROOT", str(repo_root / "dashboard/exports"))
         ),
@@ -250,6 +286,7 @@ def run_powerbi_gold_export(config: PowerBIExportConfig, logger: logging.Logger)
     logger.info("Starting Power BI Gold export.")
     logger.info("AO1/AO2 score input path: %s", config.ao1_ao2_score_path)
     logger.info("AO3 segment input path: %s", config.ao3_segment_path)
+    logger.info("Geographic summary input path: %s", config.geographic_summary_path)
     logger.info("Power BI export root: %s", config.export_root)
 
     score_df = spark.read.format(config.read_format).load(config.ao1_ao2_score_path)
@@ -293,6 +330,27 @@ def run_powerbi_gold_export(config: PowerBIExportConfig, logger: logging.Logger)
         }
     )
     logger.info("Exported AO3 segment table with %d rows.", segment_rows)
+
+    geographic_df = spark.read.format(config.read_format).load(config.geographic_summary_path)
+    geographic_export_df = select_dashboard_columns(
+        geographic_df,
+        GEOGRAPHIC_SUMMARY_COLUMNS,
+        "Power BI geographic summary",
+    )
+    geographic_rows = write_single_csv(
+        geographic_export_df,
+        config.export_root / "powerbi_geographic_summary.csv",
+    )
+    manifest_rows.append(
+        {
+            "name": "powerbi_geographic_summary",
+            "source": config.geographic_summary_path,
+            "output": str(config.export_root / "powerbi_geographic_summary.csv"),
+            "row_count": geographic_rows,
+            "type": "gold_delta_export",
+        }
+    )
+    logger.info("Exported Power BI geographic summary with %d rows.", geographic_rows)
 
     for file_name in REFERENCE_EXPORT_FILES:
         source_path = config.reference_root / file_name

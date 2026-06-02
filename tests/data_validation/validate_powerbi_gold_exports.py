@@ -31,6 +31,7 @@ EXPORT_ROOT = Path(
 REQUIRED_EXPORTS = {
     "ao1_ao2_test_scores.csv",
     "ao3_risk_margin_segments.csv",
+    "powerbi_geographic_summary.csv",
     "ao1_decision_threshold_policy.csv",
     "ao1_ao2_test_score_summary.csv",
     "ao3_risk_margin_matrix_policy.csv",
@@ -80,6 +81,28 @@ REQUIRED_AO3_COLUMNS = {
     "ao3_high_risk_flag",
     "ao3_high_margin_flag",
     "ao3_priority_segment",
+}
+
+REQUIRED_GEOGRAPHIC_COLUMNS = {
+    "map_location_label",
+    "map_location_country",
+    "map_location_region",
+    "map_location_state",
+    "map_latitude",
+    "map_longitude",
+    "geo_coordinates_available",
+    "order_count",
+    "order_item_count",
+    "high_risk_order_count",
+    "high_risk_order_rate",
+    "avg_ao1_predicted_late_delivery_probability",
+    "avg_ao2_predicted_order_profit",
+    "avg_ao3_predicted_margin",
+    "protect_high_value_at_risk_count",
+    "expedite_selectively_count",
+    "preserve_service_count",
+    "standard_process_count",
+    "requires_review_count",
 }
 
 DAX_SOURCE_SCHEMA_REQUIREMENTS = {
@@ -173,17 +196,24 @@ def main() -> None:
     manifest_exports = {row["name"]: row for row in manifest["exports"]}
     assert "ao1_ao2_test_scores" in manifest_exports
     assert "ao3_risk_margin_segments" in manifest_exports
+    assert "powerbi_geographic_summary" in manifest_exports
 
     score_df = read_export_csv("ao1_ao2_test_scores.csv")
     segment_df = read_export_csv("ao3_risk_margin_segments.csv")
+    geographic_df = read_export_csv("powerbi_geographic_summary.csv")
     assert not score_df.empty, "AO1/AO2 score export must contain rows."
     assert not segment_df.empty, "AO3 segment export must contain rows."
+    assert not geographic_df.empty, "Power BI geographic summary export must contain rows."
 
     forbidden_score_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(score_df.columns))
     forbidden_segment_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(segment_df.columns))
+    forbidden_geographic_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(geographic_df.columns))
     assert not forbidden_score_columns, f"Score export contains target columns: {forbidden_score_columns}"
     assert not forbidden_segment_columns, (
         f"Segment export contains target columns: {forbidden_segment_columns}"
+    )
+    assert not forbidden_geographic_columns, (
+        f"Geographic export contains target columns: {forbidden_geographic_columns}"
     )
 
     assert_required_columns(
@@ -196,10 +226,21 @@ def main() -> None:
         required_columns=REQUIRED_AO3_COLUMNS,
         file_name="ao3_risk_margin_segments.csv",
     )
+    assert_required_columns(
+        dataframe=geographic_df,
+        required_columns=REQUIRED_GEOGRAPHIC_COLUMNS,
+        file_name="powerbi_geographic_summary.csv",
+    )
 
     assert segment_df["ao3_priority_segment"].notna().all(), "AO3 segment labels must not be null."
     assert segment_df["ao1_predicted_late_delivery_probability"].between(0, 1).all(), (
         "AO1 probabilities must be in [0, 1]."
+    )
+    assert geographic_df["high_risk_order_rate"].between(0, 1).all(), (
+        "Geographic high-risk rates must be in [0, 1]."
+    )
+    assert geographic_df["map_location_label"].notna().all(), (
+        "Geographic map labels must not be null."
     )
 
     for file_name, required_columns in DAX_SOURCE_SCHEMA_REQUIREMENTS.items():
