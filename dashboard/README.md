@@ -1,18 +1,20 @@
 # Dashboard Status and Support Artifacts
 
-This folder contains governed dashboard support artifacts. The final dashboard
-deliverable is still pending, and the team is evaluating a native Databricks
-AI/BI dashboard as an alternative to Power BI.
+This folder contains governed dashboard support artifacts for the final Power BI
+dashboard deliverable.
 
-Power BI artifacts in this folder remain one possible implementation path. This
-folder does not currently claim a completed dashboard file.
+Power BI is the selected dashboard direction. The final report package uses the
+exported dashboard PDF, screenshot evidence, page inventory, semantic-model
+notes, DAX measure notes, and Databricks serving-layer documentation as report
+evidence. The `.pbix` source file is submitted separately through the academic
+submission system and does not need to be Git-tracked.
 
 ## Files
 
 | Path | Purpose |
 | --- | --- |
-| `powerbi_semantic_model.md` | Semantic-model blueprint and import instructions for the Power BI path. |
-| `powerbi_measures.dax` | Draft DAX measures for AO1, AO2, and AO3 dashboard pages if Power BI is selected. |
+| `powerbi_semantic_model.md` | Semantic-model blueprint and import instructions for the selected Power BI path. |
+| `powerbi_measures.dax` | DAX measures for AO1, AO2, and AO3 Power BI dashboard pages. |
 | `exports/` | Gitignored local export folder generated from Databricks Gold outputs when the offline CSV fallback path is run. |
 
 ## Power BI Paths
@@ -37,7 +39,10 @@ The CSV script writes Power BI import files to:
 dashboard/exports/
 ```
 
-Generated export files and `.pbix` files are intentionally ignored by Git. The `.pbix` should be submitted outside Git or rebuilt locally from `powerbi_semantic_model.md` and `powerbi_measures.dax`.
+Generated export files and `.pbix` files are intentionally ignored by Git. The
+`.pbix` source file is submitted separately through the academic submission
+system and can be rebuilt locally from `powerbi_semantic_model.md` and
+`powerbi_measures.dax` if needed.
 
 ## Validate Exports
 
@@ -53,9 +58,8 @@ files exist.
 
 ## Dashboard Decision Status
 
-- Dashboard deliverable is still pending.
-- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
-- Power BI remains documented as one possible path.
-- Direct Databricks SQL serving-layer connection is the preferred Power BI workflow for issue #139.
+- Power BI is the official dashboard deliverable.
+- Direct Databricks SQL serving-layer connection is the selected Power BI workflow for issue #139.
 - CSV exports remain available as offline fallback artifacts.
-- No `.pbix` artifact is required or claimed here.
+- No Git-tracked `.pbix` artifact is required or claimed here.
+- Native Databricks dashboard / Databricks AI/BI dashboard is not the planned final dashboard deliverable.
