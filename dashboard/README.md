@@ -15,6 +15,7 @@ outputs and governed reference artifacts.
 | `exports/` | Gitignored local export folder generated from Databricks Gold outputs when the offline CSV fallback path is run. |
 | `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification for Issue `#48`. |
 | `pages/q02_ao2_profitability.md` | Implemented AO2 profitability-exposure executive page specification for Issue `#49`. |
+| `pages/q05_geographic_global_map.md` | Geographic global-map data specification for Issue `#51`. |
 | `themes/dataco_executive_operations_dark.json` | Shared executive dashboard theme. |
 | `wireframes/` | Versioned SVG backgrounds and layout standards. |
 
@@ -27,6 +28,13 @@ src/dashboard/register_powerbi_databricks_tables.py
 ```
 
 The script creates or replaces managed `powerbi_*` tables in the configured catalog/schema, defaulting to `workspace.default`, plus `powerbi_serving_layer_manifest` for row-count and source audit checks.
+
+Run the geographic summary build before the serving-layer registration when the
+global map page needs location text and rounded coordinates:
+
+```text
+src/dashboard/build_powerbi_geographic_summary.py
+```
 
 The CSV export path remains available for offline review or local fallback:
 
@@ -60,6 +68,7 @@ files exist.
 - The Power BI Project semantic model is connected to governed Databricks outputs.
 - The AO1 delivery-risk executive page is implemented and documented (Issue `#48`).
 - The AO2 profitability-exposure executive page is implemented and documented.
+- The geographic global-map data layer is implemented and documented (Issue `#51`).
 - The AO3 executive page remains an incremental dashboard task.
 - CSV exports remain available as offline fallback artifacts and must not be edited manually.
 - No `.pbix` artifact is required or claimed in this repository.

@@ -283,4 +283,3 @@ createOrReplace
 		partition Dashboard_Measures = calculated
 			mode: import
 			source = DATATABLE ( "Measure Group", STRING, { { "Governed KPI Measures" } } )
-
