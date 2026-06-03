@@ -1,0 +1,256 @@
+table powerbi_geographic_summary
+	lineageTag: 8d5fe060-8775-487b-a495-aae00e5fdb08
+
+	column map_location_label
+		dataType: string
+		lineageTag: 107e3eae-424f-4337-a5e6-577d6eeeb493
+		summarizeBy: none
+		sourceColumn: map_location_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column map_location_country
+		dataType: string
+		lineageTag: 7ffa8136-90af-4d13-af79-fd1db3a2a7cd
+		summarizeBy: none
+		sourceColumn: map_location_country
+
+		annotation SummarizationSetBy = Automatic
+
+	column map_location_region
+		dataType: string
+		lineageTag: 2115e811-01a0-4a5b-80ea-0ebfd7380165
+		summarizeBy: none
+		sourceColumn: map_location_region
+
+		annotation SummarizationSetBy = Automatic
+
+	column map_location_state
+		dataType: string
+		lineageTag: 467ff6e1-62a1-4999-beb8-dece9557702c
+		summarizeBy: none
+		sourceColumn: map_location_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column map_latitude
+		dataType: double
+		lineageTag: b3f71bdc-b33f-4a78-a354-14437178641d
+		summarizeBy: none
+		sourceColumn: map_latitude
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column map_longitude
+		dataType: double
+		lineageTag: 6c1ac5c6-35b8-4e53-b9bd-debfa2b72727
+		summarizeBy: none
+		sourceColumn: map_longitude
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column geo_coordinates_available
+		dataType: int64
+		formatString: 0
+		lineageTag: 735d46da-4fe9-4ebc-8418-fc8d4e306ca0
+		summarizeBy: sum
+		sourceColumn: geo_coordinates_available
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_count
+		dataType: int64
+		formatString: 0
+		lineageTag: c05df026-6c75-4285-a360-d55e0f93b3b3
+		summarizeBy: sum
+		sourceColumn: order_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 001848e0-ab10-4bee-a7a6-32ec008ed5bc
+		summarizeBy: sum
+		sourceColumn: order_item_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column high_risk_order_count
+		dataType: int64
+		formatString: 0
+		lineageTag: d0b75570-2f36-4acb-ab9f-6fc116ac969f
+		summarizeBy: sum
+		sourceColumn: high_risk_order_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column high_risk_order_rate
+		dataType: double
+		lineageTag: 979ec87e-c5e4-472b-af64-4a82cbb1daf3
+		summarizeBy: sum
+		sourceColumn: high_risk_order_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column high_margin_order_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d1a9902-f40b-43b4-86bd-13a28620ed7c
+		summarizeBy: sum
+		sourceColumn: high_margin_order_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column high_margin_order_rate
+		dataType: double
+		lineageTag: 4d06c8d2-b133-46fe-bb5b-858642cc748b
+		summarizeBy: sum
+		sourceColumn: high_margin_order_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao1_predicted_late_delivery_probability
+		dataType: double
+		lineageTag: 88ff9dd4-2673-46f4-b2a7-0956a51feaba
+		summarizeBy: sum
+		sourceColumn: avg_ao1_predicted_late_delivery_probability
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao2_predicted_order_profit
+		dataType: double
+		lineageTag: 0bbfbf49-d967-435b-b1e2-90f86ef30647
+		summarizeBy: sum
+		sourceColumn: avg_ao2_predicted_order_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_ao3_predicted_margin
+		dataType: double
+		lineageTag: a10f0c56-333b-48d8-8a9f-fa7fa71d07cf
+		summarizeBy: sum
+		sourceColumn: avg_ao3_predicted_margin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_predicted_profit
+		dataType: double
+		lineageTag: 045d7066-e285-47e3-90a7-c32bfc152f93
+		summarizeBy: sum
+		sourceColumn: total_predicted_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_order_value
+		dataType: double
+		lineageTag: a8a7d8f5-f402-451b-91d4-b7d16dcfe2d2
+		summarizeBy: sum
+		sourceColumn: total_order_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column protect_high_value_at_risk_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 152f82a7-6426-4537-94d4-49841c434b18
+		summarizeBy: sum
+		sourceColumn: protect_high_value_at_risk_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column expedite_selectively_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e8fe7f3-7765-4df6-8504-92e0e467b8e5
+		summarizeBy: sum
+		sourceColumn: expedite_selectively_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column preserve_service_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 07f019d0-e311-4511-a9eb-d045e1031bb9
+		summarizeBy: sum
+		sourceColumn: preserve_service_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column standard_process_count
+		dataType: int64
+		formatString: 0
+		lineageTag: ba439f25-779a-488b-8801-999dc051a536
+		summarizeBy: sum
+		sourceColumn: standard_process_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column requires_review_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f744a58-5b02-4688-9aba-2b6db9262625
+		summarizeBy: sum
+		sourceColumn: requires_review_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column min_order_date_DateOrders
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bf94335e-b904-4e75-a74d-524ef0240b0c
+		summarizeBy: none
+		sourceColumn: min_order_date_DateOrders
+
+		annotation SummarizationSetBy = Automatic
+
+	column max_order_date_DateOrders
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 63bbb535-694f-4aff-96ad-a029a65b67f3
+		summarizeBy: none
+		sourceColumn: max_order_date_DateOrders
+
+		annotation SummarizationSetBy = Automatic
+
+	column powerbi_geographic_summary_timestamp_utc
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ffeac80b-234a-483f-94a0-f3334980039e
+		summarizeBy: none
+		sourceColumn: powerbi_geographic_summary_timestamp_utc
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_geographic_summary = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\jorha\Downloads\powerbi_geographic_summary.csv"),[Delimiter=",", Columns=26, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"map_location_label", type text}, {"map_location_country", type text}, {"map_location_region", type text}, {"map_location_state", type text}, {"map_latitude", type number}, {"map_longitude", type number}, {"geo_coordinates_available", Int64.Type}, {"order_count", Int64.Type}, {"order_item_count", Int64.Type}, {"high_risk_order_count", Int64.Type}, {"high_risk_order_rate", type number}, {"high_margin_order_count", Int64.Type}, {"high_margin_order_rate", type number}, {"avg_ao1_predicted_late_delivery_probability", type number}, {"avg_ao2_predicted_order_profit", type number}, {"avg_ao3_predicted_margin", type number}, {"total_predicted_profit", type number}, {"total_order_value", type number}, {"protect_high_value_at_risk_count", Int64.Type}, {"expedite_selectively_count", Int64.Type}, {"preserve_service_count", Int64.Type}, {"standard_process_count", Int64.Type}, {"requires_review_count", Int64.Type}, {"min_order_date_DateOrders", type datetime}, {"max_order_date_DateOrders", type datetime}, {"powerbi_geographic_summary_timestamp_utc", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

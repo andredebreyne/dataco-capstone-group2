@@ -104,7 +104,7 @@ table powerbi_ao2_model_validation
 		annotation SummarizationSetBy = Automatic
 
 	partition powerbi_ao2_model_validation = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

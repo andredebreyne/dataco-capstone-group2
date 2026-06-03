@@ -1,0 +1,405 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "0-CommandView",
+  "name": "94e3044b2d917cd49040",
+  "options": {
+    "targetVisualNames": [],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "a990e776db5deeca0370",
+    "sections": {
+      "a990e776db5deeca0370": {
+        "filters": {
+          "byExpr": [
+            {
+              "name": "bef48fdb700938e5bad3",
+              "type": "Categorical",
+              "expression": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "powerbi_ao3_order_segments"
+                    }
+                  },
+                  "Property": "ao1_high_risk_flag"
+                }
+              },
+              "howCreated": 1
+            },
+            {
+              "name": "5f8dd7f329576d53d041",
+              "type": "Categorical",
+              "expression": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "powerbi_ao3_order_segments"
+                    }
+                  },
+                  "Property": "ao3_priority_segment"
+                }
+              },
+              "howCreated": 1
+            }
+          ]
+        },
+        "visualContainers": {
+          "0305120bd70673e9b540": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "34c899f281c0e3d08c66",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 04 Priority Portfolio Mix"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "327dae253ca5287da23a": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "027e7e90ca980190067b",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 01 Executive Header"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "7fc38e7003505c3b5144": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "0fa2728901ae2dd05811",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 02 Executive KPI Strip"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "8e8d63df51e8216eb756": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "c86b6ac0392927559d2b",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 03 Decision Intelligence Flow"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "965bcaadceeb8e1d9016": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "8da4386c2e3a1c1c26b6",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 07 Executive Takeaway"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "bf28f82087923e03ac07": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "1ce539856e8066296212",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | 05 Executive Focus"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "f1b6d3af4ea841a4b1ab": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "11947d075d5299e80724": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          },
+          "fc9064e6bdcb9a3293ec": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "4b9239d290ce18156e3b": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "c856db2e0850411b8122": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "662b0d6463a14731b90b",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 V2 | 03 Executive Movement Brief"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "18277050b6b522e6501a": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "5fbfeb5087376a14aa8c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 V2 | 05 Executive Geographic Direction"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "4e0f06f7e0b7d3580a4c": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "17105c02e39350cee68e",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 V2 | 02 Executive Business KPI Strip"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "d822b89c049787799676": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "85a0d88f08b2655e728c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 V2 | 01 Executive Command Header"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "944c255939345c130017": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b8cfdce23a9d0670e82c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 | C06 Weekly Protected Value Trend"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "b34e340a605a43e2234b": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "1fffffdf150b4a69d9c0",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q05 V2 | 04 Executive Action Agenda"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          }
+        },
+        "visualContainerGroups": {
+          "987db78912e3de440899": {
+            "isHidden": true
+          },
+          "bbab060c0605a91a23b3": {
+            "isHidden": false
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

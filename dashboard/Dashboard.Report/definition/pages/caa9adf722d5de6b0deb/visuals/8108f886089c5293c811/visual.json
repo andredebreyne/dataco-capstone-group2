@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "8108f886089c5293c811",
+  "position": {
+    "x": 964.29482948294833,
+    "y": 319.92959295929592,
+    "z": 2000,
+    "height": 371.74917491749176,
+    "width": 955.28272827282728,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q03 V2 | 04 Operational Allocation Brief"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q03 V2 | 04 Operational Allocation Brief",
+              "nativeQueryRef": "Q03 V2 | 04 Operational Allocation Brief"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

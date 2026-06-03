@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "18277050b6b522e6501a",
+  "position": {
+    "x": 0,
+    "y": 728,
+    "z": 2000,
+    "height": 352,
+    "width": 966,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q05 V2 | 05 Executive Geographic Direction"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q05 V2 | 05 Executive Geographic Direction",
+              "nativeQueryRef": "Q05 V2 | 05 Executive Geographic Direction"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "bbab060c0605a91a23b3"
+}

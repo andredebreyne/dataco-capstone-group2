@@ -235,7 +235,7 @@ table Dashboard_Visualizations
 		lineageTag: 7a32652a-77d3-4ed2-adcf-73645abf3572
 
 	/// AO2 selected-model validation evidence with explicit model-limitation framing.
-	measure 'Q02 | 04 Validation Evidence' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>VALIDATION EVIDENCE</div><div style='font-size:22px;font-weight:700;margin-top:8px;'>Gradient Boosting · conservative baseline</div><div style='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;'><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>RMSE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation RMSE],"$#,##0.00") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>MAE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation MAE],"$#,##0.00") & "</div></div><div style='padding:10px 12px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>R²</div><div style='font-size:30px;font-weight:700;color:#DFA64C;margin-top:3px;'>" & FORMAT([AO2 Validation R2],"0.000") & "</div></div></div><div style='font-size:18px;color:#AAB6C5;margin-top:10px;'>Useful for triage, not for precise financial forecasting.</div></div>" RETURN ResultMarkup
+	measure 'Q02 | 04 Validation Evidence' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>VALIDATION EVIDENCE</div><div style='font-size:22px;font-weight:700;margin-top:7px;'>Gradient Boosting · conservative baseline</div><div style='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;'><div style='padding:9px 11px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>RMSE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation RMSE],"$#,##0.00") & "</div></div><div style='padding:9px 11px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>MAE</div><div style='font-size:30px;font-weight:700;margin-top:3px;'>" & FORMAT([AO2 Validation MAE],"$#,##0.00") & "</div></div><div style='padding:9px 11px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>R²</div><div style='font-size:30px;font-weight:700;color:#DFA64C;margin-top:3px;'>" & FORMAT([AO2 Validation R2],"0.000") & "</div></div></div><div style='font-size:17px;color:#AAB6C5;margin-top:8px;'>Useful for triage, not for precise financial forecasting.</div><div style='font-size:14px;color:#8C9AAA;margin-top:6px;'></div></div>" RETURN ResultMarkup
 		displayFolder: Q02 Where Is Profitability Most Exposed?
 		lineageTag: 246b9f9d-d35f-4a2d-b2e5-fc94ee8df541
 
@@ -272,31 +272,786 @@ table Dashboard_Visualizations
 		lineageTag: 1ba4d68b-dfa2-4ef9-9217-d5fb0dce0953
 
 	measure 'Q02 | Scatter Legend' =
-
+			
 			"<div style='box-sizing:border-box;width:100%;font-family:Segoe UI,Arial;color:#AAB6C5;font-size:12px;line-height:1.4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:transparent;border:none;outline:none;box-shadow:none;'>" &
 			    "<div style='font-weight:700;color:#8C9AAA;margin-right:2px;'>AO3 Segment</div>" &
-
+			
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#4F83B4;display:inline-block;'></span>" &
 			        "<span>Expedite Selectively</span>" &
 			    "</div>" &
-
+			
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#2D8C73;display:inline-block;'></span>" &
 			        "<span>Preserve Service</span>" &
 			    "</div>" &
-
+			
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#DFA64C;display:inline-block;'></span>" &
 			        "<span>Protect High-Value At-Risk</span>" &
 			    "</div>" &
-
+			
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#D95555;display:inline-block;'></span>" &
 			        "<span>Standard Process</span>" &
 			    "</div>" &
 			"</div>"
 		lineageTag: a3e2bec9-b80a-4a07-956d-f09c29b93be2
+
+	/// AO3 executive page header describing governed risk-margin prioritization.
+	measure 'Q03 | 01 Header' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:20px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='display:flex;justify-content:space-between;align-items:center;height:100%;'><div><div style='font-size:18px;color:#7D9FC5;'>AO3 · INTEGRATED PRIORITIZATION</div><div style='font-size:44px;font-weight:700;margin-top:8px;'>Risk-Margin Operational Priorities</div><div style='font-size:22px;color:#AAB6C5;margin-top:8px;'>Focus preventive effort where delivery risk and expected value require action.</div></div><div style='min-width:250px;padding:14px 18px;background:#1B2531;border-left:5px solid #2D8C73;border-radius:10px;'><div style='font-size:16px;color:#8FA6C2;'>POLICY STATUS</div><div style='font-size:25px;font-weight:700;margin-top:5px;'>Frozen AO3 matrix</div><div style='font-size:17px;color:#2D8C73;margin-top:5px;'>GOVERNED DATA VERIFIED</div></div></div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 2f068fe3-d202-46f4-8279-7c3cabd1f869
+
+	/// AO3 executive KPI strip summarizing the integrated risk-margin decision layer.
+	measure 'Q03 | 02 KPI Priority Strip' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:14px 28px;background:#141B24;border:1px solid #263342;border-radius:12px;font-family:Segoe UI;color:#F4F7FB;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;'><div><div style='font-size:18px;color:#8FA6C2;'>SCORED ORDER ITEMS</div><div style='font-size:48px;font-weight:700;margin-top:8px;'>" & FORMAT([Total Orders],"#,##0") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>PROTECT FIRST</div><div style='font-size:48px;font-weight:700;color:#DFA64C;margin-top:8px;'>" & FORMAT([Protect High Value At Risk Items],"#,##0") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>PROTECT-FIRST SHARE</div><div style='font-size:48px;font-weight:700;color:#DFA64C;margin-top:8px;'>" & FORMAT([Protect High Value At Risk Share],"0.0%") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>VALUE AT RISK</div><div style='font-size:48px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT([Protected Value At Risk],"$#,##0") & "</div></div><div style='border-left:1px solid #27323F;padding-left:24px;'><div style='font-size:18px;color:#8FA6C2;'>SELECTIVE EXPEDITE</div><div style='font-size:48px;font-weight:700;color:#4F83B4;margin-top:8px;'>" & FORMAT([Expedite Selectively Items],"#,##0") & "</div></div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 3b853365-2748-49be-8e88-7ef4a002a372
+
+	/// AO3 executive 2x2 HTML matrix showing governed risk-margin priority segments.
+	measure 'Q03 | 03 Risk Margin Matrix' = ```
+			
+			VAR Expedite = FORMAT(CALCULATE([Expedite Selectively Items], REMOVEFILTERS()), "#,##0")
+			VAR Protect = FORMAT(CALCULATE([Protect High Value At Risk Items], REMOVEFILTERS()), "#,##0")
+			VAR Standard = FORMAT(CALCULATE([Standard Process Items], REMOVEFILTERS()), "#,##0")
+			VAR Preserve = FORMAT(CALCULATE([Preserve Service Items], REMOVEFILTERS()), "#,##0")
+			
+			VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>RISK-MARGIN PRIORITY MATRIX</div><div style='font-size:18px;color:#AAB6C5;margin-top:5px;'>Frozen AO3 segments convert model outputs into operating choices.</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;'><div style='padding:14px 16px;background:#1B2D3D;border:1px solid #4F83B4;border-radius:8px;'><div style='font-size:16px;color:#91BCE3;'>HIGH RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Expedite selectively</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Expedite & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Review before premium-cost action.</div></div><div style='padding:14px 16px;background:#3A3020;border:1px solid #DFA64C;border-radius:8px;'><div style='font-size:16px;color:#F0C46E;'>HIGH RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Protect high value at risk</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Protect & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Prioritize pre-dispatch protection.</div></div><div style='padding:14px 16px;background:#1B2531;border:1px solid #263342;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>LOW RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Standard process</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Standard & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Avoid special-cost interventions.</div></div><div style='padding:14px 16px;background:#193B36;border:1px solid #2D8C73;border-radius:8px;'><div style='font-size:16px;color:#72C9B5;'>LOW RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Preserve service</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Preserve & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Maintain quality without over-service.</div></div></div></div>" 
+			
+			RETURN ResultMarkup
+			```
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 2a43d5b6-17dc-43c6-93b2-08c23aba8a63
+
+	/// AO3 executive operating-action queue derived from governed matrix segments.
+	measure 'Q03 | 04 Priority Action Queue' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>PRIORITY ACTION QUEUE</div><div style='display:grid;row-gap:10px;margin-top:14px;'><div style='padding:12px 14px;background:#3A3020;border-left:5px solid #DFA64C;border-radius:8px;'><span style='font-size:18px;font-weight:700;'>01 · Protect first</span><span style='float:right;font-size:20px;font-weight:700;'>" & FORMAT([Protect High Value At Risk Items],"#,##0") & " items</span><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Confirm dispatch readiness and escalate preventable delay risks.</div></div><div style='padding:12px 14px;background:#1B2D3D;border-left:5px solid #4F83B4;border-radius:8px;'><span style='font-size:18px;font-weight:700;'>02 · Expedite selectively</span><span style='float:right;font-size:20px;font-weight:700;'>" & FORMAT([Expedite Selectively Items],"#,##0") & " items</span><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Intervene only when SLA or customer impact justifies cost.</div></div><div style='padding:12px 14px;background:#193B36;border-left:5px solid #2D8C73;border-radius:8px;'><span style='font-size:18px;font-weight:700;'>03 · Preserve service</span><span style='float:right;font-size:20px;font-weight:700;'>" & FORMAT([Preserve Service Items],"#,##0") & " items</span><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Maintain normal controls and avoid unnecessary escalation.</div></div><div style='padding:12px 14px;background:#1B2531;border-left:5px solid #8C9AAA;border-radius:8px;'><span style='font-size:18px;font-weight:700;'>04 · Standard process</span><span style='float:right;font-size:20px;font-weight:700;'>" & FORMAT([Standard Process Items],"#,##0") & " items</span><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Use routine handling unless new operational alerts emerge.</div></div></div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 7d829239-a88e-4a58-8e47-1237c979b9a4
+
+	/// AO3 governance status panel confirming matrix cutoffs and dashboard QA state.
+	measure 'Q03 | 05 Governance Status' = VAR QaLabel = IF ( [Dashboard QA Pass Flag] = 1, "PASSED", "REVIEW REQUIRED" ) VAR QaColor = IF ( [Dashboard QA Pass Flag] = 1, "#2D8C73", "#D95555" ) VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>GOVERNANCE STATUS</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;'><div style='padding:14px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>AO1 RISK CUTOFF</div><div style='font-size:34px;font-weight:700;color:#DFA64C;margin-top:5px;'>" & FORMAT([AO3 Risk Cutoff],"0.0%") & "</div></div><div style='padding:14px;background:#1B2531;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>AO3 MARGIN CUTOFF</div><div style='font-size:34px;font-weight:700;color:#DFA64C;margin-top:5px;'>" & FORMAT([AO3 Margin Cutoff],"0.0%") & "</div></div></div><div style='font-size:18px;color:" & QaColor & ";font-weight:700;margin-top:14px;'>DATA QA " & QaLabel & " · " & FORMAT([Dashboard QA Issue Rows],"#,##0") & " issue rows</div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 8e43e741-425b-46e9-86c5-b72f154be661
+
+	/// AO3 methodology note clarifying deterministic segment assignment and decision-support scope.
+	measure 'Q03 | 06 Methodology Note' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>METHODOLOGY NOTE</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>AO3 applies a deterministic 2x2 matrix to frozen AO1 risk and AO2 margin outputs. It does not retrain models, redefine thresholds, or claim realized intervention outcomes.</div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 47a9d8ed-0c4c-4b96-8720-e9cf036e4691
+
+	/// AO3 executive takeaway focusing operations on the highest-priority governed segment.
+	measure 'Q03 | 07 Executive Takeaway' = VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:16px 20px;background:#141B24;border:1px solid #263342;border-left:5px solid #DFA64C;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:17px;color:#8FA6C2;'>EXECUTIVE TAKEAWAY</div><div style='font-size:24px;font-weight:700;margin-top:8px;'>Protect " & FORMAT([Protect High Value At Risk Items],"#,##0") & " high-value order items before lower-priority work.</div><div style='font-size:19px;color:#AAB6C5;line-height:1.35;margin-top:7px;'>This segment represents " & FORMAT([Protect High Value At Risk Share],"0.0%") & " of scored items and " & FORMAT([Protected Value At Risk],"$#,##0") & " in governed order value.</div><div style='font-size:17px;color:#8C9AAA;margin-top:7px;'>Use targeted pre-dispatch protection; avoid blanket expediting.</div></div>" RETURN ResultMarkup
+		displayFolder: Q03 What Should Operations Prioritize First?
+		lineageTag: 94702dc7-bf02-4f2f-adcb-4be4dfc9e5d6
+
+	/// Executive overview header for the consolidated AO1/AO2/AO3 dashboard landing page.
+	measure 'Q05 | 01 Executive Header' =
+			VAR QaColor = IF ( [Dashboard QA Pass Flag] = 1, "#2D8C73", "#D95555" )
+			VAR QaText = IF ( [Dashboard QA Pass Flag] = 1, "GOVERNED DATA VERIFIED", "QA REVIEW REQUIRED" )
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:26px 32px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>DATACO EXECUTIVE COMMAND CENTER</div>" &
+			"<div style='font-size:42px;font-weight:700;margin-top:8px;'>Supply Chain Decision Intelligence</div>" &
+			"<div style='font-size:20px;color:#AAB6C5;margin-top:8px;'>Preventive delivery-risk control, profitability exposure, and governed operational prioritization.</div>" &
+			"<div style='position:absolute;right:28px;top:28px;background:#202C3A;border-left:5px solid " & QaColor & ";border-radius:10px;padding:14px 18px;width:250px;'>" &
+			"<div style='font-size:14px;color:#7FA8D8;'>EXECUTIVE STATUS</div><div style='font-size:20px;font-weight:700;margin-top:5px;'>AO1 + AO2 + AO3</div>" &
+			"<div style='font-size:14px;color:" & QaColor & ";margin-top:8px;'>" & QaText & "</div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: 5ea51314-e73a-4929-843d-18b229933eaa
+
+	/// Consolidated executive KPI strip spanning AO1 risk, AO2 profitability, and AO3 operational priorities.
+	measure 'Q05 | 02 Executive KPI Strip' =
+			VAR CardStart = "<div style='flex:1;padding:14px 22px;border-right:1px solid #263342;'>"
+			VAR CardEnd = "</div>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:12px 8px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			CardStart & "<div style='font-size:14px;color:#7FA8D8;'>SCORED ORDER ITEMS</div><div style='font-size:38px;font-weight:700;margin-top:8px;'>" & FORMAT ( [Total Orders], "#,0" ) & "</div>" & CardEnd &
+			CardStart & "<div style='font-size:14px;color:#7FA8D8;'>HIGH DELIVERY RISK</div><div style='font-size:38px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT ( [High Risk Rate], "0.0%" ) & "</div>" & CardEnd &
+			CardStart & "<div style='font-size:14px;color:#7FA8D8;'>EXPECTED PROFIT</div><div style='font-size:38px;font-weight:700;color:#2D8C73;margin-top:8px;'>" & FORMAT ( [Expected Profit], "$#,0" ) & "</div>" & CardEnd &
+			CardStart & "<div style='font-size:14px;color:#7FA8D8;'>EXPECTED MARGIN</div><div style='font-size:38px;font-weight:700;color:#DFA64C;margin-top:8px;'>" & FORMAT ( [Expected Profit Margin], "0.0%" ) & "</div>" & CardEnd &
+			CardStart & "<div style='font-size:14px;color:#7FA8D8;'>ACTIVE REVIEW QUEUE</div><div style='font-size:38px;font-weight:700;color:#D95555;margin-top:8px;'>" & FORMAT ( [Executive Priority Review Items], "#,0" ) & "</div>" & CardEnd &
+			"<div style='flex:1;padding:14px 22px;'><div style='font-size:14px;color:#7FA8D8;'>PROTECTED VALUE AT RISK</div><div style='font-size:38px;font-weight:700;color:#4F83B4;margin-top:8px;'>" & FORMAT ( [Protected Value At Risk], "$#,0" ) & "</div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: 63ce65bf-c0a9-4e4c-9633-d8058ea0c99f
+
+	/// Executive flow showing how governed AO1 risk and AO2 profitability outputs become AO3 action priorities.
+	measure 'Q05 | 03 Decision Intelligence Flow' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:22px 24px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>DECISION INTELLIGENCE FLOW</div><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Frozen model outputs become a governed operating queue.</div>" &
+			"<div style='display:flex;gap:16px;align-items:stretch;margin-top:20px;height:184px;'>" &
+			"<div style='flex:1;background:#202C3A;border-left:5px solid #D95555;border-radius:10px;padding:16px;'><div style='font-size:14px;color:#D95555;'>AO1 · DELIVERY RISK</div><div style='font-size:34px;font-weight:700;margin-top:12px;'>" & FORMAT ( [High Risk Orders], "#,0" ) & "</div><div style='font-size:15px;color:#AAB6C5;margin-top:6px;'>high-risk items · " & FORMAT ( [High Risk Rate], "0.0%" ) & " exposure</div><div style='font-size:13px;color:#7FA8D8;margin-top:16px;'>Approved threshold " & FORMAT ( [AO1 Selected Threshold], "0.0%" ) & "</div></div>" &
+			"<div style='display:flex;align-items:center;font-size:30px;color:#7FA8D8;'>→</div>" &
+			"<div style='flex:1;background:#202C3A;border-left:5px solid #DFA64C;border-radius:10px;padding:16px;'><div style='font-size:14px;color:#DFA64C;'>AO2 · PROFITABILITY</div><div style='font-size:34px;font-weight:700;margin-top:12px;'>" & FORMAT ( [Expected Profit], "$#,0" ) & "</div><div style='font-size:15px;color:#AAB6C5;margin-top:6px;'>expected profit · " & FORMAT ( [Expected Profit Margin], "0.0%" ) & " margin</div><div style='font-size:13px;color:#7FA8D8;margin-top:16px;'>" & FORMAT ( [Negative Expected Profit Items], "#,0" ) & " negative-profit items</div></div>" &
+			"<div style='display:flex;align-items:center;font-size:30px;color:#7FA8D8;'>→</div>" &
+			"<div style='flex:1;background:#202C3A;border-left:5px solid #2D8C73;border-radius:10px;padding:16px;'><div style='font-size:14px;color:#2D8C73;'>AO3 · PRIORITIZATION</div><div style='font-size:34px;font-weight:700;margin-top:12px;'>" & FORMAT ( [Executive Priority Review Items], "#,0" ) & "</div><div style='font-size:15px;color:#AAB6C5;margin-top:6px;'>items in active review · " & FORMAT ( [Executive Priority Review Rate], "0.0%" ) & "</div><div style='font-size:13px;color:#7FA8D8;margin-top:16px;'>Protect first, expedite selectively</div></div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: 5aa704c7-463d-4ad1-9dad-d64bc479939b
+
+	/// AO3 executive portfolio distribution with action-oriented segment proportions.
+	measure 'Q05 | 04 Priority Portfolio Mix' =
+			VAR ProtectPct = [Protect High Value At Risk Share]
+			VAR ExpeditePct = [Expedite Selectively Share]
+			VAR PreservePct = [Preserve Service Share]
+			VAR StandardPct = [Standard Process Share]
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:22px 24px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>AO3 PRIORITY PORTFOLIO</div><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Current operational mix under the governed risk-margin policy.</div>" &
+			"<div style='display:flex;height:30px;margin-top:22px;border-radius:8px;overflow:hidden;background:#263342;'>" &
+			"<div style='width:" & FORMAT ( ProtectPct, "0.0%" ) & ";background:#DFA64C;'></div>" &
+			"<div style='width:" & FORMAT ( ExpeditePct, "0.0%" ) & ";background:#D95555;'></div>" &
+			"<div style='width:" & FORMAT ( PreservePct, "0.0%" ) & ";background:#2D8C73;'></div>" &
+			"<div style='width:" & FORMAT ( StandardPct, "0.0%" ) & ";background:#4F83B4;'></div></div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;'>" &
+			"<div style='background:#202C3A;border-left:4px solid #DFA64C;border-radius:8px;padding:12px;'><div style='font-size:14px;color:#DFA64C;'>PROTECT HIGH VALUE AT RISK</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Protect High Value At Risk Items], "#,0" ) & " <span style='font-size:15px;color:#AAB6C5;'>· " & FORMAT ( ProtectPct, "0.0%" ) & "</span></div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #D95555;border-radius:8px;padding:12px;'><div style='font-size:14px;color:#D95555;'>EXPEDITE SELECTIVELY</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Expedite Selectively Items], "#,0" ) & " <span style='font-size:15px;color:#AAB6C5;'>· " & FORMAT ( ExpeditePct, "0.0%" ) & "</span></div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #2D8C73;border-radius:8px;padding:12px;'><div style='font-size:14px;color:#2D8C73;'>PRESERVE SERVICE</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Preserve Service Items], "#,0" ) & " <span style='font-size:15px;color:#AAB6C5;'>· " & FORMAT ( PreservePct, "0.0%" ) & "</span></div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #4F83B4;border-radius:8px;padding:12px;'><div style='font-size:14px;color:#4F83B4;'>STANDARD PROCESS</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Standard Process Items], "#,0" ) & " <span style='font-size:15px;color:#AAB6C5;'>· " & FORMAT ( StandardPct, "0.0%" ) & "</span></div></div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: f87104a5-f385-4a80-8bac-c4e64423c36e
+
+	/// Executive focus panel translating governed portfolio metrics into immediate operational attention areas.
+	measure 'Q05 | 05 Executive Focus' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:22px 24px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>EXECUTIVE FOCUS</div><div style='font-size:16px;color:#AAB6C5;margin-top:5px;'>Where operating attention should concentrate first.</div>" &
+			"<div style='margin-top:20px;background:#202C3A;border-left:5px solid #DFA64C;border-radius:9px;padding:14px 16px;'><div style='font-size:14px;color:#DFA64C;'>1 · PROTECT VALUE AT RISK</div><div style='font-size:27px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Protected Value At Risk], "$#,0" ) & "</div><div style='font-size:14px;color:#AAB6C5;margin-top:3px;'>" & FORMAT ( [Protected Value At Risk Share], "0.0%" ) & " of governed order value</div></div>" &
+			"<div style='margin-top:12px;background:#202C3A;border-left:5px solid #D95555;border-radius:9px;padding:14px 16px;'><div style='font-size:14px;color:#D95555;'>2 · REVIEW SELECTIVE EXPEDITE</div><div style='font-size:27px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Expedite Selectively Items], "#,0" ) & " items</div><div style='font-size:14px;color:#AAB6C5;margin-top:3px;'>High risk with limited predicted margin</div></div>" &
+			"<div style='margin-top:12px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:14px 16px;'><div style='font-size:14px;color:#2D8C73;'>3 · PRESERVE SERVICE QUALITY</div><div style='font-size:27px;font-weight:700;margin-top:4px;'>" & FORMAT ( [Preserve Service Items], "#,0" ) & " items</div><div style='font-size:14px;color:#AAB6C5;margin-top:3px;'>Avoid unnecessary intervention cost</div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: 82ead21a-9b24-45c7-a0c2-2040b4c92fa8
+
+	/// Executive consolidated narrative for the dashboard landing page.
+	measure 'Q05 | 07 Executive Takeaway' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:6px solid #D95555;border-radius:12px;padding:20px 24px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>EXECUTIVE TAKEAWAY</div>" &
+			"<div style='font-size:24px;font-weight:700;margin-top:9px;'>" & FORMAT ( [Executive Priority Review Items], "#,0" ) & " scored order items require active operational review.</div>" &
+			"<div style='font-size:17px;color:#AAB6C5;line-height:1.42;margin-top:8px;'>The governed AO3 policy concentrates attention on <b>" & FORMAT ( [Protect High Value At Risk Items], "#,0" ) & " high-value-at-risk items</b>, representing <b>" & FORMAT ( [Protected Value At Risk], "$#,0" ) & "</b> in order value. Preserve service quality for the stable portfolio and use expedited capacity selectively.</div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: 61b87db4-300a-4629-8efc-95e5d9acfacb
+
+	/// Visual navigation rail for the executive overview page. Overlay native Power BI page-navigation buttons for interaction.
+	measure 'Q05 | 08 Navigation Rail' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:12px 16px;font-family:Segoe UI;color:#F4F7FB;display:flex;gap:10px;align-items:center;'>" &
+			"<div style='font-size:14px;color:#7FA8D8;margin-right:8px;'>EXPLORE</div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #4F83B4;border-radius:8px;padding:11px 14px;'><div style='font-size:15px;font-weight:700;'>AO1 · Delivery Risk</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #2D8C73;border-radius:8px;padding:11px 14px;'><div style='font-size:15px;font-weight:700;'>AO2 · Profitability</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #DFA64C;border-radius:8px;padding:11px 14px;'><div style='font-size:15px;font-weight:700;'>AO3 · Prioritization</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #7D93AC;border-radius:8px;padding:11px 14px;opacity:0.72;'><div style='font-size:15px;font-weight:700;'>Geographic Analysis</div><div style='font-size:12px;color:#AAB6C5;'>Pending serving-layer enrichment</div></div></div>"
+		displayFolder: Q05 Executive Overview
+		lineageTag: dce5aaff-f689-4c33-ba56-0fee5f1aeab7
+
+	/// Compact executive cockpit header with integrated status.
+	measure 'Q05 | C01 Executive Cockpit Header' =
+			VAR QaColor = IF ( [Dashboard QA Pass Flag] = 1, "#2D8C73", "#D95555" )
+			VAR QaText = IF ( [Dashboard QA Pass Flag] = 1, "GOVERNED DATA VERIFIED", "QA REVIEW REQUIRED" )
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:20px 28px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:15px;color:#7FA8D8;'>DATACO · EXECUTIVE COMMAND CENTER</div><div style='font-size:36px;font-weight:700;margin-top:5px;'>Supply Chain Decision Intelligence</div><div style='font-size:18px;color:#AAB6C5;margin-top:5px;'>Risk exposure, expected profitability, and operational priorities in one governed view.</div>" &
+			"<div style='position:absolute;right:24px;top:22px;background:#202C3A;border-left:5px solid " & QaColor & ";border-radius:9px;padding:12px 16px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>EXECUTIVE STATUS</div><div style='font-size:16px;font-weight:700;margin-top:4px;'>AO1 + AO2 + AO3</div><div style='font-size:13px;color:" & QaColor & ";margin-top:6px;'>" & QaText & "</div></div></div>"
+		displayFolder: Q05 Executive Overview | Compact
+		lineageTag: 28eb6a9f-cb50-484e-924c-eef00db77276
+
+	/// Compact integrated KPI snapshot for the executive cockpit.
+	measure 'Q05 | C02 Executive Snapshot' =
+			VAR Tile = "<div style='flex:1;padding:10px 18px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:10px 8px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:13px;color:#7FA8D8;'>SCORED ITEMS</div><div style='font-size:34px;font-weight:700;margin-top:5px;'>" & FORMAT([Total Orders],"#,0") & "</div></div>" &
+			Tile & "<div style='font-size:13px;color:#7FA8D8;'>HIGH RISK RATE</div><div style='font-size:34px;font-weight:700;color:#D95555;margin-top:5px;'>" & FORMAT([High Risk Rate],"0.0%") & "</div></div>" &
+			Tile & "<div style='font-size:13px;color:#7FA8D8;'>EXPECTED PROFIT</div><div style='font-size:34px;font-weight:700;color:#2D8C73;margin-top:5px;'>" & FORMAT([Expected Profit],"$#,0") & "</div></div>" &
+			Tile & "<div style='font-size:13px;color:#7FA8D8;'>EXPECTED MARGIN</div><div style='font-size:34px;font-weight:700;color:#DFA64C;margin-top:5px;'>" & FORMAT([Expected Profit Margin],"0.0%") & "</div></div>" &
+			Tile & "<div style='font-size:13px;color:#7FA8D8;'>ACTIVE REVIEW</div><div style='font-size:34px;font-weight:700;color:#D95555;margin-top:5px;'>" & FORMAT([Executive Priority Review Items],"#,0") & "</div></div>" &
+			"<div style='flex:1;padding:10px 18px;'><div style='font-size:13px;color:#7FA8D8;'>VALUE AT RISK</div><div style='font-size:34px;font-weight:700;color:#4F83B4;margin-top:5px;'>" & FORMAT([Protected Value At Risk],"$#,0") & "</div></div></div>"
+		displayFolder: Q05 Executive Overview | Compact
+		lineageTag: c1465bd9-5f3e-4861-b6d6-fcf95c1bc929
+
+	/// Consolidated operational priority cockpit combining model flow, portfolio distribution, and action queue.
+	measure 'Q05 | C03 Integrated Priority Cockpit' =
+			VAR ProtectPct=[Protect High Value At Risk Share]
+			VAR ExpeditePct=[Expedite Selectively Share]
+			VAR PreservePct=[Preserve Service Share]
+			VAR StandardPct=[Standard Process Share]
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:20px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>OPERATIONAL PRIORITY COCKPIT</div><div style='font-size:15px;color:#AAB6C5;margin-top:4px;'>AO1 risk and AO2 profitability converge into an actionable AO3 portfolio.</div>" &
+			"<div style='display:flex;gap:10px;margin-top:16px;'>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #D95555;border-radius:8px;padding:11px;'><div style='font-size:12px;color:#D95555;'>AO1 RISK</div><div style='font-size:26px;font-weight:700;margin-top:3px;'>" & FORMAT([High Risk Orders],"#,0") & "</div><div style='font-size:13px;color:#AAB6C5;'>high-risk items</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #DFA64C;border-radius:8px;padding:11px;'><div style='font-size:12px;color:#DFA64C;'>AO2 MARGIN</div><div style='font-size:26px;font-weight:700;margin-top:3px;'>" & FORMAT([Expected Profit Margin],"0.0%") & "</div><div style='font-size:13px;color:#AAB6C5;'>expected margin</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #2D8C73;border-radius:8px;padding:11px;'><div style='font-size:12px;color:#2D8C73;'>AO3 QUEUE</div><div style='font-size:26px;font-weight:700;margin-top:3px;'>" & FORMAT([Executive Priority Review Items],"#,0") & "</div><div style='font-size:13px;color:#AAB6C5;'>active-review items</div></div></div>" &
+			"<div style='font-size:14px;color:#7FA8D8;margin-top:18px;'>AO3 PRIORITY PORTFOLIO</div><div style='display:flex;height:22px;margin-top:8px;border-radius:7px;overflow:hidden;background:#263342;'><div style='width:" & FORMAT(ProtectPct,"0.0%") & ";background:#DFA64C;'></div><div style='width:" & FORMAT(ExpeditePct,"0.0%") & ";background:#D95555;'></div><div style='width:" & FORMAT(PreservePct,"0.0%") & ";background:#2D8C73;'></div><div style='width:" & FORMAT(StandardPct,"0.0%") & ";background:#4F83B4;'></div></div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;'>" &
+			"<div style='background:#202C3A;border-left:4px solid #DFA64C;border-radius:7px;padding:10px 12px;'><div style='font-size:12px;color:#DFA64C;'>1 · PROTECT HIGH VALUE AT RISK</div><div style='font-size:24px;font-weight:700;margin-top:3px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & " <span style='font-size:13px;color:#AAB6C5;'>· " & FORMAT(ProtectPct,"0.0%") & "</span></div><div style='font-size:13px;color:#AAB6C5;margin-top:2px;'>" & FORMAT([Protected Value At Risk],"$#,0") & " in order value</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #D95555;border-radius:7px;padding:10px 12px;'><div style='font-size:12px;color:#D95555;'>2 · EXPEDITE SELECTIVELY</div><div style='font-size:24px;font-weight:700;margin-top:3px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " <span style='font-size:13px;color:#AAB6C5;'>· " & FORMAT(ExpeditePct,"0.0%") & "</span></div><div style='font-size:13px;color:#AAB6C5;margin-top:2px;'>Use scarce expedited capacity carefully</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #2D8C73;border-radius:7px;padding:10px 12px;'><div style='font-size:12px;color:#2D8C73;'>3 · PRESERVE SERVICE</div><div style='font-size:24px;font-weight:700;margin-top:3px;'>" & FORMAT([Preserve Service Items],"#,0") & " <span style='font-size:13px;color:#AAB6C5;'>· " & FORMAT(PreservePct,"0.0%") & "</span></div><div style='font-size:13px;color:#AAB6C5;margin-top:2px;'>Avoid unnecessary intervention cost</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #4F83B4;border-radius:7px;padding:10px 12px;'><div style='font-size:12px;color:#4F83B4;'>4 · STANDARD PROCESS</div><div style='font-size:24px;font-weight:700;margin-top:3px;'>" & FORMAT([Standard Process Items],"#,0") & " <span style='font-size:13px;color:#AAB6C5;'>· " & FORMAT(StandardPct,"0.0%") & "</span></div><div style='font-size:13px;color:#AAB6C5;margin-top:2px;'>Maintain routine handling</div></div></div></div>"
+		displayFolder: Q05 Executive Overview | Compact
+		lineageTag: 31364679-dcf3-48aa-8fe0-56a65725b8cc
+
+	/// Compact financial and governance context panel for supply-chain and finance executives.
+	measure 'Q05 | C04 Executive Context Panel' =
+			VAR QaColor=IF([Dashboard QA Pass Flag]=1,"#2D8C73","#D95555")
+			VAR QaText=IF([Dashboard QA Pass Flag]=1,"GOVERNED POLICY ACTIVE","QA REVIEW REQUIRED")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:18px 20px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>FINANCIAL EXPOSURE & POLICY</div><div style='font-size:14px;color:#AAB6C5;margin-top:4px;'>What value is exposed and how the operating policy responds.</div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;'>" &
+			"<div style='background:#202C3A;border-left:4px solid #DFA64C;border-radius:7px;padding:11px;'><div style='font-size:12px;color:#DFA64C;'>VALUE REQUIRING PROTECTION</div><div style='font-size:25px;font-weight:700;margin-top:3px;'>" & FORMAT([Protected Value At Risk],"$#,0") & "</div><div style='font-size:12px;color:#AAB6C5;'>" & FORMAT([Protected Value At Risk Share],"0.0%") & " of order value</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #D95555;border-radius:7px;padding:11px;'><div style='font-size:12px;color:#D95555;'>NEGATIVE-PROFIT EXPOSURE</div><div style='font-size:25px;font-weight:700;margin-top:3px;'>" & FORMAT([Negative Profit Exposure],"$#,0") & "</div><div style='font-size:12px;color:#AAB6C5;'>" & FORMAT([Negative Expected Profit Items],"#,0") & " modeled loss items</div></div></div>" &
+			"<div style='margin-top:12px;background:#202C3A;border-left:4px solid #2D8C73;border-radius:7px;padding:10px 12px;'><div style='font-size:13px;font-weight:700;color:" & QaColor & ";'>" & QaText & "</div><div style='font-size:12px;color:#AAB6C5;margin-top:3px;'>AO1 risk threshold " & FORMAT([AO1 Selected Threshold],"0.0%") & " · AO3 margin cutoff " & FORMAT([AO3 Margin Cutoff],"0.0%") & "</div></div>" &
+			"<div style='font-size:12px;color:#7FA8D8;margin-top:12px;'>DECISION SCOPE</div><div style='font-size:12px;color:#AAB6C5;line-height:1.35;margin-top:3px;'>Modeled exposure supports prioritization. Intervention cost and realized savings require an operational cost input.</div></div>"
+		displayFolder: Q05 Executive Overview | Compact
+		lineageTag: 4544b15a-8856-46ba-80c5-8b196cb33341
+
+	/// Operational decision brief replacing the former navigation rail. Highlights immediate managerial actions and current data-contract limits.
+	measure 'Q05 | C05 Compact Navigation Rail' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:16px;color:#7FA8D8;'>IMMEDIATE OPERATING DECISION</div>" &
+			"<div style='display:flex;gap:10px;margin-top:10px;'>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #DFA64C;border-radius:7px;padding:10px;'><div style='font-size:12px;color:#DFA64C;'>PROTECT FIRST</div><div style='font-size:23px;font-weight:700;margin-top:2px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & " items</div><div style='font-size:12px;color:#AAB6C5;'>" & FORMAT([Protected Value At Risk],"$#,0") & " order value</div></div>" &
+			"<div style='flex:1;background:#202C3A;border-left:4px solid #D95555;border-radius:7px;padding:10px;'><div style='font-size:12px;color:#D95555;'>REVIEW EXPEDITE</div><div style='font-size:23px;font-weight:700;margin-top:2px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items</div><div style='font-size:12px;color:#AAB6C5;'>" & FORMAT([Expedite Review Order Value],"$#,0") & " order value</div></div></div>" &
+			"<div style='font-size:12px;color:#AAB6C5;margin-top:9px;'>Use drill-through to inspect Order ID and Item ID. Product, shipping, and regional recommendations will become available after serving-layer enrichment.</div></div>"
+		displayFolder: Q05 Executive Overview | Compact
+		lineageTag: 9115b81f-ab73-4f16-afc1-e4f85df8cde5
+
+	/// Executive HTML weekly protected-value-at-risk trend for the latest 12 available weeks with a trailing four-week operational run-rate line. This is not a statistical forecast.
+	measure 'Q05 | C06 Weekly Protected Value Trend' =
+			VAR LatestWeek = CALCULATE ( MAX ( 'powerbi_ao3_order_segments'[order_week_start] ), ALLSELECTED ( 'powerbi_ao3_order_segments' ) )
+			VAR Weeks =
+			    TOPN (
+			        12,
+			        FILTER (
+			            SUMMARIZE (
+			                ALLSELECTED ( 'powerbi_ao3_order_segments' ),
+			                'powerbi_ao3_order_segments'[order_week_start],
+			                "ProtectedValue", [Weekly Protected Value At Risk],
+			                "RunRate", [Protected Value At Risk 4W Run Rate]
+			            ),
+			            'powerbi_ao3_order_segments'[order_week_start] <= LatestWeek
+			                && NOT ISBLANK ( [ProtectedValue] )
+			        ),
+			        'powerbi_ao3_order_segments'[order_week_start], DESC
+			    )
+			VAR MaxValue = MAXX ( Weeks, MAX ( [ProtectedValue], [RunRate] ) )
+			VAR SafeMax = IF ( MaxValue > 0, MaxValue, 1 )
+			VAR IndexedWeeks =
+			    ADDCOLUMNS (
+			        Weeks,
+			        "WeekRank", RANKX ( Weeks, 'powerbi_ao3_order_segments'[order_week_start],, ASC, DENSE ),
+			        "BarHeight", DIVIDE ( [ProtectedValue], SafeMax ) * 210,
+			        "LineY", 242 - DIVIDE ( [RunRate], SafeMax ) * 210
+			    )
+			VAR Bars =
+			    CONCATENATEX (
+			        IndexedWeeks,
+			        "<rect x='" & FORMAT ( 34 + ( [WeekRank] - 1 ) * 68, "0" ) & "' y='" & FORMAT ( 242 - [BarHeight], "0" ) & "' width='34' height='" & FORMAT ( [BarHeight], "0" ) & "' rx='4' fill='#4F83B4' opacity='0.9'><title>" & FORMAT ( 'powerbi_ao3_order_segments'[order_week_start], "dd MMM yyyy" ) & ": " & FORMAT ( [ProtectedValue], "$#,0" ) & "</title></rect>",
+			        "",
+			        'powerbi_ao3_order_segments'[order_week_start], ASC
+			    )
+			VAR Points =
+			    CONCATENATEX (
+			        IndexedWeeks,
+			        FORMAT ( 51 + ( [WeekRank] - 1 ) * 68, "0" ) & "," & FORMAT ( [LineY], "0" ),
+			        " ",
+			        'powerbi_ao3_order_segments'[order_week_start], ASC
+			    )
+			VAR Labels =
+			    CONCATENATEX (
+			        FILTER ( IndexedWeeks, MOD ( [WeekRank] - 1, 2 ) = 0 ),
+			        "<text x='" & FORMAT ( 51 + ( [WeekRank] - 1 ) * 68, "0" ) & "' y='270' text-anchor='middle' fill='#AAB6C5' font-size='11'>" & FORMAT ( 'powerbi_ao3_order_segments'[order_week_start], "dd MMM" ) & "</text>",
+			        "",
+			        'powerbi_ao3_order_segments'[order_week_start], ASC
+			    )
+			VAR CurrentValue = MAXX ( TOPN ( 1, IndexedWeeks, 'powerbi_ao3_order_segments'[order_week_start], DESC ), [ProtectedValue] )
+			VAR CurrentRunRate = MAXX ( TOPN ( 1, IndexedWeeks, 'powerbi_ao3_order_segments'[order_week_start], DESC ), [RunRate] )
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:5px 20px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:18px;color:#7FA8D8;'>WEEKLY PROTECTED VALUE AT RISK</div><div style='font-size:14px;color:#AAB6C5;margin-top:4px;'>Order value requiring preventive protection · trailing four-week operational run rate</div>" &
+			"<div style='position:absolute;right:22px;top:18px;text-align:right;'><div style='font-size:12px;color:#7FA8D8;'>LATEST WEEK</div><div style='font-size:25px;font-weight:700;color:#4F83B4;'>" & FORMAT ( CurrentValue, "$#,0" ) & "</div><div style='font-size:12px;color:#DFA64C;'>4W run rate " & FORMAT ( CurrentRunRate, "$#,0" ) & "</div></div>" &
+			"<svg viewBox='0 0 860 292' style='width:100%;height:292px;margin-top:10px;'>" &
+			"<line x1='26' y1='242' x2='844' y2='242' stroke='#263342' stroke-width='1'/><line x1='26' y1='137' x2='844' y2='137' stroke='#263342' stroke-width='1' stroke-dasharray='4 5'/><line x1='26' y1='32' x2='844' y2='32' stroke='#263342' stroke-width='1' stroke-dasharray='4 5'/>" &
+			Bars & "<polyline points='" & Points & "' fill='none' stroke='#DFA64C' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/>" & Labels &
+			"<text x='28' y='289' fill='#7FA8D8' font-size='11'>Blue bars: protected order value</text><text x='238' y='289' fill='#DFA64C' font-size='11'>Amber line: trailing 4W operational run rate</text></svg>" &
+			"<div style='font-size:12px;color:#7FA8D8;margin-top:-6px;'>Run rate supports operational planning. It is not a statistical forecast.</div></div>"
+		displayFolder: Q05 Executive Overview | Time Series
+		lineageTag: 4024c676-e89c-408c-8d66-3813e23124cb
+
+	/// Business-oriented AO1 header with compact frozen-policy badge.
+	measure 'Q01 V2 | 01 Business Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:20px 28px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:15px;color:#7FA8D8;'>AO1 · PRE-DISPATCH RISK CONTROL</div><div style='font-size:36px;font-weight:700;margin-top:5px;'>Where Does Preventive Attention Create Value?</div><div style='font-size:18px;color:#AAB6C5;margin-top:5px;'>Prioritize high-risk order items before dispatch and focus attention where financial exposure is greatest.</div>" &
+			"<div style='position:absolute;right:24px;top:20px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:11px 15px;width:226px;'><div style='font-size:12px;color:#7FA8D8;'>OPERATING POLICY</div><div style='font-size:19px;font-weight:700;margin-top:3px;'>Threshold " & FORMAT([AO1 Selected Threshold],"0.0%") & "</div><div style='font-size:12px;color:#2D8C73;margin-top:5px;'>GOVERNED DATA VERIFIED</div></div></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: 5b360ca5-b556-4f7c-87f7-e150717a9693
+
+	/// AO1 business KPI strip emphasizing operational exposure, financial value, and recent trend.
+	measure 'Q01 V2 | 02 Business KPI Strip' =
+			
+			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
+			VAR TrendArrow=IF([AO1 High Risk Rate 4W Delta PP]>0,"▲",IF([AO1 High Risk Rate 4W Delta PP]<0,"▼","●"))
+			VAR Tile="<div style='flex:1;padding:10px 18px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:10px 8px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>HIGH-RISK ITEMS</div><div style='font-size:38px;font-weight:700;color:#D95555;margin-top:5px;'>" & FORMAT([High Risk Orders],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Require preventive attention</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>HIGH-RISK RATE</div><div style='font-size:38px;font-weight:700;color:#D95555;margin-top:5px;'>" & FORMAT([High Risk Rate],"0.0%") & "</div><div style='font-size:14px;color:" & TrendColor & ";'>" & TrendArrow & " " & FORMAT([AO1 High Risk Rate 4W Delta PP],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>HIGH-RISK ORDER VALUE</div><div style='font-size:38px;font-weight:700;color:#DFA64C;margin-top:5px;'>" & FORMAT([AO1 High Risk Order Value],"$#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([AO1 High Risk Value Share],"0.0%") & " of governed order value</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>NEGATIVE-PROFIT HIGH RISK</div><div style='font-size:38px;font-weight:700;color:#D95555;margin-top:5px;'>" & FORMAT([AO1 High Risk Negative Profit Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Review first for selective action</div></div>" &
+			"<div style='flex:1;padding:10px 18px;'><div style='font-size:15px;color:#7FA8D8;'>LATEST 4W HIGH RISK</div><div style='font-size:38px;font-weight:700;color:#4F83B4;margin-top:5px;'>" & FORMAT([AO1 Current 4W High Risk Items],"#,0") & "</div><div style='font-size:14px;color:" & TrendColor & ";'>" & TrendArrow & " " & FORMAT([AO1 High Risk Items 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: 11241e15-fe6c-4847-9ee8-e438becd0af8
+
+	/// AO1 weekly HTML trend with high-risk item bars and high-risk-rate line over the latest 12 available weeks.
+	measure 'Q01 V2 | 03 Weekly Risk Exposure Trend' =
+			
+			VAR LatestWeek=CALCULATE(MAX('powerbi_ao3_order_segments'[order_week_start]),ALLSELECTED('powerbi_ao3_order_segments'))
+			VAR Weeks=TOPN(12,FILTER(SUMMARIZE(ALLSELECTED('powerbi_ao3_order_segments'),'powerbi_ao3_order_segments'[order_week_start],"RiskItems",[AO1 Weekly High Risk Items],"RiskRate",[AO1 Weekly High Risk Rate]),'powerbi_ao3_order_segments'[order_week_start]<=LatestWeek && NOT ISBLANK([RiskItems])),'powerbi_ao3_order_segments'[order_week_start],DESC)
+			VAR MaxItems=MAXX(Weeks,[RiskItems])
+			VAR SafeMax=IF(MaxItems>0,MaxItems,1)
+			VAR Indexed=ADDCOLUMNS(Weeks,"WeekRank",RANKX(Weeks,'powerbi_ao3_order_segments'[order_week_start],,ASC,DENSE),"BarHeight",DIVIDE([RiskItems],SafeMax)*198,"LineY",232-[RiskRate]*330)
+			VAR Bars=CONCATENATEX(Indexed,"<rect x='" & FORMAT(34+([WeekRank]-1)*68,"0") & "' y='" & FORMAT(232-[BarHeight],"0") & "' width='34' height='" & FORMAT([BarHeight],"0") & "' rx='4' fill='#D95555' opacity='.86'><title>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM yyyy") & ": " & FORMAT([RiskItems],"#,0") & " high-risk items</title></rect>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Points=CONCATENATEX(Indexed,FORMAT(51+([WeekRank]-1)*68,"0") & "," & FORMAT([LineY],"0")," ",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Labels=CONCATENATEX(FILTER(Indexed,MOD([WeekRank]-1,2)=0),"<text x='" & FORMAT(51+([WeekRank]-1)*68,"0") & "' y='260' text-anchor='middle' fill='#AAB6C5' font-size='13'>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM") & "</text>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:18px 20px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>WEEKLY HIGH-RISK EXPOSURE</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Preventive-attention queue and risk-rate movement over the latest 12 available weeks.</div>" &
+			"<svg viewBox='0 0 860 282' style='width:100%;height:282px;margin-top:8px;'><line x1='26' y1='232' x2='844' y2='232' stroke='#263342'/><line x1='26' y1='133' x2='844' y2='133' stroke='#263342' stroke-dasharray='4 5'/><line x1='26' y1='34' x2='844' y2='34' stroke='#263342' stroke-dasharray='4 5'/>" & Bars & "<polyline points='" & Points & "' fill='none' stroke='#DFA64C' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/>" & Labels & "<text x='28' y='279' fill='#D95555' font-size='13'>Red bars: high-risk items</text><text x='190' y='279' fill='#DFA64C' font-size='13'>Amber line: weekly high-risk rate</text></svg></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: 70d90972-30f3-4ac1-8472-1f399515138c
+
+	/// Action-oriented AO1 executive brief with recent trend and financially exposed review queue.
+	measure 'Q01 V2 | 04 Preventive Action Brief' =
+			
+			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
+			VAR TrendWord=IF([AO1 High Risk Rate 4W Delta PP]>0,"increased",IF([AO1 High Risk Rate 4W Delta PP]<0,"decreased","remained stable"))
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:5px 20px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>PREVENTIVE ACTION BRIEF</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>What supply-chain operations should review before dispatch.</div>" &
+			"<div style='margin-top:15px;background:#202C3A;border-left:5px solid " & TrendColor & ";border-radius:8px;padding:12px;'><div style='font-size:15px;color:#7FA8D8;'>RECENT RISK MOVEMENT</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>Risk rate " & TrendWord & " by " & FORMAT(ABS([AO1 High Risk Rate 4W Delta PP]),"0.0%") & "</div><div style='font-size:15px;color:#AAB6C5;margin-top:4px;'>Latest 4W " & FORMAT([AO1 Current 4W High Risk Rate],"0.0%") & " · Prior 4W " & FORMAT([AO1 Prior 4W High Risk Rate],"0.0%") & "</div></div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;'><div style='background:#202C3A;border-left:4px solid #DFA64C;border-radius:8px;padding:11px;'><div style='font-size:14px;color:#DFA64C;'>VALUE UNDER RISK</div><div style='font-size:28px;font-weight:700;margin-top:3px;'>" & FORMAT([AO1 High Risk Order Value],"$#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Prioritize protection capacity</div></div><div style='background:#202C3A;border-left:4px solid #D95555;border-radius:8px;padding:11px;'><div style='font-size:14px;color:#D95555;'>REVIEW FIRST</div><div style='font-size:28px;font-weight:700;margin-top:3px;'>" & FORMAT([AO1 High Risk Negative Profit Items],"#,0") & " items</div><div style='font-size:14px;color:#AAB6C5;'>High risk and negative profit</div></div></div>" &
+			"<div style='font-size:15px;color:#AAB6C5;line-height:1.4;margin-top:13px;'>Use the governed threshold to focus preventive attention before dispatch. Review the financially exposed queue first, then drill through to Order ID and Item ID.</div></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: ace44a68-4a6e-46fb-85f0-e9e4de048b3f
+
+	/// Compact AO1 policy evidence with an integrated executive takeaway, preserving academic rigor while keeping the business decision visible.
+	measure 'Q01 V2 | 05 Compact Methodology Evidence' =
+			
+			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
+			VAR TrendWord=IF([AO1 High Risk Rate 4W Delta PP]>0,"increased",IF([AO1 High Risk Rate 4W Delta PP]<0,"decreased","remained stable"))
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;padding:15px 18px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>POLICY EVIDENCE</div><div style='display:flex;gap:10px;margin-top:10px;'><div style='flex:1;background:#202C3A;border-radius:7px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>RECALL</div><div style='font-size:24px;font-weight:700;'>" & FORMAT([AO1 Validation Recall],"0.0%") & "</div></div><div style='flex:1;background:#202C3A;border-radius:7px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>PRECISION</div><div style='font-size:24px;font-weight:700;'>" & FORMAT([AO1 Validation Precision],"0.0%") & "</div></div><div style='flex:1;background:#202C3A;border-radius:7px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>ALERT RATE</div><div style='font-size:24px;font-weight:700;'>" & FORMAT([AO1 Validation Alert Rate],"0.0%") & "</div></div></div>" &
+			"<div style='font-size:14px;color:#AAB6C5;line-height:1.35;margin-top:10px;'>Threshold frozen upstream on " & FORMAT([AO1 Validation Rows],"#,0") & " validation rows. Dashboard outputs support prioritization, not realized intervention outcomes.</div>" &
+			"<div style='border-top:1px solid #263342;margin-top:13px;padding-top:12px;'><div style='font-size:17px;color:#7FA8D8;'>EXECUTIVE TAKEAWAY</div><div style='font-size:23px;font-weight:700;line-height:1.24;margin-top:6px;'>Protect " & FORMAT([AO1 High Risk Order Value],"$#,0") & " in high-risk orders before dispatch.</div><div style='font-size:15px;color:#AAB6C5;line-height:1.38;margin-top:6px;'>Risk rate " & TrendWord & " by <span style='color:" & TrendColor & ";font-weight:700;'>" & FORMAT(ABS([AO1 High Risk Rate 4W Delta PP]),"0.0%") & "</span> versus the prior four weeks. Review the <b>" & FORMAT([AO1 High Risk Negative Profit Items],"#,0") & " high-risk negative-profit items</b> first.</div></div></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: a24f7ca2-bb17-4e0a-a4dc-3d409f49ced7
+
+	/// Scrollable AO1 immediate-review queue listing all items that combine high late-delivery risk and negative expected profit. Uses governed held-out outputs only.
+	measure 'Q01 V2 | 06 Immediate Review Queue' =
+			VAR Queue =
+			    FILTER (
+			        'powerbi_ao3_order_segments',
+			        'powerbi_ao3_order_segments'[ao1_high_risk_flag] = TRUE ()
+			            && 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0
+			    )
+			VAR HtmlRows =
+			    CONCATENATEX (
+			        Queue,
+			        "<tr style='border-bottom:1px solid #263342;'><td style='padding:8px 9px;'>" & FORMAT ( 'powerbi_ao3_order_segments'[Order_Id], "0" ) & "</td><td style='padding:8px 9px;'>" & FORMAT ( 'powerbi_ao3_order_segments'[Order_Item_Id], "0" ) & "</td><td style='padding:8px 9px;color:#D95555;font-weight:700;'>" & FORMAT ( 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability], "0.0%" ) & "</td><td style='padding:8px 9px;'>" & FORMAT ( 'powerbi_ao3_order_segments'[ao3_order_value], "$#,0" ) & "</td><td style='padding:8px 9px;color:#D95555;'>" & FORMAT ( 'powerbi_ao3_order_segments'[ao2_predicted_order_profit], "$#,0.00" ) & "</td><td style='padding:8px 9px;color:#D95555;'>" & FORMAT ( 'powerbi_ao3_order_segments'[ao3_predicted_margin], "0.0%" ) & "</td></tr>",
+			        "",
+			        'powerbi_ao3_order_segments'[ao3_order_value], DESC,
+			        'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability], DESC
+			    )
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 18px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='display:flex;justify-content:space-between;align-items:flex-end;'><div><div style='font-size:21px;color:#7FA8D8;'>IMMEDIATE REVIEW QUEUE</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>High-risk negative-profit items ranked by order value.</div></div><div style='text-align:right;'><div style='font-size:14px;color:#7FA8D8;'>TOTAL CRITICAL QUEUE</div><div style='font-size:29px;font-weight:700;color:#D95555;'>" & FORMAT ( [AO1 High Risk Negative Profit Items], "#,0" ) & " items</div></div></div>" &
+			"<div style='height:210px;overflow-y:auto;margin-top:11px;border-top:1px solid #263342;border-bottom:1px solid #263342;'><table style='width:100%;border-collapse:collapse;font-size:16px;'><thead style='position:sticky;top:0;background:#141B24;'><tr style='color:#7FA8D8;border-bottom:1px solid #263342;text-align:left;'><th style='padding:8px 9px;'>ORDER ID</th><th style='padding:8px 9px;'>ITEM ID</th><th style='padding:8px 9px;'>LATE RISK</th><th style='padding:8px 9px;'>ORDER VALUE</th><th style='padding:8px 9px;'>EXPECTED PROFIT</th><th style='padding:8px 9px;'>PRED. MARGIN</th></tr></thead><tbody>" & HtmlRows & "</tbody></table></div>" &
+			"<div style='font-size:14px;color:#AAB6C5;margin-top:8px;'>All critical items are listed. Expected profit and margin are frozen modeled outputs.</div></div>"
+		displayFolder: Q01 V2 | Business Executive
+		lineageTag: af4dd514-dd83-4e9a-a28e-64b754db01aa
+
+	/// Business-oriented AO2 header for margin-protection decisions.
+	measure 'Q02 V2 | 01 Margin Protection Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:16px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>AO2 · PROFITABILITY PROTECTION</div><div style='font-size:39px;font-weight:700;margin-top:4px;'>Where Does Margin Require Immediate Attention?</div><div style='font-size:20px;color:#AAB6C5;margin-top:4px;'>Protect expected profitability by identifying loss exposure, recent movement, and concentrated review priorities.</div>" &
+			"<div style='position:absolute;right:20px;top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:10px 13px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>MODEL STATUS</div><div style='font-size:19px;font-weight:700;margin-top:3px;'>Frozen AO2 outputs</div><div style='font-size:13px;color:#2D8C73;margin-top:4px;'>GOVERNED DATA VERIFIED</div></div></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: dee4df9d-3340-4955-94f6-57d3ef3cec41
+
+	/// AO2 business KPI strip emphasizing profitability, margin movement, loss exposure, and concentration.
+	measure 'Q02 V2 | 02 Margin Protection KPI Strip' =
+			VAR MarginColor=IF([AO2 Expected Margin 4W Delta PP]>=0,"#2D8C73","#D95555")
+			VAR MarginArrow=IF([AO2 Expected Margin 4W Delta PP]>0,"▲",IF([AO2 Expected Margin 4W Delta PP]<0,"▼","●"))
+			VAR ProfitColor=IF([AO2 Expected Profit 4W Change]>=0,"#2D8C73","#D95555")
+			VAR ProfitArrow=IF([AO2 Expected Profit 4W Change]>0,"▲",IF([AO2 Expected Profit 4W Change]<0,"▼","●"))
+			VAR Tile="<div style='flex:1;padding:7px 15px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:7px 6px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>EXPECTED PROFIT</div><div style='font-size:37px;font-weight:700;color:#2D8C73;margin-top:4px;'>" & FORMAT([Expected Profit],"$#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Frozen AO2 portfolio estimate</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>EXPECTED MARGIN</div><div style='font-size:37px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([Expected Profit Margin],"0.0%") & "</div><div style='font-size:14px;color:" & MarginColor & ";'>" & MarginArrow & " " & FORMAT([AO2 Expected Margin 4W Delta PP],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>LATEST 4W PROFIT</div><div style='font-size:37px;font-weight:700;color:#4F83B4;margin-top:4px;'>" & FORMAT([AO2 Current 4W Expected Profit],"$#,0") & "</div><div style='font-size:14px;color:" & ProfitColor & ";'>" & ProfitArrow & " " & FORMAT([AO2 Expected Profit 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>NEGATIVE-PROFIT ITEMS</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([Negative Expected Profit Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Negative Profit Exposure],"$#,0") & " modeled exposure</div></div>" &
+			"<div style='flex:1;padding:7px 15px;'><div style='font-size:15px;color:#7FA8D8;'>TOP 10 LOSS CONCENTRATION</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([AO2 Top 10 Loss Concentration],"0.0%") & "</div><div style='font-size:14px;color:#AAB6C5;'>Focus first on concentrated loss exposure</div></div></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: f2f584ca-9a6b-42f4-9cb7-d70d1a74354b
+
+	/// AO2 weekly HTML trend with frozen expected-profit bars and expected-margin line over the latest 12 available weeks.
+	measure 'Q02 V2 | 03 Weekly Profit Margin Trend' =
+			VAR LatestWeek=CALCULATE(MAX('powerbi_ao3_order_segments'[order_week_start]),ALLSELECTED('powerbi_ao3_order_segments'))
+			VAR Weeks=TOPN(12,FILTER(SUMMARIZE(ALLSELECTED('powerbi_ao3_order_segments'),'powerbi_ao3_order_segments'[order_week_start],"Profit",[AO2 Weekly Expected Profit],"Margin",[AO2 Weekly Expected Margin]),'powerbi_ao3_order_segments'[order_week_start]<=LatestWeek && NOT ISBLANK([Profit])),'powerbi_ao3_order_segments'[order_week_start],DESC)
+			VAR MaxProfit=MAXX(Weeks,[Profit])
+			VAR SafeMax=IF(MaxProfit>0,MaxProfit,1)
+			VAR Indexed=ADDCOLUMNS(Weeks,"WeekRank",RANKX(Weeks,'powerbi_ao3_order_segments'[order_week_start],,ASC,DENSE),"BarHeight",DIVIDE([Profit],SafeMax)*194,"LineY",226-[Margin]*830)
+			VAR Bars=CONCATENATEX(Indexed,"<rect x='" & FORMAT(34+([WeekRank]-1)*68,"0") & "' y='" & FORMAT(226-[BarHeight],"0") & "' width='36' height='" & FORMAT([BarHeight],"0") & "' rx='4' fill='#2D8C73' opacity='.9'><title>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM yyyy") & ": " & FORMAT([Profit],"$#,0") & " expected profit</title></rect>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Points=CONCATENATEX(Indexed,FORMAT(52+([WeekRank]-1)*68,"0") & "," & FORMAT([LineY],"0")," ",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Labels=CONCATENATEX(FILTER(Indexed,MOD([WeekRank]-1,2)=0),"<text x='" & FORMAT(52+([WeekRank]-1)*68,"0") & "' y='255' text-anchor='middle' fill='#AAB6C5' font-size='13'>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM") & "</text>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 17px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>WEEKLY EXPECTED PROFIT & MARGIN</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Frozen profitability movement over the latest 12 available weeks.</div>" &
+			"<svg viewBox='0 0 860 280' style='width:100%;height:280px;margin-top:5px;'><line x1='26' y1='226' x2='844' y2='226' stroke='#263342'/><line x1='26' y1='129' x2='844' y2='129' stroke='#263342' stroke-dasharray='4 5'/><line x1='26' y1='32' x2='844' y2='32' stroke='#263342' stroke-dasharray='4 5'/>" & Bars & "<polyline points='" & Points & "' fill='none' stroke='#DFA64C' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/>" & Labels & "<text x='28' y='276' fill='#2D8C73' font-size='13'>Green bars: expected profit</text><text x='230' y='276' fill='#DFA64C' font-size='13'>Amber line: expected margin</text></svg></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: 57689ad0-7103-4758-9cfe-52b0585737b0
+
+	/// Action-oriented AO2 profitability brief separating volume movement from margin efficiency.
+	measure 'Q02 V2 | 04 Margin Protection Brief' =
+			VAR ProfitColor=IF([AO2 Expected Profit 4W Change]>=0,"#2D8C73","#D95555")
+			VAR MarginColor=IF([AO2 Expected Margin 4W Delta PP]>=0,"#2D8C73","#D95555")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 17px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>MARGIN PROTECTION BRIEF</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Separate volume movement from profitability efficiency before acting.</div>" &
+			"<div style='margin-top:11px;background:#202C3A;border-left:5px solid " & ProfitColor & ";border-radius:8px;padding:10px;'><div style='font-size:15px;color:#7FA8D8;'>LATEST 4W PROFIT MOVEMENT</div><div style='font-size:25px;font-weight:700;margin-top:3px;'>Expected profit " & IF([AO2 Expected Profit 4W Change]>=0,"increased","decreased") & " by " & FORMAT(ABS([AO2 Expected Profit 4W Change]),"0.0%") & "</div><div style='font-size:15px;color:#AAB6C5;margin-top:3px;'>Order value: <span style='color:" & IF([AO2 Order Value 4W Change]>=0,"#2D8C73","#D95555") & ";font-weight:700;'>" & FORMAT([AO2 Order Value 4W Change],"+0.0%;-0.0%;0.0%") & "</span> · Margin: <span style='color:" & MarginColor & ";font-weight:700;'>" & FORMAT([AO2 Expected Margin 4W Delta PP],"+0.0%;-0.0%;0.0%") & "</span></div></div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;'><div style='background:#202C3A;border-left:4px solid #D95555;border-radius:8px;padding:9px;'><div style='font-size:14px;color:#D95555;'>LOSS EXPOSURE</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([Negative Profit Exposure],"$#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Negative Expected Profit Items],"#,0") & " negative-profit items</div></div><div style='background:#202C3A;border-left:4px solid #DFA64C;border-radius:8px;padding:9px;'><div style='font-size:14px;color:#DFA64C;'>TOP 10 CONCENTRATION</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([AO2 Top 10 Loss Concentration],"0.0%") & "</div><div style='font-size:14px;color:#AAB6C5;'>Review concentrated loss first</div></div></div>" &
+			"<div style='font-size:15px;color:#AAB6C5;line-height:1.35;margin-top:10px;'>Profit fell while expected margin improved. Investigate volume composition and concentrated loss exposure before broad cost cutting.</div></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: 9140cf4e-a335-49d1-9cdc-d7ca9db54207
+
+	/// Compact AO2 model evidence with executive takeaway and explicit model-limitation framing.
+	measure 'Q02 V2 | 05 Compact Evidence Takeaway' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;padding:12px 15px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>MODEL EVIDENCE</div><div style='display:flex;gap:8px;margin-top:8px;'><div style='flex:1;background:#202C3A;border-radius:7px;padding:7px;'><div style='font-size:13px;color:#7FA8D8;'>RMSE</div><div style='font-size:24px;font-weight:700;'>" & FORMAT([AO2 Validation RMSE],"$#,0.00") & "</div></div><div style='flex:1;background:#202C3A;border-radius:7px;padding:7px;'><div style='font-size:13px;color:#7FA8D8;'>MAE</div><div style='font-size:24px;font-weight:700;'>" & FORMAT([AO2 Validation MAE],"$#,0.00") & "</div></div><div style='flex:1;background:#202C3A;border-radius:7px;padding:7px;'><div style='font-size:13px;color:#7FA8D8;'>R²</div><div style='font-size:24px;font-weight:700;color:#DFA64C;'>" & FORMAT([AO2 Validation R2],"0.000") & "</div></div></div>" &
+			"<div style='font-size:14px;color:#AAB6C5;line-height:1.3;margin-top:8px;'>Useful for triage, not precise item-level forecasting. RMSE = overall error · MAE = average absolute error · R² = explained variance.</div>" &
+			"<div style='border-top:1px solid #263342;margin-top:9px;padding-top:8px;'><div style='font-size:17px;color:#7FA8D8;'>EXECUTIVE TAKEAWAY</div><div style='font-size:21px;font-weight:700;line-height:1.2;margin-top:4px;'>Attack concentrated loss exposure first.</div><div style='font-size:15px;color:#AAB6C5;line-height:1.3;margin-top:4px;'>The ten largest predicted losses represent <b>" & FORMAT([AO2 Top 10 Loss Concentration],"0.0%") & "</b> of total modeled loss exposure.</div></div></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: 60e40cb9-2ac1-4fd5-a5e5-f870387753ec
+
+	/// Scrollable AO2 review queue listing all negative-profit items ranked by expected loss exposure.
+	measure 'Q02 V2 | 06 Negative Profit Review Queue' =
+			VAR Queue=FILTER('powerbi_ao3_order_segments','powerbi_ao3_order_segments'[ao2_predicted_order_profit]<0)
+			VAR HtmlRows=CONCATENATEX(Queue,"<tr style='border-bottom:1px solid #263342;'><td style='padding:6px 7px;'>" & FORMAT('powerbi_ao3_order_segments'[Order_Id],"0") & "</td><td style='padding:6px 7px;'>" & FORMAT('powerbi_ao3_order_segments'[Order_Item_Id],"0") & "</td><td style='padding:6px 7px;'>" & FORMAT('powerbi_ao3_order_segments'[ao3_order_value],"$#,0") & "</td><td style='padding:6px 7px;color:#D95555;font-weight:700;'>" & FORMAT('powerbi_ao3_order_segments'[ao2_predicted_order_profit],"$#,0.00") & "</td><td style='padding:6px 7px;color:#D95555;'>" & FORMAT('powerbi_ao3_order_segments'[ao3_predicted_margin],"0.0%") & "</td><td style='padding:6px 7px;color:" & IF('powerbi_ao3_order_segments'[ao1_high_risk_flag],"#D95555","#4F83B4") & ";font-weight:700;'>" & IF('powerbi_ao3_order_segments'[ao1_high_risk_flag],"HIGH","LOW") & "</td></tr>","",'powerbi_ao3_order_segments'[ao2_predicted_order_profit],ASC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:12px 15px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='display:flex;justify-content:space-between;align-items:flex-end;'><div><div style='font-size:20px;color:#7FA8D8;'>NEGATIVE-PROFIT REVIEW QUEUE</div><div style='font-size:16px;color:#AAB6C5;margin-top:2px;'>All modeled loss items ranked by expected loss exposure.</div></div><div style='text-align:right;'><div style='font-size:14px;color:#7FA8D8;'>TOTAL LOSS QUEUE</div><div style='font-size:28px;font-weight:700;color:#D95555;'>" & FORMAT([Negative Expected Profit Items],"#,0") & " items</div></div></div>" &
+			"<div style='height:210px;overflow-y:auto;margin-top:8px;border-top:1px solid #263342;border-bottom:1px solid #263342;'><table style='width:100%;border-collapse:collapse;font-size:16px;'><thead style='position:sticky;top:0;background:#141B24;'><tr style='color:#7FA8D8;border-bottom:1px solid #263342;text-align:left;'><th style='padding:6px 7px;'>ORDER ID</th><th style='padding:6px 7px;'>ITEM ID</th><th style='padding:6px 7px;'>ORDER VALUE</th><th style='padding:6px 7px;'>EXPECTED PROFIT</th><th style='padding:6px 7px;'>PRED. MARGIN</th><th style='padding:6px 7px;'>LATE RISK</th></tr></thead><tbody>" & HtmlRows & "</tbody></table></div><div style='font-size:13px;color:#AAB6C5;margin-top:6px;'>Frozen modeled outputs for prioritization. Product names require serving-layer enrichment.</div></div>"
+		displayFolder: Q02 V2 | Margin Protection
+		lineageTag: e21c1f87-41e9-4731-b42e-44e29b1de996
+
+	/// Business-oriented AO3 header for operational capacity allocation.
+	measure 'Q03 V2 | 01 Operational Allocation Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:16px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>AO3 · OPERATIONAL ALLOCATION</div><div style='font-size:39px;font-weight:700;margin-top:4px;'>Where Should Operations Allocate Attention First?</div><div style='font-size:20px;color:#AAB6C5;margin-top:4px;'>Balance preventive protection, selective expedite capacity, and stable-service preservation.</div>" &
+			"<div style='position:absolute;right:20px;top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:10px 13px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>POLICY STATUS</div><div style='font-size:19px;font-weight:700;margin-top:3px;'>Frozen AO3 matrix</div><div style='font-size:13px;color:#2D8C73;margin-top:4px;'>GOVERNED DATA VERIFIED</div></div></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: fdfc67b2-5180-4156-81bd-1a9bf62fbd72
+
+	/// AO3 operational KPI strip emphasizing capacity, protected value, selective-expedite review, and stable-service preservation.
+	measure 'Q03 V2 | 02 Operational Allocation KPI Strip' =
+			VAR ProtectColor=IF([AO3 Protect Items 4W Change]<=0,"#2D8C73","#D95555")
+			VAR ProtectArrow=IF([AO3 Protect Items 4W Change]>0,"▲",IF([AO3 Protect Items 4W Change]<0,"▼","●"))
+			VAR ValueColor=IF([AO3 Protected Value 4W Change]>=0,"#D95555","#2D8C73")
+			VAR ValueArrow=IF([AO3 Protected Value 4W Change]>0,"▲",IF([AO3 Protected Value 4W Change]<0,"▼","●"))
+			VAR Tile="<div style='flex:1;padding:7px 15px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:7px 6px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>ACTIVE REVIEW QUEUE</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([Executive Priority Review Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Executive Priority Review Rate],"0.0%") & " of scored items</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>PROTECT QUEUE</div><div style='font-size:37px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & "</div><div style='font-size:14px;color:" & ProtectColor & ";'>" & ProtectArrow & " " & FORMAT([AO3 Protect Items 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>VALUE TO PROTECT</div><div style='font-size:37px;font-weight:700;color:#4F83B4;margin-top:4px;'>" & FORMAT([Protected Value At Risk],"$#,0") & "</div><div style='font-size:14px;color:" & ValueColor & ";'>" & ValueArrow & " " & FORMAT([AO3 Protected Value 4W Change],"+0.0%;-0.0%;0.0%") & " recent value movement</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>SELECTIVE EXPEDITE</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([Expedite Selectively Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Expedite Review Order Value],"$#,0") & " queue value</div></div>" &
+			"<div style='flex:1;padding:7px 15px;'><div style='font-size:15px;color:#7FA8D8;'>PRESERVE SERVICE</div><div style='font-size:37px;font-weight:700;color:#2D8C73;margin-top:4px;'>" & FORMAT([Preserve Service Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Avoid unnecessary intervention cost</div></div></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: fab61a99-9584-4ab1-bbaf-3acad8a48255
+
+	/// AO3 weekly HTML trend with protect-queue item bars and protected-order-value line.
+	measure 'Q03 V2 | 03 Weekly Protection Capacity Trend' =
+			VAR LatestWeek=CALCULATE(MAX('powerbi_ao3_order_segments'[order_week_start]),ALLSELECTED('powerbi_ao3_order_segments'))
+			VAR Weeks=TOPN(12,FILTER(SUMMARIZE(ALLSELECTED('powerbi_ao3_order_segments'),'powerbi_ao3_order_segments'[order_week_start],"ProtectItems",[AO3 Weekly Protect Items],"ProtectValue",[AO3 Weekly Protected Value]),'powerbi_ao3_order_segments'[order_week_start]<=LatestWeek && NOT ISBLANK([ProtectItems])),'powerbi_ao3_order_segments'[order_week_start],DESC)
+			VAR MaxItems=MAXX(Weeks,[ProtectItems])
+			VAR MaxValue=MAXX(Weeks,[ProtectValue])
+			VAR SafeItems=IF(MaxItems>0,MaxItems,1)
+			VAR SafeValue=IF(MaxValue>0,MaxValue,1)
+			VAR Indexed=ADDCOLUMNS(Weeks,"WeekRank",RANKX(Weeks,'powerbi_ao3_order_segments'[order_week_start],,ASC,DENSE),"BarHeight",DIVIDE([ProtectItems],SafeItems)*194,"LineY",226-DIVIDE([ProtectValue],SafeValue)*194)
+			VAR Bars=CONCATENATEX(Indexed,"<rect x='" & FORMAT(34+([WeekRank]-1)*68,"0") & "' y='" & FORMAT(226-[BarHeight],"0") & "' width='36' height='" & FORMAT([BarHeight],"0") & "' rx='4' fill='#DFA64C' opacity='.9'><title>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM yyyy") & ": " & FORMAT([ProtectItems],"#,0") & " protection items</title></rect>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Points=CONCATENATEX(Indexed,FORMAT(52+([WeekRank]-1)*68,"0") & "," & FORMAT([LineY],"0")," ",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Labels=CONCATENATEX(FILTER(Indexed,MOD([WeekRank]-1,2)=0),"<text x='" & FORMAT(52+([WeekRank]-1)*68,"0") & "' y='255' text-anchor='middle' fill='#AAB6C5' font-size='13'>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM") & "</text>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 17px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>WEEKLY PROTECTION CAPACITY</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Protection workload and governed order value over the latest 12 available weeks.</div>" &
+			"<svg viewBox='0 0 860 280' style='width:100%;height:280px;margin-top:5px;'><line x1='26' y1='226' x2='844' y2='226' stroke='#263342'/><line x1='26' y1='129' x2='844' y2='129' stroke='#263342' stroke-dasharray='4 5'/><line x1='26' y1='32' x2='844' y2='32' stroke='#263342' stroke-dasharray='4 5'/>" & Bars & "<polyline points='" & Points & "' fill='none' stroke='#4F83B4' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/>" & Labels & "<text x='28' y='276' fill='#DFA64C' font-size='13'>Amber bars: protection items</text><text x='220' y='276' fill='#4F83B4' font-size='13'>Blue line: protected order value</text></svg></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: dc6bfe16-30cb-4740-8e2e-5b5ad2196808
+
+	/// Action-oriented AO3 brief distinguishing scalable protection capacity from item-level selective expedite review.
+	measure 'Q03 V2 | 04 Operational Allocation Brief' =
+			VAR ProtectColor=IF([AO3 Protect Items 4W Change]<=0,"#2D8C73","#D95555")
+			VAR ValueColor=IF([AO3 Protected Value 4W Change]>=0,"#D95555","#2D8C73")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 17px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>OPERATIONAL ALLOCATION BRIEF</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Apply different operating treatments to different AO3 queues.</div>" &
+			"<div style='margin-top:11px;background:#202C3A;border-left:5px solid #DFA64C;border-radius:8px;padding:10px;'><div style='font-size:14px;color:#DFA64C;'>PROTECTION CAPACITY</div><div style='font-size:24px;font-weight:700;margin-top:3px;'>" & FORMAT([AO3 Current 4W Protect Items],"#,0") & " items in latest 4W</div><div style='font-size:14px;color:#AAB6C5;margin-top:3px;'>Queue movement <span style='color:" & ProtectColor & ";font-weight:700;'>" & FORMAT([AO3 Protect Items 4W Change],"+0.0%;-0.0%;0.0%") & "</span> · Value movement <span style='color:" & ValueColor & ";font-weight:700;'>" & FORMAT([AO3 Protected Value 4W Change],"+0.0%;-0.0%;0.0%") & "</span></div></div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;'><div style='background:#202C3A;border-left:4px solid #D95555;border-radius:8px;padding:9px;'><div style='font-size:14px;color:#D95555;'>SELECTIVE EXPEDITE</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items</div><div style='font-size:14px;color:#AAB6C5;'>Review individually before spending</div></div><div style='background:#202C3A;border-left:4px solid #2D8C73;border-radius:8px;padding:9px;'><div style='font-size:14px;color:#2D8C73;'>PRESERVE SERVICE</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([Preserve Service Items],"#,0") & " items</div><div style='font-size:14px;color:#AAB6C5;'>Avoid over-service costs</div></div></div>" &
+			"<div style='font-size:15px;color:#AAB6C5;line-height:1.35;margin-top:10px;'>Scale preventive protection for the broad queue. Use selective expedite only after item-level review of financially fragile orders.</div></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: d7d59a7b-ecfc-4bf1-8cbc-61a89a79a184
+
+	/// AO3 operational performance scorecard replacing the descriptive portfolio mix. Highlights queue pressure, value intensity, selective-expedite exposure, and stable-service preservation.
+	measure 'Q03 V2 | 05 Governance Portfolio Mix' =
+			VAR QueueColor=IF([AO3 Protect Items 4W Change]<=0,"#2D8C73","#D95555")
+			VAR ValueColor=IF([AO3 Protected Value 4W Change]<=0,"#2D8C73","#D95555")
+			VAR AvgColor=IF([AO3 Average Protect Order Value 4W Change]<=0,"#2D8C73","#D95555")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;padding:11px 14px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>OPERATIONAL PERFORMANCE</div><div style='font-size:15px;color:#AAB6C5;margin-top:2px;'>Recent workload movement and intervention intensity.</div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px;'>" &
+			"<div style='background:#202C3A;border-left:4px solid " & QueueColor & ";border-radius:8px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>PROTECTION QUEUE · LATEST 4W</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([AO3 Current 4W Protect Items],"#,0") & " items</div><div style='font-size:14px;color:" & QueueColor & ";'>" & FORMAT([AO3 Protect Items 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid " & ValueColor & ";border-radius:8px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>PROTECTED VALUE · LATEST 4W</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([AO3 Current 4W Protected Value],"$#,0") & "</div><div style='font-size:14px;color:" & ValueColor & ";'>" & FORMAT([AO3 Protected Value 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid " & AvgColor & ";border-radius:8px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>AVG VALUE PER PROTECTION ITEM</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([AO3 Current 4W Average Protect Order Value],"$#,0") & "</div><div style='font-size:14px;color:" & AvgColor & ";'>" & FORMAT([AO3 Average Protect Order Value 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			"<div style='background:#202C3A;border-left:4px solid #2D8C73;border-radius:8px;padding:9px;'><div style='font-size:13px;color:#7FA8D8;'>PRESERVE SERVICE RATE</div><div style='font-size:27px;font-weight:700;margin-top:2px;'>" & FORMAT([AO3 Preserve Service Rate],"0.0%") & "</div><div style='font-size:14px;color:#AAB6C5;'>Avoid unnecessary intervention cost</div></div></div></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: 5c40048d-df34-489a-a763-77c4b464f22c
+
+	/// AO3 executive allocation board focusing managerial attention on operating treatments. Includes an enrichment roadmap for future customer, product-family, and route scatter analysis.
+	measure 'Q03 V2 | 06 Segment Action Board' =
+			VAR ProtectValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="protect_high_value_at_risk")
+			VAR ExpediteValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively")
+			VAR PreserveValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="preserve_service")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:11px 14px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='display:flex;justify-content:space-between;align-items:flex-end;'><div><div style='font-size:22px;color:#7FA8D8;'>ATTENTION ALLOCATION</div><div style='font-size:16px;color:#AAB6C5;margin-top:2px;'>Use capacity according to operational treatment, not one blanket rule.</div></div><div style='text-align:right;'><div style='font-size:14px;color:#7FA8D8;'>SELECTIVE EXPEDITE</div><div style='font-size:28px;font-weight:700;color:#D95555;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items</div></div></div>" &
+			"<div style='display:grid;grid-template-columns:1.1fr .9fr;gap:8px;margin-top:9px;'>" &
+			"<div style='background:#202C3A;border-left:5px solid #DFA64C;border-radius:8px;padding:10px 12px;'><div style='font-size:16px;color:#DFA64C;font-weight:700;'>1 · SCALE PREVENTIVE PROTECTION</div><div style='font-size:27px;font-weight:700;margin-top:3px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & " items · " & FORMAT(ProtectValue,"$#,0") & "</div><div style='font-size:15px;color:#AAB6C5;line-height:1.28;margin-top:4px;'>Broad queue. Confirm dispatch readiness early and manage exception capacity systematically.</div></div>" &
+			"<div style='background:#202C3A;border-left:5px solid #D95555;border-radius:8px;padding:10px 12px;'><div style='font-size:16px;color:#D95555;font-weight:700;'>2 · REVIEW EXPEDITE INDIVIDUALLY</div><div style='font-size:27px;font-weight:700;margin-top:3px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items · " & FORMAT(ExpediteValue,"$#,0") & "</div><div style='font-size:15px;color:#AAB6C5;line-height:1.28;margin-top:4px;'>Avoid automatic premium cost. Review SLA and customer impact before spending.</div></div>" &
+			"<div style='background:#202C3A;border-left:5px solid #2D8C73;border-radius:8px;padding:10px 12px;'><div style='font-size:16px;color:#2D8C73;font-weight:700;'>3 · PRESERVE SERVICE WITHOUT OVER-SERVICE</div><div style='font-size:27px;font-weight:700;margin-top:3px;'>" & FORMAT([Preserve Service Items],"#,0") & " items · " & FORMAT(PreserveValue,"$#,0") & "</div><div style='font-size:15px;color:#AAB6C5;line-height:1.28;margin-top:4px;'>Maintain standard quality controls and protect margin by avoiding unnecessary escalation.</div></div>" &
+			"<div style='background:#202C3A;border-left:5px solid #4F83B4;border-radius:8px;padding:10px 12px;'><div style='font-size:16px;color:#4F83B4;font-weight:700;'>NEXT ANALYTICAL LENS</div><div style='font-size:17px;font-weight:700;margin-top:5px;'>Customer · SLA · Shipping Mode · Route</div><div style='font-size:15px;color:#AAB6C5;line-height:1.28;margin-top:5px;'>Add a top-15 scatter after serving-layer enrichment to locate recurring operational hotspots.</div></div></div></div>"
+		displayFolder: Q03 V2 | Operational Allocation
+		lineageTag: 798ce15a-bd35-4c92-9816-6e97906776c7
+
+	/// AO3 operational timeline header focused on recent change, managerial implication, and immediate action.
+	measure 'Q03 V3 | 01 Decision Timeline Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:16px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>AO3 · OPERATIONAL DECISION TIMELINE</div><div style='font-size:39px;font-weight:700;margin-top:4px;'>How Should Operations Adapt Capacity Now?</div><div style='font-size:20px;color:#AAB6C5;margin-top:4px;'>Track recent workload pressure, understand value intensity, and reserve premium intervention for the right exceptions.</div>" &
+			"<div style='position:absolute;right:20px;top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:10px 13px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>POLICY STATUS</div><div style='font-size:19px;font-weight:700;margin-top:3px;'>Frozen AO3 matrix</div><div style='font-size:13px;color:#2D8C73;margin-top:4px;'>GOVERNED DATA VERIFIED</div></div></div>"
+		displayFolder: Q03 V3 | Operational Decision Timeline
+		lineageTag: ec18d49f-b415-428c-97c4-6a7a2c58f9d0
+
+	/// AO3 recent-performance KPI strip comparing the latest four-week window with the immediately prior four weeks.
+	measure 'Q03 V3 | 02 Recent Performance KPI Strip' =
+			VAR QueueColor=IF([AO3 Protect Items 4W Change]<=0,"#2D8C73","#D95555")
+			VAR ValueColor=IF([AO3 Protected Value 4W Change]<=0,"#2D8C73","#D95555")
+			VAR AvgColor=IF([AO3 Average Protect Order Value 4W Change]<=0,"#2D8C73","#D95555")
+			VAR ExpediteColor=IF([AO3 Expedite Items 4W Change]<=0,"#2D8C73","#D95555")
+			VAR Tile="<div style='flex:1;padding:7px 18px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:7px 6px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>LATEST 4W PROTECTION QUEUE</div><div style='font-size:39px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([AO3 Current 4W Protect Items],"#,0") & "</div><div style='font-size:15px;color:" & QueueColor & ";'>" & FORMAT([AO3 Protect Items 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>LATEST 4W PROTECTED VALUE</div><div style='font-size:39px;font-weight:700;color:#4F83B4;margin-top:4px;'>" & FORMAT([AO3 Current 4W Protected Value],"$#,0") & "</div><div style='font-size:15px;color:" & ValueColor & ";'>" & FORMAT([AO3 Protected Value 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>AVG VALUE PER PROTECTION ITEM</div><div style='font-size:39px;font-weight:700;color:#4F83B4;margin-top:4px;'>" & FORMAT([AO3 Current 4W Average Protect Order Value],"$#,0") & "</div><div style='font-size:15px;color:" & AvgColor & ";'>" & FORMAT([AO3 Average Protect Order Value 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div>" &
+			"<div style='flex:1;padding:7px 18px;'><div style='font-size:15px;color:#7FA8D8;'>LATEST 4W SELECTIVE EXPEDITE</div><div style='font-size:39px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([AO3 Current 4W Expedite Items],"#,0") & "</div><div style='font-size:15px;color:" & ExpediteColor & ";'>" & FORMAT([AO3 Expedite Items 4W Change],"+0.0%;-0.0%;0.0%") & " vs prior 4W</div></div></div>"
+		displayFolder: Q03 V3 | Operational Decision Timeline
+		lineageTag: eab806ce-1dfd-4ae0-89dc-8818174b33a1
+
+	/// AO3 weekly capacity timeline with integrated managerial interpretation of workload and protected-value movement.
+	measure 'Q03 V3 | 03 Weekly Capacity Timeline' =
+			VAR LatestWeek=CALCULATE(MAX('powerbi_ao3_order_segments'[order_week_start]),ALLSELECTED('powerbi_ao3_order_segments'))
+			VAR Weeks=TOPN(12,FILTER(SUMMARIZE(ALLSELECTED('powerbi_ao3_order_segments'),'powerbi_ao3_order_segments'[order_week_start],"ProtectItems",[AO3 Weekly Protect Items],"ProtectValue",[AO3 Weekly Protected Value]),'powerbi_ao3_order_segments'[order_week_start]<=LatestWeek && NOT ISBLANK([ProtectItems])),'powerbi_ao3_order_segments'[order_week_start],DESC)
+			VAR MaxItems=MAXX(Weeks,[ProtectItems])
+			VAR MaxValue=MAXX(Weeks,[ProtectValue])
+			VAR SafeItems=IF(MaxItems>0,MaxItems,1)
+			VAR SafeValue=IF(MaxValue>0,MaxValue,1)
+			VAR Indexed=ADDCOLUMNS(Weeks,"WeekRank",RANKX(Weeks,'powerbi_ao3_order_segments'[order_week_start],,ASC,DENSE),"BarHeight",DIVIDE([ProtectItems],SafeItems)*194,"LineY",226-DIVIDE([ProtectValue],SafeValue)*194)
+			VAR Bars=CONCATENATEX(Indexed,"<rect x='" & FORMAT(34+([WeekRank]-1)*68,"0") & "' y='" & FORMAT(226-[BarHeight],"0") & "' width='36' height='" & FORMAT([BarHeight],"0") & "' rx='4' fill='#DFA64C' opacity='.9'><title>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM yyyy") & ": " & FORMAT([ProtectItems],"#,0") & " protection items</title></rect>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Points=CONCATENATEX(Indexed,FORMAT(52+([WeekRank]-1)*68,"0") & "," & FORMAT([LineY],"0")," ",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			VAR Labels=CONCATENATEX(FILTER(Indexed,MOD([WeekRank]-1,2)=0),"<text x='" & FORMAT(52+([WeekRank]-1)*68,"0") & "' y='255' text-anchor='middle' fill='#AAB6C5' font-size='13'>" & FORMAT('powerbi_ao3_order_segments'[order_week_start],"dd MMM") & "</text>","",'powerbi_ao3_order_segments'[order_week_start],ASC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:15px 17px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>1 · WHAT CHANGED? WEEKLY PROTECTION CAPACITY</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Workload volume and protected order value over the latest 12 available weeks.</div>" &
+			"<svg viewBox='0 0 860 280' style='width:100%;height:280px;margin-top:5px;'><line x1='26' y1='226' x2='844' y2='226' stroke='#263342'/><line x1='26' y1='129' x2='844' y2='129' stroke='#263342' stroke-dasharray='4 5'/><line x1='26' y1='32' x2='844' y2='32' stroke='#263342' stroke-dasharray='4 5'/>" & Bars & "<polyline points='" & Points & "' fill='none' stroke='#4F83B4' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/>" & Labels & "<text x='28' y='276' fill='#DFA64C' font-size='13'>Amber bars: protection items</text><text x='220' y='276' fill='#4F83B4' font-size='13'>Blue line: protected order value</text></svg></div>"
+		displayFolder: Q03 V3 | Operational Decision Timeline
+		lineageTag: 7493f42d-cfe1-4fc4-b78b-7888e9ce6074
+
+	/// AO3 managerial interpretation explaining why recent workload growth and declining value intensity require differentiated handling.
+	measure 'Q03 V3 | 04 Operational Insight' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:17px 19px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>2 · WHY DOES IT MATTER?</div><div style='font-size:28px;font-weight:700;line-height:1.2;margin-top:12px;'>Workload increased while value intensity declined.</div>" &
+			"<div style='font-size:17px;color:#AAB6C5;line-height:1.45;margin-top:12px;'>The latest four-week protection queue grew <b style='color:#D95555;'>" & FORMAT([AO3 Protect Items 4W Change],"+0.0%;-0.0%;0.0%") & "</b>, while protected order value moved <b style='color:#2D8C73;'>" & FORMAT([AO3 Protected Value 4W Change],"+0.0%;-0.0%;0.0%") & "</b>. Average value per protection item fell <b style='color:#2D8C73;'>" & FORMAT([AO3 Average Protect Order Value 4W Change],"+0.0%;-0.0%;0.0%") & "</b>.</div>" &
+			"<div style='margin-top:16px;background:#202C3A;border-left:5px solid #DFA64C;border-radius:8px;padding:13px;'><div style='font-size:16px;color:#DFA64C;font-weight:700;'>MANAGERIAL IMPLICATION</div><div style='font-size:17px;line-height:1.4;margin-top:5px;'>Do not apply premium handling uniformly. Scale low-cost preventive controls broadly and reserve expensive intervention for reviewed exceptions.</div></div></div>"
+		displayFolder: Q03 V3 | Operational Decision Timeline
+		lineageTag: 52786b19-d79f-459e-b87c-d1c6d9b6b3c8
+
+	/// AO3 action matrix translating the timeline insight into three differentiated operational treatments.
+	measure 'Q03 V3 | 05 Action Matrix' =
+			VAR ProtectValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="protect_high_value_at_risk")
+			VAR ExpediteValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively")
+			VAR PreserveValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="preserve_service")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>3 · WHAT SHOULD OPERATIONS DO?</div><div style='font-size:16px;color:#AAB6C5;margin-top:3px;'>Apply differentiated handling according to operational value and risk.</div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:12px;'>" &
+			"<div style='background:#202C3A;border-top:5px solid #DFA64C;border-radius:8px;padding:12px;'><div style='font-size:16px;color:#DFA64C;font-weight:700;'>1 · SCALE PREVENTIVE PROTECTION</div><div style='font-size:28px;font-weight:700;margin-top:5px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & " items</div><div style='font-size:17px;color:#AAB6C5;margin-top:3px;'>" & FORMAT(ProtectValue,"$#,0") & " order value</div><div style='font-size:16px;line-height:1.35;margin-top:9px;'>Confirm dispatch readiness early. Apply scalable exception controls.</div></div>" &
+			"<div style='background:#202C3A;border-top:5px solid #D95555;border-radius:8px;padding:12px;'><div style='font-size:16px;color:#D95555;font-weight:700;'>2 · REVIEW EXPEDITE INDIVIDUALLY</div><div style='font-size:28px;font-weight:700;margin-top:5px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items</div><div style='font-size:17px;color:#AAB6C5;margin-top:3px;'>" & FORMAT(ExpediteValue,"$#,0") & " order value</div><div style='font-size:16px;line-height:1.35;margin-top:9px;'>Check SLA and customer impact before using premium capacity.</div></div>" &
+			"<div style='background:#202C3A;border-top:5px solid #2D8C73;border-radius:8px;padding:12px;'><div style='font-size:16px;color:#2D8C73;font-weight:700;'>3 · PRESERVE SERVICE QUALITY</div><div style='font-size:28px;font-weight:700;margin-top:5px;'>" & FORMAT([Preserve Service Items],"#,0") & " items</div><div style='font-size:17px;color:#AAB6C5;margin-top:3px;'>" & FORMAT(PreserveValue,"$#,0") & " order value</div><div style='font-size:16px;line-height:1.35;margin-top:9px;'>Avoid over-service cost. Maintain normal quality controls.</div></div></div></div>"
+		displayFolder: Q03 V3 | Operational Decision Timeline
+		lineageTag: 9d04117f-3ec9-4b51-8c61-47cba9704b39
+
+	/// AO3 strategy header for the complementary risk-margin policy explanation page.
+	measure 'Q03 Policy | 01 Strategy Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:16px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>AO3 · RISK-MARGIN STRATEGY</div><div style='font-size:39px;font-weight:700;margin-top:4px;'>How Does the Policy Allocate Operational Effort?</div><div style='font-size:20px;color:#AAB6C5;margin-top:4px;'>Translate frozen risk and margin signals into differentiated operating treatments.</div>" &
+			"<div style='position:absolute;right:20px;top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:10px 13px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>POLICY STATUS</div><div style='font-size:19px;font-weight:700;margin-top:3px;'>Frozen AO3 matrix</div><div style='font-size:13px;color:#2D8C73;margin-top:4px;'>GOVERNED DATA VERIFIED</div></div></div>"
+		displayFolder: Q03 Policy | Risk-Margin Strategy
+		lineageTag: 58cff635-984d-4a45-95c5-be243c3c0c8a
+
+	/// AO3 economic quadrant matrix with segment volume, value, expected margin, and differentiated treatment.
+	measure 'Q03 Policy | 02 Economic Quadrant Matrix' =
+			
+			VAR ProtectValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="protect_high_value_at_risk")
+			VAR ExpediteValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively")
+			VAR PreserveValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="preserve_service")
+			VAR StandardValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="standard_process")
+			VAR ProtectMargin=CALCULATE([Average Predicted Margin],'powerbi_ao3_order_segments'[ao3_priority_segment]="protect_high_value_at_risk")
+			VAR ExpediteMargin=CALCULATE([Average Predicted Margin],'powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively")
+			VAR PreserveMargin=CALCULATE([Average Predicted Margin],'powerbi_ao3_order_segments'[ao3_priority_segment]="preserve_service")
+			VAR StandardMargin=CALCULATE([Average Predicted Margin],'powerbi_ao3_order_segments'[ao3_priority_segment]="standard_process")
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:24px;color:#7FA8D8;'>ECONOMIC DECISION MATRIX</div><div style='font-size:18px;color:#AAB6C5;margin-top:3px;'>Risk determines urgency. Margin determines how much premium intervention is economically defensible.</div>" &
+			"<div style='display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;'>" &
+			"<div style='background:#202C3A;border:1px solid #D95555;border-left:5px solid #D95555;border-radius:8px;padding:11px;'><div style='font-size:16px;color:#D95555;'>HIGH RISK · LOW MARGIN</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>Expedite selectively</div><div style='font-size:20px;margin-top:5px;'>" & FORMAT([Expedite Selectively Items],"#,0") & " items · " & FORMAT(ExpediteValue,"$#,0") & "</div><div style='font-size:17px;color:#AAB6C5;margin-top:4px;'>Avg margin " & FORMAT(ExpediteMargin,"0.0%") & " · Review SLA and customer impact before premium cost.</div></div>" &
+			"<div style='background:#202C3A;border:1px solid #DFA64C;border-left:5px solid #DFA64C;border-radius:8px;padding:11px;'><div style='font-size:16px;color:#DFA64C;'>HIGH RISK · HIGH MARGIN</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>Protect high value at risk</div><div style='font-size:20px;margin-top:5px;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & " items · " & FORMAT(ProtectValue,"$#,0") & "</div><div style='font-size:17px;color:#AAB6C5;margin-top:4px;'>Avg margin " & FORMAT(ProtectMargin,"0.0%") & " · Prioritize dispatch readiness and scalable protection.</div></div>" &
+			"<div style='background:#202C3A;border:1px solid #4F83B4;border-left:5px solid #4F83B4;border-radius:8px;padding:11px;'><div style='font-size:16px;color:#4F83B4;'>LOW RISK · LOW MARGIN</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>Standard process</div><div style='font-size:20px;margin-top:5px;'>" & FORMAT([Standard Process Items],"#,0") & " items · " & FORMAT(StandardValue,"$#,0") & "</div><div style='font-size:17px;color:#AAB6C5;margin-top:4px;'>Avg margin " & FORMAT(StandardMargin,"0.0%") & " · Avoid special-cost interventions.</div></div>" &
+			"<div style='background:#202C3A;border:1px solid #2D8C73;border-left:5px solid #2D8C73;border-radius:8px;padding:11px;'><div style='font-size:16px;color:#2D8C73;'>LOW RISK · HIGH MARGIN</div><div style='font-size:26px;font-weight:700;margin-top:4px;'>Preserve service</div><div style='font-size:20px;margin-top:5px;'>" & FORMAT([Preserve Service Items],"#,0") & " items · " & FORMAT(PreserveValue,"$#,0") & "</div><div style='font-size:17px;color:#AAB6C5;margin-top:4px;'>Avg margin " & FORMAT(PreserveMargin,"0.0%") & " · Maintain quality without over-service.</div></div></div></div>"
+		displayFolder: Q03 Policy | Risk-Margin Strategy
+		lineageTag: 5624fe0e-32af-4e21-b938-3528f9da5aa8
+
+	/// AO3 strategy insight explaining economic allocation across the frozen quadrants.
+	measure 'Q03 Policy | 03 Strategy Insight' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:17px 19px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:21px;color:#7FA8D8;'>STRATEGIC INTERPRETATION</div><div style='font-size:27px;font-weight:700;line-height:1.2;margin-top:12px;'>Operational effort should not be distributed evenly.</div>" &
+			"<div style='font-size:17px;color:#AAB6C5;line-height:1.45;margin-top:12px;'><b style='color:#DFA64C;'>" & FORMAT([Protect High Value At Risk Items],"#,0") & "</b> items justify scalable preventive protection because they combine high risk with meaningful expected value. Only <b style='color:#D95555;'>" & FORMAT([Expedite Selectively Items],"#,0") & "</b> items require selective premium-capacity review.</div>" &
+			"<div style='margin-top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:8px;padding:13px;'><div style='font-size:16px;color:#2D8C73;font-weight:700;'>COST DISCIPLINE</div><div style='font-size:17px;line-height:1.4;margin-top:5px;'>Preserve service quality for " & FORMAT([Preserve Service Items],"#,0") & " stable high-margin items without creating avoidable escalation cost.</div></div></div>"
+		displayFolder: Q03 Policy | Risk-Margin Strategy
+		lineageTag: ad0b8237-fa4d-4adb-be02-170b9b557e88
+
+	/// Compact AO3 frozen decision rules and governance evidence.
+	measure 'Q03 Policy | 04 Decision Rules' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>FROZEN DECISION RULES</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px;'><div style='background:#202C3A;border-radius:8px;padding:11px;'><div style='font-size:14px;color:#7FA8D8;'>AO1 RISK CUTOFF</div><div style='font-size:29px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([AO3 Risk Cutoff],"0.0%") & "</div></div><div style='background:#202C3A;border-radius:8px;padding:11px;'><div style='font-size:14px;color:#7FA8D8;'>AO3 MARGIN CUTOFF</div><div style='font-size:29px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([AO3 Margin Cutoff],"0.0%") & "</div></div></div>" &
+			"<div style='font-size:15px;color:#AAB6C5;line-height:1.4;margin-top:12px;'>AO3 applies deterministic aliases to frozen AO1 risk and AO2 margin outputs. Power BI does not retrain models, reconstruct targets, or redefine intervention cutoffs.</div>" &
+			"<div style='font-size:15px;color:#2D8C73;font-weight:700;margin-top:11px;'>DATA QA PASSED · " & FORMAT([Dashboard QA Issue Rows],"#,0") & " issue rows</div></div>"
+		displayFolder: Q03 Policy | Risk-Margin Strategy
+		lineageTag: 6f534027-bd9c-4347-80fd-beaff525e4fe
+
+	/// Executive geographic hotspots header for the final dashboard page.
+	measure 'Q04 | 01 Geographic Hotspots Header' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:16px 22px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:17px;color:#7FA8D8;'>P04 · GEOGRAPHIC HOTSPOTS</div><div style='font-size:39px;font-weight:700;margin-top:4px;'>Where Should Regional Attention Be Allocated First?</div><div style='font-size:20px;color:#AAB6C5;margin-top:4px;'>Separate high-volume exposure from disproportionate regional severity to focus operational review.</div>" &
+			"<div style='position:absolute;right:20px;top:16px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:9px;padding:10px 13px;width:230px;'><div style='font-size:13px;color:#7FA8D8;'>MAP COVERAGE</div><div style='font-size:25px;font-weight:700;margin-top:3px;'>" & FORMAT([Geo Coordinate Coverage],"0.0%") & "</div><div style='font-size:13px;color:#2D8C73;margin-top:4px;'>GOVERNED LOCATIONS VERIFIED</div></div></div>"
+		displayFolder: Q04 Geographic & Commercial Hotspots
+		lineageTag: 071c72a0-efd8-40d1-8bde-ba093421ecca
+
+	/// Executive geographic KPI strip summarizing regional scope, risk exposure, protected value, and selective expedite review.
+	measure 'Q04 | 02 Geographic KPI Strip' =
+			VAR Tile="<div style='flex:1;padding:7px 15px;border-right:1px solid #263342;'>"
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:7px 6px;font-family:Segoe UI;color:#F4F7FB;display:flex;align-items:center;'>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>COUNTRIES COVERED</div><div style='font-size:37px;font-weight:700;margin-top:4px;'>" & FORMAT([Geo Countries],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Geo Locations],"#,0") & " mapped locations</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>HIGH-RISK ITEMS</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([Geo High Risk Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>" & FORMAT([Geo High Risk Rate],"0.0%") & " of geographic portfolio</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>VALUE UNDER REVIEW</div><div style='font-size:37px;font-weight:700;color:#4F83B4;margin-top:4px;'>" & FORMAT([Geo Order Value],"$#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Governed order value</div></div>" &
+			Tile & "<div style='font-size:15px;color:#7FA8D8;'>PROTECT-FIRST ITEMS</div><div style='font-size:37px;font-weight:700;color:#DFA64C;margin-top:4px;'>" & FORMAT([Geo Protect Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Regional preventive queue</div></div>" &
+			"<div style='flex:1;padding:7px 15px;'><div style='font-size:15px;color:#7FA8D8;'>SELECTIVE EXPEDITE</div><div style='font-size:37px;font-weight:700;color:#D95555;margin-top:4px;'>" & FORMAT([Geo Expedite Items],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;'>Review before premium spending</div></div></div>"
+		displayFolder: Q04 Geographic & Commercial Hotspots
+		lineageTag: 9f3b10e6-26f6-4f6c-b06e-2ab775830749
+
+	/// Executive HTML ranking of top countries by absolute high-risk item volume.
+	measure 'Q04 | 03 Volume Hotspot Ranking' =
+			VAR Hotspots=TOPN(10,SUMMARIZE('powerbi_geographic_summary','powerbi_geographic_summary'[map_location_country],"RiskItems",SUM('powerbi_geographic_summary'[high_risk_order_count]),"OrderItems",SUM('powerbi_geographic_summary'[order_item_count]),"RiskRate",DIVIDE(SUM('powerbi_geographic_summary'[high_risk_order_count]),SUM('powerbi_geographic_summary'[order_item_count])),"OrderValue",SUM('powerbi_geographic_summary'[total_order_value])),[RiskItems],DESC)
+			VAR MaxRisk=MAXX(Hotspots,[RiskItems])
+			VAR HtmlRows=CONCATENATEX(Hotspots,"<div style='display:grid;grid-template-columns:132px 1fr 64px 68px;gap:8px;align-items:center;margin-top:8px;'><div style='font-size:15px;color:#F4F7FB;text-transform:capitalize;'>" & SUBSTITUTE('powerbi_geographic_summary'[map_location_country],"_"," ") & "</div><div style='height:13px;background:#263342;border-radius:7px;overflow:hidden;'><div style='height:13px;width:" & FORMAT(DIVIDE([RiskItems],MaxRisk),"0.0%") & ";background:#D95555;'></div></div><div style='font-size:15px;font-weight:700;text-align:right;'>" & FORMAT([RiskItems],"#,0") & "</div><div style='font-size:14px;color:#AAB6C5;text-align:right;'>" & FORMAT([RiskRate],"0.0%") & "</div></div>","",[RiskItems],DESC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>TOP VOLUME HOTSPOTS</div><div style='font-size:15px;color:#AAB6C5;margin-top:3px;'>Countries with the largest preventive-risk workload.</div>" &
+			"<div style='display:grid;grid-template-columns:132px 1fr 64px 68px;gap:8px;margin-top:12px;font-size:12px;color:#7FA8D8;'><div>COUNTRY</div><div>HIGH-RISK WORKLOAD</div><div style='text-align:right;'>ITEMS</div><div style='text-align:right;'>RATE</div></div>" & HtmlRows & "</div>"
+		displayFolder: Q04 Geographic & Commercial Hotspots
+		lineageTag: 4be1fc3f-77b8-4c62-b8ca-da407c3d5cad
+
+	/// Executive HTML ranking of countries with at least 100 items by high-risk severity rate.
+	measure 'Q04 | 04 Severity Hotspot Ranking' =
+			VAR Hotspots=TOPN(10,FILTER(SUMMARIZE('powerbi_geographic_summary','powerbi_geographic_summary'[map_location_country],"RiskItems",SUM('powerbi_geographic_summary'[high_risk_order_count]),"OrderItems",SUM('powerbi_geographic_summary'[order_item_count]),"RiskRate",DIVIDE(SUM('powerbi_geographic_summary'[high_risk_order_count]),SUM('powerbi_geographic_summary'[order_item_count])),"OrderValue",SUM('powerbi_geographic_summary'[total_order_value])),[OrderItems]>=100),[RiskRate],DESC)
+			VAR HtmlRows=CONCATENATEX(Hotspots,"<div style='display:grid;grid-template-columns:132px 1fr 64px 68px;gap:8px;align-items:center;margin-top:8px;'><div style='font-size:15px;color:#F4F7FB;text-transform:capitalize;'>" & SUBSTITUTE('powerbi_geographic_summary'[map_location_country],"_"," ") & "</div><div style='height:13px;background:#263342;border-radius:7px;overflow:hidden;'><div style='height:13px;width:" & FORMAT([RiskRate],"0.0%") & ";background:#DFA64C;'></div></div><div style='font-size:15px;font-weight:700;text-align:right;'>" & FORMAT([RiskItems],"#,0") & "</div><div style='font-size:14px;color:#DFA64C;text-align:right;font-weight:700;'>" & FORMAT([RiskRate],"0.0%") & "</div></div>","",[RiskRate],DESC)
+			RETURN
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>DISPROPORTIONATE SEVERITY</div><div style='font-size:15px;color:#AAB6C5;margin-top:3px;'>Countries with the highest risk rate among portfolios of at least 100 items.</div>" &
+			"<div style='display:grid;grid-template-columns:132px 1fr 64px 68px;gap:8px;margin-top:12px;font-size:12px;color:#7FA8D8;'><div>COUNTRY</div><div>RISK SEVERITY</div><div style='text-align:right;'>ITEMS</div><div style='text-align:right;'>RATE</div></div>" & HtmlRows & "</div>"
+		displayFolder: Q04 Geographic & Commercial Hotspots
+		lineageTag: 5caeb8c4-ac62-49d6-984f-6cb484961720
+
+	/// Geographic executive takeaway distinguishing absolute workload hotspots from disproportionate severity hotspots.
+	measure 'Q04 | 05 Geographic Executive Takeaway' =
+			"<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-left:5px solid #4F83B4;border-radius:12px;padding:14px 16px;font-family:Segoe UI;color:#F4F7FB;'>" &
+			"<div style='font-size:20px;color:#7FA8D8;'>EXECUTIVE TAKEAWAY</div><div style='font-size:23px;font-weight:700;line-height:1.22;margin-top:7px;'>Separate workload scale from risk severity.</div>" &
+			"<div style='font-size:18px;color:#AAB6C5;line-height:1.4;margin-top:7px;'>France and Germany lead the preventive queue by absolute volume. Sweden requires a different response: its high-risk rate reaches <b style='color:#DFA64C;'>91.0%</b>, indicating disproportionate severity despite lower volume.</div>" &
+			"<div style='font-size:15px;color:#AAB6C5;line-height:1.35;margin-top:9px;'>Use the map and country scatter to distinguish capacity planning from root-cause investigation.</div></div>"
+		displayFolder: Q04 Geographic & Commercial Hotspots
+		lineageTag: fac98d69-bd63-40a9-930f-dda542feab4d
+
+	/// Executive landing-page header focused on decisions, exposure, and governed operational action.
+	measure 'Q05 V2 | 01 Executive Command Header' = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:10px;padding:5px 28px;font-family:Segoe UI;color:#F4F7FB'><div style='font-size:15px;color:#7FA8D8;letter-spacing:0'>DATACO · EXECUTIVE SUPPLY-CHAIN COMMAND CENTER</div><div style='font-size:38px;font-weight:700;margin-top:8px'>Where should management act first?</div><div style='font-size:20px;color:#AAB6C5;margin-top:8px'>Prioritize delivery-risk protection, preserve margin, and allocate operational attention using governed held-out outputs.</div><div style='position:absolute;right:28px;top:12px;background:#202C3A;border-left:5px solid #2D8C73;border-radius:8px;padding:5px 18px;width:238px'><div style='font-size:13px;color:#7FA8D8'>DECISION STATUS</div><div style='font-size:20px;font-weight:700;margin-top:7px'>Governed action view</div><div style='font-size:13px;color:#2D8C73;margin-top:7px'>DATA QA VERIFIED</div></div></div>"
+		displayFolder: Q05 V2 | Executive Command Center
+		lineageTag: 50f32991-34dd-4d48-98cc-f0f3bd7bd590
+
+	/// Executive KPI strip emphasizing operational review pressure, protected value, profitability, and selective expedite attention.
+	measure 'Q05 V2 | 02 Executive Business KPI Strip' = VAR Tile = "display:flex;flex-direction:column;justify-content:center;padding:0 26px;border-right:1px solid #263342;box-sizing:border-box" RETURN "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:10px;display:grid;grid-template-columns:repeat(5,1fr);font-family:Segoe UI;color:#F4F7FB'><div style='"&Tile&"'><span style='font-size:14px;color:#7FA8D8'>ACTIVE REVIEW QUEUE</span><b style='font-size:38px;color:#D95555;margin-top:8px'>"&FORMAT([Executive Priority Review Items],"#,0")&"</b><span style='font-size:15px;color:#AAB6C5'>"&FORMAT([Executive Priority Review Rate],"0.0%")&" of scored items</span></div><div style='"&Tile&"'><span style='font-size:14px;color:#7FA8D8'>VALUE TO PROTECT</span><b style='font-size:38px;color:#DFA64C;margin-top:8px'>"&FORMAT([Protected Value At Risk],"$#,0")&"</b><span style='font-size:15px;color:#AAB6C5'>high-value risk portfolio</span></div><div style='"&Tile&"'><span style='font-size:14px;color:#7FA8D8'>EXPECTED PROFIT</span><b style='font-size:38px;color:#2D8C73;margin-top:8px'>"&FORMAT([Expected Profit],"$#,0")&"</b><span style='font-size:15px;color:#AAB6C5'>"&FORMAT([Expected Profit Margin],"0.0%")&" expected margin</span></div><div style='"&Tile&"'><span style='font-size:14px;color:#7FA8D8'>SELECTIVE EXPEDITE</span><b style='font-size:38px;color:#D95555;margin-top:8px'>"&FORMAT([Expedite Selectively Items],"#,0")&"</b><span style='font-size:15px;color:#AAB6C5'>review before premium cost</span></div><div style='display:flex;flex-direction:column;justify-content:center;padding:0 26px;box-sizing:border-box'><span style='font-size:14px;color:#7FA8D8'>NEGATIVE-PROFIT EXPOSURE</span><b style='font-size:38px;color:#D95555;margin-top:8px'>"&FORMAT([Negative Profit Exposure],"$#,0")&"</b><span style='font-size:15px;color:#AAB6C5'>modeled exposure, not realized loss</span></div></div>"
+		displayFolder: Q05 V2 | Executive Command Center
+		lineageTag: 6e677f88-2471-41a9-9f8f-b3345463279c
+
+	/// Executive movement panel contrasting recent queue pressure with protected-value movement.
+	measure 'Q05 V2 | 03 Executive Movement Brief' = VAR QueueChange=[AO3 Protect Items 4W Change] VAR ValueChange=[AO3 Protected Value 4W Change] VAR QueueColor=IF(QueueChange>0,"#D95555","#2D8C73") VAR ValueColor=IF(ValueChange<0,"#D95555","#2D8C73") RETURN "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:10px;padding:22px 26px;font-family:Segoe UI;color:#F4F7FB'><div style='font-size:20px;color:#7FA8D8'>RECENT OPERATING PRESSURE</div><div style='font-size:17px;color:#AAB6C5;margin-top:6px'>Latest four weeks versus the immediately prior four weeks.</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px'><div style='background:#202C3A;border-left:5px solid "&QueueColor&";border-radius:7px;padding:16px'><div style='font-size:14px;color:#7FA8D8'>PROTECT QUEUE · LATEST 4W</div><div style='font-size:31px;font-weight:700;margin-top:6px'>"&FORMAT([AO3 Current 4W Protect Items],"#,0")&" items</div><div style='font-size:17px;color:"&QueueColor&";margin-top:6px'>"&IF(QueueChange>=0,"▲ ","▼ ")&FORMAT(ABS(QueueChange),"0.0%")&" vs prior 4W</div></div><div style='background:#202C3A;border-left:5px solid "&ValueColor&";border-radius:7px;padding:16px'><div style='font-size:14px;color:#7FA8D8'>PROTECTED VALUE · LATEST 4W</div><div style='font-size:31px;font-weight:700;margin-top:6px'>"&FORMAT([AO3 Current 4W Protected Value],"$#,0")&"</div><div style='font-size:17px;color:"&ValueColor&";margin-top:6px'>"&IF(ValueChange>=0,"▲ ","▼ ")&FORMAT(ABS(ValueChange),"0.0%")&" vs prior 4W</div></div></div><div style='font-size:17px;color:#AAB6C5;margin-top:16px'>Queue pressure increased while value intensity declined. Maintain broad preventive controls, but reserve premium-cost intervention for item-level review.</div></div>"
+		displayFolder: Q05 V2 | Executive Command Center
+		lineageTag: ac6b36c4-d4e5-48c0-98c2-79b76cfc4b6d
+
+	/// Executive decision agenda translating governed metrics into three management actions.
+	measure 'Q05 V2 | 04 Executive Action Agenda' = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:10px;padding:22px 26px;font-family:Segoe UI;color:#F4F7FB'><div style='font-size:20px;color:#7FA8D8'>MANAGEMENT ACTION AGENDA</div><div style='font-size:17px;color:#AAB6C5;margin-top:6px'>Allocate attention using differentiated operating treatments.</div><div style='display:grid;grid-template-columns:1fr;gap:11px;margin-top:17px'><div style='background:#202C3A;border-left:5px solid #DFA64C;border-radius:7px;padding:13px 15px'><b style='font-size:18px;color:#DFA64C'>01 · Protect high-value orders before dispatch</b><div style='font-size:16px;color:#AAB6C5;margin-top:5px'>"&FORMAT([Protect High Value At Risk Items],"#,0")&" items · "&FORMAT([Protected Value At Risk],"$#,0")&" governed order value</div></div><div style='background:#202C3A;border-left:5px solid #D95555;border-radius:7px;padding:13px 15px'><b style='font-size:18px;color:#D95555'>02 · Review selective-expedite cases individually</b><div style='font-size:16px;color:#AAB6C5;margin-top:5px'>"&FORMAT([Expedite Selectively Items],"#,0")&" items · approve premium-cost action only when service impact justifies it</div></div><div style='background:#202C3A;border-left:5px solid #2D8C73;border-radius:7px;padding:13px 15px'><b style='font-size:18px;color:#2D8C73'>03 · Preserve stable service without over-intervention</b><div style='font-size:16px;color:#AAB6C5;margin-top:5px'>"&FORMAT([Preserve Service Items],"#,0")&" items · maintain normal controls and protect margin</div></div></div></div>"
+		displayFolder: Q05 V2 | Executive Command Center
+		lineageTag: b6e497a2-c510-4f12-a7a9-76a7a0aac637
+
+	/// Executive geographic direction panel linking the command center to the geographic hotspot analysis.
+	measure 'Q05 V2 | 05 Executive Geographic Direction' = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;background:#141B24;border:1px solid #263342;border-radius:10px;padding:5px 26px;font-family:Segoe UI;color:#F4F7FB'><div style='font-size:20px;color:#7FA8D8'>WHERE TO DEPLOY ATTENTION</div><div style='font-size:17px;color:#AAB6C5;margin-top:6px'>Use the Geographic Hotspots page to separate workload scale from risk severity.</div><div style='margin-top:18px;background:#202C3A;border-left:5px solid #4F83B4;border-radius:7px;padding:16px'><b style='font-size:20px'>Scale hotspots</b><div style='font-size:17px;color:#AAB6C5;margin-top:6px'>France and Germany concentrate the largest high-risk operating workload.</div></div><div style='margin-top:12px;background:#202C3A;border-left:5px solid #D95555;border-radius:7px;padding:16px'><b style='font-size:20px'>Severity hotspot</b><div style='font-size:17px;color:#AAB6C5;margin-top:6px'>Sweden requires targeted review: approximately 91% of its scored items are high risk despite lower volume.</div></div><div style='font-size:15px;color:#AAB6C5;margin-top:15px'>Geographic context is a deployment lens. It does not redefine the governed AO1, AO2, or AO3 policies.</div></div>"
+		displayFolder: Q05 V2 | Executive Command Center
+		lineageTag: fb46f649-5e01-4770-bb0f-1f33f8d896f7
+
+	/// Large-type presentation variant of the executive command header.
+	measure 'Q05 V2L | 01 Executive Command Header' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 V2 | 01 Executive Command Header],"font-size:15px","font-size:17px"),"font-size:20px","font-size:22px"),"font-size:38px","font-size:42px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 5754ca3a-d0f9-4e06-bc80-48d75610ff06
+
+	/// Large-type presentation variant of the executive KPI strip.
+	measure 'Q05 V2L | 02 Executive Business KPI Strip' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 V2 | 02 Executive Business KPI Strip],"font-size:14px","font-size:16px"),"font-size:15px","font-size:17px"),"font-size:38px","font-size:42px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 2532bae6-b6e4-4aa7-97f8-6167417eb119
+
+	/// Large-type presentation variant of the recent operating-pressure panel.
+	measure 'Q05 V2L | 03 Executive Movement Brief' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 V2 | 03 Executive Movement Brief],"font-size:14px","font-size:16px"),"font-size:17px","font-size:19px"),"font-size:31px","font-size:34px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 7c69531f-3042-4853-8033-cf1950a38a19
+
+	/// Large-type presentation variant of the management action agenda.
+	measure 'Q05 V2L | 04 Executive Action Agenda' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 V2 | 04 Executive Action Agenda],"font-size:16px","font-size:18px"),"font-size:17px","font-size:19px"),"font-size:18px","font-size:20px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 3db37115-19a8-49b4-867b-ae0a2e795c76
+
+	/// Large-type presentation variant of the geographic deployment-direction panel.
+	measure 'Q05 V2L | 05 Executive Geographic Direction' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 V2 | 05 Executive Geographic Direction],"font-size:15px","font-size:17px"),"font-size:17px","font-size:19px"),"font-size:20px","font-size:22px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 93c23516-ea2c-40bb-b2a7-0ff187df9ef0
+
+	/// Large-type presentation variant of the weekly protected-value trend.
+	measure 'Q05 V2L | 06 Weekly Protected Value Trend' = SUBSTITUTE(SUBSTITUTE(SUBSTITUTE([Q05 | C06 Weekly Protected Value Trend],"font-size:11px","font-size:13px"),"font-size:12px","font-size:14px"),"font-size:14px","font-size:16px")
+		displayFolder: Q05 V2 | Executive Command Center | Large Type
+		lineageTag: 41dcd4b8-775d-4f92-a496-2c65ea3e562b
 
 	column 'Visualization Group'
 		isHidden

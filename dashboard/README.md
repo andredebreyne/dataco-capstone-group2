@@ -16,6 +16,8 @@ outputs and governed reference artifacts.
 | `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification for Issue `#48`. |
 | `pages/q02_ao2_profitability.md` | Implemented AO2 profitability-exposure executive page specification for Issue `#49`. |
 | `pages/q03_ao3_prioritization.md` | Implemented AO3 operational-prioritization executive page specification for Issue `#50`. |
+| `pages/q04_geographic_commercial_hotspots.md` | Implemented geographic and commercial hotspot page specification. |
+| `pages/q05_executive_command_center.md` | Implemented executive command-center page specification. |
 | `themes/dataco_executive_operations_dark.json` | Shared executive dashboard theme. |
 | `wireframes/` | Versioned SVG backgrounds and layout standards. |
 
@@ -62,5 +64,9 @@ files exist.
 - The AO1 delivery-risk executive page is implemented and documented (Issue `#48`).
 - The AO2 profitability-exposure executive page is implemented and documented.
 - The AO3 operational-prioritization executive page is implemented and documented.
+- The geographic and commercial hotspot page is implemented and documented.
+- The executive command-center page is implemented and documented.
+- The Power BI semantic model uses the official `Dim_Date` calendar dimension
+  for governed date filtering instead of Power BI automatic local date tables.
 - CSV exports remain available as offline fallback artifacts and must not be edited manually.
 - No `.pbix` artifact is required or claimed in this repository.

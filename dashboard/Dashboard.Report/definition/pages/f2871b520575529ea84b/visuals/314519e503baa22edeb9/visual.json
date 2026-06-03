@@ -3,7 +3,7 @@
   "name": "314519e503baa22edeb9",
   "position": {
     "x": 0,
-    "y": 730.61467173772235,
+    "y": 0,
     "z": 3000,
     "height": 348.9807510255601,
     "width": 963.26850575476249,
@@ -47,24 +47,6 @@
               },
               "queryRef": "powerbi_ao3_order_segments.ao3_priority_segment",
               "nativeQueryRef": "ao3_priority_segment"
-            }
-          ]
-        },
-        "Size": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dashboard_Measures"
-                    }
-                  },
-                  "Property": "Total Order Value for Scatter"
-                }
-              },
-              "queryRef": "Dashboard_Measures.Total Order Value for Scatter",
-              "nativeQueryRef": "Total Order Value for Scatter"
             }
           ]
         },
@@ -279,6 +261,56 @@
             }
           }
         }
+      ],
+      "bubbles": [
+        {
+          "properties": {
+            "markerShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'circle'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "powerbi_ao3_order_segments"
+                          }
+                        },
+                        "Property": "ao3_priority_segment"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'standard_process'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "bubbleSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "55L"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "visualContainerObjects": {
@@ -297,5 +329,6 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  }
+  },
+  "parentGroupName": "4af18b81b9dceb006e10"
 }

@@ -72,7 +72,7 @@ table powerbi_ao1_confusion_by_threshold
 		annotation SummarizationSetBy = Automatic
 
 	partition powerbi_ao1_confusion_by_threshold = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

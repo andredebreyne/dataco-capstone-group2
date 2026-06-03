@@ -197,8 +197,14 @@ table powerbi_ao1_ao2_test_scores
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Calendar-day key normalized to midnight for the official Dim_Date relationship.
+	column order_date_key = DATE ( YEAR ( [order_date_DateOrders] ), MONTH ( [order_date_DateOrders] ), DAY ( [order_date_DateOrders] ) )
+		dataType: dateTime
+		displayFolder: Calendar
+		lineageTag: 04597b6a-ac29-4f61-ac05-f8e5a33ddf32
+
 	partition powerbi_ao1_ao2_test_scores = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

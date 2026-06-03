@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "4e0f06f7e0b7d3580a4c",
+  "position": {
+    "x": 0,
+    "y": 168,
+    "z": 1000,
+    "height": 154,
+    "width": 1920,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q05 V2 | 02 Executive Business KPI Strip"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q05 V2 | 02 Executive Business KPI Strip",
+              "nativeQueryRef": "Q05 V2 | 02 Executive Business KPI Strip"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "bbab060c0605a91a23b3"
+}

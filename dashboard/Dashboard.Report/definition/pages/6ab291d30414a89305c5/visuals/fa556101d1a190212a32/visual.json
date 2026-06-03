@@ -3,10 +3,10 @@
   "name": "fa556101d1a190212a32",
   "position": {
     "x": 0,
-    "y": 370,
+    "y": 354.69354627569055,
     "z": 2000,
-    "height": 340,
-    "width": 964,
+    "height": 354.69354627569055,
+    "width": 964.54928655583194,
     "tabOrder": 2000
   },
   "visual": {
@@ -32,6 +32,21 @@
           ]
         }
       }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "drillFilterOtherVisuals": true
   }

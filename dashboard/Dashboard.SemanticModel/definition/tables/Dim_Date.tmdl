@@ -1,0 +1,65 @@
+/// Official dashboard calendar dimension for governed order-date filtering and time-intelligence analysis. Replaces Power BI automatic local date tables.
+table Dim_Date
+	lineageTag: 12597cb3-d770-444d-a75b-9638a8cf1219
+	dataCategory: Time
+
+	column Date
+		isUnique
+		lineageTag: c5973594-b0ea-4a0f-99a4-07ae807a087d
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		lineageTag: c644e51f-364a-425b-87e2-9a6f9c1b5c86
+		isNameInferred
+		sourceColumn: [Year]
+
+	column Quarter
+		lineageTag: cd524ff7-9217-4318-bddc-cbd947905644
+		isNameInferred
+		sourceColumn: [Quarter]
+
+	column 'Month Number'
+		lineageTag: bc410e13-1854-449b-a19a-9d14273f91a8
+		isNameInferred
+		sourceColumn: [Month Number]
+
+	column Month
+		lineageTag: fd6290d2-a73d-4cc3-a934-fae67d6bb533
+		isNameInferred
+		sourceColumn: [Month]
+
+	column 'Year Month'
+		lineageTag: 6152ec20-8a0c-4493-9425-db4968b9c301
+		isNameInferred
+		sourceColumn: [Year Month]
+
+	column 'Week Start'
+		lineageTag: c0f8f8f1-9154-447d-8027-9a6497fab1f7
+		isNameInferred
+		sourceColumn: [Week Start]
+
+	column 'Week Number'
+		lineageTag: 0996b547-2cf0-4725-bd72-6f494b040ead
+		isNameInferred
+		sourceColumn: [Week Number]
+
+	column Day
+		lineageTag: 6ea305e8-28fd-43d4-8d00-38caf26ce7b2
+		isNameInferred
+		sourceColumn: [Day]
+
+	column 'Day of Week Number'
+		lineageTag: d73ee387-1ceb-400f-a455-7d0266842f55
+		isNameInferred
+		sourceColumn: [Day of Week Number]
+
+	column 'Day of Week'
+		lineageTag: 3a671382-3155-4744-9b5e-81019e8ec57f
+		isNameInferred
+		sourceColumn: [Day of Week]
+
+	partition Dim_Date = calculated
+		mode: import
+		source = ADDCOLUMNS ( CALENDAR ( DATE ( 2015, 1, 1 ), DATE ( 2018, 12, 31 ) ), "Year", YEAR ( [Date] ), "Quarter", "Q" & FORMAT ( [Date], "Q" ), "Month Number", MONTH ( [Date] ), "Month", FORMAT ( [Date], "MMM" ), "Year Month", FORMAT ( [Date], "YYYY-MM" ), "Week Start", [Date] - WEEKDAY ( [Date], 2 ) + 1, "Week Number", WEEKNUM ( [Date], 2 ), "Day", DAY ( [Date] ), "Day of Week Number", WEEKDAY ( [Date], 2 ), "Day of Week", FORMAT ( [Date], "ddd" ) )
+

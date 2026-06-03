@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "b34e340a605a43e2234b",
+  "position": {
+    "x": 966,
+    "y": 658,
+    "z": 4000,
+    "height": 422,
+    "width": 954,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q05 V2 | 04 Executive Action Agenda"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q05 V2 | 04 Executive Action Agenda",
+              "nativeQueryRef": "Q05 V2 | 04 Executive Action Agenda"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "bbab060c0605a91a23b3"
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "bdc6a00f1b0174bea3e0",
+  "position": {
+    "x": 955.9727005196919,
+    "y": 342.38056477365222,
+    "z": 2000,
+    "height": 402.0086406611984,
+    "width": 963.66664579550434,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q01 V2 | 04 Preventive Action Brief"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q01 V2 | 04 Preventive Action Brief",
+              "nativeQueryRef": "Q01 V2 | 04 Preventive Action Brief"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

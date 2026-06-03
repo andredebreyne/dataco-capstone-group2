@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "bb803de000a33504200d",
+  "position": {
+    "x": 0,
+    "y": 340.45707845469911,
+    "z": 4000,
+    "height": 440.47836704026048,
+    "width": 963.66664579550434,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q03 V3 | 03 Weekly Capacity Timeline"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q03 V3 | 03 Weekly Capacity Timeline",
+              "nativeQueryRef": "Q03 V3 | 03 Weekly Capacity Timeline"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

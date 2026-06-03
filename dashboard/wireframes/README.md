@@ -105,6 +105,8 @@ answers one business question:
 Q01 / P01  AO1 delivery risk
 Q02 / P02  AO2 profitability
 Q03 / P03  AO3 risk-margin prioritization
+Q04 / P04  geographic and commercial hotspots
+Q05 / P05  executive command center
 ```
 
 Create visualization measures in `Dashboard_Visualizations` with this pattern:
@@ -196,3 +198,51 @@ margin-protection review?
 The AO2 page combines premium HTML summary surfaces with one native scatter
 chart. The scatter preserves executive interactivity while the HTML profit-band
 distribution maintains the visual language established on P01.
+
+## P04 Geographic and Commercial Hotspots
+
+Business question:
+
+```text
+Where should management deploy attention across markets, countries, and
+commercial hotspots?
+```
+
+Recommended structure:
+
+| Slot | Recommended content |
+| --- | --- |
+| Page header with synchronized slicers | `Q04 | 01 Geographic Hotspots Header` plus Power BI slicers |
+| Geographic KPI strip | `Q04 | 02 Geographic KPI Strip` |
+| Volume hotspot ranking | `Q04 | 03 Volume Hotspot Ranking` |
+| Severity hotspot ranking | `Q04 | 04 Severity Hotspot Ranking` |
+| Geographic map or scatter | Native Power BI visual using governed geographic summary fields |
+| Executive takeaway | `Q04 | 05 Geographic Executive Takeaway` |
+
+Use geography as a deployment lens. Do not sum latitude or longitude as
+business metrics, and do not allow geographic summaries to redefine AO1, AO2,
+or AO3 decisions.
+
+## P05 Executive Command Center
+
+Business question:
+
+```text
+Where should management act first across delivery risk, margin exposure, and
+operational prioritization?
+```
+
+Recommended structure:
+
+| Slot | Recommended content |
+| --- | --- |
+| Page header with synchronized slicers | `Q05 V2L | 01 Executive Command Header` plus Power BI slicers |
+| Executive KPI strip | `Q05 V2L | 02 Executive Business KPI Strip` |
+| Recent movement brief | `Q05 V2L | 03 Executive Movement Brief` |
+| Management action agenda | `Q05 V2L | 04 Executive Action Agenda` |
+| Geographic direction | `Q05 V2L | 05 Executive Geographic Direction` |
+| Weekly protected-value trend | `Q05 V2L | 06 Weekly Protected Value Trend` |
+
+Prefer the large-type `Q05 V2L` measures for final presentation. The command
+center should summarize the operating picture and direct executives to the
+detailed AO1, AO2, AO3, and geographic pages for deeper evidence.
