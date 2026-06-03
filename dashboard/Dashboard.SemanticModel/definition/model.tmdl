@@ -28,6 +28,7 @@ ref table powerbi_ao3_risk_margin_policy
 ref table powerbi_ao3_segment_summary
 ref table Dashboard_Measures
 ref table Dashboard_Visualizations
+ref table Dashboard_AO2_Profit_Bands
 
 ref cultureInfo en-US
 
