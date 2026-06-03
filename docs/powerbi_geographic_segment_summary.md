@@ -8,11 +8,11 @@ Issue: `#145`
 
 The existing `powerbi_geographic_summary` table remains useful for high-level geography-only visuals. However, it is aggregated independently at geography level and does not contain the segment, risk, profit-band, and date fields required for interactive filtering.
 
-This table solves that modeling gap by keeping geography together with governed AO3 filter dimensions.
+This table solves that modeling gap by keeping geography together with governed AO3 filter dimensions. A complementary enrichment job adds Power BI-friendly decision fields for better executive interpretation.
 
 ## Business Question
 
-Which geographies remain exposed after filtering by operational priority segment, high-risk flag, expected-profit band, and time period?
+Which geographies remain exposed after filtering by operational priority segment, high-risk flag, expected-profit band, margin-policy tier, and time period?
 
 ## Why This Table Is Needed
 
@@ -52,10 +52,11 @@ Default Delta output:
 /Volumes/workspace/default/raw_data/gold/powerbi_geographic_segment_summary
 ```
 
-Default metadata output:
+Default metadata outputs:
 
 ```text
 models/dashboard/powerbi_geographic_segment_summary_metadata.json
+models/dashboard/powerbi_geographic_decision_enrichment_metadata.json
 ```
 
 ## Power BI Serving Table
@@ -90,6 +91,18 @@ workspace.default.powerbi_geographic_segment_summary
 | `total_predicted_profit` | Sum of frozen AO2 predicted profit for the grain. |
 | `avg_ao3_predicted_margin` | Average predicted margin for the grain. |
 
+## Power BI Display Fields
+
+The enrichment job adds display labels and sort orders so Power BI visuals do not need ad hoc DAX formatting for common slicers.
+
+| Field | Purpose |
+| --- | --- |
+| `ao3_priority_segment_label` | Business-facing AO3 segment label. |
+| `ao3_priority_segment_sort_order` | Stable AO3 segment display order. |
+| `ao1_high_risk_label` | Business-facing high-risk flag label. |
+| `ao1_high_risk_sort_order` | Stable risk-label display order. |
+| `ao2_expected_profit_band_sort_order` | Stable expected-profit band display order. |
+
 ## AO2 Expected-Profit Bands
 
 The expected-profit band is a display-only derivative of frozen AO2 predicted profit:
@@ -105,6 +118,49 @@ $100+
 
 It is designed for slicer interaction and should not be interpreted as a retrained profitability model or a revised AO3 policy.
 
+## Margin Policy Tier
+
+The enrichment job adds `ao2_margin_policy_tier` to improve visibility inside the dominant positive-margin population without changing the official AO3 cutoff.
+
+Official AO3 still uses `0.0` as the profit/loss margin boundary. The margin-policy tier is a dashboard-serving interpretation layer:
+
+```text
+Loss or Negative Margin
+Low Positive Margin
+Core Positive Margin
+Strategic Positive Margin
+```
+
+The positive tiers are based on the positive-margin distribution of the geographic serving table. This helps the dashboard answer whether a geography is merely profit-positive or strategically margin-attractive.
+
+## Geographic Decision Enrichments
+
+The enrichment job also adds geographic decision fields:
+
+| Field | Purpose |
+| --- | --- |
+| `geo_data_quality_status` | Distinguishes complete coordinates, missing coordinates, and unknown geography. |
+| `geo_exposure_tier` | Classifies geography by value exposure using total order value quantiles. |
+| `geo_exposure_tier_sort_order` | Stable exposure tier display order. |
+| `geo_risk_intensity_tier` | Classifies geography by high-risk order-rate quantiles. |
+| `geo_risk_intensity_tier_sort_order` | Stable risk-intensity display order. |
+| `geo_decision_archetype` | Executive decision profile combining segment, exposure, risk intensity, margin tier, and data quality. |
+| `geo_decision_archetype_sort_order` | Stable archetype display order. |
+| `geo_recommended_focus` | Short action label for executive tables and tooltip cards. |
+
+Controlled archetypes:
+
+```text
+Priority Protection Geography
+Selective Recovery Review
+Preserve Service Geography
+Standard Monitoring Geography
+Operational Monitoring Geography
+Data Quality Review
+```
+
+Recommended focus values are intended for visuals such as `Geographic Action Queue`, `Country Decision Portfolio`, and region-level treemaps.
+
 ## Recommended P04 Visual Usage
 
 | Visual | Recommended source |
@@ -114,6 +170,8 @@ It is designed for slicer interaction and should not be interpreted as a retrain
 | Treemap by region responsive to Priority Segment | `powerbi_geographic_segment_summary` |
 | Country risk-margin scatter responsive to slicers | `powerbi_geographic_segment_summary` |
 | Geographic action queue table | `powerbi_geographic_segment_summary` |
+| Country or region decision archetype view | `powerbi_geographic_segment_summary` |
+| Margin-policy sensitivity slicer | `powerbi_geographic_segment_summary` |
 
 ## Governance Rules
 
@@ -122,15 +180,17 @@ It is designed for slicer interaction and should not be interpreted as a retrain
 - Do not retrain AO1 or AO2.
 - Do not redefine AO3.
 - Do not recalculate AO3 segment logic in Power BI.
+- Treat margin-policy tier, decision archetype, and recommended focus as serving-layer enrichments, not new model outputs.
 - Use this table as a serving artifact built from governed upstream outputs.
 
 ## Acceptance Checks
 
 The validation script must confirm:
 
-- all required geography, date, AO3, risk, and profit-band columns exist;
+- all required geography, date, AO3, risk, profit-band, and enrichment columns exist;
 - forbidden target/outcome fields are absent;
 - filter dimensions are not null;
+- controlled display values are valid;
 - coordinates fall within valid latitude/longitude ranges;
 - rates are between 0 and 1;
 - metric counts are non-negative;
@@ -140,6 +200,10 @@ The validation script must confirm:
 
 This table enables the geographic dashboard to answer a more operationally useful question than the aggregate map alone:
 
-> After the manager filters by segment, risk profile, profit band, or date period, where is the remaining geographic exposure concentrated?
+> After the manager filters by segment, risk profile, profit band, margin-policy tier, or date period, where is the remaining geographic exposure concentrated?
 
 This improves the P04 page from a static geographic overview into an interactive geographic decision-support layer.
+
+Recommended executive takeaway for P04:
+
+> Geographic exposure should be prioritized where risk, value, and margin-policy attractiveness overlap. The enriched serving table allows managers to distinguish priority protection geographies, selective recovery review geographies, preserve-service geographies, and data-quality review cases without changing the official AO3 model policy.
