@@ -272,7 +272,9 @@ table powerbi_ao3_order_segments
 		dataType: int64
 		displayFolder: AO2 Profitability
 		lineageTag: c8ff3301-c4a9-4451-afb7-cd5420315faa
-		summarizeBy: none
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
 
 	/// Stable AO2 expected-profit visualization band derived only from frozen AO2 predicted profit.
 	column ao2_expected_profit_band = SWITCH ( TRUE (), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0, "Negative Profit", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 10, "$0 to $10", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 25, "$10 to $25", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 50, "$25 to $50", 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 100, "$50 to $100", "$100+" )
@@ -282,8 +284,24 @@ table powerbi_ao3_order_segments
 		summarizeBy: none
 		sortByColumn: ao2_expected_profit_band_sort
 
+	/// Monday-start calendar week at midnight derived from governed order date for executive weekly trend analysis.
+	column order_week_start =
+			VAR OrderDay = DATE ( YEAR ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), MONTH ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), DAY ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ) )
+			RETURN OrderDay - WEEKDAY ( OrderDay, 2 ) + 1
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		displayFolder: Executive Overview | Time Series
+		lineageTag: 47a3b532-66c8-400a-9eee-46c8f6a8fd68
+		summarizeBy: none
+
+	/// Calendar-day key normalized to midnight for the official Dim_Date relationship.
+	column order_date_key = DATE ( YEAR ( [order_date_DateOrders] ), MONTH ( [order_date_DateOrders] ), DAY ( [order_date_DateOrders] ) )
+		dataType: dateTime
+		displayFolder: Calendar
+		lineageTag: 2f2e26d1-13e7-4953-8d4d-e8972798d3c3
+
 	partition powerbi_ao3_order_segments = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

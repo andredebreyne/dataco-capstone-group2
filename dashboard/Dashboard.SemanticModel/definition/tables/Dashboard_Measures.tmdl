@@ -272,6 +272,557 @@ table Dashboard_Measures
 		displayFolder: AO2 Profitability | Profit Bands
 		lineageTag: bd434d1e-b8f1-4ac4-9db9-5ea164b0ce67
 
+	/// AO3 scored order items assigned to protect_high_value_at_risk.
+	measure 'Protect High Value At Risk Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "protect_high_value_at_risk" )
+		formatString: #,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: fd92fc46-c637-45ac-8641-3e0a400e589d
+
+	/// Share of AO3 scored order items assigned to protect_high_value_at_risk.
+	measure 'Protect High Value At Risk Share' = DIVIDE ( [Protect High Value At Risk Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: 1191587b-25fd-4d7c-8358-562f6079bf8d
+
+	/// AO3 scored order items assigned to expedite_selectively.
+	measure 'Expedite Selectively Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "expedite_selectively" )
+		formatString: #,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: 3ce879ba-a055-4bf4-9429-19457532c864
+
+	/// AO3 scored order items assigned to preserve_service.
+	measure 'Preserve Service Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "preserve_service" )
+		formatString: #,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: b6bb2e84-9607-4296-b0d2-8ed356b62db6
+
+	/// AO3 scored order items assigned to standard_process.
+	measure 'Standard Process Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "standard_process" )
+		formatString: #,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: 1421886e-8423-49be-8322-9d1f1a399723
+
+	/// Governed order value assigned to protect_high_value_at_risk.
+	measure 'Protected Value At Risk' = CALCULATE ( [Total Order Value], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "protect_high_value_at_risk" )
+		formatString: $#,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: d02ad373-6ba7-4ebe-8aad-d5a170e258bf
+
+	/// Frozen expected profit assigned to protect_high_value_at_risk.
+	measure 'Protected Expected Profit At Risk' = CALCULATE ( [Expected Profit], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "protect_high_value_at_risk" )
+		formatString: $#,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: f1eb71eb-20f3-4e4e-b7e0-6051f3962b69
+
+	/// AO3 items requiring selective expedite review due to high risk and low predicted margin.
+	measure 'High Risk Negative Margin Items' = [Expedite Selectively Items]
+		formatString: #,##0
+		displayFolder: AO3 Risk-Margin Prioritization
+		lineageTag: 4ae03570-98a7-4ee2-be0b-5c307d40425a
+
+	/// AO3 scored order items requiring active review: protect high-value-at-risk plus selective-expedite segments.
+	measure 'Executive Priority Review Items' = [Protect High Value At Risk Items] + [Expedite Selectively Items]
+		formatString: #,0
+		displayFolder: Executive Overview
+		lineageTag: cdf0e563-08b9-4bf3-9a97-e17c21521e7f
+
+	/// Share of governed scored order items requiring active AO3 review.
+	measure 'Executive Priority Review Rate' = DIVIDE ( [Executive Priority Review Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: c981e9bd-bdef-4d98-a679-ac98277bca40
+
+	/// Share of governed order value assigned to the protect-high-value-at-risk AO3 segment.
+	measure 'Protected Value At Risk Share' = DIVIDE ( [Protected Value At Risk], [Total Order Value] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: cc4dfbdb-2f7c-4ac5-8d73-373102c17b4e
+
+	/// Share of frozen AO2 expected profit assigned to the protect-high-value-at-risk AO3 segment.
+	measure 'Protected Expected Profit Share' = DIVIDE ( [Protected Expected Profit At Risk], [Expected Profit] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: 6f9bf2df-bc1a-4948-8f4d-8889c0084ed0
+
+	/// Share of governed scored order items assigned to selective expedite review.
+	measure 'Expedite Selectively Share' = DIVIDE ( [Expedite Selectively Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: 5e9da419-4309-43d5-b752-cda3f8ca8744
+
+	/// Share of governed scored order items assigned to preserve-service handling.
+	measure 'Preserve Service Share' = DIVIDE ( [Preserve Service Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: 7f62757d-8cbc-4a18-9674-6d2fb5683604
+
+	/// Share of governed scored order items assigned to routine standard processing.
+	measure 'Standard Process Share' = DIVIDE ( [Standard Process Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: Executive Overview
+		lineageTag: 8cfeafef-a7e1-49d0-9343-f5d901ca18a6
+
+	/// Governed order value assigned to selective expedite review. This is exposure for review, not an intervention cost estimate.
+	measure 'Expedite Review Order Value' = CALCULATE ( [Total Order Value], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "expedite_selectively" )
+		formatString: $#,0
+		displayFolder: Executive Overview | Operational Decisions
+		lineageTag: cb31dbe4-c55f-4713-af68-392373f91f23
+
+	/// Frozen AO2 expected profit for items assigned to selective expedite review.
+	measure 'Expedite Review Expected Profit' = CALCULATE ( [Expected Profit], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "expedite_selectively" )
+		formatString: $#,0
+		displayFolder: Executive Overview | Operational Decisions
+		lineageTag: 25ade02e-5331-46cc-85b1-f1e26f530dba
+
+	/// Absolute expected loss exposure for frozen AO2 negative-profit items. This is modeled exposure, not realized loss.
+	measure 'Negative Profit Exposure' = ABS ( CALCULATE ( [Expected Profit], 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0 ) )
+		formatString: $#,0
+		displayFolder: Executive Overview | Financial Decisions
+		lineageTag: a9ee6555-88cc-40d4-9935-27b88f8d8b56
+
+	/// Share of total frozen AO2 expected profit concentrated in protect-high-value-at-risk orders.
+	measure 'Protected Expected Profit Share of Total' = DIVIDE ( [Protected Expected Profit At Risk], [Expected Profit] )
+		formatString: 0.0%
+		displayFolder: Executive Overview | Financial Decisions
+		lineageTag: 21cb7c77-4b2d-49f9-8049-94b2dd6f70e8
+
+	/// Weekly governed order value assigned to protect-high-value-at-risk. Use with order_week_start on the X-axis.
+	measure 'Weekly Protected Value At Risk' = CALCULATE ( [Total Order Value], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "protect_high_value_at_risk" )
+		formatString: $#,0
+		displayFolder: Executive Overview | Time Series
+		lineageTag: ea9a3e86-bcaf-4448-a7c7-6d890fbd2c02
+
+	/// Trailing four-week average protected value at risk. This is an operational run-rate projection aid, not a statistical forecast.
+	measure 'Protected Value At Risk 4W Run Rate' =
+			VAR CurrentWeek = MAX ( 'powerbi_ao3_order_segments'[order_week_start] )
+			VAR WindowStart = CurrentWeek - 21
+			VAR WeeklyValues =
+			    CALCULATETABLE (
+			        SUMMARIZE (
+			            'powerbi_ao3_order_segments',
+			            'powerbi_ao3_order_segments'[order_week_start],
+			            "WeeklyValue", [Weekly Protected Value At Risk]
+			        ),
+			        FILTER (
+			            ALL ( 'powerbi_ao3_order_segments'[order_week_start] ),
+			            'powerbi_ao3_order_segments'[order_week_start] >= WindowStart
+			                && 'powerbi_ao3_order_segments'[order_week_start] <= CurrentWeek
+			        )
+			    )
+			RETURN
+			AVERAGEX ( WeeklyValues, [WeeklyValue] )
+		formatString: $#,0
+		displayFolder: Executive Overview | Time Series
+		lineageTag: 90256697-a2d4-4726-a349-c87f392a6978
+
+	/// Weekly count of protect-high-value-at-risk order items for operational queue tracking.
+	measure 'Weekly Protect First Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "protect_high_value_at_risk" )
+		formatString: #,0
+		displayFolder: Executive Overview | Time Series
+		lineageTag: 69b0acd2-7ebd-4c6d-8098-ce071a99a070
+
+	/// Weekly count of selective-expedite order items for operational queue tracking.
+	measure 'Weekly Expedite Selectively Items' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_priority_segment] = "expedite_selectively" )
+		formatString: #,0
+		displayFolder: Executive Overview | Time Series
+		lineageTag: fefd6c9c-a666-4444-aa02-9cefb3b50369
+
+	/// Governed order value associated with items classified as high delivery risk by the frozen AO1 policy.
+	measure 'AO1 High Risk Order Value' = CALCULATE ( [Total Order Value], 'powerbi_ao3_order_segments'[ao1_high_risk_flag] = TRUE () )
+		formatString: $#,0
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: ddfa68e0-79d0-447f-b6b5-c487ea3e2fbc
+
+	/// Share of governed order value associated with frozen AO1 high-risk items.
+	measure 'AO1 High Risk Value Share' = DIVIDE ( [AO1 High Risk Order Value], [Total Order Value] )
+		formatString: 0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 2cfd04b5-1209-48d6-9c03-daf723e5b414
+
+	/// Items simultaneously classified as frozen AO1 high risk and negative expected profit by frozen AO2 outputs.
+	measure 'AO1 High Risk Negative Profit Items' = CALCULATE ( [Negative Expected Profit Items], 'powerbi_ao3_order_segments'[ao1_high_risk_flag] = TRUE () )
+		formatString: #,0
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 3491229a-8259-4704-a2e7-0750ff8f6ae8
+
+	/// High-risk item count in the latest four-week window ending on the latest visible order date.
+	measure 'AO1 Current 4W High Risk Items' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN
+			CALCULATE (
+			    [High Risk Orders],
+			    REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ),
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 28,
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate
+			)
+		formatString: #,0
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 05e84044-05cb-4c65-bcc3-839768e1a106
+
+	/// High-risk item count in the four-week window immediately preceding the latest four-week window.
+	measure 'AO1 Prior 4W High Risk Items' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN
+			CALCULATE (
+			    [High Risk Orders],
+			    REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ),
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 56,
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate - 28
+			)
+		formatString: #,0
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 7e996a7e-3250-4ae6-b25f-0c297870da7a
+
+	/// Relative change in high-risk item count: latest four weeks versus immediately prior four weeks.
+	measure 'AO1 High Risk Items 4W Change' = DIVIDE ( [AO1 Current 4W High Risk Items] - [AO1 Prior 4W High Risk Items], [AO1 Prior 4W High Risk Items] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 3b9b7399-ba90-4b44-8c2a-292e557777a6
+
+	/// High-risk rate in the latest four-week window ending on the latest visible order date.
+	measure 'AO1 Current 4W High Risk Rate' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN
+			CALCULATE (
+			    [High Risk Rate],
+			    REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ),
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 28,
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate
+			)
+		formatString: 0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: c3dabb98-71b5-4db7-b634-788a85046f15
+
+	/// High-risk rate in the four-week window immediately preceding the latest four-week window.
+	measure 'AO1 Prior 4W High Risk Rate' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN
+			CALCULATE (
+			    [High Risk Rate],
+			    REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ),
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 56,
+			    'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate - 28
+			)
+		formatString: 0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 0b935afc-e9ff-479d-9ffc-eba7ddc9695f
+
+	/// Percentage-point change in high-risk rate: latest four weeks versus immediately prior four weeks.
+	measure 'AO1 High Risk Rate 4W Delta PP' = [AO1 Current 4W High Risk Rate] - [AO1 Prior 4W High Risk Rate]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 7779449a-d196-46ed-b9dc-44f1f7f0cb46
+
+	/// Weekly count of order items classified as high risk by frozen AO1 outputs. Use with order_week_start.
+	measure 'AO1 Weekly High Risk Items' = [High Risk Orders]
+		formatString: #,0
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: e46840bb-f18d-4ac6-858d-0179b794a817
+
+	/// Weekly share of order items classified as high risk by frozen AO1 outputs. Use with order_week_start.
+	measure 'AO1 Weekly High Risk Rate' = [High Risk Rate]
+		formatString: 0.0%
+		displayFolder: AO1 Delivery Risk | Business Executive V2
+		lineageTag: 855154c8-fe0c-4331-bb57-ef55ec14d03c
+
+	/// Frozen AO2 expected profit in the latest four-week window ending on the latest visible order date.
+	measure 'AO2 Current 4W Expected Profit' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Expected Profit], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 28, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate )
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 957b2dd8-0b87-4acd-b22e-935c594e8865
+
+	/// Frozen AO2 expected profit in the four-week window immediately preceding the latest four-week window.
+	measure 'AO2 Prior 4W Expected Profit' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Expected Profit], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 56, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate - 28 )
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 00afebbc-dd28-4712-b4b3-70b3ceb3cbb4
+
+	/// Relative frozen expected-profit change: latest four weeks versus immediately prior four weeks.
+	measure 'AO2 Expected Profit 4W Change' = DIVIDE ( [AO2 Current 4W Expected Profit] - [AO2 Prior 4W Expected Profit], [AO2 Prior 4W Expected Profit] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: ed3e3579-023b-4bc7-a3bc-31a922b37167
+
+	/// Frozen expected margin in the latest four-week window ending on the latest visible order date.
+	measure 'AO2 Current 4W Expected Margin' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Expected Profit Margin], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 28, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: f37b9523-1a6d-41b0-92d3-4a2d977f37e1
+
+	/// Frozen expected margin in the four-week window immediately preceding the latest four-week window.
+	measure 'AO2 Prior 4W Expected Margin' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Expected Profit Margin], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 56, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate - 28 )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: ee1e9b64-fe27-4153-946a-b7b72f62e564
+
+	/// Percentage-point frozen expected-margin change: latest four weeks versus immediately prior four weeks.
+	measure 'AO2 Expected Margin 4W Delta PP' = [AO2 Current 4W Expected Margin] - [AO2 Prior 4W Expected Margin]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: a5eaae8f-a4c3-4a6b-9486-3c0effa39029
+
+	/// Governed order value in the latest four-week window.
+	measure 'AO2 Current 4W Order Value' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Total Order Value], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 28, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate )
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 2cfa2657-70bd-431e-8d75-23af45466424
+
+	/// Governed order value in the four-week window immediately preceding the latest four-week window.
+	measure 'AO2 Prior 4W Order Value' =
+			VAR MaxVisibleDate = MAX ( 'powerbi_ao3_order_segments'[order_date_DateOrders] )
+			RETURN CALCULATE ( [Total Order Value], REMOVEFILTERS ( 'powerbi_ao3_order_segments'[order_date_DateOrders] ), 'powerbi_ao3_order_segments'[order_date_DateOrders] > MaxVisibleDate - 56, 'powerbi_ao3_order_segments'[order_date_DateOrders] <= MaxVisibleDate - 28 )
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 61ee2770-531a-48a2-830a-44cdb5ba1196
+
+	/// Relative governed order-value change: latest four weeks versus immediately prior four weeks.
+	measure 'AO2 Order Value 4W Change' = DIVIDE ( [AO2 Current 4W Order Value] - [AO2 Prior 4W Order Value], [AO2 Prior 4W Order Value] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 6c2e46cb-bc12-43a2-bf69-4f076cfb4522
+
+	/// Absolute frozen expected-loss exposure concentrated in the ten most negative AO2 items.
+	measure 'AO2 Top 10 Loss Exposure' =
+			VAR LossQueue = TOPN ( 10, FILTER ( 'powerbi_ao3_order_segments', 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0 ), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit], ASC )
+			RETURN ABS ( SUMX ( LossQueue, 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] ) )
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: d87cb33e-5336-4073-aca4-e37473a3c93d
+
+	/// Share of frozen negative-profit exposure concentrated in the ten most negative AO2 items.
+	measure 'AO2 Top 10 Loss Concentration' = DIVIDE ( [AO2 Top 10 Loss Exposure], [Negative Profit Exposure] )
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 01c0b80b-5d18-46a0-9a87-2946d485ddd7
+
+	/// Weekly frozen AO2 expected profit. Use with order_week_start.
+	measure 'AO2 Weekly Expected Profit' = [Expected Profit]
+		formatString: $#,0
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: 189fa0a6-7f99-44b7-81b5-a26bf4410b05
+
+	/// Weekly frozen expected-profit margin. Use with order_week_start.
+	measure 'AO2 Weekly Expected Margin' = [Expected Profit Margin]
+		formatString: 0.0%
+		displayFolder: AO2 Profitability | Margin Protection V2
+		lineageTag: f061a96c-5f00-4d7c-bdca-d0a1e1e53f2e
+
+	/// Protect-high-value-at-risk item count in the latest four-week window.
+	measure 'AO3 Current 4W Protect Items' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Protect High Value At Risk Items],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-28,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate)
+		formatString: #,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: af599c95-1d8c-4a3c-b918-6f2482a07a5e
+
+	/// Protect-high-value-at-risk item count in the prior four-week window.
+	measure 'AO3 Prior 4W Protect Items' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Protect High Value At Risk Items],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-56,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate-28)
+		formatString: #,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 2fc3ea05-5b5d-4ae6-b239-305065f1d799
+
+	/// Relative protect-queue count change: latest four weeks versus prior four weeks.
+	measure 'AO3 Protect Items 4W Change' = DIVIDE([AO3 Current 4W Protect Items]-[AO3 Prior 4W Protect Items],[AO3 Prior 4W Protect Items])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 5d751506-2b83-494d-92fb-100539a66e97
+
+	/// Governed protect-high-value-at-risk order value in the latest four-week window.
+	measure 'AO3 Current 4W Protected Value' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Protected Value At Risk],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-28,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate)
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 80e7dfe2-28f9-4d04-9e1e-1e4e22a8a295
+
+	/// Governed protect-high-value-at-risk order value in the prior four-week window.
+	measure 'AO3 Prior 4W Protected Value' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Protected Value At Risk],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-56,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate-28)
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 91a092cd-da96-4d6d-852d-9763c8233ef5
+
+	/// Relative protected order-value change: latest four weeks versus prior four weeks.
+	measure 'AO3 Protected Value 4W Change' = DIVIDE([AO3 Current 4W Protected Value]-[AO3 Prior 4W Protected Value],[AO3 Prior 4W Protected Value])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: d74c65c2-411b-4961-973f-ef8086dbb5cf
+
+	/// Selective-expedite item count in the latest four-week window.
+	measure 'AO3 Current 4W Expedite Items' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Expedite Selectively Items],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-28,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate)
+		formatString: #,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: ec323d9c-a0ce-423b-bf18-8d2f9f670146
+
+	/// Selective-expedite item count in the prior four-week window.
+	measure 'AO3 Prior 4W Expedite Items' =
+			VAR MaxVisibleDate=MAX('powerbi_ao3_order_segments'[order_date_DateOrders])
+			RETURN CALCULATE([Expedite Selectively Items],REMOVEFILTERS('powerbi_ao3_order_segments'[order_date_DateOrders]),'powerbi_ao3_order_segments'[order_date_DateOrders]>MaxVisibleDate-56,'powerbi_ao3_order_segments'[order_date_DateOrders]<=MaxVisibleDate-28)
+		formatString: #,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: f38e38cd-8b7f-45d5-9178-12abbdc0ee6d
+
+	/// Relative selective-expedite count change: latest four weeks versus prior four weeks.
+	measure 'AO3 Expedite Items 4W Change' = DIVIDE([AO3 Current 4W Expedite Items]-[AO3 Prior 4W Expedite Items],[AO3 Prior 4W Expedite Items])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: cca04d1d-7756-4ef5-ac48-4b0465faa4bb
+
+	/// Governed order value in the ten largest selective-expedite items.
+	measure 'AO3 Top 10 Expedite Value' =
+			VAR Queue=TOPN(10,FILTER('powerbi_ao3_order_segments','powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively"),'powerbi_ao3_order_segments'[ao3_order_value],DESC)
+			RETURN SUMX(Queue,'powerbi_ao3_order_segments'[ao3_order_value])
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: d822e4c8-ff6f-4bd1-9527-e67cc849134e
+
+	/// Share of selective-expedite order value concentrated in the ten largest items.
+	measure 'AO3 Top 10 Expedite Value Share' = DIVIDE([AO3 Top 10 Expedite Value],[Expedite Review Order Value])
+		formatString: 0.0%
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 11898a59-0e81-433c-86b7-84b1acbee0c1
+
+	/// Weekly protect-high-value-at-risk item count. Use with order_week_start.
+	measure 'AO3 Weekly Protect Items' = [Protect High Value At Risk Items]
+		formatString: #,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: 185e0aa7-a0eb-4cdd-afa6-fbbc42187d47
+
+	/// Weekly governed protect-high-value-at-risk order value. Use with order_week_start.
+	measure 'AO3 Weekly Protected Value' = [Protected Value At Risk]
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Allocation V2
+		lineageTag: cd99e20a-4b40-409b-88fa-11eba0a4c42e
+
+	/// Average governed order value for protect-high-value-at-risk items.
+	measure 'AO3 Average Protect Order Value' = DIVIDE ( [Protected Value At Risk], [Protect High Value At Risk Items] )
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: f01c3e45-d49c-4bbd-a7a4-c54435b44bd9
+
+	/// Average governed order value for protect-high-value-at-risk items in the latest four-week window.
+	measure 'AO3 Current 4W Average Protect Order Value' = DIVIDE ( [AO3 Current 4W Protected Value], [AO3 Current 4W Protect Items] )
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: c280eac9-81d5-432a-ad5d-62375436ab5b
+
+	/// Average governed order value for protect-high-value-at-risk items in the prior four-week window.
+	measure 'AO3 Prior 4W Average Protect Order Value' = DIVIDE ( [AO3 Prior 4W Protected Value], [AO3 Prior 4W Protect Items] )
+		formatString: $#,0
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: d43f2fbf-3c79-4a67-a661-5d6af7701c65
+
+	/// Relative average protected order-value movement: latest four weeks versus prior four weeks.
+	measure 'AO3 Average Protect Order Value 4W Change' = DIVIDE ( [AO3 Current 4W Average Protect Order Value] - [AO3 Prior 4W Average Protect Order Value], [AO3 Prior 4W Average Protect Order Value] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: b9c1f23a-d220-4942-a652-dc44ba852b28
+
+	/// Share of governed order value assigned to selective-expedite review.
+	measure 'AO3 Expedite Queue Value Share' = DIVIDE ( [Expedite Review Order Value], [Total Order Value] )
+		formatString: 0.00%
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: b2ea9d98-2bde-4bc6-be44-4edf19a136b0
+
+	/// Share of scored items assigned to preserve-service handling.
+	measure 'AO3 Preserve Service Rate' = DIVIDE ( [Preserve Service Items], [Total Orders] )
+		formatString: 0.0%
+		displayFolder: AO3 Prioritization | Operational Performance
+		lineageTag: ccbb08a5-fec7-4c1c-84a3-eceff2d752d0
+
+	/// Count of governed geographic summary locations in the current geographic filter context.
+	measure 'Geo Locations' = COUNTROWS ( 'powerbi_geographic_summary' )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: 2fc957b4-fad4-4d45-b6d0-d8356b61f659
+
+	/// Distinct governed countries in the geographic summary context.
+	measure 'Geo Countries' = DISTINCTCOUNT ( 'powerbi_geographic_summary'[map_location_country] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: 8cc40d0e-9962-4689-9712-15396942506d
+
+	/// Distinct governed regions in the geographic summary context.
+	measure 'Geo Regions' = DISTINCTCOUNT ( 'powerbi_geographic_summary'[map_location_region] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: e11302a7-ecec-4540-9419-d7289d6fe218
+
+	/// Distinct governed states in the geographic summary context.
+	measure 'Geo States' = DISTINCTCOUNT ( 'powerbi_geographic_summary'[map_location_state] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: 11abe2df-27b8-4540-9b7a-b477295cbc7f
+
+	/// Summed governed order-item count from the geographic serving summary.
+	measure 'Geo Order Items' = SUM ( 'powerbi_geographic_summary'[order_item_count] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: 8001da71-4122-471b-8477-91f7f00165e0
+
+	/// Summed high-risk item count from the geographic serving summary.
+	measure 'Geo High Risk Items' = SUM ( 'powerbi_geographic_summary'[high_risk_order_count] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: e854cf32-3709-494d-a31f-f6b0f2e11147
+
+	/// Geographic high-risk item share from the governed summary.
+	measure 'Geo High Risk Rate' = DIVIDE ( [Geo High Risk Items], [Geo Order Items] )
+		formatString: 0.0%
+		displayFolder: Geographic Hotspots
+		lineageTag: c0dca097-4c48-4d2d-810b-a3f0b164c1f4
+
+	/// Summed protect-high-value-at-risk item count from the geographic serving summary.
+	measure 'Geo Protect Items' = SUM ( 'powerbi_geographic_summary'[protect_high_value_at_risk_count] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: b440523e-e6d9-4652-9841-8d27e59c24a7
+
+	/// Summed selective-expedite item count from the geographic serving summary.
+	measure 'Geo Expedite Items' = SUM ( 'powerbi_geographic_summary'[expedite_selectively_count] )
+		formatString: #,0
+		displayFolder: Geographic Hotspots
+		lineageTag: 4830f999-6e5b-40c6-85d8-4042808f292c
+
+	/// Summed governed order value from the geographic serving summary.
+	measure 'Geo Order Value' = SUM ( 'powerbi_geographic_summary'[total_order_value] )
+		formatString: $#,0
+		displayFolder: Geographic Hotspots
+		lineageTag: bb4825ed-15fc-4341-a2aa-23a47a46e2dc
+
+	/// Summed frozen predicted profit from the geographic serving summary.
+	measure 'Geo Expected Profit' = SUM ( 'powerbi_geographic_summary'[total_predicted_profit] )
+		formatString: $#,0
+		displayFolder: Geographic Hotspots
+		lineageTag: e94546ff-5ba2-4da0-9cdf-7ac5a7b56255
+
+	/// Geographic predicted-profit margin derived from frozen predicted profit and governed order value.
+	measure 'Geo Expected Margin' = DIVIDE ( [Geo Expected Profit], [Geo Order Value] )
+		formatString: 0.0%
+		displayFolder: Geographic Hotspots
+		lineageTag: 12715fef-5172-40fb-924f-13cf62e1fd81
+
+	/// Share of geographic summary locations with available coordinates.
+	measure 'Geo Coordinate Coverage' = DIVIDE ( CALCULATE ( COUNTROWS ( 'powerbi_geographic_summary' ), 'powerbi_geographic_summary'[geo_coordinates_available] = 1 ), COUNTROWS ( 'powerbi_geographic_summary' ) )
+		formatString: 0.0%
+		displayFolder: Geographic Hotspots
+		lineageTag: ceb4eba1-e9fb-496e-93d8-e379158b0ba7
+
 	column 'Measure Group'
 		isHidden
 		lineageTag: 178048c3-e0aa-42d4-a92b-630cadac0387

@@ -30,3 +30,11 @@ relationship ao2_profit_band_dimension_to_order_segments
 	fromColumn: powerbi_ao3_order_segments.ao2_expected_profit_band
 	toColumn: Dashboard_AO2_Profit_Bands.profit_band
 
+relationship dim_date_to_ao3_order_segments
+	fromColumn: powerbi_ao3_order_segments.order_date_key
+	toColumn: Dim_Date.Date
+
+relationship dim_date_to_ao1_ao2_test_scores
+	fromColumn: powerbi_ao1_ao2_test_scores.order_date_key
+	toColumn: Dim_Date.Date
+

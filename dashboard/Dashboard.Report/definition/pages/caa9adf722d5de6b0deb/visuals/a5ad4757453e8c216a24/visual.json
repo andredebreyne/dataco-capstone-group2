@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "a5ad4757453e8c216a24",
+  "position": {
+    "x": 0,
+    "y": 727.72717271727174,
+    "z": 5000,
+    "height": 351.47194719471946,
+    "width": 966.54785478547853,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q03 V2 | 05 Governance Portfolio Mix"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q03 V2 | 05 Governance Portfolio Mix",
+              "nativeQueryRef": "Q03 V2 | 05 Governance Portfolio Mix"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

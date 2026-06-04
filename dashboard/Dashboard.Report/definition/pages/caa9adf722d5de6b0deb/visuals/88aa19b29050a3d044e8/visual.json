@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "88aa19b29050a3d044e8",
+  "position": {
+    "x": 0,
+    "y": 322.18261826182618,
+    "z": 4000,
+    "height": 405.54455445544556,
+    "width": 964.29482948294833,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q03 V2 | 03 Weekly Protection Capacity Trend"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q03 V2 | 03 Weekly Protection Capacity Trend",
+              "nativeQueryRef": "Q03 V2 | 03 Weekly Protection Capacity Trend"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "e2d5ae2d398e52387114",
+  "position": {
+    "x": 0,
+    "y": 200.04257717112264,
+    "z": 1000,
+    "height": 169.26679606787303,
+    "width": 1919.6393463151962,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q02 V2 | 02 Margin Protection KPI Strip"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q02 V2 | 02 Margin Protection KPI Strip",
+              "nativeQueryRef": "Q02 V2 | 02 Margin Protection KPI Strip"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

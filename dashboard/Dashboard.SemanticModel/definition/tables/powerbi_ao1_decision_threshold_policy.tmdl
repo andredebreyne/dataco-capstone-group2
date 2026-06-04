@@ -204,7 +204,7 @@ table powerbi_ao1_decision_threshold_policy
 		annotation SummarizationSetBy = Automatic
 
 	partition powerbi_ao1_decision_threshold_policy = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

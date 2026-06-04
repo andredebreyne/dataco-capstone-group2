@@ -187,7 +187,7 @@ table powerbi_ao3_risk_margin_policy
 		annotation SummarizationSetBy = Automatic
 
 	partition powerbi_ao3_risk_margin_policy = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

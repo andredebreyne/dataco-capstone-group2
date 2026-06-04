@@ -171,7 +171,7 @@ table powerbi_ao1_model_validation
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition powerbi_ao1_model_validation = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),

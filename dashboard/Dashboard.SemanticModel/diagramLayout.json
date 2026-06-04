@@ -4,14 +4,14 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 367.99999999999955,
+        "x": 0,
         "y": 0
       },
       "nodes": [
         {
           "location": {
-            "x": 1709.2027036234297,
-            "y": 406.88452335626346
+            "x": 2309.3473544847343,
+            "y": 437.58875431093793
           },
           "nodeIndex": "powerbi_ao1_ao2_test_score_summary",
           "nodeLineageTag": "cb3d286a-da89-41c9-86a3-2d9b577fad1a",
@@ -23,8 +23,8 @@
         },
         {
           "location": {
-            "x": 1993.2027036234297,
-            "y": 406.88452335626346
+            "x": 1220.9884307342722,
+            "y": 825.1775086218762
           },
           "nodeIndex": "powerbi_ao1_ao2_test_scores",
           "nodeLineageTag": "fd9a4ae9-9d69-44b0-a016-676f06ad1a83",
@@ -36,8 +36,8 @@
         },
         {
           "location": {
-            "x": 1254.7731752963359,
-            "y": 692.06373572267239
+            "x": 1854.9178261576405,
+            "y": 722.76796667734686
           },
           "nodeIndex": "powerbi_ao1_confusion_by_threshold",
           "nodeLineageTag": "62548550-5ba1-4c2e-8a1b-993d3409f305",
@@ -49,8 +49,8 @@
         },
         {
           "location": {
-            "x": 1475.20270362343,
-            "y": 73.705310989854524
+            "x": 2075.3473544847343,
+            "y": 104.409541944529
           },
           "nodeIndex": "powerbi_ao1_decision_threshold_policy",
           "nodeLineageTag": "e258e87c-0b00-473b-ba2d-1cb02dd1053e",
@@ -62,8 +62,8 @@
         },
         {
           "location": {
-            "x": 1191.0490990532758,
-            "y": 341.853794370663
+            "x": 1791.1937499145802,
+            "y": 372.5580253253375
           },
           "nodeIndex": "powerbi_ao1_model_validation",
           "nodeLineageTag": "2db14e29-2786-4ff4-b709-b9206b1dea4e",
@@ -75,8 +75,8 @@
         },
         {
           "location": {
-            "x": 904.84377987296739,
-            "y": 364.85017049509571
+            "x": 1504.988430734272,
+            "y": 395.55440144977018
           },
           "nodeIndex": "powerbi_ao1_threshold_tradeoff",
           "nodeLineageTag": "742dbb57-18c6-4cce-9603-b0e38dd85635",
@@ -88,8 +88,8 @@
         },
         {
           "location": {
-            "x": 2277.2027036234294,
-            "y": 406.88452335626346
+            "x": 2593.3473544847343,
+            "y": 437.58875431093793
           },
           "nodeIndex": "powerbi_ao2_evaluation_metrics",
           "nodeLineageTag": "98703a50-9101-4df1-9a36-3da813012ffd",
@@ -101,8 +101,8 @@
         },
         {
           "location": {
-            "x": 2561.2027036234294,
-            "y": 406.88452335626346
+            "x": 2877.3473544847343,
+            "y": 437.58875431093793
           },
           "nodeIndex": "powerbi_ao2_model_validation",
           "nodeLineageTag": "fe9415d9-fd54-438e-8145-b2b424c50e90",
@@ -114,8 +114,8 @@
         },
         {
           "location": {
-            "x": 2845.2027036234294,
-            "y": 480.88452335626346
+            "x": 3161.3473544847343,
+            "y": 511.58875431093793
           },
           "nodeIndex": "powerbi_ao3_benchmark_insights",
           "nodeLineageTag": "c6921309-5527-4f1a-a4e2-79e8804edeac",
@@ -127,8 +127,8 @@
         },
         {
           "location": {
-            "x": 620.84377987296739,
-            "y": -50
+            "x": 50.036081587853005,
+            "y": 493.91798126860186
           },
           "nodeIndex": "powerbi_ao3_benchmark_segment_summary",
           "nodeLineageTag": "95ed244d-c11a-4efb-a5f7-25355a9e273d",
@@ -140,8 +140,8 @@
         },
         {
           "location": {
-            "x": 488.50606271114111,
-            "y": 767.76904671252692
+            "x": 50,
+            "y": 44.582551562019489
           },
           "nodeIndex": "powerbi_ao3_operational_recommendations",
           "nodeLineageTag": "ac7de157-7aea-4016-a819-e50345647b21",
@@ -153,8 +153,8 @@
         },
         {
           "location": {
-            "x": 50,
-            "y": 139.09593736404429
+            "x": 629.2773374890005,
+            "y": 132.45164750834374
           },
           "nodeIndex": "powerbi_ao3_order_segments",
           "nodeLineageTag": "161a3ae2-2cc5-438f-b630-f7ca04d1eee3",
@@ -166,8 +166,8 @@
         },
         {
           "location": {
-            "x": 336.24875686587444,
-            "y": -9.1113467924246834
+            "x": 963.56847167590126,
+            "y": 122.86753330143824
           },
           "nodeIndex": "powerbi_ao3_risk_margin_policy",
           "nodeLineageTag": "9788fc8c-f1ab-464a-b75d-677e44bc9858",
@@ -179,8 +179,8 @@
         },
         {
           "location": {
-            "x": 217.30598901305848,
-            "y": 490.50841056296576
+            "x": 339.92957690836761,
+            "y": 225.08670917824122
           },
           "nodeIndex": "powerbi_ao3_segment_summary",
           "nodeLineageTag": "98f172ca-ac63-4b13-9fc8-ed195b3755be",
@@ -192,33 +192,72 @@
         },
         {
           "location": {
-            "x": 3079.2027036234294,
-            "y": 456.88452335626346
+            "x": 3445.3473544847343,
+            "y": 437.58875431093793
           },
           "nodeIndex": "Dashboard_Measures",
           "nodeLineageTag": "7e080b02-f1cd-4e8e-a084-cb8b485f1467",
           "size": {
-            "height": 200,
+            "height": 300,
             "width": 234
           },
           "zIndex": 0
         },
         {
           "location": {
-            "x": 3363.2027036234294,
-            "y": 456.88452335626346
+            "x": 3729.3473544847343,
+            "y": 437.58875431093793
           },
           "nodeIndex": "Dashboard_Visualizations",
           "nodeLineageTag": "7ff464a1-814c-4868-83af-56de81d6922c",
           "size": {
-            "height": 200,
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 676.84786953856042,
+            "y": -50
+          },
+          "nodeIndex": "Dashboard_AO2_Profit_Bands",
+          "nodeLineageTag": "12bd5d8f-6e05-4da8-bff0-252340ae6d86",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4013.3473544847343,
+            "y": 437.58875431093793
+          },
+          "nodeIndex": "powerbi_geographic_summary",
+          "nodeLineageTag": "8d5fe060-8775-487b-a495-aae00e5fdb08",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 931.12514484170106,
+            "y": 480.2540610591289
+          },
+          "nodeIndex": "Dim_Date",
+          "nodeLineageTag": "12597cb3-d770-444d-a75b-9638a8cf1219",
+          "size": {
+            "height": 300,
             "width": 234
           },
           "zIndex": 0
         }
       ],
       "name": "All tables",
-      "zoomValue": 28.923548185809938,
+      "zoomValue": 21.240077817537859,
       "pinKeyFieldsToTop": false,
       "showExtraHeaderInfo": false,
       "hideKeyFieldsWhenCollapsed": false,
