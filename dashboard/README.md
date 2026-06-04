@@ -18,6 +18,7 @@ outputs and governed reference artifacts.
 | `pages/q03_ao3_prioritization.md` | Implemented AO3 operational-prioritization executive page specification for Issue `#50`. |
 | `pages/q04_geographic_commercial_hotspots.md` | Implemented geographic and commercial hotspot page specification. |
 | `pages/q05_executive_command_center.md` | Implemented executive command-center page specification. |
+| `pages/q05_geographic_global_map.md` | Geographic global-map data specification for Issue `#51`. |
 | `themes/dataco_executive_operations_dark.json` | Shared executive dashboard theme. |
 | `wireframes/` | Versioned SVG backgrounds and layout standards. |
 
@@ -30,6 +31,13 @@ src/dashboard/register_powerbi_databricks_tables.py
 ```
 
 The script creates or replaces managed `powerbi_*` tables in the configured catalog/schema, defaulting to `workspace.default`, plus `powerbi_serving_layer_manifest` for row-count and source audit checks.
+
+Run the geographic summary build before the serving-layer registration when the
+global map page needs location text and rounded coordinates:
+
+```text
+src/dashboard/build_powerbi_geographic_summary.py
+```
 
 The CSV export path remains available for offline review or local fallback:
 
@@ -65,6 +73,7 @@ files exist.
 - The AO2 profitability-exposure executive page is implemented and documented.
 - The AO3 operational-prioritization executive page is implemented and documented.
 - The geographic and commercial hotspot page is implemented and documented.
+- The geographic global-map data layer is implemented and documented (Issue `#51`).
 - The executive command-center page is implemented and documented.
 - The Power BI semantic model uses the official `Dim_Date` calendar dimension
   for governed date filtering instead of Power BI automatic local date tables.

@@ -253,4 +253,3 @@ table powerbi_geographic_summary
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
-

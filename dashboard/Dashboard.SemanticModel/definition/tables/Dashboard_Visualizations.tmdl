@@ -272,25 +272,25 @@ table Dashboard_Visualizations
 		lineageTag: 1ba4d68b-dfa2-4ef9-9217-d5fb0dce0953
 
 	measure 'Q02 | Scatter Legend' =
-			
+
 			"<div style='box-sizing:border-box;width:100%;font-family:Segoe UI,Arial;color:#AAB6C5;font-size:12px;line-height:1.4;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:transparent;border:none;outline:none;box-shadow:none;'>" &
 			    "<div style='font-weight:700;color:#8C9AAA;margin-right:2px;'>AO3 Segment</div>" &
-			
+
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#4F83B4;display:inline-block;'></span>" &
 			        "<span>Expedite Selectively</span>" &
 			    "</div>" &
-			
+
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#2D8C73;display:inline-block;'></span>" &
 			        "<span>Preserve Service</span>" &
 			    "</div>" &
-			
+
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#DFA64C;display:inline-block;'></span>" &
 			        "<span>Protect High-Value At-Risk</span>" &
 			    "</div>" &
-			
+
 			    "<div style='display:flex;align-items:center;gap:6px;white-space:nowrap;'>" &
 			        "<span style='width:10px;height:10px;border-radius:50%;background:#D95555;display:inline-block;'></span>" &
 			        "<span>Standard Process</span>" &
@@ -310,14 +310,14 @@ table Dashboard_Visualizations
 
 	/// AO3 executive 2x2 HTML matrix showing governed risk-margin priority segments.
 	measure 'Q03 | 03 Risk Margin Matrix' = ```
-			
+
 			VAR Expedite = FORMAT(CALCULATE([Expedite Selectively Items], REMOVEFILTERS()), "#,##0")
 			VAR Protect = FORMAT(CALCULATE([Protect High Value At Risk Items], REMOVEFILTERS()), "#,##0")
 			VAR Standard = FORMAT(CALCULATE([Standard Process Items], REMOVEFILTERS()), "#,##0")
 			VAR Preserve = FORMAT(CALCULATE([Preserve Service Items], REMOVEFILTERS()), "#,##0")
-			
-			VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>RISK-MARGIN PRIORITY MATRIX</div><div style='font-size:18px;color:#AAB6C5;margin-top:5px;'>Frozen AO3 segments convert model outputs into operating choices.</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;'><div style='padding:14px 16px;background:#1B2D3D;border:1px solid #4F83B4;border-radius:8px;'><div style='font-size:16px;color:#91BCE3;'>HIGH RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Expedite selectively</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Expedite & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Review before premium-cost action.</div></div><div style='padding:14px 16px;background:#3A3020;border:1px solid #DFA64C;border-radius:8px;'><div style='font-size:16px;color:#F0C46E;'>HIGH RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Protect high value at risk</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Protect & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Prioritize pre-dispatch protection.</div></div><div style='padding:14px 16px;background:#1B2531;border:1px solid #263342;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>LOW RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Standard process</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Standard & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Avoid special-cost interventions.</div></div><div style='padding:14px 16px;background:#193B36;border:1px solid #2D8C73;border-radius:8px;'><div style='font-size:16px;color:#72C9B5;'>LOW RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Preserve service</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Preserve & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Maintain quality without over-service.</div></div></div></div>" 
-			
+
+			VAR ResultMarkup = "<div style='position:absolute;inset:2px;overflow:hidden;box-sizing:border-box;padding:18px 22px;background:#141B24;border:1px solid #263342;border-radius:12px;color:#F4F7FB;font-family:Segoe UI;'><div style='font-size:19px;color:#8FA6C2;'>RISK-MARGIN PRIORITY MATRIX</div><div style='font-size:18px;color:#AAB6C5;margin-top:5px;'>Frozen AO3 segments convert model outputs into operating choices.</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;'><div style='padding:14px 16px;background:#1B2D3D;border:1px solid #4F83B4;border-radius:8px;'><div style='font-size:16px;color:#91BCE3;'>HIGH RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Expedite selectively</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Expedite & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Review before premium-cost action.</div></div><div style='padding:14px 16px;background:#3A3020;border:1px solid #DFA64C;border-radius:8px;'><div style='font-size:16px;color:#F0C46E;'>HIGH RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Protect high value at risk</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Protect & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Prioritize pre-dispatch protection.</div></div><div style='padding:14px 16px;background:#1B2531;border:1px solid #263342;border-radius:8px;'><div style='font-size:16px;color:#8FA6C2;'>LOW RISK · LOW MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Standard process</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Standard & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Avoid special-cost interventions.</div></div><div style='padding:14px 16px;background:#193B36;border:1px solid #2D8C73;border-radius:8px;'><div style='font-size:16px;color:#72C9B5;'>LOW RISK · HIGH MARGIN</div><div style='font-size:24px;font-weight:700;margin-top:5px;'>Preserve service</div><div style='font-size:34px;font-weight:700;margin-top:6px;'>" & Preserve & "</div><div style='font-size:16px;color:#AAB6C5;margin-top:4px;'>Maintain quality without over-service.</div></div></div></div>"
+
 			RETURN ResultMarkup
 			```
 		displayFolder: Q03 What Should Operations Prioritize First?
@@ -583,7 +583,7 @@ table Dashboard_Visualizations
 
 	/// AO1 business KPI strip emphasizing operational exposure, financial value, and recent trend.
 	measure 'Q01 V2 | 02 Business KPI Strip' =
-			
+
 			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
 			VAR TrendArrow=IF([AO1 High Risk Rate 4W Delta PP]>0,"▲",IF([AO1 High Risk Rate 4W Delta PP]<0,"▼","●"))
 			VAR Tile="<div style='flex:1;padding:10px 18px;border-right:1px solid #263342;'>"
@@ -599,7 +599,7 @@ table Dashboard_Visualizations
 
 	/// AO1 weekly HTML trend with high-risk item bars and high-risk-rate line over the latest 12 available weeks.
 	measure 'Q01 V2 | 03 Weekly Risk Exposure Trend' =
-			
+
 			VAR LatestWeek=CALCULATE(MAX('powerbi_ao3_order_segments'[order_week_start]),ALLSELECTED('powerbi_ao3_order_segments'))
 			VAR Weeks=TOPN(12,FILTER(SUMMARIZE(ALLSELECTED('powerbi_ao3_order_segments'),'powerbi_ao3_order_segments'[order_week_start],"RiskItems",[AO1 Weekly High Risk Items],"RiskRate",[AO1 Weekly High Risk Rate]),'powerbi_ao3_order_segments'[order_week_start]<=LatestWeek && NOT ISBLANK([RiskItems])),'powerbi_ao3_order_segments'[order_week_start],DESC)
 			VAR MaxItems=MAXX(Weeks,[RiskItems])
@@ -617,7 +617,7 @@ table Dashboard_Visualizations
 
 	/// Action-oriented AO1 executive brief with recent trend and financially exposed review queue.
 	measure 'Q01 V2 | 04 Preventive Action Brief' =
-			
+
 			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
 			VAR TrendWord=IF([AO1 High Risk Rate 4W Delta PP]>0,"increased",IF([AO1 High Risk Rate 4W Delta PP]<0,"decreased","remained stable"))
 			RETURN
@@ -631,7 +631,7 @@ table Dashboard_Visualizations
 
 	/// Compact AO1 policy evidence with an integrated executive takeaway, preserving academic rigor while keeping the business decision visible.
 	measure 'Q01 V2 | 05 Compact Methodology Evidence' =
-			
+
 			VAR TrendColor=IF([AO1 High Risk Rate 4W Delta PP]>0,"#D95555",IF([AO1 High Risk Rate 4W Delta PP]<0,"#2D8C73","#DFA64C"))
 			VAR TrendWord=IF([AO1 High Risk Rate 4W Delta PP]>0,"increased",IF([AO1 High Risk Rate 4W Delta PP]<0,"decreased","remained stable"))
 			RETURN
@@ -907,7 +907,7 @@ table Dashboard_Visualizations
 
 	/// AO3 economic quadrant matrix with segment volume, value, expected margin, and differentiated treatment.
 	measure 'Q03 Policy | 02 Economic Quadrant Matrix' =
-			
+
 			VAR ProtectValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="protect_high_value_at_risk")
 			VAR ExpediteValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="expedite_selectively")
 			VAR PreserveValue=CALCULATE([Total Order Value],'powerbi_ao3_order_segments'[ao3_priority_segment]="preserve_service")
@@ -1062,4 +1062,3 @@ table Dashboard_Visualizations
 	partition Dashboard_Visualizations = calculated
 		mode: import
 		source = DATATABLE ( "Visualization Group", STRING, { { "Executive SVG Measures" } } )
-

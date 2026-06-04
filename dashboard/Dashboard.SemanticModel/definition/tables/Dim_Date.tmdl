@@ -62,4 +62,3 @@ table Dim_Date
 	partition Dim_Date = calculated
 		mode: import
 		source = ADDCOLUMNS ( CALENDAR ( DATE ( 2015, 1, 1 ), DATE ( 2018, 12, 31 ) ), "Year", YEAR ( [Date] ), "Quarter", "Q" & FORMAT ( [Date], "Q" ), "Month Number", MONTH ( [Date] ), "Month", FORMAT ( [Date], "MMM" ), "Year Month", FORMAT ( [Date], "YYYY-MM" ), "Week Start", [Date] - WEEKDAY ( [Date], 2 ) + 1, "Week Number", WEEKNUM ( [Date], 2 ), "Day", DAY ( [Date] ), "Day of Week Number", WEEKDAY ( [Date], 2 ), "Day of Week", FORMAT ( [Date], "ddd" ) )
-

@@ -106,6 +106,10 @@ class PowerBIDatabricksRegistrationConfig:
         "DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH",
         f"{VOLUME_ROOT}/gold/ao3_risk_margin_segments",
     )
+    geographic_summary_path: str = os.getenv(
+        "DATACO_POWERBI_GEOGRAPHIC_SUMMARY_OUTPUT_PATH",
+        f"{VOLUME_ROOT}/gold/powerbi_geographic_summary",
+    )
     repo_root: Path = Path(
         os.getenv("DATACO_REPO_ROOT", str(Path.cwd()))
     ).expanduser().resolve()
@@ -149,6 +153,7 @@ def with_repo_defaults(
         schema=config.schema,
         ao1_ao2_score_path=config.ao1_ao2_score_path,
         ao3_segment_path=config.ao3_segment_path,
+        geographic_summary_path=config.geographic_summary_path,
         repo_root=resolve_repo_root(),
     )
 
@@ -172,6 +177,13 @@ def build_table_specs(config: PowerBIDatabricksRegistrationConfig) -> tuple[Powe
             artifact_category="gold_delta_dashboard_fact",
             description="Integrated AO1/AO2 held-out prediction table used upstream of AO3.",
             dashboard_columns=AO1_AO2_SCORE_COLUMNS,
+        ),
+        PowerBIDatabricksTableSpec(
+            table_name="powerbi_geographic_summary",
+            source_type="delta",
+            source_path=config.geographic_summary_path,
+            artifact_category="gold_delta_dashboard_summary",
+            description="Map-ready Power BI geographic summary with destination text and rounded coordinates.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_decision_threshold_policy",
