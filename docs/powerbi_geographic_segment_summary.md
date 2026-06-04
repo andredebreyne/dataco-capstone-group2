@@ -57,7 +57,38 @@ Default metadata outputs:
 ```text
 models/dashboard/powerbi_geographic_segment_summary_metadata.json
 models/dashboard/powerbi_geographic_decision_enrichment_metadata.json
+models/dashboard/powerbi_geographic_segment_serving_metadata.json
 ```
+
+## Scoped Workflow Integration
+
+The PR includes a scoped Databricks workflow for P04:
+
+```text
+notebooks/pipeline/run_powerbi_geographic_segment_workflow.py
+```
+
+This workflow runs the full P04 geographic segment chain without requiring edits to the large monolithic project orchestrator:
+
+```text
+1. Build powerbi_geographic_segment_summary
+2. Enrich it with serving-layer decision fields
+3. Validate the output
+4. Optionally export CSV fallback
+5. Optionally register the Databricks SQL serving table
+```
+
+Workflow flags:
+
+```python
+RUN_POWERBI_GEOGRAPHIC_SEGMENT_SUMMARY = True
+RUN_POWERBI_GEOGRAPHIC_DECISION_ENRICHMENT = True
+RUN_POWERBI_GEOGRAPHIC_SEGMENT_SUMMARY_VALIDATION = True
+RUN_POWERBI_GEOGRAPHIC_SEGMENT_EXPORT = False
+RUN_POWERBI_GEOGRAPHIC_SEGMENT_SERVING_REGISTRATION = False
+```
+
+Set the export and serving flags to `True` when the Delta output has been validated and the user wants to publish to local CSV or Databricks SQL.
 
 ## Power BI Serving Table
 
@@ -65,6 +96,26 @@ Recommended Databricks SQL table name:
 
 ```text
 workspace.default.powerbi_geographic_segment_summary
+```
+
+Scoped registration script:
+
+```text
+src/dashboard/register_powerbi_geographic_segment_table.py
+```
+
+## CSV Fallback Export
+
+Scoped CSV export script:
+
+```text
+src/dashboard/export_powerbi_geographic_segment_summary.py
+```
+
+Expected output:
+
+```text
+dashboard/exports/powerbi_geographic_segment_summary.csv
 ```
 
 ## Key Fields
