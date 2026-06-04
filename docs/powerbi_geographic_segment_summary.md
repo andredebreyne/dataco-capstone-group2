@@ -129,7 +129,8 @@ dashboard/exports/powerbi_geographic_segment_summary.csv
 | `map_latitude` | Rounded latitude for map visuals. |
 | `map_longitude` | Rounded longitude for map visuals. |
 | `geo_coordinates_available` | Coordinate availability flag. |
-| `order_date_key` | Integer date key for date filtering. |
+| `order_date_DateOrders` | Date field for the default Power BI relationship to `Dim_Date[Date]`. |
+| `order_date_key` | Integer `yyyyMMdd` date key for optional DateKey-based models. |
 | `order_week_key` | Week key for weekly trend or slicer support. |
 | `order_month_key` | Month key for monthly trend or slicer support. |
 | `ao3_priority_segment` | Governed AO3 segment for priority filtering. |
@@ -224,6 +225,27 @@ Recommended focus values are intended for visuals such as `Geographic Action Que
 | Country or region decision archetype view | `powerbi_geographic_segment_summary` |
 | Margin-policy sensitivity slicer | `powerbi_geographic_segment_summary` |
 
+## Recommended Power BI Relationships
+
+For the current dashboard model, use the date relationship below because
+`Dim_Date[Date]` is a date column:
+
+```text
+powerbi_geographic_segment_summary[order_date_DateOrders]
+  -> Dim_Date[Date]
+```
+
+If a future semantic-model version adds an integer date key to `Dim_Date`, the
+integer relationship can be modeled instead:
+
+```text
+powerbi_geographic_segment_summary[order_date_key]
+  -> Dim_Date[DateKey]
+```
+
+Avoid relating `order_date_key` directly to `Dim_Date[Date]` because those
+columns use different data types.
+
 ## Governance Rules
 
 - Do not force a direct Power BI relationship between different-grain tables.
@@ -241,11 +263,11 @@ The validation script must confirm:
 - all required geography, date, AO3, risk, profit-band, and enrichment columns exist;
 - forbidden target/outcome fields are absent;
 - filter dimensions are not null;
-- controlled display values are valid;
+- controlled display and decision-enrichment values are valid;
 - coordinates fall within valid latitude/longitude ranges;
 - rates are between 0 and 1;
 - metric counts are non-negative;
-- metadata exists and references Issue `#145`.
+- build and enrichment metadata exists and references Issue `#145`.
 
 ## Dashboard Interpretation
 
