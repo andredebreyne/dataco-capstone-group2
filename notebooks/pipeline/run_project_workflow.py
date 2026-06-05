@@ -142,6 +142,8 @@ RUN_POWERBI_GOLD_EXPORT = False
 RUN_POWERBI_GOLD_EXPORT_VALIDATION = True
 RUN_POWERBI_GEOGRAPHIC_SUMMARY = False
 RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION = True
+RUN_POWERBI_LOGISTICS_KPI_SUMMARY = False
+RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION = True
 RUN_POWERBI_DATABRICKS_SERVING_LAYER = False
 RUN_FINAL_CHECKLIST = True
 
@@ -197,6 +199,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/modeling/run_ao3_kmeans_extension.py"),
     Path("src/dashboard/export_powerbi_gold_tables.py"),
     Path("src/dashboard/build_powerbi_geographic_summary.py"),
+    Path("src/dashboard/build_powerbi_logistics_kpi_summary.py"),
     Path("src/dashboard/register_powerbi_databricks_tables.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
@@ -226,6 +229,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_ao3_kmeans_extension.py"),
     Path("tests/data_validation/validate_powerbi_gold_exports.py"),
     Path("tests/data_validation/validate_powerbi_geographic_summary.py"),
+    Path("tests/data_validation/validate_powerbi_logistics_kpi_summary.py"),
     Path("tests/data_validation/validate_powerbi_databricks_serving_layer.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
@@ -464,6 +468,11 @@ from src.dashboard.build_powerbi_geographic_summary import (  # noqa: E402
     PowerBIGeographicSummaryConfig,
     configure_logging as configure_powerbi_geographic_logging,
     run_powerbi_geographic_summary,
+)
+from src.dashboard.build_powerbi_logistics_kpi_summary import (  # noqa: E402
+    PowerBILogisticsKPISummaryConfig,
+    configure_logging as configure_powerbi_logistics_kpi_logging,
+    run_powerbi_logistics_kpi_summary,
 )
 from src.dashboard.register_powerbi_databricks_tables import (  # noqa: E402
     PowerBIDatabricksRegistrationConfig,
@@ -926,6 +935,19 @@ def run_powerbi_geographic_summary_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_powerbi_geographic_summary.py"))
 
 
+def run_powerbi_logistics_kpi_summary_build() -> None:
+    """Build the Power BI logistics KPI risk exposure summary table."""
+    run_powerbi_logistics_kpi_summary(
+        PowerBILogisticsKPISummaryConfig(),
+        configure_powerbi_logistics_kpi_logging(),
+    )
+
+
+def run_powerbi_logistics_kpi_summary_validation() -> None:
+    """Run Power BI logistics KPI risk exposure summary validation."""
+    run_python_file(Path("tests/data_validation/validate_powerbi_logistics_kpi_summary.py"))
+
+
 def run_powerbi_databricks_serving_layer_registration() -> None:
     """Register dashboard-ready Power BI serving tables in Databricks SQL."""
     run_powerbi_databricks_registration(
@@ -1004,6 +1026,8 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: Power BI Gold export validation runs only when RUN_POWERBI_GOLD_EXPORT_VALIDATION is True.")
     print("- OPTIONAL: Power BI geographic summary runs only when RUN_POWERBI_GEOGRAPHIC_SUMMARY is True.")
     print("- OPTIONAL: Power BI geographic summary validation runs only when RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION is True.")
+    print("- OPTIONAL: Power BI logistics KPI summary runs only when RUN_POWERBI_LOGISTICS_KPI_SUMMARY is True.")
+    print("- OPTIONAL: Power BI logistics KPI summary validation runs only when RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION is True.")
     print("- OPTIONAL: Power BI Databricks serving layer runs only when RUN_POWERBI_DATABRICKS_SERVING_LAYER is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
@@ -1031,6 +1055,7 @@ def print_final_checklist() -> None:
     ao3_kmeans_config = AO3KMeansExtensionConfig()
     powerbi_export_config = PowerBIExportConfig()
     powerbi_geographic_config = PowerBIGeographicSummaryConfig()
+    powerbi_logistics_kpi_config = PowerBILogisticsKPISummaryConfig()
     powerbi_databricks_config = PowerBIDatabricksRegistrationConfig()
 
     print("\nPrimary workflow output paths:")
@@ -1078,6 +1103,7 @@ def print_final_checklist() -> None:
     print(f"- AO3 K-means cluster profiles: {ao3_kmeans_config.cluster_profiles_output_path}")
     print(f"- Power BI dashboard export folder: {powerbi_export_config.export_root}")
     print(f"- Power BI geographic summary Delta: {powerbi_geographic_config.geographic_summary_output_path}")
+    print(f"- Power BI logistics KPI summary Delta: {powerbi_logistics_kpi_config.output_path}")
     print(
         "- Power BI Databricks serving tables: "
         f"{powerbi_databricks_config.catalog}.{powerbi_databricks_config.schema}.powerbi_*"
@@ -1440,6 +1466,18 @@ def main() -> None:
         RUN_POWERBI_GEOGRAPHIC_SUMMARY and RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION,
         run_powerbi_geographic_summary_validation,
         required=RUN_POWERBI_GEOGRAPHIC_SUMMARY and RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION,
+    )
+    run_step(
+        "Power BI logistics KPI summary build",
+        RUN_POWERBI_LOGISTICS_KPI_SUMMARY,
+        run_powerbi_logistics_kpi_summary_build,
+        required=RUN_POWERBI_LOGISTICS_KPI_SUMMARY,
+    )
+    run_step(
+        "Power BI logistics KPI summary validation",
+        RUN_POWERBI_LOGISTICS_KPI_SUMMARY and RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION,
+        run_powerbi_logistics_kpi_summary_validation,
+        required=RUN_POWERBI_LOGISTICS_KPI_SUMMARY and RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION,
     )
     run_step(
         "Power BI Gold dashboard export",
