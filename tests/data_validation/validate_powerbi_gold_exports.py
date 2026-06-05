@@ -32,6 +32,7 @@ REQUIRED_EXPORTS = {
     "ao1_ao2_test_scores.csv",
     "ao3_risk_margin_segments.csv",
     "powerbi_geographic_summary.csv",
+    "powerbi_logistics_kpi_summary.csv",
     "ao1_decision_threshold_policy.csv",
     "ao1_ao2_test_score_summary.csv",
     "ao3_risk_margin_matrix_policy.csv",
@@ -103,6 +104,38 @@ REQUIRED_GEOGRAPHIC_COLUMNS = {
     "preserve_service_count",
     "standard_process_count",
     "requires_review_count",
+}
+
+REQUIRED_LOGISTICS_KPI_COLUMNS = {
+    "order_month_key",
+    "market_normalized",
+    "map_location_country",
+    "map_location_region",
+    "shipping_mode_normalized",
+    "shipping_speed_tier",
+    "product_category_key",
+    "product_department_key",
+    "ao3_priority_segment",
+    "ao3_action_queue_label",
+    "risk_band",
+    "order_count",
+    "order_item_count",
+    "valid_delivery_metric_count",
+    "historical_on_time_count",
+    "historical_late_count",
+    "historical_otd_rate",
+    "historical_late_delivery_rate",
+    "expected_late_delivery_rate",
+    "expected_otd_rate",
+    "expected_otd_exposure_pp",
+    "expected_late_order_equivalent_count",
+    "expected_on_time_order_equivalent_count",
+    "high_risk_order_count",
+    "high_risk_delivery_exposure_rate",
+    "intervention_required_count",
+    "intervention_load_rate",
+    "total_order_value",
+    "total_predicted_profit",
 }
 
 DAX_SOURCE_SCHEMA_REQUIREMENTS = {
@@ -197,23 +230,32 @@ def main() -> None:
     assert "ao1_ao2_test_scores" in manifest_exports
     assert "ao3_risk_margin_segments" in manifest_exports
     assert "powerbi_geographic_summary" in manifest_exports
+    assert "powerbi_logistics_kpi_summary" in manifest_exports
 
     score_df = read_export_csv("ao1_ao2_test_scores.csv")
     segment_df = read_export_csv("ao3_risk_margin_segments.csv")
     geographic_df = read_export_csv("powerbi_geographic_summary.csv")
+    logistics_kpi_df = read_export_csv("powerbi_logistics_kpi_summary.csv")
     assert not score_df.empty, "AO1/AO2 score export must contain rows."
     assert not segment_df.empty, "AO3 segment export must contain rows."
     assert not geographic_df.empty, "Power BI geographic summary export must contain rows."
+    assert not logistics_kpi_df.empty, "Power BI logistics KPI summary export must contain rows."
 
     forbidden_score_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(score_df.columns))
     forbidden_segment_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(segment_df.columns))
     forbidden_geographic_columns = sorted(FORBIDDEN_TARGET_COLUMNS.intersection(geographic_df.columns))
+    forbidden_logistics_columns = sorted(
+        FORBIDDEN_TARGET_COLUMNS.intersection(logistics_kpi_df.columns)
+    )
     assert not forbidden_score_columns, f"Score export contains target columns: {forbidden_score_columns}"
     assert not forbidden_segment_columns, (
         f"Segment export contains target columns: {forbidden_segment_columns}"
     )
     assert not forbidden_geographic_columns, (
         f"Geographic export contains target columns: {forbidden_geographic_columns}"
+    )
+    assert not forbidden_logistics_columns, (
+        f"Logistics KPI export contains target columns: {forbidden_logistics_columns}"
     )
 
     assert_required_columns(
@@ -231,6 +273,11 @@ def main() -> None:
         required_columns=REQUIRED_GEOGRAPHIC_COLUMNS,
         file_name="powerbi_geographic_summary.csv",
     )
+    assert_required_columns(
+        dataframe=logistics_kpi_df,
+        required_columns=REQUIRED_LOGISTICS_KPI_COLUMNS,
+        file_name="powerbi_logistics_kpi_summary.csv",
+    )
 
     assert segment_df["ao3_priority_segment"].notna().all(), "AO3 segment labels must not be null."
     assert segment_df["ao1_predicted_late_delivery_probability"].between(0, 1).all(), (
@@ -241,6 +288,20 @@ def main() -> None:
     )
     assert geographic_df["map_location_label"].notna().all(), (
         "Geographic map labels must not be null."
+    )
+    for rate_column in [
+        "historical_otd_rate",
+        "historical_late_delivery_rate",
+        "expected_late_delivery_rate",
+        "expected_otd_rate",
+        "high_risk_delivery_exposure_rate",
+        "intervention_load_rate",
+    ]:
+        assert logistics_kpi_df[rate_column].dropna().between(0, 1).all(), (
+            f"{rate_column} must be in [0, 1]."
+        )
+    assert (logistics_kpi_df["order_item_count"] > 0).all(), (
+        "Logistics KPI summary grain must contain positive order-item counts."
     )
 
     for file_name, required_columns in DAX_SOURCE_SCHEMA_REQUIREMENTS.items():
