@@ -110,6 +110,10 @@ class PowerBIDatabricksRegistrationConfig:
         "DATACO_POWERBI_GEOGRAPHIC_SUMMARY_OUTPUT_PATH",
         f"{VOLUME_ROOT}/gold/powerbi_geographic_summary",
     )
+    logistics_kpi_summary_path: str = os.getenv(
+        "DATACO_POWERBI_LOGISTICS_KPI_SUMMARY_OUTPUT_PATH",
+        f"{VOLUME_ROOT}/gold/powerbi_logistics_kpi_summary",
+    )
     repo_root: Path = Path(
         os.getenv("DATACO_REPO_ROOT", str(Path.cwd()))
     ).expanduser().resolve()
@@ -154,6 +158,7 @@ def with_repo_defaults(
         ao1_ao2_score_path=config.ao1_ao2_score_path,
         ao3_segment_path=config.ao3_segment_path,
         geographic_summary_path=config.geographic_summary_path,
+        logistics_kpi_summary_path=config.logistics_kpi_summary_path,
         repo_root=resolve_repo_root(),
     )
 
@@ -184,6 +189,13 @@ def build_table_specs(config: PowerBIDatabricksRegistrationConfig) -> tuple[Powe
             source_path=config.geographic_summary_path,
             artifact_category="gold_delta_dashboard_summary",
             description="Map-ready Power BI geographic summary with destination text and rounded coordinates.",
+        ),
+        PowerBIDatabricksTableSpec(
+            table_name="powerbi_logistics_kpi_summary",
+            source_type="delta",
+            source_path=config.logistics_kpi_summary_path,
+            artifact_category="gold_delta_dashboard_summary",
+            description="Power BI logistics KPI risk exposure summary with historical KPI context and governed AO1/AO2/AO3 exposure fields.",
         ),
         PowerBIDatabricksTableSpec(
             table_name="powerbi_ao1_decision_threshold_policy",
