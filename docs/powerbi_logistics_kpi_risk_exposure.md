@@ -92,6 +92,7 @@ Predictive fields are derived from governed AO1/AO2/AO3 outputs.
 | `expected_otd_rate` | One minus expected late-delivery rate. |
 | `expected_otd_exposure_pp` | Historical OTD rate minus expected OTD rate, expressed as a proportion. |
 | `expected_late_order_equivalent_count` | Sum of predicted late-delivery probabilities. |
+| `expected_on_time_order_equivalent_count` | Sum of one minus predicted late-delivery probabilities. |
 | `high_risk_order_count` | Count of orders flagged as high risk by AO1. |
 | `high_risk_delivery_exposure_rate` | High-risk orders divided by total scored order items. |
 | `service_protection_queue_count` | AO3 protect-first cases. |
@@ -145,6 +146,23 @@ Order Volume
 Units Ordered
 Total Order Value
 ```
+
+## KPI Aggregation Rules
+
+When aggregating this serving table in Power BI, avoid averaging precomputed
+rate columns across rows. Use the provided numerators and denominators:
+
+| KPI | Recommended aggregate formula |
+| --- | --- |
+| Historical OTD Rate | `SUM(historical_on_time_count) / SUM(valid_delivery_metric_count)` |
+| Historical Late Delivery Rate | `SUM(historical_late_count) / SUM(valid_delivery_metric_count)` |
+| Expected Late Delivery Rate | `SUM(expected_late_order_equivalent_count) / SUM(order_item_count)` |
+| Expected OTD Rate | `SUM(expected_on_time_order_equivalent_count) / SUM(order_item_count)` |
+| High-Risk Delivery Exposure | `SUM(high_risk_order_count) / SUM(order_item_count)` |
+| Intervention Load Rate | `SUM(intervention_required_count) / SUM(order_item_count)` |
+
+The row-level rate fields are retained for sliced visuals at the published
+serving grain. Executive cards should use the weighted aggregate formulas above.
 
 ## Recommended Visuals
 

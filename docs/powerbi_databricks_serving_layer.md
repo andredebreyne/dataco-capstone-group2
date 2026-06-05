@@ -130,6 +130,12 @@ The manifest should list every published table with generated timestamp, workflo
 
 The CSV export workflow from issue #47 remains valid for reproducibility and offline review. The Databricks SQL serving layer is the preferred Power BI Desktop connection and refresh workflow for issue #139, using the same core logical table structure without requiring local CSV imports.
 
+The logistics KPI summary is also available in the CSV fallback export as:
+
+```text
+dashboard/exports/powerbi_logistics_kpi_summary.csv
+```
+
 Recommended use:
 
 - CSV export: backup, reproducibility, review, and local fallback
