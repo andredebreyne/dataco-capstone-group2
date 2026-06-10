@@ -71,6 +71,14 @@ APPROVED_ACTION_LABELS = {
     "Review Score or Margin",
 }
 AUDIT_GRAIN = ["Order_Id", "Order_Item_Id"]
+CRITICAL_GOVERNED_COLUMNS = [
+    "ao1_predicted_late_delivery_probability",
+    "ao1_high_risk_flag",
+    "ao2_predicted_order_profit",
+    "ao3_predicted_margin",
+    "ao3_order_value",
+    "ao3_priority_segment",
+]
 
 
 def resolve_repo_root() -> Path:
@@ -108,13 +116,15 @@ def main() -> None:
     duplicate_grain_rows = detail_df.groupBy(*AUDIT_GRAIN).count().filter(col("count") > 1).count()
     assert duplicate_grain_rows == 0, f"Duplicated audit grain rows: {duplicate_grain_rows}"
 
-    for column_name in AUDIT_GRAIN + [
+    required_non_null_columns = AUDIT_GRAIN + [
         "order_month_key",
         "shipping_mode_normalized",
         "product_category_key",
         "risk_band",
         "ao3_action_queue_label",
-    ]:
+        *CRITICAL_GOVERNED_COLUMNS,
+    ]
+    for column_name in required_non_null_columns:
         null_count = detail_df.filter(col(column_name).isNull()).count()
         assert null_count == 0, f"{column_name} contains null rows: {null_count}"
 

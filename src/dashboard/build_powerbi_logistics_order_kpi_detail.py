@@ -32,6 +32,14 @@ WORKFLOW_NAME = "powerbi_logistics_order_kpi_detail"
 ISSUE_ID = "#152"
 JOIN_KEYS = ["Order_Id", "Order_Item_Id", "order_date_DateOrders"]
 AUDIT_GRAIN = ["Order_Id", "Order_Item_Id"]
+CRITICAL_GOVERNED_COLUMNS = [
+    "ao1_predicted_late_delivery_probability",
+    "ao1_high_risk_flag",
+    "ao2_predicted_order_profit",
+    "ao3_predicted_margin",
+    "ao3_order_value",
+    "ao3_priority_segment",
+]
 
 OUTPUT_COLUMNS = [
     "Order_Id",
@@ -275,7 +283,14 @@ def validate_output(df: DataFrame) -> None:
     if duplicate_grain_rows:
         raise ValueError(f"Order-level KPI detail contains duplicated grain rows: {duplicate_grain_rows}")
 
-    for column_name in AUDIT_GRAIN + ["order_month_key", "shipping_mode_normalized", "risk_band", "ao3_action_queue_label"]:
+    required_non_null_columns = AUDIT_GRAIN + [
+        "order_month_key",
+        "shipping_mode_normalized",
+        "risk_band",
+        "ao3_action_queue_label",
+        *CRITICAL_GOVERNED_COLUMNS,
+    ]
+    for column_name in required_non_null_columns:
         null_count = df.filter(col(column_name).isNull()).count()
         if null_count:
             raise ValueError(f"{column_name} contains null rows: {null_count}")
