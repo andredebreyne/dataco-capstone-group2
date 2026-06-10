@@ -144,6 +144,10 @@ RUN_POWERBI_GEOGRAPHIC_SUMMARY = False
 RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION = True
 RUN_POWERBI_LOGISTICS_KPI_SUMMARY = False
 RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION = True
+RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL = False
+RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_VALIDATION = True
+RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_CSV_EXPORT = False
+RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_DATABRICKS_REGISTRATION = False
 RUN_POWERBI_DATABRICKS_SERVING_LAYER = False
 RUN_FINAL_CHECKLIST = True
 
@@ -200,6 +204,9 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("src/dashboard/export_powerbi_gold_tables.py"),
     Path("src/dashboard/build_powerbi_geographic_summary.py"),
     Path("src/dashboard/build_powerbi_logistics_kpi_summary.py"),
+    Path("src/dashboard/build_powerbi_logistics_order_kpi_detail.py"),
+    Path("src/dashboard/export_powerbi_logistics_order_kpi_detail.py"),
+    Path("src/dashboard/register_powerbi_logistics_order_kpi_detail_table.py"),
     Path("src/dashboard/register_powerbi_databricks_tables.py"),
     Path("tests/data_validation"),
     Path("tests/data_validation/test_silver_quality.py"),
@@ -230,6 +237,7 @@ REQUIRED_REPOSITORY_PATHS = (
     Path("tests/data_validation/validate_powerbi_gold_exports.py"),
     Path("tests/data_validation/validate_powerbi_geographic_summary.py"),
     Path("tests/data_validation/validate_powerbi_logistics_kpi_summary.py"),
+    Path("tests/data_validation/validate_powerbi_logistics_order_kpi_detail.py"),
     Path("tests/data_validation/validate_powerbi_databricks_serving_layer.py"),
     Path("notebooks/eda"),
     Path("notebooks/pipeline"),
@@ -473,6 +481,21 @@ from src.dashboard.build_powerbi_logistics_kpi_summary import (  # noqa: E402
     PowerBILogisticsKPISummaryConfig,
     configure_logging as configure_powerbi_logistics_kpi_logging,
     run_powerbi_logistics_kpi_summary,
+)
+from src.dashboard.build_powerbi_logistics_order_kpi_detail import (  # noqa: E402
+    PowerBILogisticsOrderKPIDetailConfig,
+    configure_logging as configure_powerbi_logistics_order_kpi_logging,
+    run_powerbi_logistics_order_kpi_detail,
+)
+from src.dashboard.export_powerbi_logistics_order_kpi_detail import (  # noqa: E402
+    LogisticsOrderKPIExportConfig,
+    configure_logging as configure_powerbi_logistics_order_kpi_export_logging,
+    run_logistics_order_kpi_export,
+)
+from src.dashboard.register_powerbi_logistics_order_kpi_detail_table import (  # noqa: E402
+    LogisticsOrderKPIRegistrationConfig,
+    configure_logging as configure_powerbi_logistics_order_kpi_registration_logging,
+    run_registration as run_powerbi_logistics_order_kpi_registration,
 )
 from src.dashboard.register_powerbi_databricks_tables import (  # noqa: E402
     PowerBIDatabricksRegistrationConfig,
@@ -948,6 +971,35 @@ def run_powerbi_logistics_kpi_summary_validation() -> None:
     run_python_file(Path("tests/data_validation/validate_powerbi_logistics_kpi_summary.py"))
 
 
+def run_powerbi_logistics_order_kpi_detail_build() -> None:
+    """Build the Power BI order-item-level logistics KPI audit table."""
+    run_powerbi_logistics_order_kpi_detail(
+        PowerBILogisticsOrderKPIDetailConfig(),
+        configure_powerbi_logistics_order_kpi_logging(),
+    )
+
+
+def run_powerbi_logistics_order_kpi_detail_validation() -> None:
+    """Run Power BI logistics order KPI detail validation."""
+    run_python_file(Path("tests/data_validation/validate_powerbi_logistics_order_kpi_detail.py"))
+
+
+def run_powerbi_logistics_order_kpi_detail_csv_export() -> None:
+    """Export the Power BI logistics order KPI detail CSV fallback."""
+    run_logistics_order_kpi_export(
+        LogisticsOrderKPIExportConfig(),
+        configure_powerbi_logistics_order_kpi_export_logging(),
+    )
+
+
+def run_powerbi_logistics_order_kpi_detail_registration() -> None:
+    """Register the Power BI logistics order KPI detail table in Databricks SQL."""
+    run_powerbi_logistics_order_kpi_registration(
+        LogisticsOrderKPIRegistrationConfig(),
+        configure_powerbi_logistics_order_kpi_registration_logging(),
+    )
+
+
 def run_powerbi_databricks_serving_layer_registration() -> None:
     """Register dashboard-ready Power BI serving tables in Databricks SQL."""
     run_powerbi_databricks_registration(
@@ -1028,6 +1080,10 @@ def print_final_checklist() -> None:
     print("- OPTIONAL: Power BI geographic summary validation runs only when RUN_POWERBI_GEOGRAPHIC_SUMMARY_VALIDATION is True.")
     print("- OPTIONAL: Power BI logistics KPI summary runs only when RUN_POWERBI_LOGISTICS_KPI_SUMMARY is True.")
     print("- OPTIONAL: Power BI logistics KPI summary validation runs only when RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION is True.")
+    print("- OPTIONAL: Power BI logistics order KPI detail runs only when RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL is True.")
+    print("- OPTIONAL: Power BI logistics order KPI detail validation runs only when RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_VALIDATION is True.")
+    print("- OPTIONAL: Power BI logistics order KPI detail CSV export runs only when RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_CSV_EXPORT is True.")
+    print("- OPTIONAL: Power BI logistics order KPI detail Databricks registration runs only when RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_DATABRICKS_REGISTRATION is True.")
     print("- OPTIONAL: Power BI Databricks serving layer runs only when RUN_POWERBI_DATABRICKS_SERVING_LAYER is True.")
     print("- REVIEW: Confirm any Databricks path overrides in the PR notes.")
     print("- REVIEW: Update docs/project_orchestrator.md for future executable workflow changes.")
@@ -1056,6 +1112,9 @@ def print_final_checklist() -> None:
     powerbi_export_config = PowerBIExportConfig()
     powerbi_geographic_config = PowerBIGeographicSummaryConfig()
     powerbi_logistics_kpi_config = PowerBILogisticsKPISummaryConfig()
+    powerbi_logistics_order_kpi_config = PowerBILogisticsOrderKPIDetailConfig()
+    powerbi_logistics_order_kpi_export_config = LogisticsOrderKPIExportConfig()
+    powerbi_logistics_order_kpi_registration_config = LogisticsOrderKPIRegistrationConfig()
     powerbi_databricks_config = PowerBIDatabricksRegistrationConfig()
 
     print("\nPrimary workflow output paths:")
@@ -1104,6 +1163,18 @@ def print_final_checklist() -> None:
     print(f"- Power BI dashboard export folder: {powerbi_export_config.export_root}")
     print(f"- Power BI geographic summary Delta: {powerbi_geographic_config.geographic_summary_output_path}")
     print(f"- Power BI logistics KPI summary Delta: {powerbi_logistics_kpi_config.output_path}")
+    print(f"- Power BI logistics order KPI detail Delta: {powerbi_logistics_order_kpi_config.output_path}")
+    print(f"- Power BI logistics order KPI detail metadata: {powerbi_logistics_order_kpi_config.metadata_output_path}")
+    print(
+        "- Power BI logistics order KPI detail CSV export: "
+        f"{powerbi_logistics_order_kpi_export_config.export_root / powerbi_logistics_order_kpi_export_config.export_file_name}"
+    )
+    print(
+        "- Power BI logistics order KPI detail Databricks table: "
+        f"{powerbi_logistics_order_kpi_registration_config.catalog}."
+        f"{powerbi_logistics_order_kpi_registration_config.schema}."
+        f"{powerbi_logistics_order_kpi_registration_config.table_name}"
+    )
     print(
         "- Power BI Databricks serving tables: "
         f"{powerbi_databricks_config.catalog}.{powerbi_databricks_config.schema}.powerbi_*"
@@ -1478,6 +1549,30 @@ def main() -> None:
         RUN_POWERBI_LOGISTICS_KPI_SUMMARY and RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION,
         run_powerbi_logistics_kpi_summary_validation,
         required=RUN_POWERBI_LOGISTICS_KPI_SUMMARY and RUN_POWERBI_LOGISTICS_KPI_SUMMARY_VALIDATION,
+    )
+    run_step(
+        "Power BI logistics order KPI detail build",
+        RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL,
+        run_powerbi_logistics_order_kpi_detail_build,
+        required=RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL,
+    )
+    run_step(
+        "Power BI logistics order KPI detail validation",
+        RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL and RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_VALIDATION,
+        run_powerbi_logistics_order_kpi_detail_validation,
+        required=RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL and RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_VALIDATION,
+    )
+    run_step(
+        "Power BI logistics order KPI detail CSV export",
+        RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_CSV_EXPORT,
+        run_powerbi_logistics_order_kpi_detail_csv_export,
+        required=RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_CSV_EXPORT,
+    )
+    run_step(
+        "Power BI logistics order KPI detail Databricks registration",
+        RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_DATABRICKS_REGISTRATION,
+        run_powerbi_logistics_order_kpi_detail_registration,
+        required=RUN_POWERBI_LOGISTICS_ORDER_KPI_DETAIL_DATABRICKS_REGISTRATION,
     )
     run_step(
         "Power BI Gold dashboard export",
