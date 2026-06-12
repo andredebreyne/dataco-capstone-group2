@@ -15,8 +15,8 @@ if "__file__" in globals():
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum as spark_sum
 
-from src.dashboard.country_label_standardization import (
-    PORTUGUESE_COUNTRY_LABEL_TOKENS,
+from src.dashboard.country_display_labels import (
+    TECHNICAL_COUNTRY_TOKENS,
     normalize_country_lookup_value,
 )
 
@@ -113,12 +113,12 @@ def main() -> None:
 
     assert summary_df.filter(col("map_location_label").isNull()).count() == 0
     assert summary_df.filter(col("map_location_country").isNull()).count() == 0
-    non_english_country_count = summary_df.filter(
-        normalize_country_lookup_value("map_location_country").isin(*PORTUGUESE_COUNTRY_LABEL_TOKENS)
+    technical_country_token_count = summary_df.filter(
+        normalize_country_lookup_value("map_location_country").isin(*TECHNICAL_COUNTRY_TOKENS)
     ).count()
-    assert non_english_country_count == 0, (
-        "Power BI geographic summary contains non-English country labels: "
-        f"{non_english_country_count}"
+    assert technical_country_token_count == 0, (
+        "Power BI geographic summary contains technical country tokens in display labels: "
+        f"{technical_country_token_count}"
     )
 
     invalid_latitude_count = summary_df.filter(
@@ -157,6 +157,9 @@ def main() -> None:
     assert metadata["workflow"] == "powerbi_geographic_summary"
     assert metadata["issue"] == "#51"
     assert metadata["target_or_outcome_columns_used"] is False
+    assert metadata["country_display_label_source"] == (
+        "Silver Order_Country translated to English for Power BI display"
+    )
     assert metadata["output_path"] == GEOGRAPHIC_SUMMARY_PATH
     assert metadata["row_count"] == row_count
 

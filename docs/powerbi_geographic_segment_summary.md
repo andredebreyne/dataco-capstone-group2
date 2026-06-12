@@ -122,7 +122,7 @@ dashboard/exports/powerbi_geographic_segment_summary.csv
 
 | Field | Purpose |
 | --- | --- |
-| `map_location_country` | Country-level geography, standardized as an English display label for Power BI. |
+| `map_location_country` | Country-level geography. |
 | `map_location_region` | Region-level geography. |
 | `map_location_state` | State-level geography. |
 | `map_location_label` | Combined map label. |

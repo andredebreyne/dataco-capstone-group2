@@ -67,8 +67,6 @@ order month / market / country / region / state / shipping mode / shipping speed
 
 This grain supports logistics KPI analysis by time, geography, service mode, product grouping, risk band, and AO3 action queue.
 
-`map_location_country` is standardized as an English display label in the Power BI serving layer. The source `order_country_normalized` feature remains unchanged upstream.
-
 ## Historical KPI Fields
 
 Historical fields use actual delivery outcomes for descriptive dashboard reporting. They are not used to retrain AO1, AO2, or AO3.

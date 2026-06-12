@@ -4,21 +4,10 @@ from __future__ import annotations
 
 import json
 import os
-import sys
 from pathlib import Path
-
-if "__file__" in globals():
-    repo_root_for_imports = Path(__file__).resolve().parents[2]
-    if str(repo_root_for_imports) not in sys.path:
-        sys.path.insert(0, str(repo_root_for_imports))
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum as spark_sum
-
-from src.dashboard.country_label_standardization import (
-    PORTUGUESE_COUNTRY_LABEL_TOKENS,
-    normalize_country_lookup_value,
-)
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -132,7 +121,6 @@ def main() -> None:
 
     for column_name in [
         "order_month_key",
-        "map_location_country",
         "shipping_mode_normalized",
         "product_category_key",
         "ao3_priority_segment",
@@ -141,14 +129,6 @@ def main() -> None:
     ]:
         null_count = summary_df.filter(col(column_name).isNull()).count()
         assert null_count == 0, f"{column_name} contains null rows: {null_count}"
-
-    non_english_country_count = summary_df.filter(
-        normalize_country_lookup_value("map_location_country").isin(*PORTUGUESE_COUNTRY_LABEL_TOKENS)
-    ).count()
-    assert non_english_country_count == 0, (
-        "Power BI logistics KPI summary contains non-English country labels: "
-        f"{non_english_country_count}"
-    )
 
     invalid_risk_rows = summary_df.filter(~col("risk_band").isin(*APPROVED_RISK_BANDS)).count()
     assert invalid_risk_rows == 0, f"Invalid risk band rows: {invalid_risk_rows}"

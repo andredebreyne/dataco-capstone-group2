@@ -248,7 +248,7 @@ def margin_policy_sort_expression() -> object:
 def geography_quality_expression() -> object:
     """Return geography data-quality status for filtering and governance."""
     unknown_geography = (
-        col("map_location_country").isin("unknown_country", "Unknown Country")
+        (col("map_location_country") == "unknown_country")
         | (col("map_location_region") == "unknown_region")
         | (col("map_location_state") == "unknown_state")
     )

@@ -32,14 +32,20 @@ from pyspark.sql.functions import (
     max as spark_max,
     min as spark_min,
     sum as spark_sum,
+    trim,
     when,
 )
 from pyspark.sql.types import DoubleType, IntegerType, StringType
 
-from src.dashboard.country_label_standardization import standardize_country_display_label
+from src.dashboard.country_display_labels import standardize_country_display_label
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
+
+DEFAULT_SILVER_INPUT_PATH = os.getenv(
+    "DATACO_SILVER_INPUT_PATH",
+    f"{VOLUME_ROOT}/silver/dataco_orders_silver",
+)
 
 DEFAULT_AO3_SEGMENT_PATH = os.getenv(
     "DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH",
@@ -85,6 +91,8 @@ GEOGRAPHIC_REQUIRED_COLUMNS = JOIN_KEY_COLUMNS + (
     "longitude_rounded",
     "geo_coordinates_available",
 )
+
+SILVER_DISPLAY_REQUIRED_COLUMNS = JOIN_KEY_COLUMNS + ("Order_Country",)
 
 FORBIDDEN_TARGET_COLUMNS = {
     "Late_delivery_risk",
@@ -133,6 +141,7 @@ class PowerBIGeographicSummaryConfig:
     """Configuration for the Power BI geographic summary job."""
 
     ao3_segment_path: str = DEFAULT_AO3_SEGMENT_PATH
+    silver_input_path: str = DEFAULT_SILVER_INPUT_PATH
     customer_regional_feature_path: str = DEFAULT_CUSTOMER_REGIONAL_FEATURE_PATH
     geographic_summary_output_path: str = DEFAULT_GEOGRAPHIC_SUMMARY_OUTPUT_PATH
     metadata_output_path: Path = Path(
@@ -180,6 +189,7 @@ def with_repo_defaults(config: PowerBIGeographicSummaryConfig) -> PowerBIGeograp
     repo_root = resolve_repo_root()
     return PowerBIGeographicSummaryConfig(
         ao3_segment_path=config.ao3_segment_path,
+        silver_input_path=config.silver_input_path,
         customer_regional_feature_path=config.customer_regional_feature_path,
         geographic_summary_output_path=config.geographic_summary_output_path,
         metadata_output_path=Path(
@@ -213,7 +223,7 @@ def read_delta(spark: SparkSession, path: str, config: PowerBIGeographicSummaryC
     return spark.read.format(config.read_format).load(path)
 
 
-def validate_source_contracts(ao3_df: DataFrame, geographic_df: DataFrame) -> None:
+def validate_source_contracts(ao3_df: DataFrame, geographic_df: DataFrame, silver_df: DataFrame) -> None:
     """Validate input schemas before joining."""
     assert_required_columns(ao3_df, AO3_REQUIRED_COLUMNS, "AO3 segment table")
     assert_required_columns(
@@ -221,25 +231,44 @@ def validate_source_contracts(ao3_df: DataFrame, geographic_df: DataFrame) -> No
         GEOGRAPHIC_REQUIRED_COLUMNS,
         "customer/regional feature table",
     )
+    assert_required_columns(silver_df, SILVER_DISPLAY_REQUIRED_COLUMNS, "Silver order table")
     assert_no_forbidden_targets(ao3_df, "AO3 segment table")
     assert_no_forbidden_targets(geographic_df, "customer/regional feature table")
 
 
-def build_geographic_summary_dataframe(ao3_df: DataFrame, geographic_df: DataFrame) -> DataFrame:
+def build_geographic_summary_dataframe(
+    ao3_df: DataFrame,
+    geographic_df: DataFrame,
+    silver_df: DataFrame,
+) -> DataFrame:
     """Join AO3 scores to geography and aggregate map-ready metrics."""
     ao3_projection = ao3_df.select(*AO3_REQUIRED_COLUMNS)
     geographic_projection = geographic_df.select(*GEOGRAPHIC_REQUIRED_COLUMNS)
-
-    joined_df = ao3_projection.join(
-        geographic_projection,
-        on=list(JOIN_KEY_COLUMNS),
-        how="left",
+    silver_display_projection = silver_df.select(*SILVER_DISPLAY_REQUIRED_COLUMNS).dropDuplicates(
+        list(JOIN_KEY_COLUMNS)
     )
 
-    map_location_country = when(
+    joined_df = (
+        ao3_projection.join(
+            geographic_projection,
+            on=list(JOIN_KEY_COLUMNS),
+            how="left",
+        )
+        .join(
+            silver_display_projection,
+            on=list(JOIN_KEY_COLUMNS),
+            how="left",
+        )
+    )
+
+    map_location_country_token = when(
         col("order_country_normalized").isNull() | (col("order_country_normalized") == ""),
         lit("unknown_country"),
     ).otherwise(col("order_country_normalized"))
+    map_location_country_display = when(
+        col("Order_Country").isNull() | (trim(col("Order_Country")) == ""),
+        map_location_country_token,
+    ).otherwise(col("Order_Country"))
     map_location_region = when(
         col("order_region_normalized").isNull() | (col("order_region_normalized") == ""),
         lit("unknown_region"),
@@ -252,7 +281,7 @@ def build_geographic_summary_dataframe(ao3_df: DataFrame, geographic_df: DataFra
     enriched_df = (
         joined_df.withColumn(
             "map_location_country",
-            standardize_country_display_label(map_location_country).cast(StringType()),
+            standardize_country_display_label(map_location_country_display).cast(StringType()),
         )
         .withColumn("map_location_region", map_location_region.cast(StringType()))
         .withColumn("map_location_state", map_location_state.cast(StringType()))
@@ -384,7 +413,9 @@ def write_metadata(
         "workflow": WORKFLOW_NAME,
         "issue": "#51",
         "source_ao3_segment_path": config.ao3_segment_path,
+        "source_silver_input_path": config.silver_input_path,
         "source_customer_regional_feature_path": config.customer_regional_feature_path,
+        "country_display_label_source": "Silver Order_Country translated to English for Power BI display",
         "output_path": config.geographic_summary_output_path,
         "row_count": int(summary_df.count()),
         "coordinate_available_group_count": coordinate_rows,
@@ -407,14 +438,16 @@ def run_powerbi_geographic_summary(
 
     logger.info("Starting Power BI geographic summary build.")
     logger.info("AO3 segment input path: %s", config.ao3_segment_path)
+    logger.info("Silver input path: %s", config.silver_input_path)
     logger.info("Customer/regional feature input path: %s", config.customer_regional_feature_path)
     logger.info("Geographic summary output path: %s", config.geographic_summary_output_path)
 
     ao3_df = read_delta(spark, config.ao3_segment_path, config)
+    silver_df = read_delta(spark, config.silver_input_path, config)
     geographic_df = read_delta(spark, config.customer_regional_feature_path, config)
-    validate_source_contracts(ao3_df, geographic_df)
+    validate_source_contracts(ao3_df, geographic_df, silver_df)
 
-    summary_df = build_geographic_summary_dataframe(ao3_df, geographic_df)
+    summary_df = build_geographic_summary_dataframe(ao3_df, geographic_df, silver_df)
     validate_geographic_summary_output(summary_df)
     write_delta(summary_df, config.geographic_summary_output_path, config)
 
