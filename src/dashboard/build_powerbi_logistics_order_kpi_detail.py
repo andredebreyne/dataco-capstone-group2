@@ -16,9 +16,16 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+if "__file__" in globals():
+    repo_root_for_imports = Path(__file__).resolve().parents[2]
+    if str(repo_root_for_imports) not in sys.path:
+        sys.path.insert(0, str(repo_root_for_imports))
+
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, current_timestamp, date_format, lit, to_date, when
 from pyspark.sql.types import DoubleType, IntegerType, StringType
+
+from src.dashboard.country_label_standardization import standardize_country_display_label
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -238,7 +245,10 @@ def build_powerbi_logistics_order_kpi_detail_dataframe(
         .withColumn("order_year", date_format(col("order_date"), "yyyy").cast(IntegerType()))
         .withColumn("order_month", date_format(col("order_date"), "MM").cast(IntegerType()))
         .withColumn("market_normalized", safe_label("market_normalized", "unknown_market"))
-        .withColumn("map_location_country", safe_label("order_country_normalized", "unknown_country"))
+        .withColumn(
+            "map_location_country",
+            standardize_country_display_label(safe_label("order_country_normalized", "unknown_country")),
+        )
         .withColumn("map_location_region", safe_label("order_region_normalized", "unknown_region"))
         .withColumn("map_location_state", safe_label("order_state_normalized", "unknown_state"))
         .withColumn("shipping_mode_normalized", safe_label("shipping_mode_normalized", "unknown_shipping_mode"))

@@ -101,7 +101,7 @@ AO3 Action Queue Volume
 | Field | Meaning |
 | --- | --- |
 | `market_normalized` | Normalized market. |
-| `map_location_country` | Delivery country for mapping and slicing. |
+| `map_location_country` | Delivery country for mapping and slicing, standardized as an English display label. |
 | `map_location_region` | Delivery region for mapping and slicing. |
 | `map_location_state` | Delivery state for mapping and slicing. |
 | `shipping_mode_normalized` | Normalized shipping mode. |

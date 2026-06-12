@@ -21,6 +21,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+if "__file__" in globals():
+    repo_root_for_imports = Path(__file__).resolve().parents[2]
+    if str(repo_root_for_imports) not in sys.path:
+        sys.path.insert(0, str(repo_root_for_imports))
+
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import (
     avg,
@@ -35,6 +40,8 @@ from pyspark.sql.functions import (
     when,
 )
 from pyspark.sql.types import DoubleType, IntegerType, StringType
+
+from src.dashboard.country_label_standardization import standardize_country_display_label
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -279,7 +286,10 @@ def build_geographic_segment_summary_dataframe(ao3_df: DataFrame, geographic_df:
     order_date = to_date(col("order_date_DateOrders"))
 
     enriched_df = (
-        joined_df.withColumn("map_location_country", map_location_country.cast(StringType()))
+        joined_df.withColumn(
+            "map_location_country",
+            standardize_country_display_label(map_location_country).cast(StringType()),
+        )
         .withColumn("map_location_region", map_location_region.cast(StringType()))
         .withColumn("map_location_state", map_location_state.cast(StringType()))
         .withColumn(
