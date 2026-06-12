@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "b99f69a31a4a298c44bc",
+  "position": {
+    "x": 963.66664579550434,
+    "y": 742.46571911589751,
+    "z": 4000,
+    "height": 336.61010581679295,
+    "width": 955.9727005196919,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q02 V2 | 06 Negative Profit Review Queue"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q02 V2 | 06 Negative Profit Review Queue",
+              "nativeQueryRef": "Q02 V2 | 06 Negative Profit Review Queue"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

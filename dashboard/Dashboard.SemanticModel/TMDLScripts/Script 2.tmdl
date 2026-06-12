@@ -1,0 +1,285 @@
+createOrReplace
+
+	/// Dedicated semantic-model table for governed dashboard KPI measures. Business logic must reuse approved Databricks outputs.
+	table Dashboard_Measures
+		lineageTag: 7e080b02-f1cd-4e8e-a084-cb8b485f1467
+
+		/// Count of governed AO3 held-out scored order-item rows in the current filter context.
+		measure 'Total Orders' = COUNTROWS ( 'powerbi_ao3_order_segments' )
+			formatString: #,0
+			displayFolder: Shared Operational KPIs
+			lineageTag: 511867cd-a038-4526-a0a6-6e844424e220
+
+		/// AO3 rows classified as high risk using the frozen AO1 threshold output.
+		measure 'High Risk Orders' = CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao1_high_risk_flag] = TRUE () )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 6c61219c-55e8-4cd3-82d6-36408e786614
+
+		/// Share of governed AO3 rows classified as high risk.
+		measure 'High Risk Rate' = DIVIDE ( [High Risk Orders], [Total Orders] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 6f3c2e41-c140-45df-9af6-899913e6e5b5
+
+		/// Total predicted order profit from the frozen AO2 model outputs.
+		measure 'Expected Profit' = SUM ( 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] )
+			formatString: $#,0.00;($#,0.00);$0.00
+			displayFolder: AO2 Profitability
+			lineageTag: 85be1338-8fa8-4083-a6c9-33627ae268ba
+
+		/// Average predicted order profit from frozen AO2 outputs.
+		measure 'Average Expected Profit' = AVERAGE ( 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] )
+			formatString: $#,0.00;($#,0.00);$0.00
+			displayFolder: AO2 Profitability
+			lineageTag: e30fdca4-5fab-4fa6-a128-14473e990ffe
+
+		/// Total governed AO3 support order value in the current filter context.
+		measure 'Total Order Value' = SUM ( 'powerbi_ao3_order_segments'[ao3_order_value] )
+			formatString: $#,0.00;($#,0.00);$0.00
+			displayFolder: AO2 Profitability
+			lineageTag: 274f3eff-ae33-4686-97a3-18c59b02aaf6
+
+		/// Predicted profit divided by governed AO3 support order value.
+		measure 'Expected Profit Margin' = DIVIDE ( [Expected Profit], [Total Order Value] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability
+			lineageTag: c8670c55-d5a3-4903-ad04-df493239039f
+
+		/// Average frozen AO1 late-delivery probability.
+		measure 'Average AO1 Late Risk' = AVERAGE ( 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 874902d1-6d90-4d06-bd81-95f674bf69c6
+
+		/// Average deterministic AO3 predicted margin.
+		measure 'Average Predicted Margin' = AVERAGE ( 'powerbi_ao3_order_segments'[ao3_predicted_margin] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability
+			lineageTag: 0bf33519-7811-43f2-8989-d5eb8af83377
+
+		/// Frozen AO3 risk cutoff loaded from the governed policy table.
+		measure 'AO3 Risk Cutoff' = MAX ( 'powerbi_ao3_risk_margin_policy'[risk_cutoff] )
+			formatString: 0.0%
+			displayFolder: AO3 Risk-Margin Prioritization
+			lineageTag: f285615f-d788-49b7-bbf1-e91bfcd39296
+
+		/// Frozen AO3 margin cutoff loaded from the governed policy table.
+		measure 'AO3 Margin Cutoff' = MAX ( 'powerbi_ao3_risk_margin_policy'[margin_cutoff] )
+			formatString: 0.0%
+			displayFolder: AO3 Risk-Margin Prioritization
+			lineageTag: efb7f04f-913e-4e5e-b79f-62cad061511d
+
+		/// AO3 rows without an assigned priority segment.
+		measure 'Rows Missing Segment' = COALESCE ( CALCULATE ( [Total Orders], ISBLANK ( 'powerbi_ao3_order_segments'[ao3_priority_segment] ) ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: d4115562-ce80-41f5-bb7a-62712e5e813b
+
+		/// AO3 rows without a frozen AO1 risk probability.
+		measure 'Rows Missing Risk Score' = COALESCE ( CALCULATE ( [Total Orders], ISBLANK ( 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] ) ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: 0f2654eb-14ab-45c1-b378-0307bd4fcae0
+
+		/// AO3 rows without a frozen AO2 expected-profit value.
+		measure 'Rows Missing Expected Profit' = COALESCE ( CALCULATE ( [Total Orders], ISBLANK ( 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] ) ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: a0158305-f7a4-45f2-8acc-941e398533c1
+
+		/// AO3 rows without a deterministic predicted-margin value.
+		measure 'Rows Missing Predicted Margin' = COALESCE ( CALCULATE ( [Total Orders], ISBLANK ( 'powerbi_ao3_order_segments'[ao3_predicted_margin] ) ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: 62294428-d46c-494f-aba3-09f6ca294231
+
+		/// AO3 rows containing an invalid AO1 probability outside the interval from zero to one.
+		measure 'Rows With Invalid Risk Probability' = COALESCE ( CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] < 0 || 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] > 1 ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: 7daa2ae0-bcba-40c0-a33e-254ab11900ad
+
+		/// AO3 rows with a nonpositive order-value denominator.
+		measure 'Rows With Nonpositive Order Value' = COALESCE ( CALCULATE ( [Total Orders], 'powerbi_ao3_order_segments'[ao3_order_value] <= 0 ), 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: 3d56e7fc-4515-48d2-8cd9-5b79b275ea49
+
+		/// Aggregated dashboard QA issue count across required AO3 checks.
+		measure 'Dashboard QA Issue Rows' = COALESCE ( [Rows Missing Segment], 0 ) + COALESCE ( [Rows Missing Risk Score], 0 ) + COALESCE ( [Rows Missing Expected Profit], 0 ) + COALESCE ( [Rows Missing Predicted Margin], 0 ) + COALESCE ( [Rows With Invalid Risk Probability], 0 ) + COALESCE ( [Rows With Nonpositive Order Value], 0 )
+			formatString: #,0
+			displayFolder: Governance QA
+			lineageTag: d4524a31-d1c2-4217-a1cc-cb5c451ba9c2
+
+		/// Returns one when all dashboard QA checks pass and zero otherwise.
+		measure 'Dashboard QA Pass Flag' = IF ( [Dashboard QA Issue Rows] = 0, 1, 0 )
+			formatString: 0
+			displayFolder: Governance QA
+			lineageTag: 9d1ab5cc-c933-4584-a9ac-3f30e019eff7
+
+		/// Scored AO3 rows not classified as high risk by the frozen AO1 threshold.
+		measure 'Low Risk Orders' = [Total Orders] - [High Risk Orders]
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 848f0653-956e-477e-884c-839172f156c8
+
+		/// Share of scored rows below the frozen AO1 high-risk threshold.
+		measure 'Low Risk Rate' = DIVIDE ( [Low Risk Orders], [Total Orders] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 416a2cd7-fd7d-4db7-acf6-a7a6844eb96f
+
+		/// Approved AO1 operating threshold loaded from the governed decision policy.
+		measure 'AO1 Selected Threshold' = MAX ( 'powerbi_ao1_decision_threshold_policy'[selected_threshold] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: ba3c9bc6-568c-4b8d-909b-ee2cd3546695
+
+		/// Validation recall at the approved AO1 operating threshold.
+		measure 'AO1 Validation Recall' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_recall] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 3cdf21ec-4d4b-4fef-a9b5-2a0806492cf5
+
+		/// Validation precision at the approved AO1 operating threshold.
+		measure 'AO1 Validation Precision' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_precision] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: f4e4e787-e375-49e1-9c29-fbe8c1d0eba3
+
+		/// Validation F1 score at the approved AO1 operating threshold.
+		measure 'AO1 Validation F1' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_f1] )
+			formatString: 0.000
+			displayFolder: AO1 Delivery Risk
+			lineageTag: ea83357c-f442-4f44-8aea-997afd731a85
+
+		/// Validation predicted-positive alert rate at the approved AO1 operating threshold.
+		measure 'AO1 Validation Alert Rate' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_predicted_positive_rate] )
+			formatString: 0.0%
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 956c691c-65e2-4cf2-9f61-ff2bd83e61ad
+
+		/// Validation true-positive count at the approved AO1 threshold.
+		measure 'AO1 True Positives' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_true_positive] )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 2b131ef8-e419-4c82-ae1f-caefb8a6b0af
+
+		/// Validation true-negative count at the approved AO1 threshold.
+		measure 'AO1 True Negatives' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_true_negative] )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: accd61fb-f8eb-4b5b-b066-81788d3f063c
+
+		/// Validation false-positive count at the approved AO1 threshold.
+		measure 'AO1 False Positives' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_false_positive] )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 958477fe-b0cd-4085-90ea-6ff16f1cfd16
+
+		/// Validation false-negative count at the approved AO1 threshold.
+		measure 'AO1 False Negatives' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_false_negative] )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 8d50933d-7e8b-4c1c-abfe-af70145a9ecd
+
+		/// Validation population size used to approve the AO1 threshold.
+		measure 'AO1 Validation Rows' = MAX ( 'powerbi_ao1_decision_threshold_policy'[validation_row_count] )
+			formatString: #,0
+			displayFolder: AO1 Delivery Risk
+			lineageTag: 718e9d6d-60b4-424b-a718-f750c25eb296
+
+		/// Scored order items with a frozen AO2 predicted profit below zero.
+		measure 'Negative Expected Profit Items' = CALCULATE ( COUNTROWS ( 'powerbi_ao3_order_segments' ), 'powerbi_ao3_order_segments'[ao2_predicted_order_profit] < 0 )
+			formatString: #,##0
+			displayFolder: AO2 Profitability
+			lineageTag: 10dc4248-e88d-4391-bf1f-91a91541eb55
+
+		/// Share of scored order items with frozen AO2 predicted profit below zero.
+		measure 'Negative Expected Profit Rate' = DIVIDE ( [Negative Expected Profit Items], [Total Orders] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability
+			lineageTag: 3d77be00-4d6f-486d-a213-00a9e346e0e6
+
+		/// Scored order items with frozen AO2 predicted profit greater than or equal to zero.
+		measure 'Positive Expected Profit Items' = [Total Orders] - [Negative Expected Profit Items]
+			formatString: #,##0
+			displayFolder: AO2 Profitability
+			lineageTag: 667c2d3f-a2fd-4539-a4b1-219656aff174
+
+		/// Share of scored order items with frozen AO2 predicted profit greater than or equal to zero.
+		measure 'Positive Expected Profit Rate' = DIVIDE ( [Positive Expected Profit Items], [Total Orders] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability
+			lineageTag: cf079cdc-ee22-4003-be16-23e1b7c93179
+
+		/// Validation population size for the selected AO2 gradient boosting model.
+		measure 'AO2 Validation Rows' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[validation_rows] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: #,##0
+			displayFolder: AO2 Profitability
+			lineageTag: 8e94c991-b938-46cb-93a8-cb02016bc769
+
+		/// Validation root mean squared error for the selected AO2 gradient boosting model.
+		measure 'AO2 Validation RMSE' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[rmse] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: $#,##0.00;-$#,##0.00
+			displayFolder: AO2 Profitability
+			lineageTag: fd938b49-24bf-4f3b-8a33-825e17fe69d6
+
+		/// Validation mean absolute error for the selected AO2 gradient boosting model.
+		measure 'AO2 Validation MAE' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[mae] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: $#,##0.00;-$#,##0.00
+			displayFolder: AO2 Profitability
+			lineageTag: e4c86b37-68c1-431b-82d8-bb6f9228e6f1
+
+		/// Validation coefficient of determination for the selected AO2 gradient boosting model.
+		measure 'AO2 Validation R2' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[r2] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: 0.000
+			displayFolder: AO2 Profitability
+			lineageTag: dd2449ed-1372-49b0-9667-859018add419
+
+		/// Validation median absolute error for the selected AO2 gradient boosting model.
+		measure 'AO2 Median Absolute Error' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[median_absolute_error] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: $#,##0.00;-$#,##0.00
+			displayFolder: AO2 Profitability
+			lineageTag: 9b29e221-0e4a-4275-b2e2-dc5ccc435b10
+
+		/// Validation share of AO2 predictions with a profit sign different from the target.
+		measure 'AO2 Wrong Profit Sign Share' = CALCULATE ( MAX ( 'powerbi_ao2_evaluation_metrics'[wrong_profit_sign_share] ), 'powerbi_ao2_evaluation_metrics'[model_name] = "ao2_gradient_boosting_regressor" )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability
+			lineageTag: c787312f-3789-4cfa-8114-a2885e1ab260
+
+		/// Explicit scatter-chart X-axis measure: average frozen AO1 late-delivery probability in the current AO3 segment context.
+		measure 'Average AO1 Risk for Scatter' = AVERAGE ( 'powerbi_ao3_order_segments'[ao1_predicted_late_delivery_probability] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability | Scatter
+			lineageTag: 94475e90-9d77-4dbb-97e1-43cfc026b3ec
+
+		/// Explicit scatter-chart Y-axis measure: average deterministic predicted margin in the current AO3 segment context.
+		measure 'Average Predicted Margin for Scatter' = AVERAGE ( 'powerbi_ao3_order_segments'[ao3_predicted_margin] )
+			formatString: 0.0%
+			displayFolder: AO2 Profitability | Scatter
+			lineageTag: 9f9cc209-b84f-4e40-b0f9-010564adb743
+
+		/// Explicit scatter-chart bubble-size measure: governed order value in the current AO3 segment context.
+		measure 'Total Order Value for Scatter' = SUM ( 'powerbi_ao3_order_segments'[ao3_order_value] )
+			formatString: $#,##0
+			displayFolder: AO2 Profitability | Scatter
+			lineageTag: 4cdca677-d63c-4ef9-ac74-2a2ca29d9ed9
+
+		/// Explicit profit-band chart value measure. Counts governed held-out scored order items and returns zero for empty stable bands.
+		measure 'Scored Items for Profit Bands' = COALESCE ( COUNTROWS ( 'powerbi_ao3_order_segments' ), 0 )
+			formatString: #,##0
+			displayFolder: AO2 Profitability | Profit Bands
+			lineageTag: bd434d1e-b8f1-4ac4-9db9-5ea164b0ce67
+
+		column 'Measure Group'
+			isHidden
+			lineageTag: 178048c3-e0aa-42d4-a92b-630cadac0387
+			isNameInferred
+			sourceColumn: [Measure Group]
+
+		partition Dashboard_Measures = calculated
+			mode: import
+			source = DATATABLE ( "Measure Group", STRING, { { "Governed KPI Measures" } } )

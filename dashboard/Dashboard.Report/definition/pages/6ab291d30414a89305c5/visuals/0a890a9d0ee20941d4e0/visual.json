@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "0a890a9d0ee20941d4e0",
+  "position": {
+    "x": 0,
+    "y": 200.87236549286555,
+    "z": 1000,
+    "height": 153.82118078282497,
+    "width": 1920.0502683597329,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q01 | 02 KPI Exposure Strip"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q01 | 02 KPI Exposure Strip",
+              "nativeQueryRef": "Q01 | 02 KPI Exposure Strip"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

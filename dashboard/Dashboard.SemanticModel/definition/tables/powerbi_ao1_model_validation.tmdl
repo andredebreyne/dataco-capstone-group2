@@ -1,0 +1,187 @@
+table powerbi_ao1_model_validation
+	lineageTag: 2db14e29-2786-4ff4-b709-b9206b1dea4e
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: b7d96bf0-c587-4f0c-bbee-8f93dc083b2e
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 6c90fe7d-6047-4f77-a6c3-7ff40a5193f5
+		summarizeBy: sum
+		sourceColumn: threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column row_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 244c95c4-1454-4c20-9bba-170550a10840
+		summarizeBy: sum
+		sourceColumn: row_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column positive_class_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 48c63770-9c6f-48db-810a-92514fd079ab
+		summarizeBy: sum
+		sourceColumn: positive_class_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column predicted_positive_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c5845459-dea6-4196-9882-47825d7e96e9
+		summarizeBy: sum
+		sourceColumn: predicted_positive_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column accuracy
+		dataType: double
+		sourceProviderType: double
+		lineageTag: b5aa3da7-de4b-4b6a-a5c5-a17e51ffdfa7
+		summarizeBy: sum
+		sourceColumn: accuracy
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precision
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 55a7e989-596d-4102-b0a7-5688401085bb
+		summarizeBy: sum
+		sourceColumn: precision
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column recall
+		dataType: double
+		sourceProviderType: double
+		lineageTag: d838d6b8-b29f-4c63-84af-19f78e5515a6
+		summarizeBy: sum
+		sourceColumn: recall
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column f1
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 1c1291eb-e480-4cbb-8e9f-51ff28393b82
+		summarizeBy: sum
+		sourceColumn: f1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column true_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: ce4ae7d2-1be2-4598-af3d-5e041cd0e95b
+		summarizeBy: sum
+		sourceColumn: true_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 9f39224a-ca74-4a0d-8afe-cd834a554390
+		summarizeBy: sum
+		sourceColumn: false_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: ecc1badd-89e8-4a54-a9b8-35d6b559d5c7
+		summarizeBy: sum
+		sourceColumn: false_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column true_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 3177880e-5307-403c-a205-ca90f103aa64
+		summarizeBy: sum
+		sourceColumn: true_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column roc_auc
+		dataType: double
+		sourceProviderType: double
+		lineageTag: c8cb32c6-0cfa-4454-a9df-f48acb7490e4
+		summarizeBy: sum
+		sourceColumn: roc_auc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pr_auc
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 8f30bc87-ac8b-4eda-95ca-f02e7920db32
+		summarizeBy: sum
+		sourceColumn: pr_auc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column log_loss
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 83b5326e-7583-4f01-b4bb-d54cbff6bf8e
+		summarizeBy: sum
+		sourceColumn: log_loss
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition powerbi_ao1_model_validation = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao1_model_validation_Table = default_Schema{[Name="powerbi_ao1_model_validation",Kind="Table"]}[Data]
+				in
+				    powerbi_ao1_model_validation_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

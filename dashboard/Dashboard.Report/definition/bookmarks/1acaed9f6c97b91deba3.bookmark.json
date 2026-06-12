@@ -1,0 +1,363 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "AllRegion",
+  "name": "1acaed9f6c97b91deba3",
+  "options": {
+    "targetVisualNames": []
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "01fb79c0200404a76c98",
+    "sections": {
+      "01fb79c0200404a76c98": {
+        "filters": {
+          "byExpr": [
+            {
+              "name": "bef48fdb700938e5bad3",
+              "type": "Categorical",
+              "expression": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "powerbi_ao3_order_segments"
+                    }
+                  },
+                  "Property": "ao1_high_risk_flag"
+                }
+              },
+              "howCreated": 1
+            },
+            {
+              "name": "5f8dd7f329576d53d041",
+              "type": "Categorical",
+              "expression": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "powerbi_ao3_order_segments"
+                    }
+                  },
+                  "Property": "ao3_priority_segment"
+                }
+              },
+              "howCreated": 1
+            }
+          ]
+        },
+        "visualContainers": {
+          "221f7b816559d37e6bba": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "2be7ee8d3d08ad2d000c",
+                  "type": "TopN",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_country"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "c033886f33e48c796a76",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Measures"
+                        }
+                      },
+                      "Property": "Geo Order Value"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "3f42681d00001b3b5242",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Measures"
+                        }
+                      },
+                      "Property": "Geo High Risk Rate"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "1b952e92b9ac4b11431d",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Measures"
+                        }
+                      },
+                      "Property": "Geo Expected Margin"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "scatterChart",
+              "objects": {},
+              "activeProjections": {
+                "X": [
+                  {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Measures"
+                        }
+                      },
+                      "Property": "Geo High Risk Rate"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "225a52d05304b29210d1": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "5dd7aa0f39d19c8c4b04",
+                  "type": "TopN",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_country"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "5b10ed039185720ed400",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_region"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "5bf8aee2467071500b1b",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_state"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "0ef32042759ae880cc08",
+                  "type": "Advanced",
+                  "expression": {
+                    "Aggregation": {
+                      "Expression": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "powerbi_geographic_summary"
+                            }
+                          },
+                          "Property": "high_risk_order_count"
+                        }
+                      },
+                      "Function": 0
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "filledMap",
+              "objects": {},
+              "activeProjections": {
+                "Category": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_country"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "bcb6b44d8c437bc9d39e": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "2be7ee8d3d08ad2d000c",
+                  "type": "TopN",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_country"
+                    }
+                  },
+                  "howCreated": 1
+                },
+                {
+                  "name": "ac17102be067209ea402",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Measures"
+                        }
+                      },
+                      "Property": "Geo Order Value"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "e7b06f3bd73797d566b8",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_region"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "treemap",
+              "objects": {},
+              "activeProjections": {
+                "Group": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "powerbi_geographic_summary"
+                        }
+                      },
+                      "Property": "map_location_region"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "fee267ef6ee5baa8ecd8": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "9743f79c00caecb4ad38",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dashboard_Visualizations"
+                        }
+                      },
+                      "Property": "Q04 | 01 Geographic Hotspots Header"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+              "objects": {}
+            }
+          },
+          "98599de6d9d603de7091": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "b6d1b50aab20e1c4651c": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "aa0fbb240014818eb060": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "2ef4c4c4c24e6760bae1": {
+            "singleVisual": {
+              "visualType": "image",
+              "objects": {}
+            }
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "false"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

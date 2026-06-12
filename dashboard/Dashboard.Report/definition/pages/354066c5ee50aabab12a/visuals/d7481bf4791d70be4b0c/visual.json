@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "d7481bf4791d70be4b0c",
+  "position": {
+    "x": 0,
+    "y": 340.20682068206821,
+    "z": 4000,
+    "height": 441.59295929592957,
+    "width": 964.29482948294833,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q04 | 03 Volume Hotspot Ranking"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q04 | 03 Volume Hotspot Ranking",
+              "nativeQueryRef": "Q04 | 03 Volume Hotspot Ranking"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

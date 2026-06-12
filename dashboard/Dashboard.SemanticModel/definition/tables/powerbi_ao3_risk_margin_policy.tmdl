@@ -1,0 +1,201 @@
+table powerbi_ao3_risk_margin_policy
+	lineageTag: 9788fc8c-f1ab-464a-b75d-677e44bc9858
+
+	column policy_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: aa62d1b8-3e5a-44c6-af87-6dc64f692e2a
+		summarizeBy: none
+		sourceColumn: policy_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column issue
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 761c0d1b-2995-4bd1-b21b-7e38202bfe61
+		summarizeBy: none
+		sourceColumn: issue
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_status
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 885ca07c-2d17-481c-9be7-acebba6eb79a
+		summarizeBy: none
+		sourceColumn: policy_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column policy_type
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 86f977ca-f4a4-43b4-8337-41990d600f55
+		summarizeBy: none
+		sourceColumn: policy_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_signal
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: d2650093-e8bf-4a62-bb5c-9493b8ed32e3
+		summarizeBy: none
+		sourceColumn: risk_signal
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_cutoff
+		dataType: double
+		sourceProviderType: double
+		lineageTag: f21f7166-98e8-489a-8737-83d65be75278
+		summarizeBy: sum
+		sourceColumn: risk_cutoff
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column risk_cutoff_source
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 68fa6dbf-0324-400b-a698-e48534a22f26
+		summarizeBy: none
+		sourceColumn: risk_cutoff_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_signal_lineage
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 4c1a6fdf-68e7-4213-a19e-66f543b1ee20
+		summarizeBy: none
+		sourceColumn: risk_signal_lineage
+
+		annotation SummarizationSetBy = Automatic
+
+	column margin_signal
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: bc6c91f3-475d-49d6-8511-6151d0cc8e1a
+		summarizeBy: none
+		sourceColumn: margin_signal
+
+		annotation SummarizationSetBy = Automatic
+
+	column margin_cutoff
+		dataType: double
+		sourceProviderType: double
+		lineageTag: a6c0dc82-84cb-406d-a5fe-d238cc21860d
+		summarizeBy: sum
+		sourceColumn: margin_cutoff
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column margin_cutoff_source
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 6afac261-017e-4446-8e0b-8103c37d36c4
+		summarizeBy: none
+		sourceColumn: margin_cutoff_source
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_value_denominator
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: d0271a41-d4d8-4bb5-87ea-e0907ed82a37
+		summarizeBy: none
+		sourceColumn: order_value_denominator
+
+		annotation SummarizationSetBy = Automatic
+
+	column profit_signal_lineage
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 2c35cb18-db9a-49e0-afb8-0408c86f7fe0
+		summarizeBy: none
+		sourceColumn: profit_signal_lineage
+
+		annotation SummarizationSetBy = Automatic
+
+	column margin_signal_lineage
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: ac62c0bd-2e3b-4d3f-b189-3360c3296d55
+		summarizeBy: none
+		sourceColumn: margin_signal_lineage
+
+		annotation SummarizationSetBy = Automatic
+
+	column high_risk_high_margin_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 64dcc672-e654-4475-9e2c-bc5a9cf752e2
+		summarizeBy: none
+		sourceColumn: high_risk_high_margin_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column high_risk_low_margin_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 95a9c6b0-96fa-44dd-88a2-a1857c0b6d78
+		summarizeBy: none
+		sourceColumn: high_risk_low_margin_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_risk_high_margin_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 333340b1-c7fe-4592-a790-d5b59aaa0431
+		summarizeBy: none
+		sourceColumn: low_risk_high_margin_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_risk_low_margin_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 18c0bea8-3f77-42d1-abac-877a1831c9c6
+		summarizeBy: none
+		sourceColumn: low_risk_low_margin_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column final_test_used
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 54d4338f-d0dd-4383-9512-a8c5afa4864b
+		summarizeBy: none
+		sourceColumn: final_test_used
+
+		annotation SummarizationSetBy = Automatic
+
+	column notes
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 6dc8d737-dadf-435f-beeb-9c181065d03e
+		summarizeBy: none
+		sourceColumn: notes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao3_risk_margin_policy = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao3_risk_margin_policy_Table = default_Schema{[Name="powerbi_ao3_risk_margin_policy",Kind="Table"]}[Data]
+				in
+				    powerbi_ao3_risk_margin_policy_Table
+
+	annotation PBI_ResultType = Table
+

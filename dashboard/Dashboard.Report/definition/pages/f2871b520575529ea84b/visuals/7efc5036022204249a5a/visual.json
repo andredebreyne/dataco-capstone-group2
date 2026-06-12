@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "7efc5036022204249a5a",
+  "position": {
+    "x": 0,
+    "y": 369.38898207968646,
+    "z": 5000,
+    "height": 361.22568965803589,
+    "width": 963.26850575476249,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "htmlContent443BE3AD55E043BF878BED274D3A6865",
+    "query": {
+      "queryState": {
+        "content": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dashboard_Visualizations"
+                    }
+                  },
+                  "Property": "Q02 | 03 Profit Band Distribution"
+                }
+              },
+              "queryRef": "Dashboard_Visualizations.Q02 | 03 Profit Band Distribution",
+              "nativeQueryRef": "Q02 | 03 Profit Band Distribution"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

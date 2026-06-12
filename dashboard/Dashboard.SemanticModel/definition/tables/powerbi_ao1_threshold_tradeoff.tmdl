@@ -1,0 +1,152 @@
+table powerbi_ao1_threshold_tradeoff
+	lineageTag: 742dbb57-18c6-4cce-9603-b0e38dd85635
+
+	column model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 9a217a40-36ca-409e-9d72-dbbe46107c3c
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: cada223e-8cc5-4a98-b3bd-14d7f896889b
+		summarizeBy: sum
+		sourceColumn: threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column row_count
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 6c8b441f-e956-411a-9a1c-e12979ff04f5
+		summarizeBy: sum
+		sourceColumn: row_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column positive_class_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: d83d4981-629c-442c-82fc-ac7ef60ca738
+		summarizeBy: sum
+		sourceColumn: positive_class_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column predicted_positive_rate
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 1dbfd24b-207f-40fd-9011-4c5537565fe5
+		summarizeBy: sum
+		sourceColumn: predicted_positive_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column accuracy
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 27a01aac-897c-4ceb-bce8-a4f52f702d50
+		summarizeBy: sum
+		sourceColumn: accuracy
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precision
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 9f58e70e-7177-48b3-97f3-7d8e95ec547b
+		summarizeBy: sum
+		sourceColumn: precision
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column recall
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 1693ccb8-74cf-4a3a-a55b-16fd44a054a0
+		summarizeBy: sum
+		sourceColumn: recall
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column f1
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 32c5857d-152b-4cc4-9415-0eb4ead4725e
+		summarizeBy: sum
+		sourceColumn: f1
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column true_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: a23735af-39a7-4403-9077-5c2ab3d864b4
+		summarizeBy: sum
+		sourceColumn: true_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: fdff5ac7-96de-4678-8c6b-e22575b10311
+		summarizeBy: sum
+		sourceColumn: false_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	column false_negative
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 3ea6739f-1f88-4aec-9283-9fc337372fcf
+		summarizeBy: sum
+		sourceColumn: false_negative
+
+		annotation SummarizationSetBy = Automatic
+
+	column true_positive
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 212f6393-17f3-4c5b-b2d0-da37ffe21bf2
+		summarizeBy: sum
+		sourceColumn: true_positive
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao1_threshold_tradeoff = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao1_threshold_tradeoff_Table = default_Schema{[Name="powerbi_ao1_threshold_tradeoff",Kind="Table"]}[Data]
+				in
+				    powerbi_ao1_threshold_tradeoff_Table
+
+	annotation PBI_ResultType = Table
+

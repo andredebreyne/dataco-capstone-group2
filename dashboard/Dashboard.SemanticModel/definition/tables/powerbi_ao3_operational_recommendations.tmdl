@@ -1,0 +1,97 @@
+table powerbi_ao3_operational_recommendations
+	lineageTag: ac7de157-7aea-4016-a819-e50345647b21
+
+	column ao3_priority_segment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 59ed2157-0ae1-43b4-b0b7-5b82a9d577e9
+		summarizeBy: none
+		sourceColumn: ao3_priority_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column segment_interpretation
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: c8e72af2-7bc0-4003-840b-32328803d970
+		summarizeBy: none
+		sourceColumn: segment_interpretation
+
+		annotation SummarizationSetBy = Automatic
+
+	column recommended_action
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: fe3e9c31-7ed4-4001-a94b-4981c1618e42
+		summarizeBy: none
+		sourceColumn: recommended_action
+
+		annotation SummarizationSetBy = Automatic
+
+	column logistics_attention
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: caf7d897-0a6e-4dea-b0cc-2d80e1e77c0a
+		summarizeBy: none
+		sourceColumn: logistics_attention
+
+		annotation SummarizationSetBy = Automatic
+
+	column pricing_or_margin_attention
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: cfb2a2a9-bb8c-4263-b7a5-95b159401621
+		summarizeBy: none
+		sourceColumn: pricing_or_margin_attention
+
+		annotation SummarizationSetBy = Automatic
+
+	column monitoring_focus
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5fb2140e-1fc1-4d12-8bb7-f47f66157c5d
+		summarizeBy: none
+		sourceColumn: monitoring_focus
+
+		annotation SummarizationSetBy = Automatic
+
+	column dashboard_use
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 88ff8bf6-12aa-48f2-b993-d4cfb543b1dc
+		summarizeBy: none
+		sourceColumn: dashboard_use
+
+		annotation SummarizationSetBy = Automatic
+
+	column evidence_basis
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5b6fddab-6674-4c9f-8030-14c94864346b
+		summarizeBy: none
+		sourceColumn: evidence_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	column limitations
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: a02db529-596d-4732-9d9d-e98061d2530e
+		summarizeBy: none
+		sourceColumn: limitations
+
+		annotation SummarizationSetBy = Automatic
+
+	partition powerbi_ao3_operational_recommendations = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao3_operational_recommendations_Table = default_Schema{[Name="powerbi_ao3_operational_recommendations",Kind="Table"]}[Data]
+				in
+				    powerbi_ao3_operational_recommendations_Table
+
+	annotation PBI_ResultType = Table
+

@@ -33,6 +33,8 @@ ORCHESTRATOR_PATH = REPO_ROOT / "notebooks/pipeline/run_project_workflow.py"
 EXPECTED_TABLE_NAMES = {
     "powerbi_ao3_order_segments",
     "powerbi_ao1_ao2_test_scores",
+    "powerbi_geographic_summary",
+    "powerbi_logistics_kpi_summary",
     "powerbi_ao1_decision_threshold_policy",
     "powerbi_ao1_ao2_test_score_summary",
     "powerbi_ao3_risk_margin_policy",
@@ -70,6 +72,8 @@ REQUIRED_ENVIRONMENT_OVERRIDES = {
     "DATACO_POWERBI_SERVING_SCHEMA",
     "DATACO_AO1_AO2_TEST_SCORE_OUTPUT_PATH",
     "DATACO_AO3_RISK_MARGIN_SEGMENT_OUTPUT_PATH",
+    "DATACO_POWERBI_GEOGRAPHIC_SUMMARY_OUTPUT_PATH",
+    "DATACO_POWERBI_LOGISTICS_KPI_SUMMARY_OUTPUT_PATH",
 }
 
 FORBIDDEN_TARGET_COLUMNS = {
@@ -90,8 +94,12 @@ REQUIRED_DOC_REFERENCES = {
 }
 
 ACTIVE_CODE_PATHS = (
+    Path("src/dashboard/build_powerbi_geographic_summary.py"),
+    Path("src/dashboard/build_powerbi_logistics_kpi_summary.py"),
     Path("src/dashboard/register_powerbi_databricks_tables.py"),
     Path("notebooks/pipeline/run_project_workflow.py"),
+    Path("tests/data_validation/validate_powerbi_geographic_summary.py"),
+    Path("tests/data_validation/validate_powerbi_logistics_kpi_summary.py"),
     Path("tests/data_validation/validate_powerbi_databricks_serving_layer.py"),
 )
 

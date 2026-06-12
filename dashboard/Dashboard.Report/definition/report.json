@@ -1,0 +1,206 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU05",
+      "reportVersionAtImport": {
+        "visual": "2.9.0",
+        "report": "3.3.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "DataCo_Executive_Operations_Da026041330639939075.json",
+      "reportVersionAtImport": {
+        "visual": "2.9.0",
+        "report": "3.3.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "htmlContent443BE3AD55E043BF878BED274D3A6865"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU05",
+          "path": "BaseThemes/CY26SU05.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Background04122495747559218.png",
+          "path": "Background04122495747559218.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background06406084962398173.png",
+          "path": "Background06406084962398173.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background19093447457157509.png",
+          "path": "Background19093447457157509.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background29745011453024495.png",
+          "path": "Background29745011453024495.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background2985858379873776.png",
+          "path": "Background2985858379873776.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background31867768152675013.png",
+          "path": "Background31867768152675013.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background4066266750598776.png",
+          "path": "Background4066266750598776.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background48370989675744536.png",
+          "path": "Background48370989675744536.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background5427922268933102.png",
+          "path": "Background5427922268933102.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background5936578788262897.png",
+          "path": "Background5936578788262897.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background6855039920734942.png",
+          "path": "Background6855039920734942.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background7105257672768023.png",
+          "path": "Background7105257672768023.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background7209330897467899.png",
+          "path": "Background7209330897467899.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background7545018976427421.png",
+          "path": "Background7545018976427421.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background8432619793723312.png",
+          "path": "Background8432619793723312.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background863381460564152.png",
+          "path": "Background863381460564152.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background8725132662152388.png",
+          "path": "Background8725132662152388.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background8905840054897167.png",
+          "path": "Background8905840054897167.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background9368844078738788.png",
+          "path": "Background9368844078738788.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background9611242021095637.png",
+          "path": "Background9611242021095637.png",
+          "type": "Image"
+        },
+        {
+          "name": "Background997275902856419.png",
+          "path": "Background997275902856419.png",
+          "type": "Image"
+        },
+        {
+          "name": "DataCo_Executive_Operations_Da026041330639939075.json",
+          "path": "DataCo_Executive_Operations_Da026041330639939075.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "Gemini_Generated_Image_51edzz57511585682249712.png",
+          "path": "Gemini_Generated_Image_51edzz57511585682249712.png",
+          "type": "Image"
+        },
+        {
+          "name": "switch-off41673143008936897.png",
+          "path": "switch-off41673143008936897.png",
+          "type": "Image"
+        },
+        {
+          "name": "switch-on7059364341130604.png",
+          "path": "switch-on7059364341130604.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

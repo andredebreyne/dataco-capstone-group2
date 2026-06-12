@@ -1,0 +1,220 @@
+table powerbi_ao1_ao2_test_scores
+	lineageTag: fd9a4ae9-9d69-44b0-a016-676f06ad1a83
+
+	column Order_Id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 941341cd-e009-4dbc-8ac7-5e700c07161f
+		summarizeBy: count
+		sourceColumn: Order_Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Order_Item_Id
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: e39b9ffd-dd4e-4bdf-bc55-9148433e2f5f
+		summarizeBy: count
+		sourceColumn: Order_Item_Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date_DateOrders
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 9db72dd1-88db-4349-a7da-a210b99e66fa
+		summarizeBy: none
+		sourceColumn: order_date_DateOrders
+
+		annotation SummarizationSetBy = Automatic
+
+	column chronological_row_number
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 121befc9-dda7-4a9e-a61c-a117a1c928db
+		summarizeBy: sum
+		sourceColumn: chronological_row_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column split_partition
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 144d1229-623d-431b-9a6c-dea1a63eae53
+		summarizeBy: none
+		sourceColumn: split_partition
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_chronological_row_number
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 93752ea9-6f35-4265-9e56-3b33ae395283
+		summarizeBy: sum
+		sourceColumn: ao2_chronological_row_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_split_partition
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: abdb1419-6dc6-4c1d-b096-ba30bfc3c136
+		summarizeBy: none
+		sourceColumn: ao2_split_partition
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 26308129-4acb-475d-9ed0-8d0c2732049f
+		summarizeBy: none
+		sourceColumn: ao1_model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_selected_candidate
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 7a1ac308-a2cf-4c47-9ccf-8c18fc768236
+		summarizeBy: none
+		sourceColumn: ao1_selected_candidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_scoring_mode
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 12d10b85-efc4-4476-b782-6c8020fc8b61
+		summarizeBy: none
+		sourceColumn: ao1_scoring_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao1_predicted_late_delivery_probability
+		dataType: double
+		sourceProviderType: double
+		lineageTag: d265dbad-74b1-4e61-90a5-413d0191406b
+		summarizeBy: sum
+		sourceColumn: ao1_predicted_late_delivery_probability
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao1_decision_threshold
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 928ebce5-36bb-43e2-89b6-e619b1f3c067
+		summarizeBy: sum
+		sourceColumn: ao1_decision_threshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao1_high_risk_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: cb957cef-3e82-4fad-93d0-52f676a2b294
+		summarizeBy: none
+		sourceColumn: ao1_high_risk_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_model_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 1098b623-4803-4566-b633-457301a1cd67
+		summarizeBy: none
+		sourceColumn: ao2_model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_selected_candidate
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 8cd17f41-4488-452f-b84c-b93838eba28b
+		summarizeBy: none
+		sourceColumn: ao2_selected_candidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_scoring_mode
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 6a9b2ead-b1b6-4614-9315-16f898bf61f2
+		summarizeBy: none
+		sourceColumn: ao2_scoring_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ao2_predicted_order_profit
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 45f46ffc-02bf-4ad3-bf23-d7ed1f739df4
+		summarizeBy: sum
+		sourceColumn: ao2_predicted_order_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_order_value
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 7b95a3f7-1269-493c-81ad-32d19b2eed29
+		summarizeBy: sum
+		sourceColumn: ao3_order_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ao3_predicted_margin
+		dataType: double
+		sourceProviderType: double
+		lineageTag: 711960e5-5c53-4c69-a7a7-09bffc96aca5
+		summarizeBy: sum
+		sourceColumn: ao3_predicted_margin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column scoring_timestamp_utc
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 765b19aa-4d48-4818-8234-f4fdb23bd251
+		summarizeBy: none
+		sourceColumn: scoring_timestamp_utc
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Calendar-day key normalized to midnight for the official Dim_Date relationship.
+	column order_date_key = DATE ( YEAR ( [order_date_DateOrders] ), MONTH ( [order_date_DateOrders] ), DAY ( [order_date_DateOrders] ) )
+		dataType: dateTime
+		displayFolder: Calendar
+		lineageTag: 04597b6a-ac29-4f61-ac05-f8e5a33ddf32
+
+	partition powerbi_ao1_ao2_test_scores = m
+		mode: import
+		source =
+				let
+				    Source = DatabricksMultiCloud.Catalogs("dbc-3e4ac542-9599.cloud.databricks.com", "/sql/1.0/warehouses/5874cfdd34ed7aca", [Catalog = "", Database = ""]),
+				    workspace_Database = Source{[Name="workspace",Kind="Database"]}[Data],
+				    default_Schema = workspace_Database{[Name="default",Kind="Schema"]}[Data],
+				    powerbi_ao1_ao2_test_scores_Table = default_Schema{[Name="powerbi_ao1_ao2_test_scores",Kind="Table"]}[Data]
+				in
+				    powerbi_ao1_ao2_test_scores_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
