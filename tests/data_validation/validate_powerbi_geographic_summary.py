@@ -4,10 +4,21 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
+
+if "__file__" in globals():
+    repo_root_for_imports = Path(__file__).resolve().parents[2]
+    if str(repo_root_for_imports) not in sys.path:
+        sys.path.insert(0, str(repo_root_for_imports))
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum as spark_sum
+
+from src.dashboard.country_display_labels import (
+    TECHNICAL_COUNTRY_TOKENS,
+    normalize_country_lookup_value,
+)
 
 
 VOLUME_ROOT = os.getenv("DATACO_VOLUME_ROOT", "/Volumes/workspace/default/raw_data").rstrip("/")
@@ -102,6 +113,13 @@ def main() -> None:
 
     assert summary_df.filter(col("map_location_label").isNull()).count() == 0
     assert summary_df.filter(col("map_location_country").isNull()).count() == 0
+    technical_country_token_count = summary_df.filter(
+        normalize_country_lookup_value("map_location_country").isin(*TECHNICAL_COUNTRY_TOKENS)
+    ).count()
+    assert technical_country_token_count == 0, (
+        "Power BI geographic summary contains technical country tokens in display labels: "
+        f"{technical_country_token_count}"
+    )
 
     invalid_latitude_count = summary_df.filter(
         (col("map_latitude").isNotNull()) & ~col("map_latitude").between(-90, 90)
@@ -139,6 +157,9 @@ def main() -> None:
     assert metadata["workflow"] == "powerbi_geographic_summary"
     assert metadata["issue"] == "#51"
     assert metadata["target_or_outcome_columns_used"] is False
+    assert metadata["country_display_label_source"] == (
+        "Silver Order_Country translated to English for Power BI display"
+    )
     assert metadata["output_path"] == GEOGRAPHIC_SUMMARY_PATH
     assert metadata["row_count"] == row_count
 
