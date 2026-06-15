@@ -1,6 +1,6 @@
 # Table 1. DataCo Dataset Summary
 
-Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_capstone_report_draft_v3.md`.
+Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_capstone_report_final_markdown.md`.
 
 | Field | Value | Final report note |
 | --- | --- | --- |

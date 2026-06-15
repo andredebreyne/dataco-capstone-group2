@@ -9,14 +9,14 @@ The project combines predictive modeling and business intelligence to support pr
 - **AO1:** Predict late delivery risk at order level.
 - **AO2:** Estimate order-level profitability.
 - **AO3:** Create a risk-margin segmentation framework for operations.
-- **Executive Dashboard:** Final dashboard deliverable is still pending; native Databricks AI/BI is being evaluated as an alternative to Power BI.
+- **Executive Dashboard:** Deliver a finalized Power BI decision-support layer using governed Databricks serving tables.
 
 ## Tech Stack
 
 - **Language:** Python (PySpark)
 - **Data Platform:** Databricks
 - **Processing Engine:** Apache Spark + Delta Lake
-- **Dashboard/BI:** tool choice pending; Power BI support artifacts are retained and native Databricks AI/BI is under evaluation
+- **Dashboard/BI:** Power BI with governed Azure Databricks serving-layer tables
 - **Version Control:** GitHub
 - **IDE:** Cursor
 
@@ -24,22 +24,28 @@ The project combines predictive modeling and business intelligence to support pr
 
 Use these links for final-facing review:
 
+- Final academic report: [report/Group_2_-_Capstone_DataCo_Report_final.docx](report/Group_2_-_Capstone_DataCo_Report_final.docx). The same final DOCX is submitted through the academic submission system.
+- [Final report Markdown source](report/final_capstone_report_final_markdown.md)
 - [Published Project Landing Page](https://sites.google.com/view/unf-mda-group2-jun2026-dataco/in%C3%ADcio)
 - [Published Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiZGRmMjNmNTQtMDdkMS00MDEzLThmMTUtZjNkOTgyNzUzZmVkIiwidCI6IjMyZjYwMjA2LTRlN2QtNGU1NC04MWE0LWQ3ZDc3YjM1NTRhOCJ9&embedImagePlaceholder=true)
 - [Project Marketing and Presentation Assets](https://drive.google.com/drive/folders/1ObquIgxpq34TdKeUj5-bULCJjyDsjGmd?usp=drive_link)
-- [Final Capstone Report Draft](report/final_capstone_report.md)
 - [Final Artifact Index](report/final_artifact_index.md)
 - [Final Validation Summary](report/final_validation_summary.md)
+- [Final Submission Checklist](report/final_submission_checklist.md)
+- [Report Folder Guide](report/README.md)
 - [Testing Strategy](docs/TESTING.md)
 - [Databricks Setup](docs/databricks_setup.md)
-- [Dashboard Status and Support Artifacts](dashboard/README.md)
+- [Power BI Dashboard Package](dashboard/README.md)
+- [Power BI Semantic Model](dashboard/powerbi_semantic_model.md)
+- [Power BI Databricks SQL Serving Layer](docs/powerbi_databricks_serving_layer.md)
 
-Current dashboard status:
+Current dashboard delivery:
 
-- Dashboard deliverable is still pending.
-- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
-- Power BI semantic-model, DAX, Databricks serving-layer, and CSV export-validation files remain available as one possible dashboard path.
-- No `.pbix` file is claimed as present in this repository; `.pbix` files are ignored by Git and should be submitted outside the repository or rebuilt locally from the documented model instructions.
+- Power BI is the official visualization and decision-support layer.
+- The dashboard uses governed Azure Databricks serving-layer tables and checked-in Power BI Project source files.
+- Executive View and Command Center use the same governed analytical outputs as AO1, AO2, and AO3 documentation.
+- Power BI does not retrain models, recalculate scores, retune thresholds, or reassign AO3 segments.
+- The final `.pbix` is submitted separately through the academic submission system. The repository contains the Power BI project source, documentation, page inventory, semantic-model notes, DAX notes, and supporting exports.
 
 ## Development Workflow
 
@@ -52,12 +58,12 @@ To ensure reproducibility, traceability, and collaboration quality, we follow th
 - Critical cleaning, feature engineering, splitting, modeling, evaluation, and prioritization logic should not exist only inside notebooks.
 - Notebooks should be runnable from top to bottom.
 
-### 1) Branching and Pull Requests
+### 1) Branching and Merge Review
 
 - **Protected `main`:** no direct commits.
 - **Feature branches:** `feature/<issue-number>-short-name`  (example: `feature/12-databricks-setup`).
-- **Pull Requests required:** every merge into `main` must go through PR review.
-- **Traceability:** each PR should reference its task/issue.
+- **Merge review required:** every merge into `main` must go through review.
+- **Traceability:** each review should reference its task/issue.
 
 The detailed Git workflow, squash-and-merge rule, branch cleanup process, and cascading branch workflow are documented in `docs/git_strategy.md`.
 
@@ -104,9 +110,9 @@ The decision-time feature availability map is documented in `docs/feature_availa
 - [AO1 Results and H1 Validation](docs/ao1_results_h1_validation.md)
 - [EDA Findings Summary](docs/eda_findings_summary.md)
 
-### 3) Optional Power BI serving layer
+### 3) Power BI serving layer
 
-Power BI remains one supported dashboard path while the final dashboard tool decision is pending. For issue #139, the preferred Power BI path is the direct Azure Databricks connector pointed at governed serving-layer tables.
+Power BI is the finalized dashboard path. The selected workflow connects Power BI Desktop directly to governed Azure Databricks SQL serving-layer tables.
 
 Supported Power BI consumption paths:
 
@@ -123,7 +129,7 @@ import os
 import runpy
 from pathlib import Path
 
-repo_root = Path("/Workspace/Users/<your-email>/dataco-capstone-group2")
+repo_root = Path("/Workspace/Repos/<workspace-user>/dataco-capstone-group2")
 os.environ["DATACO_REPO_ROOT"] = str(repo_root)
 os.environ["DATACO_POWERBI_SERVING_CATALOG"] = "workspace"
 os.environ["DATACO_POWERBI_SERVING_SCHEMA"] = "default"
@@ -157,7 +163,7 @@ See [docs/TESTING.md](docs/TESTING.md) and [report/final_validation_summary.md](
 - `/src` - reusable modules for cleaning, feature engineering, and modeling
 - `/models` - trained model artifacts and outputs
 - `/docs` - governance and project documentation
-- `/dashboard` - dashboard status and optional Power BI support artifacts
+- `/dashboard` - finalized Power BI project source, documentation, page specs, exports, and dashboard support assets
 - `/report` - final academic report and presentation materials
 
 ## Project Management (Agile/Kanban)
@@ -178,12 +184,12 @@ A task is considered **Done** only when:
 - Deliverable is completed and reviewed.
 - Outputs are validated against project objectives.
 - README/Wiki documentation is updated.
-- PR is merged and working branch is deleted.
+- Merge review is complete and the working branch is deleted.
 
 ## Final Review Checklist
 
-- Use the final report draft and artifact index for grader navigation.
+- Use the final academic report, final artifact index, and report README for grader navigation.
 - Treat H1 and H2 as validation-evidence conclusions unless a cited artifact explicitly states otherwise.
 - Treat H3 as AO3 segmentation and benchmark evidence, not realized intervention outcome evidence.
 - Re-run local or Databricks validators only in the appropriate environment described in `docs/TESTING.md`.
-- Keep the dashboard tool decision open until the team formally chooses native Databricks AI/BI or Power BI.
+- Treat Power BI as the finalized dashboard deliverable; submit the `.pbix` separately through the academic submission system.

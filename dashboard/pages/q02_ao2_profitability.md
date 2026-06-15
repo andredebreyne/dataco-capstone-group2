@@ -1,6 +1,6 @@
 # Q02 AO2 Profitability Dashboard Page
 
-Issue: `[W7][P0][#3] Power BI: profitability page (AO2) #49`
+Page: Power BI profitability view (AO2)
 
 ## Objective
 
@@ -193,8 +193,8 @@ theme, and the P02 profitability wireframe:
 
 ## Review Evidence
 
-Before closing Issue `#49`, attach a final screenshot of the Power BI page to
-the pull request and confirm:
+For final review, attach a current screenshot of the Power BI page to the
+dashboard evidence package and confirm:
 
 - the synchronized slicers filter both AO1 and AO2 pages;
 - `Reset Filters` clears the page selections;

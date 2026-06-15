@@ -6,22 +6,21 @@ Status key: `complete`, `manual upload required`, `optional`, `not applicable`.
 
 | Item | Status | Evidence / note |
 | --- | --- | --- |
+| Canonical academic report | `complete` | `report/Group_2_-_Capstone_DataCo_Report_final.docx`; the same DOCX is submitted through the academic submission system. |
 | Final Markdown report | `complete` | `report/final_capstone_report_final_markdown.md` |
-| Final submission Markdown draft | `complete` | `report/final_capstone_report_submission_draft.md` |
-| Final report source draft history | `complete` | `report/final_capstone_report_draft_v6.md` and prior drafts remain available for traceability. |
-| Draft V6 change log | `complete` | `report/final_report_draft_v6_change_log.md` |
+| Historical report source files | `complete` | Superseded report sources and change logs are retained under `report/_drafting/`. |
 | Final artifact index | `complete` | `report/final_artifact_index.md` |
 | Final validation summary | `complete` | `report/final_validation_summary.md` |
-| Final report PDF/Word | `manual upload required` | Convert the final Markdown report to the course-required Word/PDF format before upload. |
+| Final report PDF/Word upload | `manual upload required` | Upload the final course-required report file through the academic submission system. |
 
 ## 2. Dataset / Code / Repository Deliverables
 
 | Item | Status | Evidence / note |
 | --- | --- | --- |
 | Repository package | `complete` | Source code, notebooks, validators, docs, report assets, and dashboard support files are in the repository. |
-| Project repository URL | `manual upload required` | Replace `[INSERT FINAL REPOSITORY URL]` in the final Markdown after the final repository URL is confirmed. |
-| Final submission branch | `complete` | `report/final-capstone-report` |
-| Final branch/tag/commit hash | `manual upload required` | Replace `[INSERT FINAL COMMIT HASH AFTER FINAL COMMIT]` after the final commit or tag is created. |
+| Project repository URL | `https://github.com/andredebreyne/dataco-capstone-group2` | Confirm the final GitHub repository URL in the course submission form if required. |
+| Final cleanup branch | `complete` | `feature/final-report-dashboard-cleanup` |
+| Final branch/tag/commit hash | `manual upload required` | Record the final commit hash after this cleanup is committed or merged. |
 | Repository availability note | `complete` | Added to Appendix D in `report/final_capstone_report_final_markdown.md`. |
 | Dataset source documentation | `complete` | DataCo source and checksums are documented in `docs/data_source_verification.md`; dataset/data dictionary artifacts are referenced in the report appendices. |
 | Data dictionary / schema documentation | `complete` | `docs/data_dictionary.md`, `docs/silver_schema_data_dictionary.md`, and related reference artifacts. |
@@ -58,17 +57,17 @@ Status key: `complete`, `manual upload required`, `optional`, `not applicable`.
 | Tables 1-7 present in report | `complete` | Present in `report/final_capstone_report_final_markdown.md`. |
 | Figure 1 workflow diagram present | `complete` | Mermaid workflow figure is included in the final Markdown report. |
 | Figure 2 Power BI screenshot present | `complete` | Figure 2 points to the real Page 1 Power BI screenshot asset. |
-| Table/figure placeholder language removed | `complete` | No table or figure placeholder markers remain in the submission draft. |
+| Table/figure unresolved markers removed | `complete` | No unresolved table or figure markers remain in the final Markdown report. |
 | Full source-faithful Table 7 available | `complete` | `report/final_report_assets/tables/table_7_ao3_operational_recommendation_matrix.md` and `.csv`. |
 
 ## 6. References and APA Formatting
 
 | Item | Status | Evidence / note |
 | --- | --- | --- |
-| APA citation placeholders removed | `complete` | No unresolved APA citation markers remain in the final Markdown report. |
-| Generic source-detail placeholders removed | `complete` | No unresolved source-detail markers remain in the final Markdown report. |
+| APA citation markers removed | `complete` | No unresolved APA citation markers remain in the final Markdown report. |
+| Generic source-detail markers removed | `complete` | No unresolved source-detail markers remain in the final Markdown report. |
 | `## References` section present | `complete` | References section is present in the final Markdown report. |
-| Draft-only reference heading removed | `complete` | No draft-only reference heading remains. |
+| Temporary reference heading removed | `complete` | No temporary reference heading remains. |
 | In-text citation coverage | `complete` | Checked citation surnames against the References section; no missing reference entries were identified. |
 | Final APA visual formatting | `manual upload required` | Confirm hanging indents, italics, spacing, and line breaks in the final Word/PDF conversion. |
 

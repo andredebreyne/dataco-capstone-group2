@@ -1,6 +1,6 @@
 # Predicting Late Delivery Risk and Explaining Order Profitability in a Global E-Commerce Supply Chain
 
-DAMO 699 Capstone Final Report Final Markdown
+DAMO 699 Capstone Final Report Draft V6
 
 Team: Group 2
 
@@ -8,7 +8,7 @@ Institution: University of Niagara Falls Canada
 
 Instructor: Prof William Pourmajidi, PhD
 
-Date: 03-Jun-2026
+Date: 02-Jun-2026
 
 ## Abstract / Executive Summary
 
@@ -18,9 +18,9 @@ The research question is: How can pre-shipment attributes available at order cre
 
 The analysis is organized around three analytical objectives. AO1 predicts late-delivery risk using pre-shipment and order-time attributes. AO2 estimates expected order-level profitability before dispatch. AO3 combines the AO1 and AO2 outputs into a risk-margin segmentation framework that supports differentiated operational review. The final visualization layer is a Power BI dashboard connected to governed Azure Databricks serving-layer tables.
 
-The evidence supports the project hypotheses with appropriate caveats. H1 is supported on chronological validation evidence because the AO1 XGBoost classifier outperformed Logistic Regression on ROC-AUC and recall, along with the other checked validation metrics. H2 is supported on chronological validation evidence with modest improvement because the AO2 Gradient Boosting/XGBoost Regressor improved RMSE and MAE relative to Ridge Regression, although R-squared remained low and the target-reconstruction audit accepted the model with caution. H3 is supported by held-out scored prediction outputs and AO3 benchmark segmentation because the combined risk-margin framework identified operational groups that were not fully evident from either risk-only or margin-only views.
+The current evidence supports the project hypotheses with appropriate caveats. H1 is supported on chronological validation evidence because the AO1 XGBoost classifier outperformed Logistic Regression on ROC-AUC and recall, along with the other checked validation metrics. H2 is supported on chronological validation evidence with modest improvement because the AO2 Gradient Boosting/XGBoost Regressor improved RMSE and MAE relative to Ridge Regression, although R-squared remained low and the target-reconstruction audit accepted the model with caution. H3 is supported by held-out scored prediction outputs and AO3 benchmark segmentation because the combined risk-margin framework identified operational groups that were not fully evident from either risk-only or margin-only views.
 
-The report does not claim causal intervention impact, production deployment, or unsupported final-test confirmation. The results should be interpreted as an academic decision-support prototype with documented leakage controls, chronological validation discipline, model-explanation caveats, and final dashboard evidence provided through the Power BI export package.
+The report does not claim causal intervention impact, production deployment, or unsupported final-test confirmation. The results should be interpreted as an academic decision-support prototype with documented leakage controls, chronological validation discipline, model-explanation caveats, and remaining dashboard-finalization work before final submission.
 
 ## Introduction and Business Problem
 
@@ -88,7 +88,7 @@ The verified structured dataset contains 180,519 rows and 53 columns. The compan
 
 ### Table 1. DataCo Dataset Summary
 
-Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_report_assets/tables/table_1_dataco_dataset_summary.md`.
+Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_capstone_report_draft_v3.md`.
 
 | Field | Value | Final report note |
 | --- | --- | --- |
@@ -143,13 +143,13 @@ flowchart LR
 
 Caption: Figure 1 shows the workflow from DataCo source data through Bronze, Silver, Gold, AO1/AO2 modeling, AO3 risk-margin prioritization, and the Power BI serving layer.
 
-Source note: Mermaid source is maintained in `report/final_report_assets/figures/figure_1_medallion_project_workflow.md`. No PNG was generated in this repository package.
+Source note: Mermaid source is maintained in `report/final_report_assets/figures/figure_1_medallion_project_workflow.md`. No PNG was generated for this draft.
 
 Databricks Community Edition is the standard execution environment for the project. The documented preferred runtime is Databricks Runtime 14.3 LTS with Spark 3.5.0, with 13.3 LTS as a fallback. Spark and Delta support the data-processing and table-management pattern used in the academic workflow (Zaharia et al., 2016; Armbrust et al., 2020). Microsoft Learn provides the external platform context for Azure Databricks (Microsoft, 2026b).
 
 Reusable logic lives in the repository's source modules, while notebooks and workflow scripts orchestrate execution. The workflow coordinates setup validation, source validation, Bronze ingestion, Silver cleaning, feature engineering, Gold table creation, chronological partitioning, model training, evaluation, explainability, AO2 target-reconstruction audit, AO1 threshold selection, held-out AO1/AO2 scoring, AO3 segmentation, AO3 benchmarking, optional K-means review, and Power BI serving-layer registration.
 
-Many generation steps are disabled by default in final packaging workflows so that model artifacts and dashboard artifacts are not regenerated accidentally. This final report source uses checked-in result artifacts as evidence and does not rerun data engineering, model training, evaluation, export generation, or dashboard creation.
+Many generation steps are disabled by default in final packaging workflows so that model artifacts and dashboard artifacts are not regenerated accidentally. This draft uses checked-in result artifacts as evidence and does not rerun data engineering, model training, evaluation, export generation, or dashboard creation.
 
 ## Leakage-Control and Chronological Split Methodology
 
@@ -317,6 +317,8 @@ H3 is supported by held-out scored prediction outputs and benchmark segmentation
 
 Power BI is the official dashboard deliverable for this capstone. The selected architecture is a direct Power BI connection to Azure Databricks serving-layer tables. The exported Power BI dashboard PDF, Page 1 executive screenshot, and dashboard page inventory are included as final report evidence. The Power BI `.pbix` source file is submitted separately through the academic submission system and does not need to be Git-tracked.
 
+Databricks native dashboards and Databricks AI/BI dashboards are not the final planned dashboard deliverable.
+
 The dashboard is a communication layer, not a modeling layer. It should consume governed serving tables and must not recreate AO1 or AO2 scores, recalculate AO3 margins, retune thresholds, reassign segments, or introduce actual target/outcome columns into operational dashboard tables.
 
 ### Figure 2. Power BI Executive Command Center for DataCo Risk-Margin Prioritization
@@ -335,7 +337,7 @@ Validation tables in the dashboard should remain labeled as validation evidence.
 
 The Power BI `.pbix` source file is submitted separately through the academic submission system. The repository contains the dashboard export PDF, screenshot evidence, page inventory, semantic-model notes (`dashboard/powerbi_semantic_model.md`), DAX measure notes (`dashboard/powerbi_measures.dax`), and Databricks serving-layer documentation (`docs/powerbi_databricks_serving_layer.md`).
 
-The dashboard uses the governed Azure Databricks serving-layer architecture documented in `docs/powerbi_databricks_serving_layer.md`. Final serving-layer manifest row counts are not included in the report package; if they are required during technical review, they should be confirmed in Databricks from `workspace.default.powerbi_serving_layer_manifest` after the registration script has run.
+The dashboard uses the governed Databricks serving-layer architecture documented in `docs/powerbi_databricks_serving_layer.md`. The checked repository does not contain a final `powerbi_serving_layer_manifest` row-count artifact, so this draft does not add serving-layer manifest row counts. If row counts are required during final technical review, they should be confirmed in Databricks from `workspace.default.powerbi_serving_layer_manifest` after the registration script has run.
 
 ## Strategic and Operational Recommendations
 
@@ -353,7 +355,7 @@ The main strategic recommendation is to use AO3 priority segments as the pre-dis
 
 Source artifact: `data/references/ao3_operational_recommendation_matrix.csv`.
 
-This concise view uses source artifact wording from `segment_interpretation`, `recommended_action`, and `limitations`. The full source-faithful recommendation matrix remains available in the final report assets for appendix or audit use.
+This optional concise view uses only source artifact wording from `segment_interpretation`, `recommended_action`, and `limitations`. It is intended for the main report if the full source-faithful table is too wide for final formatting.
 
 | AO3 segment | Human-readable label | Operational priority | Limitation/caution |
 | --- | --- | --- | --- |
@@ -438,31 +440,27 @@ Zaharia, M., Xin, R. S., Wendell, P., Das, T., Armbrust, M., Dave, A., Meng, X.,
 
 ### Appendix A. Artifact Navigation
 
-The final artifact index is the master navigation file for graders and reviewers. It links to README, Databricks setup, project orchestrator, testing strategy, AO1/AO2/AO3 documents, key tables, key figures, validators, dashboard documentation, and final report artifacts.
+Use the final artifact index as the master navigation file for graders and reviewers. It links to README, Databricks setup, project orchestrator, testing strategy, AO1/AO2/AO3 documents, key tables, key figures, validators, dashboard docs, and final report artifacts. Remaining older dashboard-status language in final-facing navigation files should be reconciled before final submission if those files are still used.
 
 ### Appendix B. Validation Summary
 
-The final validation summary and testing documentation distinguish local validators from validators requiring Databricks, PySpark, and Delta outputs. These artifacts preserve AO1 validation status, AO2 validation status, AO3 benchmark status, and dashboard-serving validation status.
+Use the final validation summary and testing documentation to distinguish local validators from validators requiring Databricks, PySpark, and Delta outputs. The appendix should preserve AO1 validation status, AO2 validation status, AO3 benchmark status, and dashboard-serving validation status.
 
 ### Appendix C. Data Dictionary and Schema
 
-The Silver schema data dictionary and machine-readable Silver dictionary reference table document cleaned Silver columns, data types, policy notes, lineage fields, and source metadata references.
+Include the Silver schema data dictionary and the machine-readable Silver dictionary reference table. These artifacts document cleaned Silver columns, data types, policy notes, lineage fields, and source metadata references.
 
 ### Appendix D. Code Repository and Script Index
 
-The code repository includes the executable workflow and major scripts for data engineering, modeling, dashboard support, pipeline orchestration, and validation.
-
-Project repository: The repository contains the source code, validation scripts, documentation, generated analytical artifacts, final report assets, and dashboard-support files used in this capstone. The final repository URL is provided through the course submission channel. The Power BI `.pbix` source file is submitted separately through the academic submission system.
-
-Final submission version: final cleanup branch `feature/final-report-dashboard-cleanup` before merge to the course submission branch or `main`; the final commit hash is assigned by Git after the cleanup commit is created.
+Summarize the executable workflow and major scripts, including data engineering, modeling, dashboard, pipeline notebook, and validation script families.
 
 ### Appendix E. Model Metadata
 
-The AO1, AO2, and AO3 metadata directories document selected candidates, validation boundaries, threshold decisions, SHAP workflows, target-reconstruction audit status, AO3 scoring, segment assignment, and benchmark outputs.
+Reference the AO1, AO2, and AO3 metadata directories. These metadata files document selected candidates, validation boundaries, threshold decisions, SHAP workflows, target-reconstruction audit status, AO3 scoring, segment assignment, and benchmark outputs.
 
 ### Appendix F. Power BI Serving-Layer Documentation
 
-The Power BI serving-layer documentation, semantic-model blueprint, DAX measure file, Databricks serving-layer registration script, and serving-layer validator document the selected direct Azure Databricks serving-table architecture for Power BI.
+Reference the Power BI serving-layer documentation, semantic-model blueprint, DAX measure file, Databricks serving-layer registration script, and serving-layer validator. These artifacts document the selected direct Azure Databricks serving-table architecture for Power BI.
 
 ### Appendix G. Dashboard Artifacts
 
@@ -480,4 +478,4 @@ Dashboard support documentation is available in `dashboard/powerbi_semantic_mode
 
 ### Appendix H. AI / Tooling Usage Note
 
-AI coding assistance was used to help navigate repository artifacts and prepare report documentation from checked-in sources. The assistant did not regenerate models, change metrics, create fake dashboard screenshots, create `.pbix` files, or fabricate evidence. The Figure 2 screenshot was created from the supplied Power BI Page 1 image export. All claims should be reviewed by the project team against the cited artifacts before final submission.
+AI coding assistance was used to help navigate repository artifacts and draft report documentation from checked-in sources. The assistant did not regenerate models, change metrics, create fake dashboard screenshots, create `.pbix` files, or fabricate evidence. The Figure 2 screenshot was created from the supplied Power BI Page 1 image export. All claims should be reviewed by the project team against the cited artifacts before final submission.

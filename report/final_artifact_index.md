@@ -1,14 +1,17 @@
 # Final Artifact Index
 
-This index points graders and reviewers to the checked-in evidence for the DataCo capstone. It intentionally separates analytical artifacts from the dashboard deliverable, which is still pending.
+This index points graders and reviewers to the checked-in evidence for the DataCo capstone, including the finalized Power BI dashboard documentation and supporting report assets.
 
 ## Start Here
 
 | Artifact | Purpose |
 | --- | --- |
 | [README.md](../README.md) | Repository overview, status, and final navigation. |
-| [report/final_capstone_report.md](final_capstone_report.md) | Draft final report suitable for later PDF or Word conversion. |
+| [report/Group_2_-_Capstone_DataCo_Report_final.docx](Group_2_-_Capstone_DataCo_Report_final.docx) | Final academic report document. |
+| [report/final_capstone_report_final_markdown.md](final_capstone_report_final_markdown.md) | Final report Markdown source and appendices. |
 | [report/final_validation_summary.md](final_validation_summary.md) | Final-facing validation status by local, Databricks, AO1, AO2, AO3, and dashboard checks. |
+| [report/final_submission_checklist.md](final_submission_checklist.md) | Final packaging and manual-submission checklist. |
+| [report/README.md](README.md) | Report folder guide, final evidence map, and historical drafting location. |
 | [docs/proposal/proposal_summary.md](../docs/proposal/proposal_summary.md) | Proposal-aligned research framing, hypotheses, and scope. |
 
 ## Environment and Workflow
@@ -162,14 +165,20 @@ This index points graders and reviewers to the checked-in evidence for the DataC
 | [tests/data_validation/validate_ao3_operational_recommendations.py](../tests/data_validation/validate_ao3_operational_recommendations.py) | Local AO3 recommendation validator. |
 | [tests/data_validation/validate_ao3_kmeans_extension.py](../tests/data_validation/validate_ao3_kmeans_extension.py) | Local optional K-means extension validator. |
 
-## Dashboard Docs and Status
+## Dashboard Docs and Evidence
 
 | Artifact | Purpose |
 | --- | --- |
-| [dashboard/README.md](../dashboard/README.md) | Dashboard status and available support artifacts. |
-| [dashboard/powerbi_semantic_model.md](../dashboard/powerbi_semantic_model.md) | Power BI semantic-model path retained as one possible dashboard implementation. |
-| [dashboard/powerbi_measures.dax](../dashboard/powerbi_measures.dax) | Draft Power BI DAX measures for the Power BI path. |
-| [src/dashboard/export_powerbi_gold_tables.py](../src/dashboard/export_powerbi_gold_tables.py) | Optional Databricks export script for Power BI import files. |
+| [dashboard/README.md](../dashboard/README.md) | Final Power BI dashboard package overview and delivery notes. |
+| [dashboard/Dashboard.pbip](../dashboard/Dashboard.pbip) | Power BI Project entry file for the checked-in dashboard source package. |
+| [dashboard/powerbi_semantic_model.md](../dashboard/powerbi_semantic_model.md) | Governed Power BI semantic-model documentation. |
+| [dashboard/powerbi_measures.dax](../dashboard/powerbi_measures.dax) | Power BI DAX measures used by the dashboard pages. |
+| [docs/powerbi_databricks_serving_layer.md](../docs/powerbi_databricks_serving_layer.md) | Azure Databricks SQL serving-layer documentation. |
+| [report/final_report_assets/figures/DataCo_Dashboard.pdf](final_report_assets/figures/DataCo_Dashboard.pdf) | Final dashboard PDF evidence used by the report package. |
+| [report/final_report_assets/figures/figure_2_powerbi_executive_command_center.png](final_report_assets/figures/figure_2_powerbi_executive_command_center.png) | Main report Power BI screenshot evidence. |
+| [report/final_report_assets/figures/powerbi_dashboard_page_inventory.md](final_report_assets/figures/powerbi_dashboard_page_inventory.md) | Final dashboard page inventory and report-use guidance. |
+| [src/dashboard/register_powerbi_databricks_tables.py](../src/dashboard/register_powerbi_databricks_tables.py) | Databricks serving-layer registration script. |
+| [src/dashboard/export_powerbi_gold_tables.py](../src/dashboard/export_powerbi_gold_tables.py) | Offline CSV fallback export script. |
 | [tests/data_validation/validate_powerbi_gold_exports.py](../tests/data_validation/validate_powerbi_gold_exports.py) | Validator for generated Power BI exports when they exist. |
 
-Dashboard status: dashboard deliverable is still pending. Native Databricks AI/BI is being evaluated as an alternative to Power BI. Generated Power BI exports are absent unless intentionally regenerated from Databricks, and this index does not claim a `.pbix` file exists.
+Dashboard status: Power BI is the official visualization and decision-support layer. The dashboard uses governed Azure Databricks serving-layer tables and checked-in Power BI Project source files. The `.pbix` file is submitted separately through the academic submission system and is not Git-tracked.

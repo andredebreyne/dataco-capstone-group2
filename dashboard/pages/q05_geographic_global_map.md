@@ -1,6 +1,6 @@
 # Q05 Geographic Global Map Dashboard Data
 
-Issue: `[W7][P2][#5] Power BI: geographic page (global map) #51`
+Page: Power BI geographic global-map view
 
 ## Objective
 

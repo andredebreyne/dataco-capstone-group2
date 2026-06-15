@@ -1,6 +1,6 @@
 # Q01 AO1 Delivery Risk Dashboard Page
 
-Issue: `[W7][P0][#2] Power BI: delivery risk page (AO1) #48`
+Page: Power BI delivery risk view (AO1)
 
 ## Objective
 
@@ -158,8 +158,8 @@ scrollbars.
 
 ## Review Evidence
 
-Before closing Issue `#48`, attach a final screenshot of the Power BI page to
-the pull request and confirm:
+For final review, attach a current screenshot of the Power BI page to the
+dashboard evidence package and confirm:
 
 - all seven visual components render without scrollbars;
 - the page is legible on a `1920 x 1080` canvas;
