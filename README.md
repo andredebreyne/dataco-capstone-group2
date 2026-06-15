@@ -26,6 +26,9 @@ Use these links for final-facing review:
 
 - Final academic report: [report/Group_2_-_Capstone_DataCo_Report_final.docx](report/Group_2_-_Capstone_DataCo_Report_final.docx). The same final DOCX is submitted through the academic submission system.
 - [Final report Markdown source](report/final_capstone_report_final_markdown.md)
+- [Published Project Landing Page](https://sites.google.com/view/unf-mda-group2-jun2026-dataco/in%C3%ADcio)
+- [Published Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiZGRmMjNmNTQtMDdkMS00MDEzLThmMTUtZjNkOTgyNzUzZmVkIiwidCI6IjMyZjYwMjA2LTRlN2QtNGU1NC04MWE0LWQ3ZDc3YjM1NTRhOCJ9&embedImagePlaceholder=true)
+- [Project Marketing and Presentation Assets](https://drive.google.com/drive/folders/1ObquIgxpq34TdKeUj5-bULCJjyDsjGmd?usp=drive_link)
 - [Final Artifact Index](report/final_artifact_index.md)
 - [Final Validation Summary](report/final_validation_summary.md)
 - [Final Submission Checklist](report/final_submission_checklist.md)

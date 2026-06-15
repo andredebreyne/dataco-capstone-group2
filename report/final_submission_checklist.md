@@ -18,7 +18,7 @@ Status key: `complete`, `manual upload required`, `optional`, `not applicable`.
 | Item | Status | Evidence / note |
 | --- | --- | --- |
 | Repository package | `complete` | Source code, notebooks, validators, docs, report assets, and dashboard support files are in the repository. |
-| Project repository URL | `manual upload required` | Confirm the final GitHub repository URL in the course submission form if required. |
+| Project repository URL | `https://github.com/andredebreyne/dataco-capstone-group2` | Confirm the final GitHub repository URL in the course submission form if required. |
 | Final cleanup branch | `complete` | `feature/final-report-dashboard-cleanup` |
 | Final branch/tag/commit hash | `manual upload required` | Record the final commit hash after this cleanup is committed or merged. |
 | Repository availability note | `complete` | Added to Appendix D in `report/final_capstone_report_final_markdown.md`. |
