@@ -1,0 +1,14 @@
+# Table 7. AO3 Operational Recommendation Matrix - Concise View
+
+Source artifact: `data/references/ao3_operational_recommendation_matrix.csv`.
+
+This optional concise view uses only source artifact wording from `segment_interpretation`, `recommended_action`, and `limitations`. It is intended for the main report if the full source-faithful table is too wide for final formatting.
+
+| AO3 segment | Human-readable label | Operational priority | Limitation/caution |
+| --- | --- | --- | --- |
+| `protect_high_value_at_risk` | High late-delivery risk and high predicted margin; these orders combine service risk with meaningful expected value. | Prioritize pre-dispatch protection and exception handling before lower-risk work. | Recommendations are limited to predicted risk and predicted margin evidence; they do not establish realized delivery or profit improvement from intervention. |
+| `expedite_selectively` | High late-delivery risk and low predicted margin; these orders have service risk but limited expected economic upside. | Review selectively before committing scarce expedited capacity. | Small segment size means recommendations should be applied case by case and not generalized as a broad operating policy. |
+| `preserve_service` | Low late-delivery risk and high predicted margin; these orders have expected value but do not require urgent risk intervention. | Maintain standard service quality and protect customer experience without unnecessary escalation. | Recommendations are limited by predicted risk evidence; low predicted risk does not remove the need for normal monitoring and only argues against urgent intervention by default. |
+| `standard_process` | Low late-delivery risk and low predicted margin; these orders do not show strong risk or margin reasons for special handling. | Use normal operating procedures and avoid special-cost interventions unless new information appears. | Small segment size limits broad conclusions; recommendations should remain conservative. |
+| `requires_score_review` | Missing AO1 or AO2 score inputs; the order cannot be assigned to a reliable operational segment. | Hold automated AO3 prioritization and review score pipeline completeness before actioning from the matrix. | Recommendations are limited to data-quality review; if this segment appears in future refreshes it indicates a data or scoring issue, not a direct business recommendation. |
+| `requires_margin_review` | Missing or invalid AO3 order value or predicted margin; the order cannot be placed reliably on the margin axis. | Hold automated margin-based prioritization and review denominator or margin construction before actioning. | Recommendations are limited to data-quality review; if this segment appears in future refreshes it indicates a data-quality issue and should require manual review before business action. |

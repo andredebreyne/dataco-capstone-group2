@@ -1,9 +1,15 @@
 # Dashboard Status and Support Artifacts
 
 This folder contains the governed Power BI dashboard project and its support
-artifacts. Power BI is the selected executive-dashboard implementation path.
-Dashboard pages are developed incrementally from approved Databricks Gold
-outputs and governed reference artifacts.
+artifacts for the final Power BI dashboard deliverable. Power BI is the selected
+executive-dashboard implementation path. Dashboard pages are developed from
+approved Databricks Gold outputs and governed reference artifacts.
+
+The final report package uses the exported dashboard PDF, screenshot evidence,
+page inventory, semantic-model notes, DAX measure notes, and Databricks
+serving-layer documentation as report evidence. The `.pbix` source file is
+submitted separately through the academic submission system and does not need to
+be Git-tracked.
 
 ## Files
 
@@ -11,7 +17,7 @@ outputs and governed reference artifacts.
 | --- | --- |
 | `Dashboard.pbip` | Power BI Project with semantic model and report definitions. |
 | `powerbi_semantic_model.md` | Semantic-model blueprint and import instructions for the Power BI path. |
-| `powerbi_measures.dax` | Draft DAX measures for AO1, AO2, and AO3 dashboard pages. |
+| `powerbi_measures.dax` | DAX measures for AO1, AO2, and AO3 dashboard pages. |
 | `exports/` | Gitignored local export folder generated from Databricks Gold outputs when the offline CSV fallback path is run. |
 | `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification for Issue `#48`. |
 | `pages/q02_ao2_profitability.md` | Implemented AO2 profitability-exposure executive page specification for Issue `#49`. |
@@ -51,7 +57,10 @@ The CSV script writes Power BI import files to:
 dashboard/exports/
 ```
 
-Generated export files and `.pbix` files are intentionally ignored by Git. The `.pbix` should be submitted outside Git or rebuilt locally from `powerbi_semantic_model.md` and `powerbi_measures.dax`.
+Generated export files and `.pbix` files are intentionally ignored by Git. The
+`.pbix` source file is submitted separately through the academic submission
+system and can be rebuilt locally from `powerbi_semantic_model.md` and
+`powerbi_measures.dax` if needed.
 
 ## Validate Exports
 
@@ -67,7 +76,8 @@ files exist.
 
 ## Dashboard Delivery Status
 
-- Direct Databricks SQL serving-layer connection is the preferred Power BI workflow for issue `#139`.
+- Power BI is the official dashboard deliverable.
+- Direct Databricks SQL serving-layer connection is the selected Power BI workflow for issue `#139`.
 - The Power BI Project semantic model is connected to governed Databricks outputs.
 - The AO1 delivery-risk executive page is implemented and documented (Issue `#48`).
 - The AO2 profitability-exposure executive page is implemented and documented.
@@ -78,4 +88,4 @@ files exist.
 - The Power BI semantic model uses the official `Dim_Date` calendar dimension
   for governed date filtering instead of Power BI automatic local date tables.
 - CSV exports remain available as offline fallback artifacts and must not be edited manually.
-- No `.pbix` artifact is required or claimed in this repository.
+- No Git-tracked `.pbix` artifact is required or claimed in this repository.
