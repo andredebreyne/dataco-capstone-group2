@@ -24,6 +24,9 @@ The project combines predictive modeling and business intelligence to support pr
 
 Use these links for final-facing review:
 
+- [Published Project Landing Page](https://sites.google.com/view/unf-mda-group2-jun2026-dataco/in%C3%ADcio)
+- [Published Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiZGRmMjNmNTQtMDdkMS00MDEzLThmMTUtZjNkOTgyNzUzZmVkIiwidCI6IjMyZjYwMjA2LTRlN2QtNGU1NC04MWE0LWQ3ZDc3YjM1NTRhOCJ9&embedImagePlaceholder=true)
+- [Project Marketing and Presentation Assets](https://drive.google.com/drive/folders/1ObquIgxpq34TdKeUj5-bULCJjyDsjGmd?usp=drive_link)
 - [Final Capstone Report Draft](report/final_capstone_report.md)
 - [Final Artifact Index](report/final_artifact_index.md)
 - [Final Validation Summary](report/final_validation_summary.md)
