@@ -90,8 +90,8 @@ The page should reuse the synchronized executive slicer pattern:
 
 ## Review Evidence
 
-Before closing the issue, attach a final screenshot of the Power BI page to the
-pull request and confirm:
+For final review, attach a current screenshot of the Power BI page to the
+dashboard evidence package and confirm:
 
 - all KPI values match the detailed AO1, AO2, and AO3 pages;
 - synchronized slicers work through `Dim_Date` and AO3 segment filters;

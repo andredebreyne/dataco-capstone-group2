@@ -1,6 +1,6 @@
 # Q03 AO3 Operational Prioritization Dashboard Page
 
-Issue: `[W7][P0][#4] Power BI: AO3 prioritization page #50`
+Page: Power BI AO3 prioritization view
 
 ## Objective
 
@@ -130,8 +130,8 @@ theme:
 
 ## Review Evidence
 
-Before closing Issue `#50`, attach a final screenshot of the Power BI page to
-the pull request and confirm:
+For final review, attach a current screenshot of the Power BI page to the
+dashboard evidence package and confirm:
 
 - the synchronized slicers filter the AO3 page;
 - `Reset Filters` clears the page selections;

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Power BI Databricks SQL serving layer publishes governed dashboard artifacts as managed Databricks tables under the configured catalog/schema, defaulting to `workspace.default`. This is the preferred Power BI path for issue #139 because Power BI Desktop can refresh directly through the Azure Databricks connector instead of relying on local CSV imports.
+The Power BI Databricks SQL serving layer publishes governed dashboard artifacts as managed Databricks tables under the configured catalog/schema, defaulting to `workspace.default`. This is the finalized Power BI connection path because Power BI Desktop can refresh directly through the Azure Databricks connector instead of relying on local CSV imports.
 
 This layer is a dashboard-serving layer, not a modeling layer.
 
@@ -23,14 +23,14 @@ src/dashboard/register_powerbi_databricks_tables.py
 Run from Databricks after AO1/AO2 scoring, AO3 segmentation, AO3 benchmark, and the reference/report artifacts exist.
 The project orchestrator can also run this step when `RUN_POWERBI_DATABRICKS_SERVING_LAYER = True`; it is disabled by default.
 
-Example. Replace `<your-email>` with the Databricks Workspace user folder for your own checkout:
+Example. Replace `<workspace-user>` with the Databricks workspace folder for the repository checkout:
 
 ```python
 import os
 import runpy
 from pathlib import Path
 
-repo_root = Path("/Workspace/Users/<your-email>/dataco-capstone-group2")
+repo_root = Path("/Workspace/Repos/<workspace-user>/dataco-capstone-group2")
 os.environ["DATACO_REPO_ROOT"] = str(repo_root)
 os.environ["DATACO_POWERBI_SERVING_CATALOG"] = "workspace"
 os.environ["DATACO_POWERBI_SERVING_SCHEMA"] = "default"
@@ -91,7 +91,7 @@ The script publishes one managed Databricks SQL table per governed dashboard art
 7. Select the required `powerbi_*` tables.
 8. Rename imported tables to the semantic-model names listed above.
 9. Add DAX measures from `dashboard/powerbi_measures.dax`.
-10. Build pages #48, #49, #50, and #51 from the curated serving tables.
+10. Build the executive, AO1, AO2, AO3, geographic, and command-center pages from the curated serving tables.
 
 For the geographic global map page, run
 `src/dashboard/build_powerbi_geographic_summary.py` before this registration
@@ -128,7 +128,7 @@ The manifest should list every published table with generated timestamp, workflo
 
 ## Relationship to CSV export
 
-The CSV export workflow from issue #47 remains valid for reproducibility and offline review. The Databricks SQL serving layer is the preferred Power BI Desktop connection and refresh workflow for issue #139, using the same core logical table structure without requiring local CSV imports.
+The CSV export workflow remains valid for reproducibility and offline review. The Databricks SQL serving layer is the preferred Power BI Desktop connection and refresh workflow, using the same core logical table structure without requiring local CSV imports.
 
 The logistics KPI summary is also available in the CSV fallback export as:
 

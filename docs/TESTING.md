@@ -69,7 +69,7 @@ python tests/data_validation/validate_ao3_kmeans_extension.py
 python tests/data_validation/validate_powerbi_gold_exports.py
 ```
 
-This validator is local, but it requires generated export files under `dashboard/exports/`. Those files are gitignored and are absent unless the Power BI export script has been run intentionally from Databricks.
+This validator is local, but it validates the optional CSV fallback workflow and requires generated files under `dashboard/exports/`. Those files are gitignored and are present only when the Power BI export script has been run intentionally from Databricks.
 
 ## Databricks / PySpark / Delta Validators
 
@@ -145,17 +145,16 @@ Current report status: H3 is supported by AO3 segmentation and benchmark evidenc
 
 Dashboard status:
 
-- Dashboard deliverable is still pending.
-- Native Databricks AI/BI dashboard is being evaluated as an alternative to Power BI.
-- Power BI semantic-model, DAX, and export-validation artifacts remain as one possible dashboard path.
-- Generated Power BI exports are absent unless regenerated from Databricks.
-- No `.pbix` file is claimed as present.
+- Power BI is the official dashboard and decision-support deliverable.
+- The repository contains the Power BI Project source package, page documentation, semantic-model notes, DAX notes, dashboard evidence exports, and Databricks serving-layer documentation.
+- The dashboard uses governed Databricks serving-layer tables and does not retrain models, recalculate scores, retune thresholds, or reassign AO3 segments.
+- The final `.pbix` is submitted separately through the academic submission system and is not Git-tracked.
 
 Dashboard/export validation:
 
-- `src/dashboard/export_powerbi_gold_tables.py` is the optional Databricks export script for the Power BI path.
+- `src/dashboard/export_powerbi_gold_tables.py` is the optional Databricks export script for CSV fallback review.
 - `tests/data_validation/validate_powerbi_gold_exports.py` validates generated exports after they exist.
-- Do not run export validation as evidence of dashboard readiness unless export files have been regenerated and are available locally.
+- Do not use CSV export validation as evidence of `.pbix` readiness unless export files have been regenerated and are available locally.
 
 ## Final Validation Command Groups
 
@@ -221,9 +220,7 @@ python tests/data_validation/validate_powerbi_gold_exports.py
 
 ## Known Deferred Items
 
-- Final dashboard implementation.
-- Final dashboard technology decision between native Databricks AI/BI and Power BI.
-- Regenerated dashboard export files, if the Power BI path is chosen.
-- `.pbix` creation, if the team later chooses Power BI.
+- Optional regenerated CSV fallback dashboard exports.
+- Manual `.pbix` upload through the academic submission system.
 - Realized intervention outcome evaluation for AO3.
 - Production model monitoring, drift review, and fairness review beyond the academic prototype.

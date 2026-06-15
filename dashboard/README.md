@@ -18,19 +18,19 @@ be Git-tracked.
 | `Dashboard.pbip` | Power BI Project with semantic model and report definitions. |
 | `powerbi_semantic_model.md` | Semantic-model blueprint and import instructions for the Power BI path. |
 | `powerbi_measures.dax` | DAX measures for AO1, AO2, and AO3 dashboard pages. |
-| `exports/` | Gitignored local export folder generated from Databricks Gold outputs when the offline CSV fallback path is run. |
-| `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification for Issue `#48`. |
-| `pages/q02_ao2_profitability.md` | Implemented AO2 profitability-exposure executive page specification for Issue `#49`. |
-| `pages/q03_ao3_prioritization.md` | Implemented AO3 operational-prioritization executive page specification for Issue `#50`. |
+| `exports/` | Local export staging folder. Git-tracked final dashboard PDF evidence is copied under `report/final_report_assets/figures/`; optional regenerated CSV fallback files also write here. |
+| `pages/q01_ao1_delivery_risk.md` | Implemented AO1 delivery-risk executive page specification. |
+| `pages/q02_ao2_profitability.md` | Implemented AO2 profitability-exposure executive page specification. |
+| `pages/q03_ao3_prioritization.md` | Implemented AO3 operational-prioritization executive page specification. |
 | `pages/q04_geographic_commercial_hotspots.md` | Implemented geographic and commercial hotspot page specification. |
 | `pages/q05_executive_command_center.md` | Implemented executive command-center page specification. |
-| `pages/q05_geographic_global_map.md` | Geographic global-map data specification for Issue `#51`. |
+| `pages/q05_geographic_global_map.md` | Geographic global-map data specification. |
 | `themes/dataco_executive_operations_dark.json` | Shared executive dashboard theme. |
 | `wireframes/` | Versioned SVG backgrounds and layout standards. |
 
 ## Power BI Paths
 
-The preferred Power BI path for issue #139 is direct connection from Power BI Desktop to Databricks SQL serving-layer tables. Run this Databricks registration script after AO1/AO2 scoring, AO3 segmentation, AO3 benchmark, and the supporting reference/report artifacts are available:
+The selected Power BI path is direct connection from Power BI Desktop to Databricks SQL serving-layer tables. Run this Databricks registration script after AO1/AO2 scoring, AO3 segmentation, AO3 benchmark, and the supporting reference/report artifacts are available:
 
 ```text
 src/dashboard/register_powerbi_databricks_tables.py
@@ -57,10 +57,11 @@ The CSV script writes Power BI import files to:
 dashboard/exports/
 ```
 
-Generated export files and `.pbix` files are intentionally ignored by Git. The
-`.pbix` source file is submitted separately through the academic submission
-system and can be rebuilt locally from `powerbi_semantic_model.md` and
-`powerbi_measures.dax` if needed.
+Generated files under `dashboard/exports/` and `.pbix` files are intentionally
+ignored by Git. Final checked-in dashboard PDF evidence is stored under
+`report/final_report_assets/figures/`. The `.pbix` source file is submitted
+separately through the academic submission system and can be rebuilt locally
+from `powerbi_semantic_model.md` and `powerbi_measures.dax` if needed.
 
 ## Validate Exports
 
@@ -77,13 +78,13 @@ files exist.
 ## Dashboard Delivery Status
 
 - Power BI is the official dashboard deliverable.
-- Direct Databricks SQL serving-layer connection is the selected Power BI workflow for issue `#139`.
+- Direct Databricks SQL serving-layer connection is the selected Power BI workflow.
 - The Power BI Project semantic model is connected to governed Databricks outputs.
-- The AO1 delivery-risk executive page is implemented and documented (Issue `#48`).
+- The AO1 delivery-risk executive page is implemented and documented.
 - The AO2 profitability-exposure executive page is implemented and documented.
 - The AO3 operational-prioritization executive page is implemented and documented.
 - The geographic and commercial hotspot page is implemented and documented.
-- The geographic global-map data layer is implemented and documented (Issue `#51`).
+- The geographic global-map data layer is implemented and documented.
 - The executive command-center page is implemented and documented.
 - The Power BI semantic model uses the official `Dim_Date` calendar dimension
   for governed date filtering instead of Power BI automatic local date tables.

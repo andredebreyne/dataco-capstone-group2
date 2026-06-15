@@ -6,7 +6,7 @@ Source artifacts:
 - `report/final_report_assets/figures/figure_2_powerbi_executive_command_center.png`
 - exported page images supplied from `DataCo_Dashboard_pages-to-jpg-0001.jpg` through `DataCo_Dashboard_pages-to-jpg-0011.jpg`
 
-Power BI is the official dashboard deliverable. The exported dashboard PDF and page image set are final-report evidence sources. The `.pbix` source file should be treated as a local or separately submitted Power BI source file unless the team confirms a tracked/submitted route.
+Power BI is the official dashboard deliverable. The exported dashboard PDF and page image set are final-report evidence sources. The `.pbix` source file is submitted separately through the academic submission system and is not tracked in Git.
 
 | Page | Page title | Report use | Key metrics or focus | Notes |
 | ---: | --- | --- | --- | --- |
