@@ -1,6 +1,6 @@
 # Figure 1. Medallion and Project Workflow Architecture
 
-Source artifacts: `docs/medallion_structure.md`, `docs/project_orchestrator.md`, `report/final_capstone_report_draft_v3.md`.
+Source artifacts: `docs/medallion_structure.md`, `docs/project_orchestrator.md`, `report/final_capstone_report_final_markdown.md`.
 
 Use this Mermaid source to render the final report architecture figure.
 

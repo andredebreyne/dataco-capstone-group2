@@ -88,7 +88,7 @@ The verified structured dataset contains 180,519 rows and 53 columns. The compan
 
 ### Table 1. DataCo Dataset Summary
 
-Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_capstone_report_draft_v3.md`.
+Source artifacts: `docs/data_source_verification.md`, `docs/medallion_structure.md`, `report/final_report_assets/tables/table_1_dataco_dataset_summary.md`.
 
 | Field | Value | Final report note |
 | --- | --- | --- |
@@ -143,13 +143,13 @@ flowchart LR
 
 Caption: Figure 1 shows the workflow from DataCo source data through Bronze, Silver, Gold, AO1/AO2 modeling, AO3 risk-margin prioritization, and the Power BI serving layer.
 
-Source note: Mermaid source is maintained in `report/final_report_assets/figures/figure_1_medallion_project_workflow.md`. No PNG was generated for this draft.
+Source note: Mermaid source is maintained in `report/final_report_assets/figures/figure_1_medallion_project_workflow.md`. No PNG was generated in this repository package.
 
 Databricks Community Edition is the standard execution environment for the project. The documented preferred runtime is Databricks Runtime 14.3 LTS with Spark 3.5.0, with 13.3 LTS as a fallback. Spark and Delta support the data-processing and table-management pattern used in the academic workflow (Zaharia et al., 2016; Armbrust et al., 2020). Microsoft Learn provides the external platform context for Azure Databricks (Microsoft, 2026b).
 
 Reusable logic lives in the repository's source modules, while notebooks and workflow scripts orchestrate execution. The workflow coordinates setup validation, source validation, Bronze ingestion, Silver cleaning, feature engineering, Gold table creation, chronological partitioning, model training, evaluation, explainability, AO2 target-reconstruction audit, AO1 threshold selection, held-out AO1/AO2 scoring, AO3 segmentation, AO3 benchmarking, optional K-means review, and Power BI serving-layer registration.
 
-Many generation steps are disabled by default in final packaging workflows so that model artifacts and dashboard artifacts are not regenerated accidentally. This draft uses checked-in result artifacts as evidence and does not rerun data engineering, model training, evaluation, export generation, or dashboard creation.
+Many generation steps are disabled by default in final packaging workflows so that model artifacts and dashboard artifacts are not regenerated accidentally. This final report source uses checked-in result artifacts as evidence and does not rerun data engineering, model training, evaluation, export generation, or dashboard creation.
 
 ## Leakage-Control and Chronological Split Methodology
 
@@ -452,9 +452,9 @@ The Silver schema data dictionary and machine-readable Silver dictionary referen
 
 The code repository includes the executable workflow and major scripts for data engineering, modeling, dashboard support, pipeline orchestration, and validation.
 
-Project repository: [INSERT FINAL REPOSITORY URL]. The repository contains the source code, validation scripts, documentation, generated analytical artifacts, final report assets, and dashboard-support files used in this capstone. The Power BI `.pbix` source file is submitted separately through the academic submission system.
+Project repository: The repository contains the source code, validation scripts, documentation, generated analytical artifacts, final report assets, and dashboard-support files used in this capstone. The final repository URL is provided through the course submission channel. The Power BI `.pbix` source file is submitted separately through the academic submission system.
 
-Final submission version: branch `report/final-capstone-report`; final commit hash: [INSERT FINAL COMMIT HASH AFTER FINAL COMMIT].
+Final submission version: final cleanup branch `feature/final-report-dashboard-cleanup` before merge to the course submission branch or `main`; the final commit hash is assigned by Git after the cleanup commit is created.
 
 ### Appendix E. Model Metadata
 
@@ -480,4 +480,4 @@ Dashboard support documentation is available in `dashboard/powerbi_semantic_mode
 
 ### Appendix H. AI / Tooling Usage Note
 
-AI coding assistance was used to help navigate repository artifacts and draft report documentation from checked-in sources. The assistant did not regenerate models, change metrics, create fake dashboard screenshots, create `.pbix` files, or fabricate evidence. The Figure 2 screenshot was created from the supplied Power BI Page 1 image export. All claims should be reviewed by the project team against the cited artifacts before final submission.
+AI coding assistance was used to help navigate repository artifacts and prepare report documentation from checked-in sources. The assistant did not regenerate models, change metrics, create fake dashboard screenshots, create `.pbix` files, or fabricate evidence. The Figure 2 screenshot was created from the supplied Power BI Page 1 image export. All claims should be reviewed by the project team against the cited artifacts before final submission.
